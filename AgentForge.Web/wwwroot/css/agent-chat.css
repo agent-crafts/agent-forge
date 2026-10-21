@@ -96,3 +96,20 @@
 .chat-tab-row .chat-tab{min-width:0;flex:1;width:auto}
 .chat-tab-delete{flex:none;border:0;background:transparent;color:var(--muted);font-size:21px;line-height:1;border-radius:7px;width:29px;height:32px;cursor:pointer}
 .chat-tab-delete:hover,.chat-tab-delete:focus-visible{background:var(--hover);color:var(--heading)}
+
+/* Explicit delete action and accessible theme-aware confirmation modal */
+.chat-tab-delete{width:auto;min-width:52px;height:32px;padding:0 7px;font-family:inherit;font-size:11px;font-weight:600;color:var(--muted)}
+.chat-tab-delete:hover,.chat-tab-delete:focus-visible{background:var(--hover);color:#e05252}
+.delete-chat-dialog{border:1px solid var(--line-strong);border-radius:18px;background:var(--surface);color:var(--content);width:min(420px,calc(100% - 32px));max-width:none;padding:0;box-shadow:0 24px 80px #0006}
+.delete-chat-dialog::backdrop{background:rgba(0,0,0,.65);backdrop-filter:blur(3px)}
+.delete-chat-modal{padding:28px}
+.delete-chat-modal-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:rgba(220,65,65,.12);font-size:23px;margin-bottom:17px}
+.delete-chat-modal h2{font-size:20px;letter-spacing:-.4px;color:var(--heading);margin:0 0 10px}
+.delete-chat-modal p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 26px;overflow-wrap:anywhere}
+.delete-chat-actions{display:flex;justify-content:flex-end;gap:10px}
+.delete-chat-actions button{border-radius:9px;padding:11px 19px;font:600 13px inherit;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.delete-chat-cancel{background:var(--surface-raised);border:1px solid var(--line-strong);color:var(--heading)}
+.delete-chat-cancel:hover{background:var(--hover)}
+.delete-chat-confirm{background:#c83737;border:1px solid #c83737;color:#fff}
+.delete-chat-confirm:hover{background:#a92727;border-color:#a92727}
+.delete-chat-actions button:focus-visible,.chat-tab-delete:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
