@@ -1,9 +1,9 @@
 @{
-    Layout = "_WorkspaceLayout";
+    Layout = "_AppLayout";
     var section = (string)(ViewData["Section"] ?? "");
 }
 <section class="workspace-content">
-    <partial name="_WorkspaceHeading" />
+    <partial name="_PageHeading" />
     @if (section == "agents")
     {
         <partial name="_AgentsContent" />
