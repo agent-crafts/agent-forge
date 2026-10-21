@@ -12,9 +12,9 @@
 | --- | --- |
 | Current phase | Module 00 — Baseline & Roadmap Alignment (planned) |
 | Current learning module | Not started |
-| Current engineering milestone | UI foundation merged; architecture assessment documented (PR pending); Project Foundation implementation not started |
+| Current engineering milestone | UI foundation and architecture assessment merged; static Projects list/profile UI committed on feature branch (not build-tested); Project domain foundation remains in draft PR #7 |
 | Current mastery assessment | Not assessed |
-| Next recommended action | Review training resources; decide database and identity boundary; scope first Project domain/application slice |
+| Next recommended action | Review static Projects UI PR; run build and browser checks; decide database and identity boundary before wiring persistence |
 | Last progress review | 2026-10-21 (architecture assessment) |
 
 ## 2. Learning & engineering roadmap
