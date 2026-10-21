@@ -1,17 +1,45 @@
 using AgentForge.Application.Chat.Commands;
-using AgentForge.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgentForge.Web.Controllers;
 
-public class ChatController(ChatCommand chatCommand) : Controller
+[Route("chat")]
+public sealed class ChatController(ChatCommand chatCommand, ILogger<ChatController> logger) : Controller
 {
-    [HttpGet]
-    public async Task<IActionResult> GetAIConfig()
-    {
-        var res = await chatCommand.HandleAsync(
-            new SendMessageCommand("Hello Sir"));
+    [HttpGet("")]
+    public IActionResult Index() => View();
 
-        return Ok(res);
+    [HttpPost("messages")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SendMessage([FromBody] SendMessageRequest request, CancellationToken cancellationToken)
+    {
+        if (request is null || string.IsNullOrWhiteSpace(request.Message))
+            return BadRequest(new { error = "Please enter a message." });
+
+        if (request.Message.Length > 12000)
+            return BadRequest(new { error = "Message is too long (maximum 12,000 characters)." });
+
+        try
+        {
+            var result = await chatCommand.HandleAsync(
+                new SendMessageCommand(request.Message.Trim()), cancellationToken);
+            return Ok(new { response = result.Response });
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            return StatusCode(499);
+        }
+        catch (HttpRequestException ex)
+        {
+            logger.LogWarning(ex, "Local inference service unavailable");
+            return StatusCode(502, new { error = "The local AI service is unavailable. Check that your model server is running." });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Chat request failed");
+            return StatusCode(500, new { error = "The AI request failed. Please try again." });
+        }
     }
+
+    public sealed record SendMessageRequest(string Message);
 }
