@@ -61,3 +61,15 @@
 .workspace-nav .side-link.active{font-weight:600}
 .workspace-nav .side-label{font-size:11px}
 .workspace-nav .side-link span{font-size:22px}
+
+/* Two workspace groups with independently accessible settings */
+.sidebar{gap:14px}
+.workspace-nav{min-height:0;overflow-y:auto;overflow-x:hidden;flex:1;padding-right:3px}
+.workspace-nav .side-label{flex:none}
+.workspace-section-break{margin-top:17px!important;padding-top:17px!important;border-top:1px solid var(--line)}
+.workspace-settings-link{display:flex;align-items:center;gap:13px;min-height:46px;padding:11px 13px;text-decoration:none;font-size:14px;font-weight:500;flex:none}
+.workspace-settings-link span{display:inline-flex;align-items:center;justify-content:center;flex:0 0 26px;width:26px;height:26px;color:var(--accent);font-size:22px;line-height:1}
+.workspace-settings-link:hover{background:var(--hover)}
+.workspace-settings-link.active{font-weight:600}
+.sidebar .new-chat{flex:none}
+.sidebar .side-footer{margin-top:0;flex:none}
