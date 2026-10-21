@@ -12,10 +12,10 @@
 | --- | --- |
 | Current phase | Module 00 — Baseline & Roadmap Alignment (planned) |
 | Current learning module | Not started |
-| Current engineering milestone | UI foundation merged; next feature not yet scoped |
+| Current engineering milestone | UI foundation merged; Project domain/application slice committed on feature branch (not tested) |
 | Current mastery assessment | Not assessed |
-| Next recommended action | Review training resources and current repository architecture; establish baseline and select first learning sprint |
-| Last progress review | 2026-10-21 (initial tracker) |
+| Next recommended action | Review Project Foundation PR, run build/tests, choose database and identity model |
+| Last progress review | 2026-10-21 (Project Foundation implementation pending verification) |
 
 ## 2. Learning & engineering roadmap
 
@@ -66,7 +66,7 @@ These phases are **provisional** until reconciled with the project's training ma
 4. Resume from the first unresolved learning objective or engineering dependency.
 5. At the end of the session, update the snapshot, roadmap status, active module, gaps, and handoff based on verified progress.
 
-**Next suggested session:** Module 00 — inspect the uploaded training roadmaps and the latest AgentForge architecture, establish a baseline skill matrix, and define the first learning sprint.
+**Next suggested session:** Review Project Foundation PR, run tests, decide persistence and identity boundary; Module 00 mastery not assessed.
 
 ## 6. Update rules for ChatGPT
 
