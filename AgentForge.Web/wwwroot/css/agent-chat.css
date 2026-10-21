@@ -73,3 +73,18 @@
 .workspace-settings-link.active{font-weight:600}
 .sidebar .new-chat{flex:none}
 .sidebar .side-footer{margin-top:0;flex:none}
+
+/* Chat sits above both workspace navigation groups */
+.chat-sidebar-group{flex:none}
+.chat-group-toggle{display:flex;align-items:center;gap:13px;width:100%;border:0;border-radius:9px;background:var(--active);color:var(--heading);font:600 14px inherit;font-size:14px;font-weight:600;padding:12px 13px;text-align:left;cursor:pointer}
+.chat-group-toggle>span:first-child{font-size:22px;color:var(--accent)}
+.chat-chevron{margin-left:auto;color:var(--muted)}
+.chat-group-toggle[aria-expanded="false"] .chat-chevron{transform:rotate(-90deg)}
+.chat-tabs[hidden]{display:none}
+.chat-tabs{padding:6px 0 0 16px;display:flex;flex-direction:column;gap:3px}
+.chat-tab,.chat-tab-new{border:0;background:transparent;color:var(--content);border-radius:8px;text-align:left;padding:9px 12px;font-size:13px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
+.chat-tab:hover,.chat-tab-new:hover{background:var(--hover)}
+.chat-tab.active{background:var(--active);font-weight:600}
+.chat-tab-new{color:var(--accent);font-weight:600}
+.chat-tab-new span{margin-right:8px}
+.chat-tab-list{max-height:160px;overflow:auto}
