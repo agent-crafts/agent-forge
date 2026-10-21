@@ -1,0 +1,36 @@
+@model IReadOnlyList<AgentForge.Web.Models.ProjectPreview>
+@{
+    Layout = "_AppLayout";
+}
+<link rel="stylesheet" href="~/css/projects.css" asp-append-version="true" />
+<div class="project-toolbar">
+    <div><h2>All Projects</h2><p>Choose a project to manage its profile, connections, and AI workspace.</p></div>
+    <button class="project-primary" type="button" disabled title="Coming in a future milestone">+ New Project</button>
+</div>
+<div class="project-search"><input id="projectSearch" type="search" placeholder="Search projects..." aria-label="Search projects" /></div>
+<div class="project-grid" id="projectGrid">
+@foreach (var project in Model)
+{
+    <a class="project-tile" href="/projects/@project.Slug" data-project-name="@project.Name.ToLowerInvariant()">
+        <div class="project-tile-head"><span class="project-avatar" style="background:@project.Color">@project.Initials</span><span class="project-status @(project.Status == "Active" ? "is-active" : "is-archived")">@project.Status</span></div>
+        <h3>@project.Name</h3><p>@project.Description</p>
+        <div class="project-tile-metrics"><span>✧ @project.Agents agents</span><span>▤ @project.Documents docs</span><span>▷ @project.Runs runs</span></div>
+        <span class="project-open">Open project →</span>
+    </a>
+}
+</div>
+<p id="projectEmpty" class="project-empty" hidden>No projects match your search.</p>
+@section Scripts {
+<script>
+document.getElementById('projectSearch').addEventListener('input', function () {
+    const term = this.value.trim().toLowerCase();
+    let visible = 0;
+    document.querySelectorAll('[data-project-name]').forEach(card => {
+        const show = card.dataset.projectName.includes(term);
+        card.hidden = !show;
+        if (show) visible++;
+    });
+    document.getElementById('projectEmpty').hidden = visible !== 0;
+});
+</script>
+}
