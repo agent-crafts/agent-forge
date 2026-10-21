@@ -6,6 +6,62 @@
   const welcome = document.getElementById('welcome');
   const conversation = document.getElementById('conversation');
   const token = form.querySelector('input[name="__RequestVerificationToken"]').value;
+  const storageKey = 'agentforge.demo.chats.v1';
+  const demoChats = [
+    { id: 'demo-architecture', title: 'Agent Architecture', messages: [{ role: 'user', content: 'How should I structure an AI agent?' }, { role: 'assistant', content: 'Start with a model, instructions, tools, and a bounded execution loop.' }] },
+    { id: 'demo-workflow', title: 'ADLC Workflow Ideas', messages: [{ role: 'user', content: 'What is an ADLC workflow?' }, { role: 'assistant', content: 'It connects specifications, implementation, tests, and review into a repeatable process.' }] }
+  ];
+  function loadChats() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey));
+      if (Array.isArray(saved) && saved.every(c => typeof c.id === 'string' && Array.isArray(c.messages))) return saved;
+    } catch (_) { /* reset invalid demo storage */ }
+    return demoChats;
+  }
+  let chats = loadChats();
+  let currentChatId = chats[0]?.id || null;
+  const tabList = document.getElementById('chatTabList');
+  const chatToggle = document.getElementById('chatGroupToggle');
+  const chatTabs = document.getElementById('chatTabs');
+  function saveChats() { try { localStorage.setItem(storageKey, JSON.stringify(chats)); } catch (_) { /* storage may be unavailable */ } }
+  function currentChat() { return chats.find(c => c.id === currentChatId); }
+  function renderTabs() {
+    tabList.replaceChildren();
+    for (const chat of chats) {
+      const tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = 'chat-tab' + (chat.id === currentChatId ? ' active' : '');
+      tab.textContent = chat.title;
+      tab.title = chat.title;
+      tab.setAttribute('aria-current', chat.id === currentChatId ? 'page' : 'false');
+      tab.addEventListener('click', () => selectChat(chat.id));
+      tabList.append(tab);
+    }
+  }
+  function selectChat(id) {
+    if (activeController) activeController.abort();
+    currentChatId = id;
+    messages.replaceChildren();
+    const chat = currentChat();
+    for (const message of chat?.messages || []) appendMessage(message.role, message.content);
+    welcome.hidden = !!chat?.messages.length;
+    renderTabs();
+    document.querySelector('.sidebar').classList.remove('open');
+  }
+  function createChat() {
+    const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now());
+    chats.unshift({ id, title: 'New Chat', messages: [] });
+    saveChats();
+    selectChat(id);
+    prompt.value = '';
+    resize();
+    prompt.focus();
+  }
+  chatToggle?.addEventListener('click', () => {
+    const expanded = chatToggle.getAttribute('aria-expanded') !== 'true';
+    chatToggle.setAttribute('aria-expanded', String(expanded));
+    chatTabs.hidden = !expanded;
+  });
   let busy = false;
   let activeController = null;
   function scrollDown() { conversation.scrollTop = conversation.scrollHeight; }
@@ -43,6 +99,8 @@
     send.disabled = true;
     prompt.value = '';
     resize();
+    const chat = currentChat();
+    if (chat) { chat.messages.push({ role: 'user', content: text }); if (chat.title === 'New Chat') chat.title = text.slice(0, 34); saveChats(); renderTabs(); }
     appendMessage('user', text);
     const reply = appendMessage('assistant', 'Thinking…');
     activeController = new AbortController();
@@ -56,8 +114,10 @@
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || 'Request failed (' + response.status + ').');
       reply.textContent = data.response || '(No text returned)';
+      if (chat) { chat.messages.push({ role: 'assistant', content: reply.textContent }); saveChats(); }
     } catch (err) {
       reply.textContent = err.name === 'AbortError' ? 'Request cancelled.' : 'Error: ' + err.message;
+      if (chat && err.name !== 'AbortError') { chat.messages.push({ role: 'assistant', content: reply.textContent }); saveChats(); }
     } finally {
       busy = false;
       activeController = null;
@@ -66,15 +126,9 @@
       scrollDown();
     }
   });
-  document.getElementById('newChat').addEventListener('click', () => {
-    if (activeController) activeController.abort();
-    messages.replaceChildren();
-    welcome.hidden = false;
-    prompt.value = '';
-    resize();
-    prompt.focus();
-    document.querySelector('.sidebar').classList.remove('open');
-  });
+  document.getElementById('newChat').addEventListener('click', createChat);
+  saveChats();
+  if (new URLSearchParams(location.search).has('new')) createChat(); else selectChat(currentChatId);
   document.getElementById('mobileMenu').addEventListener('click', () => document.querySelector('.sidebar').classList.toggle('open'));
   document.querySelectorAll('[data-prompt]').forEach(button => button.addEventListener('click', () => {
     prompt.value = button.dataset.prompt;
