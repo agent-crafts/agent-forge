@@ -5,7 +5,10 @@
     <partial name="_Sidebar" />
     <main class="main">
         <partial name="_Topbar" />
-        @RenderBody()
+        <section class="page-content">
+            <partial name="_PageHeading" />
+            @RenderBody()
+        </section>
     </main>
 </div>
 <script src="~/js/app-shell.js" asp-append-version="true"></script>
