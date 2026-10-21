@@ -99,3 +99,8 @@
 .chat-tab-delete{display:grid;place-items:center;flex:none;width:24px;height:28px;margin:0;padding:0;border:0;background:transparent;color:var(--muted);cursor:pointer;line-height:1}
 .chat-tab-delete svg{display:block}
 .chat-tab-delete:hover,.chat-tab-delete:focus-visible{background:transparent;color:#e05252}
+
+/* Shared SVG navigation icon sizing: avoid platform-dependent Unicode glyph sizes. */
+.ui-icon{display:block;width:100%;height:100%;flex:none}
+.app-nav .side-link .nav-icon,.chat-group-toggle .nav-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 24px;width:24px;height:24px;color:var(--accent);margin:0}
+.app-nav .side-link .nav-icon .ui-icon,.chat-group-toggle .nav-icon .ui-icon{width:24px;height:24px}
