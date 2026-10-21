@@ -49,35 +49,14 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Mastery criteria and evidence:** TBD
 - **Open questions / blockers:** TBD
 
-## 4. Module completion record (copy for each completed module)
-
-### Module: [ID — Title]
-
-- **Date:** YYYY-MM-DD
-- **Problem / learning objective:**
-- **Concepts understood:** (brief, precise)
-- **Scientific foundations / internals covered:**
-- **Experiments / exercises performed:**
-- **Implementation:** (paths, branch, PR, commit)
-- **Verification:** (tests actually run, results, and limitations)
-- **Trade-offs / failure modes discussed:**
-- **Mastery evidence:** (what was independently explained, built, debugged, or designed)
-- **Knowledge status:** Not started / In progress / Completed
-- **Engineering status:** Not started / In progress / Completed
-- **Mastery status:** Not assessed / In progress / Demonstrated
-- **Remaining gaps / follow-up tasks:**
-- **Next module / dependency:**
-
-<!-- Append completed records below this line. Never delete historical records merely to shorten the file. -->
-
-## 5. Decisions & unresolved gaps
+## 4. Decisions & unresolved gaps
 
 | Date | Decision / gap | Rationale | Evidence / follow-up |
 | --- | --- | --- | --- |
 | 2026-10-21 | Track learning, implementation, and mastery independently | Merged code alone does not establish understanding | This tracker |
 | 2026-10-21 | Align training resources before finalizing the phase order | Prevent prerequisite gaps and disconnected feature work | Module 00 |
 
-## 6. Next-session handoff
+## 5. Next-session handoff
 
 **Read this section first in a new chat.**
 
@@ -85,15 +64,15 @@ These phases are **provisional** until reconciled with the project's training ma
 2. Verify current branches, PRs, and relevant code through GitHub; do not rely solely on this summary.
 3. Identify the active module and distinguish proven outcomes from plans.
 4. Resume from the first unresolved learning objective or engineering dependency.
-5. At the end of the session, update the snapshot, active module, evidence, gaps, and handoff; append a completion record **only when warranted**.
+5. At the end of the session, update the snapshot, roadmap status, active module, gaps, and handoff based on verified progress.
 
 **Next suggested session:** Module 00 — inspect the uploaded training roadmaps and the latest AgentForge architecture, establish a baseline skill matrix, and define the first learning sprint.
 
-## 7. Update rules for ChatGPT
+## 6. Update rules for ChatGPT
 
 - **When:** After a meaningful module, PR, assessment, or decision; not after every small message.
 - **Where:** Edit `MASTERY_PROGRESS.md` in a focused feature branch or the active PR branch. Do not push to `main` without explicit permission.
-- **How:** Read the latest file first, preserve existing history, update only affected sections, cite actual PRs/commits/tests, and keep entries concise.
+- **How:** Read the latest file first, preserve relevant decisions, update only affected sections, cite actual PRs/commits/tests where useful, and keep entries concise.
 - **Evidence:** Never mark a skill `Demonstrated` without an actual mastery check. Never claim a build or test was run unless verified.
 - **Scope:** Distinguish **planned**, **implemented**, **verified**, and **mastered**.
 - **Completion:** Summarize what changed and link the PR. If repository write access is unavailable, supply the exact proposed Markdown patch and state that it was not committed.
