@@ -55,3 +55,9 @@
 /* Larger, consistent workspace sidebar icons */
 .workspace-nav .side-link{display:flex;align-items:center;gap:13px;min-height:46px;padding:11px 13px}
 .workspace-nav .side-link span{display:inline-flex;align-items:center;justify-content:center;flex:0 0 26px;width:26px;height:26px;margin:0;color:var(--accent);font-size:24px;line-height:1;font-weight:500}
+
+/* Balanced sidebar typography */
+.workspace-nav .side-link{font-size:14px;font-weight:500}
+.workspace-nav .side-link.active{font-weight:600}
+.workspace-nav .side-label{font-size:11px}
+.workspace-nav .side-link span{font-size:22px}
