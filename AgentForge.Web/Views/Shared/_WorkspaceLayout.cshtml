@@ -1,0 +1,12 @@
+@{
+    Layout = "_Layout";
+}
+<div class="shell">
+    <partial name="_WorkspaceSidebar" />
+    <main class="main">
+        <partial name="_WorkspaceTopbar" />
+        @RenderBody()
+    </main>
+</div>
+<script src="~/js/workspace-shell.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
