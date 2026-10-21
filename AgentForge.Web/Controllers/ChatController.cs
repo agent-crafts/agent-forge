@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using AgentForge.Application.Chat.Commands;
+using AgentForge.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgentForge.Web.Controllers;
@@ -8,6 +10,10 @@ public sealed class ChatController(ChatCommand chatCommand, ILogger<ChatControll
 {
     [HttpGet("")]
     public IActionResult Index() => View();
+
+    [HttpGet("error")]
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 
     [HttpPost("messages")]
     [ValidateAntiForgeryToken]
