@@ -1,0 +1,51 @@
+@{ ViewData["Title"] = "Chat"; }
+<div class="shell">
+    <aside class="sidebar">
+        <a class="brand" href="/chat"><span class="brand-mark">✦</span><span>AgentForge <small>LOCAL AI WORKSPACE</small></span></a>
+        <button class="new-chat" id="newChat" type="button"><span>＋</span> New chat</button>
+        <div class="side-label">YOUR WORKSPACE</div>
+        <div class="side-link active"><span>◈</span> Current conversation</div>
+        <div class="side-footer"><span class="status-dot"></span> Local model <span class="muted">· Connected via API</span></div>
+    </aside>
+    <main class="main">
+        <header class="topbar">
+            <button class="mobile-menu" id="mobileMenu" aria-label="Toggle menu" type="button">☰</button>
+            <div class="model-heading"><strong>AgentForge Assistant</strong><span>Local inference · Qwen</span></div>
+            <div class="flex items-center gap-3">
+                <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme" title="Switch to light theme">
+                    <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+                    <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"/></svg>
+                </button>
+                <span class="top-pill"><span class="status-dot"></span> Local</span>
+            </div>
+        </header>
+        <section class="conversation" id="conversation" aria-label="Chat messages" aria-live="polite">
+            <div class="welcome" id="welcome">
+                <div class="welcome-icon">✦</div>
+                <h1>What can we build today?</h1>
+                <p>Your local AI engineering companion. Ask a question, explore an idea, or debug some code.</p>
+                <div class="suggestions">
+                    <button type="button" data-prompt="Explain how an AI agent loop works from first principles.">How does an agent loop work? <span>↗</span></button>
+                    <button type="button" data-prompt="Help me design a production-ready .NET AI agent architecture.">Design a .NET agent <span>↗</span></button>
+                    <button type="button" data-prompt="What is the difference between context, memory, and RAG?">Context vs memory vs RAG <span>↗</span></button>
+                </div>
+            </div>
+            <div class="messages" id="messages"></div>
+        </section>
+        <div class="composer-wrap">
+            <form id="chatForm" class="composer">
+                @Html.AntiForgeryToken()
+                <label for="prompt" class="sr-only">Your message</label>
+                <textarea id="prompt" rows="1" maxlength="12000" placeholder="Message AgentForge…" required></textarea>
+                <div class="composer-actions">
+                    <span class="hint">Enter to send · Shift+Enter for new line</span>
+                    <button id="sendButton" type="submit" aria-label="Send message" title="Send message">↑</button>
+                </div>
+            </form>
+            <p class="disclaimer">Responses are generated locally. Chat history is kept in this browser tab only; the model receives each message independently.</p>
+        </div>
+    </main>
+</div>
+@section Scripts {
+    <script src="~/js/agent-chat.js" asp-append-version="true"></script>
+}
