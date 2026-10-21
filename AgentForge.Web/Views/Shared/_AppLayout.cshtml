@@ -6,7 +6,10 @@
     <main class="main">
         <partial name="_Topbar" />
         <section class="page-content">
-            <partial name="_PageHeading" />
+            @if (!string.Equals(ViewData["Section"] as string, "projects", StringComparison.OrdinalIgnoreCase))
+            {
+                <partial name="_PageHeading" />
+            }
             @RenderBody()
         </section>
     </main>
