@@ -1,4 +1,4 @@
-using AgentForge.Core.Projects;
+using AgentForge.Core.Domain;
 using Xunit;
 
 namespace AgentForge.Tests;
@@ -16,6 +16,7 @@ public sealed class ProjectTests
         Assert.Equal("Prototype", project.Description);
         Assert.Equal(Now, project.CreatedAt);
         Assert.False(project.IsArchived);
+        Assert.True(project.IsActive);
     }
 
     [Theory]
@@ -34,6 +35,7 @@ public sealed class ProjectTests
         var project = Project.Create("Agent Studio", null, Now);
         project.Archive(Now.AddMinutes(1));
         Assert.True(project.IsArchived);
+        Assert.False(project.IsActive);
         Assert.Equal(Now.AddMinutes(1), project.ArchivedAt);
         Assert.Throws<InvalidOperationException>(() => project.UpdateDetails("Renamed", null, Now.AddMinutes(2)));
         Assert.Throws<InvalidOperationException>(() => project.Archive(Now.AddMinutes(2)));
