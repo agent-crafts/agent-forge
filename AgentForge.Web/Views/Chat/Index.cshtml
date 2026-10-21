@@ -1,17 +1,4 @@
-@{
-    Layout = null;
-    ViewData["Title"] = "AgentForge Chat";
-}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#0d1117">
-    <title>AgentForge — Chat</title>
-    <link rel="stylesheet" href="~/css/agent-chat.css" asp-append-version="true">
-</head>
-<body>
+@{ ViewData["Title"] = "Chat"; }
 <div class="shell">
     <aside class="sidebar">
         <a class="brand" href="/chat"><span class="brand-mark">✦</span><span>AgentForge <small>LOCAL AI WORKSPACE</small></span></a>
@@ -53,6 +40,6 @@
         </div>
     </main>
 </div>
-<script src="~/js/agent-chat.js" asp-append-version="true"></script>
-</body>
-</html>
+@section Scripts {
+    <script src="~/js/agent-chat.js" asp-append-version="true"></script>
+}
