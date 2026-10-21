@@ -1,86 +1,15 @@
 @{
-    var section = (string)(ViewData["Section"] ?? "agents");
-    var title = (string)(ViewData["Title"] ?? "Workspace");
-    var description = (string)(ViewData["Description"] ?? "");
+    Layout = "_WorkspaceLayout";
+    var section = (string)(ViewData["Section"] ?? "");
 }
-<div class="shell">
-    <aside class="sidebar" id="workspaceSidebar">
-        <a class="brand" href="/chat"><span class="brand-mark">✦</span><span>AgentForge <small>AGENT WORKSPACE</small></span></a>
-        <div class="chat-sidebar-group">
-            <button type="button" class="chat-group-toggle" id="chatGroupToggle" aria-expanded="false" aria-controls="chatTabs"><span>◈</span> Chat <span class="chat-chevron">⌄</span></button>
-            <div class="chat-tabs" id="chatTabs" hidden>
-                <button class="chat-tab-new" id="newChat" type="button"><span>＋</span> New Chat</button>
-                <div id="chatTabList" class="chat-tab-list" aria-label="Conversations"><a class="chat-tab" href="/chat">Open conversations →</a></div>
-            </div>
-        </div>
-        <nav class="workspace-nav" aria-label="Workspace navigation">
-            <div class="side-label">DEVELOPMENT OPERATIONS</div>
-            @foreach (var item in new[] { ("projects", "▣", "Projects"), ("specifications", "▤", "Specifications"), ("workflows", "⑂", "Workflows"), ("tasks", "☑", "Tasks"), ("reviews", "✓", "Reviews & Approvals"), ("pipelines", "⇢", "Pipelines") })
-            {
-                var active = item.Item1 == section;
-                <a class="side-link @(active ? "active" : "")" aria-current="@(active ? "page" : null)" href="/@(item.Item1)"><span>@item.Item2</span> @item.Item3</a>
-            }
-            <div class="side-label workspace-section-break">AGENT STUDIO</div>
-            @foreach (var item in new[] { ("agents", "✧", "Agents"), ("tools", "⚒", "Tools"), ("knowledge", "▤", "Knowledge"), ("runs", "◷", "Runs") })
-            {
-                var active = item.Item1 == section;
-                <a class="side-link @(active ? "active" : "")" aria-current="@(active ? "page" : null)" href="/@(item.Item1)"><span>@item.Item2</span> @item.Item3</a>
-            }
-        </nav>
-        <div class="side-footer"><span class="status-dot"></span> Local workspace</div>
-    </aside>
-    <main class="main">
-        <header class="topbar">
-            <button class="mobile-menu" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="workspaceSidebar" id="workspaceMenu">☰</button>
-            <div class="model-heading"><strong>@title</strong><span>AgentForge workspace</span></div>
-            <div class="flex items-center gap-3">
-                <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
-                    <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
-                    <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"/></svg>
-                </button>
-                <span class="top-pill">Local</span>
-            </div>
-        </header>
-        <section class="workspace-content">
-            <div class="workspace-heading">
-                <div><p class="workspace-eyebrow">WORKSPACE / @title.ToUpperInvariant()</p><h1>@title</h1><p>@description</p></div>
-                <span class="workspace-coming-soon">UI Preview</span>
-            </div>
-            @if (section == "agents")
-            {
-                <div class="workspace-grid">
-                    <article class="workspace-card"><div class="workspace-card-icon">✧</div><h2>My Agents</h2><p>Agent profiles and configurations will appear here.</p><span class="workspace-placeholder">No agents created yet</span></article>
-                    <article class="workspace-card"><div class="workspace-card-icon">＋</div><h2>Agent Builder</h2><p>Configure instructions, models, tools, and execution limits.</p><span class="workspace-placeholder">Coming in a future phase</span></article>
-                    <article class="workspace-card"><div class="workspace-card-icon">▸</div><h2>Test an Agent</h2><p>Preview an agent before publishing it.</p><span class="workspace-placeholder">Not connected</span></article>
-                </div>
-            }
-            else
-            {
-                <div class="workspace-grid">
-                    <article class="workspace-card"><div class="workspace-card-icon">◇</div><h2>@title Overview</h2><p>@description</p><span class="workspace-placeholder">Nothing to show yet</span></article>
-                    <article class="workspace-card"><div class="workspace-card-icon">◷</div><h2>Coming Next</h2><p>This section is a navigation placeholder. Backend integration will follow.</p><span class="workspace-placeholder">Planned feature</span></article>
-                </div>
-            }
-        </section>
-    </main>
-</div>
-@section Scripts {
-<script>
-(() => {
-  const button = document.getElementById('workspaceMenu');
-  const sidebar = document.getElementById('workspaceSidebar');
-  const chatToggle = document.getElementById('chatGroupToggle');
-  const chatTabs = document.getElementById('chatTabs');
-  chatToggle?.addEventListener('click', () => {
-    const expanded = chatToggle.getAttribute('aria-expanded') !== 'true';
-    chatToggle.setAttribute('aria-expanded', String(expanded));
-    chatTabs.hidden = !expanded;
-  });
-  document.getElementById('newChat')?.addEventListener('click', () => window.location.assign('/chat?new=1'));
-  button?.addEventListener('click', () => {
-    const expanded = sidebar.classList.toggle('open');
-    button.setAttribute('aria-expanded', String(expanded));
-  });
-})();
-</script>
-}
+<section class="workspace-content">
+    <partial name="_WorkspaceHeading" />
+    @if (section == "agents")
+    {
+        <partial name="_AgentsContent" />
+    }
+    else
+    {
+        <partial name="_PlaceholderContent" />
+    }
+</section>
