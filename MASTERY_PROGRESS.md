@@ -17,15 +17,6 @@
 | Next recommended action | Review training resources and current repository architecture; establish baseline and select first learning sprint |
 | Last progress review | 2026-10-21 (initial tracker) |
 
-### Verified engineering history
-
-| Milestone | Evidence | Engineering status | Mastery status |
-| --- | --- | --- | --- |
-| Chat UI foundation | [PR #1](https://github.com/agent-crafts/agent-forge/pull/1) | Merged | Not assessed |
-| Shared workspace shell and components | [PR #2](https://github.com/agent-crafts/agent-forge/pull/2) | Merged | Not assessed |
-
-**Important:** A feature may be merged without proving conceptual mastery or production readiness. Do not infer CI/build verification from a merge.
-
 ## 2. Learning & engineering roadmap
 
 These phases are **provisional** until reconciled with the project's training materials and learning roadmaps.
