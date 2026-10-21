@@ -1,4 +1,4 @@
-using AgentForge.Core.Projects;
+using AgentForge.Core.Domain;
 
 namespace AgentForge.Application.Projects;
 
