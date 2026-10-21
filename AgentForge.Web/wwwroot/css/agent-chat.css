@@ -88,4 +88,11 @@
 .chat-tab-new{color:var(--accent);font-weight:600}
 .chat-tab-new span{margin-right:8px}
 .chat-tab-list{max-height:160px;overflow:auto}
-\n.chat-tab-list a.chat-tab{display:block;text-decoration:none}\n
+
+.chat-tab-list a.chat-tab{display:block;text-decoration:none}
+
+/* Per-conversation delete action */
+.chat-tab-row{display:flex;align-items:center;gap:2px;border-radius:8px;min-width:0}
+.chat-tab-row .chat-tab{min-width:0;flex:1;width:auto}
+.chat-tab-delete{flex:none;border:0;background:transparent;color:var(--muted);font-size:21px;line-height:1;border-radius:7px;width:29px;height:32px;cursor:pointer}
+.chat-tab-delete:hover,.chat-tab-delete:focus-visible{background:var(--hover);color:var(--heading)}
