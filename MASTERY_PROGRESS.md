@@ -12,10 +12,10 @@
 | --- | --- |
 | Current phase | Module 00 — Baseline & Roadmap Alignment (planned) |
 | Current learning module | Not started |
-| Current engineering milestone | UI foundation merged; next feature not yet scoped |
+| Current engineering milestone | UI foundation merged; architecture assessment documented (PR pending); Project Foundation implementation not started |
 | Current mastery assessment | Not assessed |
-| Next recommended action | Review training resources and current repository architecture; establish baseline and select first learning sprint |
-| Last progress review | 2026-10-21 (initial tracker) |
+| Next recommended action | Review training resources; decide database and identity boundary; scope first Project domain/application slice |
+| Last progress review | 2026-10-21 (architecture assessment) |
 
 ## 2. Learning & engineering roadmap
 
@@ -23,7 +23,7 @@ These phases are **provisional** until reconciled with the project's training ma
 
 | Phase | Focus | Knowledge | Engineering | Mastery |
 | --- | --- | --- | --- | --- |
-| 00 | Baseline, curriculum alignment, repository architecture | Planned | UI foundation exists | Not assessed |
+| 00 | Baseline, curriculum alignment, repository architecture | In progress | UI foundation exists; architecture inspected, no implementation verified | Not assessed |
 | 01 | LLM foundations: tokens, attention, transformers, inference | Not started | Not started | Not assessed |
 | 02 | LLM application engineering: messages, context, persistence, streaming | Not started | Not started | Not assessed |
 | 03 | Agent runtime: tool calling, state, execution loops, guardrails | Not started | Not started | Not assessed |
@@ -55,6 +55,7 @@ These phases are **provisional** until reconciled with the project's training ma
 | --- | --- | --- | --- |
 | 2026-10-21 | Track learning, implementation, and mastery independently | Merged code alone does not establish understanding | This tracker |
 | 2026-10-21 | Align training resources before finalizing the phase order | Prevent prerequisite gaps and disconnected feature work | Module 00 |
+| 2026-10-21 | Project-centric Agent Studio is proposed; database and identity model remain open | Establish a project boundary before agents and orchestration | docs/architecture-foundation-assessment.md |
 
 ## 5. Next-session handoff
 
@@ -66,7 +67,7 @@ These phases are **provisional** until reconciled with the project's training ma
 4. Resume from the first unresolved learning objective or engineering dependency.
 5. At the end of the session, update the snapshot, roadmap status, active module, gaps, and handoff based on verified progress.
 
-**Next suggested session:** Module 00 — inspect the uploaded training roadmaps and the latest AgentForge architecture, establish a baseline skill matrix, and define the first learning sprint.
+**Next suggested session:** Complete Module 00 curriculum/baseline review; use `docs/architecture-foundation-assessment.md` to decide database and identity boundary, then scope the first Project Foundation implementation PR. No build or tests have been run for the assessment.
 
 ## 6. Update rules for ChatGPT
 
