@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "./tokens.css";
 @import "../wwwroot/css/agent-chat.css";
 
 /* Tailwind semantic utilities: bg-app, bg-surface, text-content, border-line, etc. */
