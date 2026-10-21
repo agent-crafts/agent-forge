@@ -13,7 +13,7 @@
 <nav class="profile-tabs" aria-label="Project profile tabs">
 @foreach (var item in tabs)
 {
-    <a href="/projects/@Model.Slug?tab=@item.Item1" class="profile-tab @(tab == item.Item1 ? "selected" : "")" aria-current="@(tab == item.Item1 ? "page" : null)"><span>@item.Item2</span> @item.Item3</a>
+    <a href="/projects/@Model.Slug?tab=@item.Item1" class="profile-tab @(tab == item.Item1 ? "selected" : "")" aria-current="@(tab == item.Item1 ? "page" : null)"><span class="profile-tab-icon"><partial name="_UiIcon" model="item.Item1" /></span> @item.Item3</a>
 }
 </nav>
 @if (tab == "general")
@@ -42,7 +42,7 @@
 else
 {
     <section class="profile-panel tab-preview">
-        <div class="tab-preview-icon">@tabs.First(t => t.Item1 == tab).Item2</div>
+        <div class="tab-preview-icon"><partial name="_UiIcon" model="tab" /></div>
         <h3>@tabs.First(t => t.Item1 == tab).Item3</h3>
         @switch (tab)
         {
