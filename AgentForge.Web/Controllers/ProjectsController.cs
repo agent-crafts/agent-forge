@@ -22,7 +22,7 @@ public sealed class ProjectsController : Controller
         var project = ProjectPreviewData.Find(slug);
         if (project is null) return NotFound();
 
-        var allowed = new[] { "general", "integrations", "knowledge", "agents", "team", "permissions", "advanced" };
+        var allowed = new[] { "general", "integrations", "knowledge", "agents", "tools", "runs", "team", "permissions", "advanced" };
         if (!allowed.Contains(tab, StringComparer.OrdinalIgnoreCase)) return NotFound();
 
         ViewData["Title"] = project.Name;
