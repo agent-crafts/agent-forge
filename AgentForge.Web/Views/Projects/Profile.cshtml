@@ -1,0 +1,59 @@
+@model AgentForge.Web.Models.ProjectPreview
+@{
+    Layout = "_AppLayout";
+    var tab = (string)ViewData["Tab"]!;
+    var tabs = new[] { ("general", "⚙", "General"), ("integrations", "🔗", "Integrations"), ("knowledge", "▤", "Knowledge"), ("agents", "✧", "Agents"), ("team", "♧", "Team"), ("permissions", "♢", "Permissions"), ("advanced", "☷", "Advanced") };
+}
+<link rel="stylesheet" href="~/css/projects.css" asp-append-version="true" />
+<div class="project-breadcrumb"><a href="/projects">Projects</a><span>›</span><strong>@Model.Name</strong><span>›</span><span>Profile</span></div>
+<header class="profile-hero">
+    <span class="profile-avatar" style="background:@Model.Color">@Model.Initials</span>
+    <div class="profile-identity"><div class="profile-title"><h2>@Model.Name</h2><span class="project-status @(Model.Status == "Active" ? "is-active" : "is-archived")">@Model.Status</span></div><p>@Model.Description</p><div class="profile-meta"><span>✧ @Model.Agents agents</span><span>▤ @Model.Documents documents</span><span>▷ @Model.Runs runs</span></div></div>
+    <span class="preview-label">Static preview</span>
+</header>
+<nav class="profile-tabs" aria-label="Project profile tabs">
+@foreach (var item in tabs)
+{
+    <a href="/projects/@Model.Slug?tab=@item.Item1" class="profile-tab @(tab == item.Item1 ? "selected" : "")" aria-current="@(tab == item.Item1 ? "page" : null)"><span>@item.Item2</span> @item.Item3</a>
+}
+</nav>
+@if (tab == "general")
+{
+    <div class="profile-columns">
+        <section class="profile-panel"><h3>Basic Information</h3><p class="panel-intro">Core details about your project.</p>
+            <div class="profile-field"><label for="projectName">Project Name</label><input id="projectName" value="@Model.Name" readonly /></div>
+            <div class="profile-field"><label for="projectDescription">Description</label><textarea id="projectDescription" rows="4" readonly>@Model.Description</textarea></div>
+            <div class="profile-field"><label for="projectStatus">Status</label><input id="projectStatus" value="@Model.Status" readonly /></div>
+            <div class="preview-note">Read-only demo data. Editing will be enabled when persistence is implemented.</div>
+        </section>
+        <div class="profile-stack">
+            <section class="profile-panel"><h3>Project Integrations</h3><p class="panel-intro">External tools associated with this project.</p>
+                <div class="integration-row"><span class="integration-symbol jira">J</span><div><strong>Jira</strong><small>Agile board and work items</small></div><span class="connection-tag">@(string.IsNullOrEmpty(Model.JiraUrl) ? "Not linked" : "Demo link")</span></div>
+                <div class="integration-row"><span class="integration-symbol github">⌘</span><div><strong>GitHub</strong><small>Source code repository</small></div><span class="connection-tag">@(string.IsNullOrEmpty(Model.GitHubUrl) ? "Not linked" : "Demo link")</span></div>
+                <div class="integration-row"><span class="integration-symbol docs">▤</span><div><strong>Documentation</strong><small>Project documentation source</small></div><span class="connection-tag">@(string.IsNullOrEmpty(Model.DocumentationUrl) ? "Not linked" : "Demo link")</span></div>
+            </section>
+            <section class="profile-panel"><h3>Project Links</h3><p class="panel-intro">Example URLs — not connected to real services.</p>
+                <div class="profile-field"><label for="jiraLink">Jira Board</label><input id="jiraLink" value="@Model.JiraUrl" placeholder="Not configured" readonly /></div>
+                <div class="profile-field"><label for="githubLink">Repository</label><input id="githubLink" value="@Model.GitHubUrl" placeholder="Not configured" readonly /></div>
+                <div class="profile-field"><label for="docsLink">Documentation</label><input id="docsLink" value="@Model.DocumentationUrl" placeholder="Not configured" readonly /></div>
+            </section>
+        </div>
+    </div>
+}
+else
+{
+    <section class="profile-panel tab-preview">
+        <div class="tab-preview-icon">@tabs.First(t => t.Item1 == tab).Item2</div>
+        <h3>@tabs.First(t => t.Item1 == tab).Item3</h3>
+        @switch (tab)
+        {
+            case "integrations": <p>Connect Jira, GitHub, and documentation services. Connections are not enabled in this static preview.</p> break;
+            case "knowledge": <p>Upload documents and manage project knowledge sources in a future milestone.</p> break;
+            case "agents": <p>Configure the AI agents assigned to this project in a future milestone.</p> break;
+            case "team": <p>Manage project members when identity and membership are available.</p> break;
+            case "permissions": <p>Configure role-based access after authentication is implemented.</p> break;
+            case "advanced": <p>Manage project lifecycle and advanced settings when persistence is available.</p> break;
+        }
+        <span class="preview-label">Coming soon</span>
+    </section>
+}
