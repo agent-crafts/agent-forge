@@ -6,6 +6,13 @@
 <div class="shell">
     <aside class="sidebar" id="workspaceSidebar">
         <a class="brand" href="/chat"><span class="brand-mark">✦</span><span>AgentForge <small>AGENT WORKSPACE</small></span></a>
+        <div class="chat-sidebar-group">
+            <button type="button" class="chat-group-toggle" id="chatGroupToggle" aria-expanded="false" aria-controls="chatTabs"><span>◈</span> Chat <span class="chat-chevron">⌄</span></button>
+            <div class="chat-tabs" id="chatTabs" hidden>
+                <button class="chat-tab-new" id="newChat" type="button"><span>＋</span> New Chat</button>
+                <div id="chatTabList" class="chat-tab-list" aria-label="Conversations"></div>
+            </div>
+        </div>
         <nav class="workspace-nav" aria-label="Workspace navigation">
             <div class="side-label">DEVELOPMENT OPERATIONS</div>
             @foreach (var item in new[] { ("projects", "▣", "Projects"), ("specifications", "▤", "Specifications"), ("workflows", "⑂", "Workflows"), ("tasks", "☑", "Tasks"), ("reviews", "✓", "Reviews & Approvals"), ("pipelines", "⇢", "Pipelines") })
@@ -14,7 +21,7 @@
                 <a class="side-link @(active ? "active" : "")" aria-current="@(active ? "page" : null)" href="/@(item.Item1)"><span>@item.Item2</span> @item.Item3</a>
             }
             <div class="side-label workspace-section-break">AGENT STUDIO</div>
-            @foreach (var item in new[] { ("chat", "◈", "Chat"), ("agents", "✧", "Agents"), ("tools", "⚒", "Tools"), ("knowledge", "▤", "Knowledge"), ("runs", "◷", "Runs") })
+            @foreach (var item in new[] { ("agents", "✧", "Agents"), ("tools", "⚒", "Tools"), ("knowledge", "▤", "Knowledge"), ("runs", "◷", "Runs") })
             {
                 var active = item.Item1 == section;
                 <a class="side-link @(active ? "active" : "")" aria-current="@(active ? "page" : null)" href="/@(item.Item1)"><span>@item.Item2</span> @item.Item3</a>
@@ -62,6 +69,14 @@
 (() => {
   const button = document.getElementById('workspaceMenu');
   const sidebar = document.getElementById('workspaceSidebar');
+  const chatToggle = document.getElementById('chatGroupToggle');
+  const chatTabs = document.getElementById('chatTabs');
+  chatToggle?.addEventListener('click', () => {
+    const expanded = chatToggle.getAttribute('aria-expanded') !== 'true';
+    chatToggle.setAttribute('aria-expanded', String(expanded));
+    chatTabs.hidden = !expanded;
+  });
+  document.getElementById('newChat')?.addEventListener('click', () => window.location.assign('/chat?new=1'));
   button?.addEventListener('click', () => {
     const expanded = sidebar.classList.toggle('open');
     button.setAttribute('aria-expanded', String(expanded));
