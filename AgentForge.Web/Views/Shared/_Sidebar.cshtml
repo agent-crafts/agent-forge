@@ -10,14 +10,14 @@
             <div id="chatTabList" class="chat-tab-list" aria-label="Conversations"><a class="chat-tab" href="/chat">Open conversations →</a></div>
         </div>
     </div>
-    <nav class="workspace-nav" aria-label="Workspace navigation">
+    <nav class="app-nav" aria-label="Workspace navigation">
         <div class="side-label">DEVELOPMENT OPERATIONS</div>
         @foreach (var item in new[] { ("projects", "▣", "Projects"), ("specifications", "▤", "Specifications"), ("workflows", "⑂", "Workflows"), ("tasks", "☑", "Tasks"), ("reviews", "✓", "Reviews & Approvals"), ("pipelines", "⇢", "Pipelines") })
         {
             var active = item.Item1 == section;
             <a class="side-link @(active ? "active" : "")" aria-current="@(active ? "page" : null)" href="/@(item.Item1)"><span>@item.Item2</span> @item.Item3</a>
         }
-        <div class="side-label workspace-section-break">AGENT STUDIO</div>
+        <div class="side-label nav-section-break">AGENT STUDIO</div>
         @foreach (var item in new[] { ("agents", "✧", "Agents"), ("tools", "⚒", "Tools"), ("knowledge", "▤", "Knowledge"), ("runs", "◷", "Runs") })
         {
             var active = item.Item1 == section;
