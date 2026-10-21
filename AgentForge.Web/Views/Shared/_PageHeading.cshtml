@@ -1,0 +1,8 @@
+@{
+    var title = (string)(ViewData["Title"] ?? "Workspace");
+    var description = (string)(ViewData["Description"] ?? "");
+}
+<div class="page-heading">
+    <div><p class="page-eyebrow">WORKSPACE / @title.ToUpperInvariant()</p><h1>@title</h1><p>@description</p></div>
+    <span class="page-status">UI Preview</span>
+</div>

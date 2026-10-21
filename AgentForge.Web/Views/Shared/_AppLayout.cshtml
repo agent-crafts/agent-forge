@@ -1,0 +1,15 @@
+@{
+    Layout = "_Layout";
+}
+<div class="shell">
+    <partial name="_Sidebar" />
+    <main class="main">
+        <partial name="_Topbar" />
+        <section class="page-content">
+            <partial name="_PageHeading" />
+            @RenderBody()
+        </section>
+    </main>
+</div>
+<script src="~/js/app-shell.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
