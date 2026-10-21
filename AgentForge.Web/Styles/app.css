@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@import "./tokens.css";
+@import "../wwwroot/css/agent-chat.css";
+
+/* Tailwind semantic utilities: bg-app, bg-surface, text-content, border-line, etc. */
+@theme inline {
+  --color-app:var(--app);
+  --color-sidebar:var(--sidebar);
+  --color-surface:var(--surface);
+  --color-content:var(--content);
+  --color-heading:var(--heading);
+  --color-muted:var(--muted);
+  --color-line:var(--line);
+  --color-accent:var(--accent);
+}
+@source "../Views/**/*.cshtml";
+@source "../wwwroot/js/**/*.js";
