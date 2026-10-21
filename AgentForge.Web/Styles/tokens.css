@@ -1,0 +1,15 @@
+/* Shared semantic design tokens: one palette per theme, one component stylesheet. */
+:root{
+  color-scheme:light;
+  --app:#f8fafc;--sidebar:#f1f5f9;--surface:#ffffff;--surface-raised:#e8eef6;--composer:#ffffff;
+  --content:#172b4d;--heading:#0f172a;--muted:#64748b;--line:#dce3ec;--line-strong:#bdcbdc;
+  --hover:#dce8f8;--active:#e5edff;--accent:#356bd7;--button-text:#ffffff;
+  --user-bubble:#e5edff;--avatar:#e2eaff;--glow:#edf4ff;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --app:#0d1117;--sidebar:#111720;--surface:#151e29;--surface-raised:#202b39;--composer:#1a2431;
+  --content:#e9edf3;--heading:#f5f7fa;--muted:#8796a9;--line:#25303d;--line-strong:#35445a;
+  --hover:#293749;--active:#1b2532;--accent:#8db8ff;--button-text:#0e1c30;
+  --user-bubble:#25364d;--avatar:#283e65;--glow:#141e2b;
+}
