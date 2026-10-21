@@ -8,7 +8,7 @@
 .confirm-dialog[data-variant="warning"] .confirm-dialog-icon{background:rgba(217,145,40,.12);color:#d99128}
 .confirm-dialog h2{font-size:20px;letter-spacing:-.4px;color:var(--heading);margin:0 0 10px}
 .confirm-dialog p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 26px;overflow-wrap:anywhere}
-.confirm-dialog-actions{display:flex;justify-content:center;align-items:center;gap:10px}
+.confirm-dialog-actions{display:flex;justify-content:flex-end;gap:10px}
 .confirm-dialog-actions button{border-radius:9px;padding:11px 19px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
 .confirm-dialog-cancel{background:var(--surface);border:1px solid var(--line-strong);color:var(--heading)}
 .confirm-dialog-cancel:hover{background:var(--hover)}
