@@ -21,7 +21,7 @@
         @foreach (var item in new[] { ("agents", "✧", "Agents"), ("tools", "⚒", "Tools"), ("knowledge", "▤", "Knowledge"), ("runs", "◷", "Runs") })
         {
             var active = item.Item1 == section;
-            <a class="side-link @(active ? "active" : "")" aria-current="@(active ? "page" : null)" href="/@(item.Item1)"><span class="nav-icon"><partial name="_UiIcon" model='@(item.Item1 == "agents" ? "agents-sidebar" : item.Item1)' /></span> @item.Item3</a>
+            <a class="side-link @(active ? "active" : "")" aria-current="@(active ? "page" : null)" href="/@(item.Item1)"><span class="nav-icon"><partial name="_UiIcon" model="item.Item1" /></span> @item.Item3</a>
         }
     </nav>
     <div class="side-footer"><span class="status-dot"></span> Local workspace</div>
