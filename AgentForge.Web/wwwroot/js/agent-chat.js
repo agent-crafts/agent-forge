@@ -45,7 +45,7 @@
       const remove = document.createElement('button');
       remove.type = 'button';
       remove.className = 'chat-tab-delete';
-      remove.textContent = 'Delete';
+      remove.textContent = '🗑';
       remove.title = 'Delete ' + chat.title;
       remove.setAttribute('aria-label', 'Delete ' + chat.title);
       remove.addEventListener('click', () => deleteChat(chat.id));
