@@ -17,11 +17,10 @@ public sealed class WorkspaceController : Controller
         ["agents"] = ("Agents", "Create, configure, and test your AI agents."),
         ["tools"] = ("Tools", "Manage the capabilities your agents can use."),
         ["knowledge"] = ("Knowledge", "Connect documents and knowledge sources to your agents."),
-        ["runs"] = ("Runs", "Inspect agent executions, steps, and tool calls."),
-        ["settings"] = ("Settings", "Configure your local AgentForge workspace.")
+        ["runs"] = ("Runs", "Inspect agent executions, steps, and tool calls.")
     };
 
-    [HttpGet("{section:regex(^(projects|specifications|workflows|tasks|reviews|pipelines|agents|tools|knowledge|runs|settings)$)}")]
+    [HttpGet("{section:regex(^(projects|specifications|workflows|tasks|reviews|pipelines|agents|tools|knowledge|runs)$)}")]
     public IActionResult Index(string section)
     {
         if (!Pages.TryGetValue(section, out var page)) return NotFound();
