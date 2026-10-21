@@ -35,7 +35,17 @@
       tab.title = chat.title;
       tab.setAttribute('aria-current', chat.id === currentChatId ? 'page' : 'false');
       tab.addEventListener('click', () => selectChat(chat.id));
-      tabList.append(tab);
+      const row = document.createElement('div');
+      row.className = 'chat-tab-row';
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'chat-tab-delete';
+      remove.textContent = '×';
+      remove.title = 'Delete ' + chat.title;
+      remove.setAttribute('aria-label', 'Delete ' + chat.title);
+      remove.addEventListener('click', () => deleteChat(chat.id));
+      row.append(tab, remove);
+      tabList.append(row);
     }
   }
   function selectChat(id) {
@@ -47,6 +57,16 @@
     welcome.hidden = !!chat?.messages.length;
     renderTabs();
     document.querySelector('.sidebar').classList.remove('open');
+  }
+  function deleteChat(id) {
+    const chat = chats.find(c => c.id === id);
+    if (!chat || !window.confirm('Delete "' + chat.title + '"? This cannot be undone.')) return;
+    const wasActive = id === currentChatId;
+    if (wasActive && activeController) activeController.abort();
+    chats = chats.filter(c => c.id !== id);
+    saveChats();
+    if (wasActive) selectChat(chats[0]?.id || null);
+    else renderTabs();
   }
   function createChat() {
     const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now());
@@ -114,10 +134,10 @@
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || 'Request failed (' + response.status + ').');
       reply.textContent = data.response || '(No text returned)';
-      if (chat) { chat.messages.push({ role: 'assistant', content: reply.textContent }); saveChats(); }
+      if (chat && chats.includes(chat)) { chat.messages.push({ role: 'assistant', content: reply.textContent }); saveChats(); }
     } catch (err) {
       reply.textContent = err.name === 'AbortError' ? 'Request cancelled.' : 'Error: ' + err.message;
-      if (chat && err.name !== 'AbortError') { chat.messages.push({ role: 'assistant', content: reply.textContent }); saveChats(); }
+      if (chat && chats.includes(chat) && err.name !== 'AbortError') { chat.messages.push({ role: 'assistant', content: reply.textContent }); saveChats(); }
     } finally {
       busy = false;
       activeController = null;
