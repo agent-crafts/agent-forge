@@ -13,7 +13,11 @@
     root.style.colorScheme = resolved;
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.content = resolved === 'dark' ? '#0d1117' : '#f8fafc';
-    document.querySelectorAll('[data-theme-select]').forEach(select => { select.value = mode; });
+    document.querySelectorAll('[data-theme-option]').forEach(button => {
+      const active = button.dataset.themeOption === mode;
+      button.setAttribute('aria-pressed', String(active));
+      button.classList.toggle('active', active);
+    });
   }
   window.AgentForgeTheme = { set(mode) {
     if (!allowed.has(mode)) return;
@@ -24,8 +28,8 @@
   media.addEventListener('change', () => { if (preference() === 'system') apply('system'); });
   document.addEventListener('DOMContentLoaded', () => {
     apply(preference());
-    document.querySelectorAll('[data-theme-select]').forEach(select => {
-      select.addEventListener('change', event => window.AgentForgeTheme.set(event.target.value));
+    document.querySelectorAll('[data-theme-option]').forEach(button => {
+      button.addEventListener('click', () => window.AgentForgeTheme.set(button.dataset.themeOption));
     });
   });
 })();
