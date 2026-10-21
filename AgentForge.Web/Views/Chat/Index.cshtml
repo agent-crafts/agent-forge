@@ -64,6 +64,17 @@
         </div>
     </main>
 </div>
+<dialog id="deleteChatDialog" class="delete-chat-dialog" aria-labelledby="deleteChatTitle" aria-describedby="deleteChatDescription">
+    <div class="delete-chat-modal">
+        <div class="delete-chat-modal-icon" aria-hidden="true">🗑</div>
+        <h2 id="deleteChatTitle">Delete conversation?</h2>
+        <p id="deleteChatDescription">This conversation will be permanently deleted. This action cannot be undone.</p>
+        <div class="delete-chat-actions">
+            <button type="button" id="cancelDeleteChat" class="delete-chat-cancel">Cancel</button>
+            <button type="button" id="confirmDeleteChat" class="delete-chat-confirm">Delete</button>
+        </div>
+    </div>
+</dialog>
 @section Scripts {
     <script src="~/js/agent-chat.js" asp-append-version="true"></script>
 }
