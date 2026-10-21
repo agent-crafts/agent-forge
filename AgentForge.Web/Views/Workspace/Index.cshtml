@@ -1,15 +1,7 @@
 @{
     Layout = "_AppLayout";
-    var section = (string)(ViewData["Section"] ?? "");
 }
 <section class="page-content">
     <partial name="_PageHeading" />
-    @if (section == "agents")
-    {
-        <partial name="_AgentsContent" />
-    }
-    else
-    {
-        <partial name="_PlaceholderContent" />
-    }
+    <partial name="_PlaceholderContent" />
 </section>
