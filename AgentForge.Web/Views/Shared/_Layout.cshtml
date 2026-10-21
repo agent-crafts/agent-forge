@@ -7,10 +7,13 @@
     <title>@ViewData["Title"] — AgentForge</title>
     <script src="~/js/theme.js" asp-append-version="true"></script>
     <link rel="stylesheet" href="~/css/agent-chat.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/confirm-dialog.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" onerror="this.remove()">
 </head>
 <body>
     @RenderBody()
+    <partial name="_ConfirmDialog" />
+    <script src="~/js/confirm-dialog.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
