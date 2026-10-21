@@ -23,6 +23,11 @@
   const tabList = document.getElementById('chatTabList');
   const chatToggle = document.getElementById('chatGroupToggle');
   const chatTabs = document.getElementById('chatTabs');
+  const deleteDialog = document.getElementById('deleteChatDialog');
+  const deleteDescription = document.getElementById('deleteChatDescription');
+  const confirmDelete = document.getElementById('confirmDeleteChat');
+  const cancelDelete = document.getElementById('cancelDeleteChat');
+  let pendingDeleteId = null;
   function saveChats() { try { localStorage.setItem(storageKey, JSON.stringify(chats)); } catch (_) { /* storage may be unavailable */ } }
   function currentChat() { return chats.find(c => c.id === currentChatId); }
   function renderTabs() {
@@ -40,7 +45,7 @@
       const remove = document.createElement('button');
       remove.type = 'button';
       remove.className = 'chat-tab-delete';
-      remove.textContent = '×';
+      remove.textContent = 'Delete';
       remove.title = 'Delete ' + chat.title;
       remove.setAttribute('aria-label', 'Delete ' + chat.title);
       remove.addEventListener('click', () => deleteChat(chat.id));
@@ -60,7 +65,16 @@
   }
   function deleteChat(id) {
     const chat = chats.find(c => c.id === id);
-    if (!chat || !window.confirm('Delete "' + chat.title + '"? This cannot be undone.')) return;
+    if (!chat) return;
+    pendingDeleteId = id;
+    deleteDescription.textContent = 'Delete "' + chat.title + '" permanently? This action cannot be undone.';
+    deleteDialog.showModal();
+  }
+  function confirmDeleteChat() {
+    const id = pendingDeleteId;
+    pendingDeleteId = null;
+    deleteDialog.close();
+    if (!id || !chats.some(c => c.id === id)) return;
     const wasActive = id === currentChatId;
     if (wasActive && activeController) activeController.abort();
     chats = chats.filter(c => c.id !== id);
@@ -68,6 +82,9 @@
     if (wasActive) selectChat(chats[0]?.id || null);
     else renderTabs();
   }
+  cancelDelete?.addEventListener('click', () => deleteDialog.close());
+  confirmDelete?.addEventListener('click', confirmDeleteChat);
+  deleteDialog?.addEventListener('close', () => { pendingDeleteId = null; });
   function createChat() {
     const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now());
     chats.unshift({ id, title: 'New Chat', messages: [] });
