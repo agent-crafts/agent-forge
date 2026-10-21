@@ -5,7 +5,6 @@
     var tabs = new[] { ("general", "⚙", "General"), ("integrations", "🔗", "Integrations"), ("knowledge", "▤", "Knowledge"), ("agents", "✧", "Agents"), ("team", "♧", "Team"), ("permissions", "♢", "Permissions"), ("advanced", "☷", "Advanced") };
 }
 <link rel="stylesheet" href="~/css/projects.css" asp-append-version="true" />
-<div class="project-breadcrumb"><a href="/projects">Projects</a><span>›</span><strong>@Model.Name</strong><span>›</span><span>Profile</span></div>
 <header class="profile-hero">
     <span class="profile-avatar" style="background:@Model.Color">@Model.Initials</span>
     <div class="profile-identity"><div class="profile-title"><h2>@Model.Name</h2><span class="project-status @(Model.Status == "Active" ? "is-active" : "is-archived")">@Model.Status</span></div><p>@Model.Description</p><div class="profile-meta"><span>✧ @Model.Agents agents</span><span>▤ @Model.Documents documents</span><span>▷ @Model.Runs runs</span></div></div>
