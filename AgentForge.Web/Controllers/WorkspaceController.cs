@@ -8,7 +8,6 @@ public sealed class WorkspaceController : Controller
 {
     private static readonly Dictionary<string, (string Title, string Description)> Pages = new(StringComparer.OrdinalIgnoreCase)
     {
-        ["projects"] = ("Projects", "Organize software projects and their development lifecycle."),
         ["specifications"] = ("Specifications", "Draft and review technical requirements and specifications."),
         ["workflows"] = ("Workflows", "Design and orchestrate development workflows."),
         ["tasks"] = ("Tasks", "Track work items across your development lifecycle."),
@@ -20,7 +19,7 @@ public sealed class WorkspaceController : Controller
         ["runs"] = ("Runs", "Inspect agent executions, steps, and tool calls.")
     };
 
-    [HttpGet("{section:regex(^(projects|specifications|workflows|tasks|reviews|pipelines|agents|tools|knowledge|runs)$)}")]
+    [HttpGet("{section:regex(^(specifications|workflows|tasks|reviews|pipelines|agents|tools|knowledge|runs)$)}")]
     public IActionResult Index(string section)
     {
         if (!Pages.TryGetValue(section, out var page)) return NotFound();
