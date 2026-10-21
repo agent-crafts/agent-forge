@@ -1,0 +1,11 @@
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Core/bin/Debug/net10.0/AgentForge.Core.deps.json
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Core/bin/Debug/net10.0/AgentForge.Core.dll
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Core/bin/Debug/net10.0/AgentForge.Core.pdb
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Core/obj/Debug/net10.0/AgentForge.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Core/obj/Debug/net10.0/AgentForge.Core.AssemblyInfoInputs.cache
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Core/obj/Debug/net10.0/AgentForge.Core.AssemblyInfo.cs
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Core/obj/Debug/net10.0/AgentForge.Core.csproj.CoreCompileInputs.cache
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Core/obj/Debug/net10.0/AgentForge.Core.dll
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Core/obj/Debug/net10.0/refint/AgentForge.Core.dll
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Core/obj/Debug/net10.0/AgentForge.Core.pdb
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Core/obj/Debug/net10.0/ref/AgentForge.Core.dll

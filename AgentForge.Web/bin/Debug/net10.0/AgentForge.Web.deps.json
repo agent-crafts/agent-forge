@@ -1,0 +1,72 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "AgentForge.Web/1.0.0": {
+        "dependencies": {
+          "AgentForge.Application": "1.0.0",
+          "AgentForge.Infrastructure": "1.0.0"
+        },
+        "runtime": {
+          "AgentForge.Web.dll": {}
+        }
+      },
+      "AgentForge.Application/1.0.0": {
+        "dependencies": {
+          "AgentForge.Core": "1.0.0"
+        },
+        "runtime": {
+          "AgentForge.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "AgentForge.Core/1.0.0": {
+        "runtime": {
+          "AgentForge.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "AgentForge.Infrastructure/1.0.0": {
+        "dependencies": {
+          "AgentForge.Core": "1.0.0"
+        },
+        "runtime": {
+          "AgentForge.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AgentForge.Web/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AgentForge.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AgentForge.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AgentForge.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

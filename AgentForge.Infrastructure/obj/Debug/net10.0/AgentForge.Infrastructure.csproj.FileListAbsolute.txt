@@ -1,0 +1,15 @@
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/bin/Debug/net10.0/AgentForge.Infrastructure.deps.json
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/bin/Debug/net10.0/AgentForge.Infrastructure.dll
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/bin/Debug/net10.0/AgentForge.Infrastructure.pdb
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/bin/Debug/net10.0/AgentForge.Core.dll
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/bin/Debug/net10.0/AgentForge.Core.pdb
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/obj/Debug/net10.0/AgentForge.Infrastructure.csproj.AssemblyReference.cache
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/obj/Debug/net10.0/AgentForge.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/obj/Debug/net10.0/AgentForge.Infrastructure.AssemblyInfoInputs.cache
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/obj/Debug/net10.0/AgentForge.Infrastructure.AssemblyInfo.cs
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/obj/Debug/net10.0/AgentForge.Infrastructure.csproj.CoreCompileInputs.cache
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/obj/Debug/net10.0/AgentFor.613C89C2.Up2Date
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/obj/Debug/net10.0/AgentForge.Infrastructure.dll
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/obj/Debug/net10.0/refint/AgentForge.Infrastructure.dll
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/obj/Debug/net10.0/AgentForge.Infrastructure.pdb
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Infrastructure/obj/Debug/net10.0/ref/AgentForge.Infrastructure.dll

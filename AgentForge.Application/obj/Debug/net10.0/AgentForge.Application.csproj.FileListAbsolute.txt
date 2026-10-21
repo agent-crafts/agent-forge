@@ -1,0 +1,15 @@
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/bin/Debug/net10.0/AgentForge.Application.deps.json
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/bin/Debug/net10.0/AgentForge.Application.dll
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/bin/Debug/net10.0/AgentForge.Application.pdb
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/bin/Debug/net10.0/AgentForge.Core.dll
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/bin/Debug/net10.0/AgentForge.Core.pdb
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/obj/Debug/net10.0/AgentForge.Application.csproj.AssemblyReference.cache
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/obj/Debug/net10.0/AgentForge.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/obj/Debug/net10.0/AgentForge.Application.AssemblyInfoInputs.cache
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/obj/Debug/net10.0/AgentForge.Application.AssemblyInfo.cs
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/obj/Debug/net10.0/AgentForge.Application.csproj.CoreCompileInputs.cache
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/obj/Debug/net10.0/AgentFor.64904FCC.Up2Date
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/obj/Debug/net10.0/AgentForge.Application.dll
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/obj/Debug/net10.0/refint/AgentForge.Application.dll
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/obj/Debug/net10.0/AgentForge.Application.pdb
+/Users/eslam.heikal/Projects/AgentForge/AgentForge.Application/obj/Debug/net10.0/ref/AgentForge.Application.dll
