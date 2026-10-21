@@ -2,34 +2,47 @@
   const key = 'agentforge.theme';
   const root = document.documentElement;
   const media = window.matchMedia('(prefers-color-scheme: dark)');
-  const allowed = new Set(['light', 'dark', 'system']);
-  function preference() {
-    try { const saved = localStorage.getItem(key); return allowed.has(saved) ? saved : 'system'; }
-    catch { return 'system'; }
+
+  function savedTheme() {
+    try {
+      const value = localStorage.getItem(key);
+      return value === 'light' || value === 'dark' ? value : null;
+    } catch {
+      return null;
+    }
   }
-  function apply(mode) {
-    const resolved = mode === 'system' ? (media.matches ? 'dark' : 'light') : mode;
-    root.dataset.theme = resolved;
-    root.style.colorScheme = resolved;
+
+  function apply(theme) {
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = resolved === 'dark' ? '#0d1117' : '#f8fafc';
-    document.querySelectorAll('[data-theme-option]').forEach(button => {
-      const active = button.dataset.themeOption === mode;
-      button.setAttribute('aria-pressed', String(active));
-      button.classList.toggle('active', active);
+    if (meta) meta.content = theme === 'dark' ? '#0d1117' : '#f8fafc';
+
+    document.querySelectorAll('[data-theme-toggle]').forEach(button => {
+      const next = theme === 'dark' ? 'light' : 'dark';
+      button.setAttribute('aria-label', 'Switch to ' + next + ' theme');
+      button.title = 'Switch to ' + next + ' theme';
     });
   }
-  window.AgentForgeTheme = { set(mode) {
-    if (!allowed.has(mode)) return;
-    try { localStorage.setItem(key, mode); } catch { /* storage may be disabled */ }
-    apply(mode);
-  }};
-  apply(preference());
-  media.addEventListener('change', () => { if (preference() === 'system') apply('system'); });
+
+  window.AgentForgeTheme = {
+    set(theme) {
+      if (theme !== 'light' && theme !== 'dark') return;
+      try { localStorage.setItem(key, theme); } catch { /* Storage may be unavailable. */ }
+      apply(theme);
+    }
+  };
+
+  apply(savedTheme() ?? (media.matches ? 'dark' : 'light'));
+  media.addEventListener('change', () => {
+    if (!savedTheme()) apply(media.matches ? 'dark' : 'light');
+  });
   document.addEventListener('DOMContentLoaded', () => {
-    apply(preference());
-    document.querySelectorAll('[data-theme-option]').forEach(button => {
-      button.addEventListener('click', () => window.AgentForgeTheme.set(button.dataset.themeOption));
+    apply(root.dataset.theme);
+    document.querySelectorAll('[data-theme-toggle]').forEach(button => {
+      button.addEventListener('click', () => {
+        window.AgentForgeTheme.set(root.dataset.theme === 'dark' ? 'light' : 'dark');
+      });
     });
   });
 })();
