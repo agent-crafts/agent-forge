@@ -11,7 +11,17 @@
         <header class="topbar">
             <button class="mobile-menu" id="mobileMenu" aria-label="Toggle menu" type="button">☰</button>
             <div class="model-heading"><strong>AgentForge Assistant</strong><span>Local inference · Qwen</span></div>
-            <span class="top-pill"><span class="status-dot"></span> Local</span>
+            <div class="flex items-center gap-3">
+                <div class="theme-switcher">
+                    <label for="themeSelect">Theme</label>
+                    <select id="themeSelect" data-theme-select aria-label="Appearance">
+                        <option value="system">System</option>
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                    </select>
+                </div>
+                <span class="top-pill"><span class="status-dot"></span> Local</span>
+            </div>
         </header>
         <section class="conversation" id="conversation" aria-label="Chat messages" aria-live="polite">
             <div class="welcome" id="welcome">
