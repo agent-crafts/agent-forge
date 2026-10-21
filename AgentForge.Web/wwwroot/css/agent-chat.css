@@ -107,7 +107,7 @@
 .delete-chat-modal h2{font-size:20px;letter-spacing:-.4px;color:var(--heading);margin:0 0 10px}
 .delete-chat-modal p{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 26px;overflow-wrap:anywhere}
 .delete-chat-actions{display:flex;justify-content:flex-end;gap:10px}
-.delete-chat-actions button{border-radius:9px;padding:11px 19px;font:600 13px inherit;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.delete-chat-actions button{border-radius:9px;padding:11px 19px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
 .delete-chat-cancel{background:var(--surface-raised);border:1px solid var(--line-strong);color:var(--heading)}
 .delete-chat-cancel:hover{background:var(--hover)}
 .delete-chat-confirm{background:#c83737;border:1px solid #c83737;color:#fff}
