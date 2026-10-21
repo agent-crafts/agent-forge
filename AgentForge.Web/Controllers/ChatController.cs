@@ -17,18 +17,18 @@ public sealed class ChatController(ChatCommand chatCommand, ILogger<ChatControll
 
     [HttpPost("messages")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> SendMessage([FromBody] SendMessageRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> SendMessage([FromBody] SendMessageCommand? command, CancellationToken cancellationToken)
     {
-        if (request is null || string.IsNullOrWhiteSpace(request.Message))
+        if (command is null || string.IsNullOrWhiteSpace(command.Message))
             return BadRequest(new { error = "Please enter a message." });
 
-        if (request.Message.Length > 12000)
+        if (command.Message.Length > 12000)
             return BadRequest(new { error = "Message is too long (maximum 12,000 characters)." });
 
         try
         {
             var result = await chatCommand.HandleAsync(
-                new SendMessageCommand(request.Message.Trim()), cancellationToken);
+                command with { Message = command.Message.Trim() }, cancellationToken);
             return Ok(new { response = result.Response });
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -46,6 +46,4 @@ public sealed class ChatController(ChatCommand chatCommand, ILogger<ChatControll
             return StatusCode(500, new { error = "The AI request failed. Please try again." });
         }
     }
-
-    public sealed record SendMessageRequest(string Message);
 }
