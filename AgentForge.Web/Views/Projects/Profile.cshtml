@@ -2,7 +2,7 @@
 @{
     Layout = "_AppLayout";
     var tab = (string)ViewData["Tab"]!;
-    var tabs = new[] { ("general", "⚙", "General"), ("integrations", "🔗", "Integrations"), ("knowledge", "▤", "Knowledge"), ("agents", "✧", "Agents"), ("team", "♧", "Team"), ("permissions", "♢", "Permissions"), ("advanced", "☷", "Advanced") };
+    var tabs = new[] { ("general", "⚙", "General"), ("integrations", "🔗", "Integrations"), ("knowledge", "▤", "Knowledge"), ("agents", "✧", "Agents"), ("tools", "🔧", "Tools"), ("runs", "▷", "Runs"), ("team", "♧", "Team"), ("permissions", "♢", "Permissions"), ("advanced", "☷", "Advanced") };
 }
 <link rel="stylesheet" href="~/css/projects.css" asp-append-version="true" />
 <header class="profile-hero">
@@ -49,6 +49,8 @@ else
             case "integrations": <p>Connect Jira, GitHub, and documentation services. Connections are not enabled in this static preview.</p> break;
             case "knowledge": <p>Upload documents and manage project knowledge sources in a future milestone.</p> break;
             case "agents": <p>Configure the AI agents assigned to this project in a future milestone.</p> break;
+            case "tools": <p>Manage the tools agents can use, including tool definitions and access policies, in a future milestone.</p> break;
+            case "runs": <p>Review agent execution history, tool calls, traces, and errors in a future milestone.</p> break;
             case "team": <p>Manage project members when identity and membership are available.</p> break;
             case "permissions": <p>Configure role-based access after authentication is implemented.</p> break;
             case "advanced": <p>Manage project lifecycle and advanced settings when persistence is available.</p> break;
