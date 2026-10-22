@@ -54,8 +54,8 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Knowledge:** Generated JSON Schema versus C# runtime validation; external `issue_number` versus internal `issueNumber`; schema-to-invocation mapping explored.
 - **Engineering:** On PR #10, GitHub tool factory generates the public schema with `issue_number`, `minimum: 1`, and no `CancellationToken` property. User ran the SchemaVerification console lab and supplied output showing schema assertions, successful stubbed invocation with 42, and rejection of 0/-5 (ArgumentOutOfRangeException) and string input (ArgumentException); invalid arguments never reached the stub GitHub client.
 - **Mastery:** Not assessed; successful lab execution is not independent mastery evidence.
-- **Registry/UI follow-up:** On `feature/tool-execution-security-registry`, implemented an application-owned `IToolRegistry`/`ToolRegistry`, DI registration, and a read-only `/tools` MVC catalog showing registered function metadata and input schema. Implementation is not yet build/browser verified; no execution authorization or LLM orchestration exists.
-- **Next action:** Verify the new Tool Registry and read-only /tools UI with a build and browser check; then design authorization and controlled tool execution before LLM orchestration. Full build/CI and real GitHub/LLM invocation remain unverified.
+- **Registry/UI follow-up:** On `feature/tool-execution-security-registry`, implemented an application-owned `IToolRegistry`/`ToolRegistry`, DI registration, and a read-only `/tools` MVC card catalog with a `/tools/{name}` details page showing function metadata and input schema. Implementation is not yet build/browser verified; no execution authorization or LLM orchestration exists.
+- **Next action:** Verify the new Tool Registry, simple cards grid, and detail page with a build and browser check; then design authorization and controlled tool execution before LLM orchestration. Full build/CI and real GitHub/LLM invocation remain unverified.
 
 - **Pending verification:** `ToolResult<T>` and `ToolError` are now shared contracts directly under `Application/Tools`; GitHubTools returns `ToolResult<GitHubIssue>` with a safe `issue_not_found` error on HTTP 404. User-provided console output confirms the stubbed 404 and 500 checks passed; full build/CI remains unverified.
 
@@ -78,7 +78,7 @@ These phases are **provisional** until reconciled with the project's training ma
 4. Resume from the first unresolved learning objective or engineering dependency.
 5. At the end of the session, update the snapshot, roadmap status, active module, gaps, and handoff based on verified progress.
 
-**Parallel Tool Engineering handoff:** Schema verification, stubbed argument binding, invalid-input rejection, safe 404 result, and propagated 500 exception passed per user-provided console output. Next: Tool Registry design, authorization, and LLM orchestration; do not claim production integration or mastery.
+**Parallel Tool Engineering handoff:** Schema verification, stubbed argument binding, invalid-input rejection, safe 404 result, and propagated 500 exception passed per user-provided console output. Next: verify Tool Registry and card/detail UI; then authorization and LLM orchestration; do not claim production integration or mastery.
 
 **Next suggested session:** Complete Module 00 curriculum/baseline review; use `docs/architecture-foundation-assessment.md` to decide database and identity boundary, then scope the first Project Foundation implementation PR. No build or tests have been run for the assessment.
 
