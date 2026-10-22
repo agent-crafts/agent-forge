@@ -3,17 +3,6 @@
     Layout = "_AppLayout";
 }
 <link rel="stylesheet" href="~/css/tools.css" asp-append-version="true" />
-<header class="tools-page-header mb-7 flex flex-wrap items-center justify-between gap-4">
-    <div class="tools-page-heading">
-        <h1 class="m-0 text-2xl font-bold tracking-tight text-heading">Tools</h1>
-        <p class="mt-1.5 mb-0 text-sm leading-6 text-muted">Explore and manage tools available for your projects.</p>
-    </div>
-    <button type="button" disabled title="Adding tools is coming soon"
-            class="tools-add-button inline-flex cursor-not-allowed items-center gap-2 rounded-xl border border-line-strong bg-raised px-4 py-2.5 text-sm font-semibold text-muted opacity-70">
-        <span aria-hidden="true" class="text-xl">+</span> Add Tool
-        <span class="text-xs font-normal">(Coming soon)</span>
-    </button>
-</header>
 <div class="tools-search-row mb-6 flex flex-col gap-3 sm:flex-row">
     <label class="sr-only" for="toolSearch">Search tools</label>
     <input id="toolSearch" type="search" placeholder="Search tools..." autocomplete="off"
@@ -25,6 +14,11 @@
         <option value="github">GitHub</option>
         <option value="jira">Jira</option>
     </select>
+    <button type="button" disabled title="Adding tools is coming soon"
+            class="tools-add-button inline-flex shrink-0 cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-line-strong bg-raised px-4 py-3 text-sm font-semibold text-muted opacity-70">
+        <span aria-hidden="true" class="text-xl">+</span> Add Tool
+        <span class="text-xs font-normal">(Coming soon)</span>
+    </button>
 </div>
 <div class="tools-grid grid grid-cols-1 gap-3 lg:grid-cols-2">
     @foreach (var tool in Model)
