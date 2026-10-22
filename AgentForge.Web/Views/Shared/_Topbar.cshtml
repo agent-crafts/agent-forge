@@ -1,9 +1,27 @@
 @{
     var title = (string)(ViewData["Title"] ?? "Workspace");
+    var description = (string)(ViewData["Description"] ?? "AgentForge workspace");
+    var parentTitle = ViewData["ParentTitle"] as string;
+    var parentController = ViewData["ParentController"] as string;
+    var parentAction = ViewData["ParentAction"] as string ?? "Index";
 }
 <header class="topbar">
     <button class="mobile-menu" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="workspaceSidebar" id="workspaceMenu">☰</button>
-    <div class="model-heading"><strong>@title</strong><span>AgentForge workspace</span></div>
+    <div class="model-heading">
+        @if (!string.IsNullOrWhiteSpace(parentTitle) && !string.IsNullOrWhiteSpace(parentController))
+        {
+            <nav class="topbar-breadcrumb" aria-label="Breadcrumb">
+                <a asp-controller="@parentController" asp-action="@parentAction">@parentTitle</a>
+                <span class="topbar-breadcrumb-separator" aria-hidden="true">/</span>
+                <strong aria-current="page">@title</strong>
+            </nav>
+        }
+        else
+        {
+            <strong>@title</strong>
+        }
+        <span>@description</span>
+    </div>
     <div class="flex items-center gap-3">
         <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
             <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>

@@ -1,0 +1,51 @@
+@model IReadOnlyList<AgentForge.Web.Controllers.ToolsController.ToolCatalogItem>
+@{
+    Layout = "_AppLayout";
+}
+<div class="ui-toolbar mb-6 flex flex-nowrap items-center gap-3">
+    <label class="ui-visually-hidden" for="toolSearch">Search tools</label>
+    <input id="toolSearch" type="search" placeholder="Search tools..." autocomplete="off"
+           class="ui-input min-w-0 flex-1 rounded-xl border border-line bg-surface px-4 py-3 text-sm text-content placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" />
+    <label class="ui-visually-hidden" for="toolCategory">Filter by integration</label>
+    <div class="ui-select-wrap relative shrink-0">
+        <select id="toolCategory" aria-label="Filter tools by integration"
+                class="ui-select w-full appearance-none cursor-pointer rounded-xl border border-line bg-surface py-3 pl-4 pr-10 text-sm text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+            <option value="all">All Categories</option>
+            <option value="github">GitHub</option>
+            <option value="jira">Jira</option>
+        </select>
+        <svg class="ui-select-chevron pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+    </div>
+    <button type="button" id="openAddToolDialog" aria-haspopup="dialog" aria-controls="addToolDialog"
+            class="ui-button inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-line-strong bg-raised px-4 py-3 text-sm font-semibold text-content">
+        <span aria-hidden="true" class="text-xl">+</span> Add Tool
+    </button>
+</div>
+<div class="ui-grid grid grid-cols-1 gap-3 lg:grid-cols-2">
+    @foreach (var tool in Model)
+    {
+        <a data-search="@($"{tool.DisplayName} {tool.Name} {tool.Description}".ToLowerInvariant())"
+           data-category="@tool.Category"
+           asp-controller="Tools" asp-action="Details" asp-route-name="@tool.Name"
+           aria-label="View details for @tool.DisplayName"
+           class="ui-item-card group flex min-w-0 items-center gap-4 rounded-xl border border-line bg-surface px-4 py-4 text-content no-underline transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+            <span aria-hidden="true" class="ui-icon-tile">
+                <partial name="_ToolIcon" model="tool.Icon" />
+            </span>
+            <span class="ui-item-content flex min-w-0 flex-1 flex-col gap-1">
+                <span class="ui-item-title break-words text-sm font-semibold text-heading">@tool.DisplayName</span>
+                <span class="ui-item-description break-words text-xs leading-5 text-muted">@tool.Description</span>
+            </span>
+            <span aria-hidden="true" class="ui-item-arrow shrink-0 text-lg text-muted transition-transform group-hover:translate-x-1">→</span>
+        </a>
+    }
+</div>
+@if (Model.Count == 0)
+{
+    <p class="mt-4 rounded-xl border border-dashed border-line p-6 text-sm text-muted">No tools registered yet.</p>
+}
+<p id="toolSearchEmpty" class="mt-4 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No tools match your search.</p>
+<partial name="_AddToolDialog" />
+<script src="~/js/tools/tools-gallery.js" asp-append-version="true"></script>
+
+<script src="~/js/tools/add-tool-dialog.js" asp-append-version="true"></script>
