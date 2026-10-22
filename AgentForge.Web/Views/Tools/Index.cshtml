@@ -2,10 +2,10 @@
 @{
     Layout = "_AppLayout";
 }
-<header class="mb-6 flex flex-wrap items-center justify-between gap-4">
+<header class="mb-7 flex flex-wrap items-center justify-between gap-4">
     <div>
-        <h1 class="m-0 text-2xl font-bold text-heading">Tools</h1>
-        <p class="mt-1 mb-0 text-sm text-muted">Explore and manage tools available for your projects.</p>
+        <h1 class="m-0 text-2xl font-bold tracking-tight text-heading">Tools</h1>
+        <p class="mt-1.5 mb-0 text-sm leading-6 text-muted">Explore and manage tools available for your projects.</p>
     </div>
     <button type="button" disabled title="Adding tools is coming soon"
             class="inline-flex cursor-not-allowed items-center gap-2 rounded-xl border border-line-strong bg-raised px-4 py-2.5 text-sm font-semibold text-muted opacity-70">
@@ -13,7 +13,7 @@
         <span class="text-xs font-normal">(Coming soon)</span>
     </button>
 </header>
-<div class="mb-5 flex flex-col gap-3 sm:flex-row">
+<div class="mb-6 flex flex-col gap-3 sm:flex-row">
     <label class="sr-only" for="toolSearch">Search tools</label>
     <input id="toolSearch" type="search" placeholder="Search tools..." autocomplete="off"
            class="min-w-0 flex-1 rounded-xl border border-line bg-surface px-4 py-3 text-sm text-content placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" />
@@ -25,20 +25,20 @@
         <option value="jira">Jira</option>
     </select>
 </div>
-<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+<div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
     @foreach (var tool in Model)
     {
         <a data-search="@($"{tool.Name} {tool.Description}".ToLowerInvariant())"
            data-category="@(tool.Name.Contains("github", StringComparison.OrdinalIgnoreCase) ? "github" : tool.Name.Contains("jira", StringComparison.OrdinalIgnoreCase) ? "jira" : "other")"
            asp-controller="Tools" asp-action="Details" asp-route-name="@tool.Name"
            aria-label="View details for @tool.Name"
-           class="flex min-w-0 items-center gap-4 rounded-xl border border-line bg-surface p-5 text-content no-underline transition-colors hover:border-line-strong hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
-            <span aria-hidden="true" class="grid size-14 shrink-0 place-items-center rounded-xl bg-raised text-2xl text-accent">⚒</span>
+           class="group flex min-w-0 items-center gap-4 rounded-xl border border-line bg-surface px-4 py-4 text-content no-underline transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+            <span aria-hidden="true" class="grid size-12 shrink-0 place-items-center rounded-lg bg-raised text-xl text-accent">⚒</span>
             <span class="flex min-w-0 flex-1 flex-col gap-1">
-                <span class="break-words text-base font-bold text-heading">@tool.Name</span>
-                <span class="break-words text-sm leading-relaxed text-muted">@tool.Description</span>
+                <span class="break-words text-sm font-semibold text-heading">@tool.Name</span>
+                <span class="break-words text-xs leading-5 text-muted">@tool.Description</span>
             </span>
-            <span aria-hidden="true" class="shrink-0 text-xl text-muted">→</span>
+            <span aria-hidden="true" class="shrink-0 text-lg text-muted transition-transform group-hover:translate-x-1">→</span>
         </a>
     }
 </div>
