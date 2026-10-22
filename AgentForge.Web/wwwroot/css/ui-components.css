@@ -166,7 +166,13 @@
 #addToolDialog>div>div{min-height:0;overflow:auto;padding:12px 24px 20px}
 #addToolDialog>div>footer{justify-content:flex-end;gap:10px;border-top:1px solid var(--line);border-bottom:0}
 #addToolDialog>div>footer button{flex:none;width:auto}
-#addToolDialog>div>footer button:last-child{background:var(--accent);border-color:var(--accent);color:#fff;color-scheme:light}
+.ui-button--primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.ui-button--secondary{background:var(--surface-raised);color:var(--content)}
+.ui-button--cancel{background:transparent;border-color:transparent;color:var(--muted)}
+.ui-button--outlined{background:transparent;border-color:var(--accent);color:var(--accent)}
+.ui-button--danger{background:#b91c1c;border-color:#b91c1c;color:#fff}
+.ui-button--ghost{background:transparent;border-color:transparent;color:var(--content)}
+.ui-button--success{background:#15803d;border-color:#15803d;color:#fff}
 #addToolDialog fieldset{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 20px;padding:0;border:0}
 #addToolDialog fieldset legend{position:absolute;clip-path:inset(50%)}
 #addToolDialog fieldset label{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:var(--surface-raised);cursor:pointer}
