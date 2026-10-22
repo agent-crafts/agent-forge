@@ -59,22 +59,17 @@
             <div><small>EXECUTION</small><strong>Not enabled</strong></div>
         </div>
     </section>
-    <nav class="tool-details-tabs" aria-label="Tool detail sections">
-        <a href="#tool-overview" class="is-current">Overview</a>
-        <a href="#tool-parameters">Parameters</a>
-        <a href="#tool-schema">JSON Schema</a>
-        <a href="#tool-example">Example Input</a>
-    </nav>
     <div class="tool-details-columns">
         <div class="tool-details-stack">
             <section class="tool-panel" id="tool-overview">
                 <h2><span class="tool-panel-symbol" aria-hidden="true">▤</span> Overview</h2>
+                <p class="tool-section-description">What this tool does and when to use it.</p>
                 <p>@Model.Description</p>
                 <div class="tool-info-note"><strong>When to use this tool</strong><p>Use this tool when its registered capability matches your task. Review the input contract before integrating it into an agent workflow.</p></div>
             </section>
             <section class="tool-panel" id="tool-parameters">
                 <h2><span class="tool-panel-symbol" aria-hidden="true">⚙</span> Parameters</h2>
-                <p>Input parameters defined by the registered JSON Schema.</p>
+                <p class="tool-section-description">Required inputs, types, and descriptions from the registered schema.</p>
                 @if (hasProperties)
                 {
                     <div class="tool-parameter-scroll"><table class="tool-parameters-table">
