@@ -55,8 +55,8 @@
         </div>
     </section>
     <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Tool details sections">
-        <button type="button" id="toolOverviewTab" role="tab" aria-controls="toolOverviewPanel" aria-selected="true" class="border-b-2 border-accent px-5 py-3 text-sm font-semibold text-heading">Overview</button>
-        <button type="button" id="toolTryTab" role="tab" aria-controls="toolTryPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Try Now</button>
+        <partial name="_Button" model='new UiButtonModel { Text = "Overview", Variant = UiButtonVariant.Ghost, Id = "toolOverviewTab", Role = "tab", AriaControls = "toolOverviewPanel", AriaSelected = "true", CssClass = "border-b-2 border-accent px-5 py-3 text-heading" }' />
+        <partial name="_Button" model='new UiButtonModel { Text = "Try Now", Variant = UiButtonVariant.Ghost, Id = "toolTryTab", Role = "tab", AriaControls = "toolTryPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
     </div>
     <div id="toolOverviewPanel" role="tabpanel" aria-labelledby="toolOverviewTab">
     <div class="ui-columns">
