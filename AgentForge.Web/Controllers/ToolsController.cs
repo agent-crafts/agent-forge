@@ -1,11 +1,12 @@
 using AgentForge.Application.Tools;
+using AgentForge.Application.Tools.GitHub;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgentForge.Web.Controllers;
 
 /// <summary>Read-only catalog. Tool execution is deliberately not exposed by this controller.</summary>
 [Route("tools")]
-public sealed class ToolsController(IToolRegistry registry) : Controller
+public sealed class ToolsController(IToolRegistry registry, GitHubTools githubTools, ILogger<ToolsController> logger) : Controller
 {
     [HttpGet("")]
     public IActionResult Index()
@@ -29,6 +30,30 @@ public sealed class ToolsController(IToolRegistry registry) : Controller
         ViewData["ParentTitle"] = "Tools";
         ViewData["ParentController"] = "Tools";
         return View(item);
+    }
+
+    // Narrow, read-only demo execution. No arbitrary tool invocation is exposed.
+    [HttpPost("get_github_issue/try")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> TryGitHubIssue([FromForm] int issueNumber, CancellationToken cancellationToken)
+    {
+        if (issueNumber <= 0)
+            return BadRequest(new { success = false, error = "Issue number must be a positive integer." });
+
+        try
+        {
+            var result = await githubTools.GetGitHubIssueAsync(issueNumber, cancellationToken);
+            return Json(result);
+        }
+        catch (HttpRequestException exception)
+        {
+            logger.LogWarning(exception, "GitHub issue lookup failed for issue {IssueNumber}", issueNumber);
+            return StatusCode(502, new { success = false, error = "GitHub could not complete the request. Please try again." });
+        }
+        catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            return StatusCode(504, new { success = false, error = "GitHub request timed out." });
+        }
     }
 
     private void SetPage(string title, string description)
