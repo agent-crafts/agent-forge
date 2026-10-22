@@ -4,7 +4,6 @@
   const get = id => document.getElementById(id);
   const run = get("githubToolRun"), runLabel = get("githubToolRunLabel");
   const status = get("githubToolStatus"), duration = get("githubToolDuration");
-  const timestamp = get("githubToolTimestamp"), durationDetail = get("githubToolDurationDetail");
   const json = get("githubToolResultJson"), raw = get("githubToolResultRaw");
   const formatted = get("githubToolResultFormatted"), copy = get("githubToolCopy");
   const tabs = ["Json", "Formatted", "Raw"];
@@ -56,8 +55,7 @@
     lastResult = null; rawText = "";
     setText(status, "Not run");
     status.className = "rounded-full bg-raised px-3 py-1.5 text-xs font-semibold text-muted";
-    duration.hidden = true; setText(timestamp, 'Not run');
-    setText(durationDetail, "Not run");
+    duration.hidden = true;
     window.AgentForgeJsonViewer.clear(json);
     setText(raw, "Run the tool to view the raw response.");
     setText(formatted, "Run the tool to view formatted issue details.");
@@ -106,10 +104,8 @@
       copy.disabled = false;
     } finally {
       const elapsed = ((performance.now() - started) / 1000).toFixed(2) + "s";
-      duration.hidden = false; setText(duration, elapsed); setText(durationDetail, elapsed);
+      duration.hidden = false; setText(duration, elapsed);
       
-      const now = new Date(); timestamp.dateTime = now.toISOString();
-      setText(timestamp, now.toLocaleString());
       run.disabled = false; setText(runLabel, "Run Tool");
     }
   });
