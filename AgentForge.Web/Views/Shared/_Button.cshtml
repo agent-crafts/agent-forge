@@ -1,2 +1,12 @@
 @model UiButtonModel
-<button type="@Model.Type" id="@Model.Id" class="ui-button ui-button--@Model.Variant.ToString().ToLowerInvariant()" disabled="@Model.Disabled">@Model.Text</button>
+@{
+    var buttonClass = $"ui-button ui-button--{Model.Variant.ToString().ToLowerInvariant()} {Model.CssClass}".Trim();
+}
+@if (Model.CloseDialog)
+{
+    <button type="@Model.Type" id="@Model.Id" class="@buttonClass" disabled="@Model.Disabled" data-modal-close>@Model.Text</button>
+}
+else
+{
+    <button type="@Model.Type" id="@Model.Id" class="@buttonClass" disabled="@Model.Disabled">@Model.Text</button>
+}
