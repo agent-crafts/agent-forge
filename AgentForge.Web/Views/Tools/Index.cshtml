@@ -2,46 +2,49 @@
 @{
     Layout = "_AppLayout";
 }
-<link rel="stylesheet" href="~/css/tools.css" asp-append-version="true" />
-<header class="tools-page-header">
-    <div class="tools-page-heading">
-        <h1>Tools</h1>
-        <p>Explore and manage tools available for your projects.</p>
+<header class="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <div>
+        <h1 class="m-0 text-2xl font-bold text-heading">Tools</h1>
+        <p class="mt-1 mb-0 text-sm text-muted">Explore and manage tools available for your projects.</p>
     </div>
-    <button class="tools-add-button" type="button" disabled title="Adding tools is coming soon">
-        <span aria-hidden="true">+</span> Add Tool
-        <span class="tools-coming-soon">(Coming soon)</span>
+    <button type="button" disabled title="Adding tools is coming soon"
+            class="inline-flex cursor-not-allowed items-center gap-2 rounded-xl border border-line-strong bg-raised px-4 py-2.5 text-sm font-semibold text-muted opacity-70">
+        <span aria-hidden="true" class="text-xl">+</span> Add Tool
+        <span class="text-xs font-normal">(Coming soon)</span>
     </button>
 </header>
-<div class="tools-search-row">
+<div class="mb-5 flex flex-col gap-3 sm:flex-row">
     <label class="sr-only" for="toolSearch">Search tools</label>
-    <input id="toolSearch" class="tools-search" type="search" placeholder="Search tools..." autocomplete="off" />
+    <input id="toolSearch" type="search" placeholder="Search tools..." autocomplete="off"
+           class="min-w-0 flex-1 rounded-xl border border-line bg-surface px-4 py-3 text-sm text-content placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" />
     <label class="sr-only" for="toolCategory">Filter by integration</label>
-    <select id="toolCategory" class="tools-category" aria-label="Filter tools by integration">
+    <select id="toolCategory" aria-label="Filter tools by integration"
+            class="w-full cursor-pointer rounded-xl border border-line bg-surface px-4 py-3 text-sm text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:w-48">
         <option value="all">All Categories</option>
         <option value="github">GitHub</option>
         <option value="jira">Jira</option>
     </select>
 </div>
-<div class="tools-grid">
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
     @foreach (var tool in Model)
     {
-        <a class="tool-card" data-search="@($"{tool.Name} {tool.Description}".ToLowerInvariant())"
+        <a data-search="@($"{tool.Name} {tool.Description}".ToLowerInvariant())"
            data-category="@(tool.Name.Contains("github", StringComparison.OrdinalIgnoreCase) ? "github" : tool.Name.Contains("jira", StringComparison.OrdinalIgnoreCase) ? "jira" : "other")"
            asp-controller="Tools" asp-action="Details" asp-route-name="@tool.Name"
-           aria-label="View details for @tool.Name">
-            <span class="tool-icon" aria-hidden="true">⚒</span>
-            <span class="tool-card-copy">
-                <span class="tool-card-name">@tool.Name</span>
-                <span class="tool-card-description">@tool.Description</span>
+           aria-label="View details for @tool.Name"
+           class="flex min-w-0 items-center gap-4 rounded-xl border border-line bg-surface p-5 text-content no-underline transition-colors hover:border-line-strong hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+            <span aria-hidden="true" class="grid size-14 shrink-0 place-items-center rounded-xl bg-raised text-2xl text-accent">⚒</span>
+            <span class="flex min-w-0 flex-1 flex-col gap-1">
+                <span class="break-words text-base font-bold text-heading">@tool.Name</span>
+                <span class="break-words text-sm leading-relaxed text-muted">@tool.Description</span>
             </span>
-            <span class="tool-card-arrow" aria-hidden="true">→</span>
+            <span aria-hidden="true" class="shrink-0 text-xl text-muted">→</span>
         </a>
     }
 </div>
 @if (Model.Count == 0)
 {
-    <p class="tool-empty">No tools registered yet.</p>
+    <p class="mt-4 rounded-xl border border-dashed border-line p-6 text-sm text-muted">No tools registered yet.</p>
 }
-<p id="toolSearchEmpty" class="tool-empty" hidden>No tools match your search.</p>
+<p id="toolSearchEmpty" class="mt-4 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No tools match your search.</p>
 <script src="~/js/tools-gallery.js" asp-append-version="true"></script>
