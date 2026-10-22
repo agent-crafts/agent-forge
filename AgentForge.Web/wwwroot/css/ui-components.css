@@ -75,3 +75,8 @@
 .ui-code .ui-json-string{color:#86efac}
 .ui-code .ui-json-number{color:#fdba74}
 .ui-code .ui-json-literal{color:#c4b5fd}
+
+/* Keep gallery icons centered and proportionate, independent of Tailwind compilation. */
+.ui-icon-tile{width:50px;height:50px;min-width:50px;min-height:50px;display:grid;place-items:center;line-height:0}
+.ui-icon-tile svg{display:block;width:28px;height:28px;max-width:100%;max-height:100%;flex:none;overflow:visible}
+@media(max-width:480px){.ui-icon-tile{width:42px;height:42px;min-width:42px;min-height:42px}.ui-icon-tile svg{width:24px;height:24px}}
