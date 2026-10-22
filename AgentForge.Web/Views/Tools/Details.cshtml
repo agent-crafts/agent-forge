@@ -45,13 +45,13 @@
         <div class="ui-profile-main">
             <div class="ui-profile-title"><h1>@Model.DisplayName</h1><span class="ui-badge ui-badge-success">Registered</span></div>
             <p>@Model.Description</p>
-            <div class="ui-tags"><span>@Model.Name</span><span>@source</span><span>API Tool</span><span>Read-only catalog</span></div>
+            <div class="ui-tags"><span>@Model.Name</span><span>@source</span><span>API Tool</span><span>Read-only GitHub tool</span></div>
         </div>
         <div class="ui-metadata">
             <div><small>TYPE</small><strong>API Tool</strong></div>
             <div><small>SOURCE</small><strong>@source</strong></div>
             <div><small>REGISTRY</small><strong>Available</strong></div>
-            <div><small>EXECUTION</small><strong>Not enabled</strong></div>
+            <div><small>EXECUTION</small><strong>@(Model.Name == "get_github_issue" ? "Read-only Try Now" : "Not enabled")</strong></div>
         </div>
     </section>
     <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Tool details sections">
@@ -97,7 +97,7 @@
                 <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="m7 9 3 3-3 3M12 15h5"/></svg></span> Example Input</h2><p>Illustrative values based on the schema; not executed.</p></div><button class="ui-copy" type="button" data-copy-target="tool-example-code">Copy</button></div>
                 <pre class="ui-code"><code id="tool-example-code" data-json-highlight>@exampleJson</code></pre>
             </section>
-            <p class="ui-footnote">Tool execution is not available from this page. No authorization or runtime controls are exposed.</p>
+            <p class="ui-footnote">The GitHub issue tool supports a limited read-only test in the Try Now tab. Other tools require an approved execution adapter.</p>
         </div>
     </div>
     </div>
