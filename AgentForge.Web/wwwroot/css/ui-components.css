@@ -154,3 +154,38 @@
 /* Explicit icon-to-label spacing for the Try Now primary action (works without Tailwind build). */
 #githubToolRun{display:inline-flex;align-items:center;justify-content:center;column-gap:12px}
 #githubToolRun [aria-hidden="true"]{margin-right:0}
+
+/* Add Tool dialog fallback when generated Tailwind utilities are unavailable. */
+#addToolDialog{width:min(720px,95vw);max-height:90vh;padding:0;border:0;border-radius:16px;background:var(--surface);color:var(--content)}
+#addToolDialog::backdrop{background:#091323b3}
+#addToolDialog>div{display:flex;flex-direction:column;max-height:90vh}
+#addToolDialog>div>header,#addToolDialog>div>footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 24px;border-bottom:1px solid var(--line)}
+#addToolDialog>div>header h2{margin:0;font-size:18px;color:var(--heading)}
+#addToolDialog>div>header p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+#addToolDialog>div>header button{border:0;background:transparent;color:var(--muted);font-size:26px;cursor:pointer}
+#addToolDialog>div>div{min-height:0;overflow:auto;padding:12px 24px 20px}
+#addToolDialog>div>footer{justify-content:flex-end;gap:10px;border-top:1px solid var(--line);border-bottom:0}
+#addToolDialog>div>footer button{flex:none;width:auto}
+#addToolDialog>div>footer button:last-child{background:var(--accent);border-color:var(--accent);color:white}
+#addToolDialog fieldset{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 20px;padding:0;border:0}
+#addToolDialog fieldset legend{position:absolute;clip-path:inset(50%)}
+#addToolDialog fieldset label{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:var(--surface-raised);cursor:pointer}
+#addToolDialog fieldset label:has(input:checked){background:var(--active);box-shadow:inset 0 0 0 1px var(--accent)}
+#addToolDialog fieldset input{position:absolute;opacity:0}
+#addToolDialog fieldset svg{width:26px;height:26px;flex:none;color:var(--muted)}
+#addToolDialog fieldset label:has(input:checked) svg{color:var(--accent)}
+#addToolDialog fieldset strong{display:block;font-size:13px}
+#addToolDialog fieldset small{display:block;margin-top:2px;font-size:11px}
+#addToolDialog [data-tool-panel]{display:grid;gap:10px}
+#addToolDialog [hidden]{display:none!important}
+#addToolDialog [data-tool-panel] .ui-input,#addToolDialog [data-tool-panel] .ui-select{width:100%;min-width:0}
+#addToolDialog [data-tool-panel] textarea{min-height:96px}
+#addToolDialog [data-tool-panel] label{font-size:13px;font-weight:600}
+#addToolDialog [data-tool-panel] p{font-size:13px;color:var(--muted)}
+#toolParameterRows{display:grid;gap:16px}
+#toolParameterRows .ui-modal-parameter{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+#toolParameterRows .param-name{flex:2 1 180px;min-width:0}
+#toolParameterRows .param-type{flex:1 1 130px;min-width:0}
+#toolParameterRows .param-remove{color:#dc2626}
+#addToolDialog .ui-modal-schema-preview{max-height:208px;overflow:auto}
+@media(max-width:540px){#addToolDialog fieldset{grid-template-columns:1fr}}
