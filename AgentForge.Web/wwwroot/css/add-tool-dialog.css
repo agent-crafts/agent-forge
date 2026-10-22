@@ -68,3 +68,6 @@
 /* Explicit equal vertical spacing in the modal header, regardless of utility styles. */
 #addToolDialog .ui-modal-header{padding-block:12px;align-items:center}
 #addToolDialog .ui-modal-header h2,#addToolDialog .ui-modal-header p{margin-bottom:0}
+
+#addToolDialog .ui-modal-footer{justify-content:flex-end;gap:10px}
+#addToolDialog .ui-modal-footer button{flex:none;width:auto}
