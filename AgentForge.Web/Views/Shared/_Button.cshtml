@@ -2,11 +2,20 @@
 @{
     var buttonClass = $"ui-button ui-button--{Model.Variant.ToString().ToLowerInvariant()} {Model.CssClass}".Trim();
 }
-@if (Model.CloseDialog)
-{
-    <button type="@Model.Type" id="@Model.Id" class="@buttonClass" disabled="@Model.Disabled" data-modal-close>@Model.Text</button>
-}
-else
-{
-    <button type="@Model.Type" id="@Model.Id" class="@buttonClass" disabled="@Model.Disabled">@Model.Text</button>
-}
+<button type="@Model.Type" id="@Model.Id" class="@buttonClass" disabled="@Model.Disabled"
+        role="@Model.Role" aria-controls="@Model.AriaControls" aria-selected="@Model.AriaSelected"
+        tabindex="@Model.TabIndex" data-copy-target="@Model.CopyTarget"
+        data-modal-close="@(Model.CloseDialog ? "" : null)">
+    @if (!string.IsNullOrEmpty(Model.Icon))
+    {
+        <span aria-hidden="true">@Model.Icon</span>
+    }
+    @if (Model.LabelId is { } labelId)
+    {
+        <span id="@labelId">@Model.Text</span>
+    }
+    else
+    {
+        @Model.Text
+    }
+</button>
