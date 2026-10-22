@@ -146,7 +146,7 @@
                             <partial name="_Button" model='new UiButtonModel { Text = "Formatted", Variant = UiButtonVariant.Outlined, Id = "githubResponseFormattedTab", Role = "tab", AriaSelected = "false", AriaControls = "githubResponseFormattedPanel" }' />
                             <partial name="_Button" model='new UiButtonModel { Text = "Raw", Variant = UiButtonVariant.Outlined, Id = "githubResponseRawTab", Role = "tab", AriaSelected = "false", AriaControls = "githubResponseRawPanel" }' />
                         </div>
-                        <button id="githubToolCopy" type="button" disabled class="rounded-lg border border-line bg-surface px-3 py-2 text-xs font-semibold text-heading disabled:cursor-not-allowed disabled:opacity-50">Copy</button>
+                        <partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, Id = "githubToolCopy", Disabled = true }' />
                     </div>
                     <div id="githubResponseJsonPanel" role="tabpanel" aria-labelledby="githubResponseJsonTab" class="mt-4 min-h-80">
                         <partial name="_JsonViewer" model='("githubToolResultJson", (string?)null)' />
@@ -163,7 +163,7 @@
         }
         else
         {
-            <div class="rounded-2xl border border-line bg-surface p-6"><h2 class="text-lg font-bold text-heading">Try Now</h2><p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p><button type="button" disabled class="mt-5 cursor-not-allowed rounded-xl border border-line bg-raised px-5 py-3 text-sm font-semibold text-muted opacity-70">Run Tool</button></div>
+            <div class="rounded-2xl border border-line bg-surface p-6"><h2 class="text-lg font-bold text-heading">Try Now</h2><p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></div>
         }
     </section>
 </div>
