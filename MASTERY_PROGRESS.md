@@ -12,7 +12,7 @@
 | --- | --- |
 | Current phase | Module 00 — Baseline & Roadmap Alignment (planned) |
 | Current learning module | Not started |
-| Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI and read-only endpoint implemented on PR #12 (build/browser unverified); Project Foundation implementation not started |
+| Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); Project Foundation implementation not started |
 | Current mastery assessment | Not assessed |
 | Next recommended action | Review training resources; decide database and identity boundary; scope first Project domain/application slice |
 | Last progress review | 2026-10-22 (GitHub Try Now UI implementation; verification pending) |
@@ -60,7 +60,7 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Pending verification:** `ToolResult<T>` and `ToolError` are now shared contracts directly under `Application/Tools`; GitHubTools returns `ToolResult<GitHubIssue>` with a safe `issue_not_found` error on HTTP 404. User-provided console output confirms the stubbed 404 and 500 checks passed; full build/CI remains unverified.
 
 
-**Tool Try Now (2026-10-22):** On PR #12, added a narrowly scoped, antiforgery-protected GitHub issue lookup endpoint and a two-column Try Now UI with fixed repository metadata, issue-number input, JSON/formatted/raw response tabs, copy, reset, execution status, and elapsed time. The UI is designed around the existing `get_github_issue` handler; build/browser/live GitHub verification is pending. This is engineering implementation, not mastery evidence.
+**Shared JSON viewer (2026-10-22):** On PR #12, extracted a reusable Razor partial and safe DOM-based syntax-highlighting renderer, now used for Tool Overview schema/example and live Try Now JSON response. Repository integration checked; browser and .NET build not verified. This is Engineering progress only; Mastery not assessed.\n\n**Tool Try Now (2026-10-22):** On PR #12, added a narrowly scoped, antiforgery-protected GitHub issue lookup endpoint and a two-column Try Now UI with fixed repository metadata, issue-number input, JSON/formatted/raw response tabs, copy, reset, execution status, and elapsed time. The UI is designed around the existing `get_github_issue` handler; build/browser/live GitHub verification is pending. This is engineering implementation, not mastery evidence.
 
 **UI engineering (2026-10-22):** Replaced the page-specific `wwwroot/css/tools.css` with globally loaded `wwwroot/css/ui-components.css` containing reusable UI primitives (toolbar, form controls, cards, profile, badges, panels, tables, code blocks). Both Tools views now use shared classes. Tailwind utilities remain supported; CSS build automation and browser/build verification are still pending. This is engineering progress, not mastery evidence.
 
@@ -83,7 +83,7 @@ These phases are **provisional** until reconciled with the project's training ma
 4. Resume from the first unresolved learning objective or engineering dependency.
 5. At the end of the session, update the snapshot, roadmap status, active module, gaps, and handoff based on verified progress.
 
-**Parallel Tool Engineering handoff:** Schema verification, stubbed argument binding, invalid-input rejection, safe 404 result, and propagated 500 exception passed per user-provided console output. Next: verify Tool Registry and card/detail UI; then authorization and LLM orchestration; do not claim production integration or mastery.
+**Parallel Tool Engineering handoff:** Shared JSON viewer added to Overview and Try Now on PR #12; verify compilation and UI appearance in browser.  Schema verification, stubbed argument binding, invalid-input rejection, safe 404 result, and propagated 500 exception passed per user-provided console output. Next: verify Tool Registry and card/detail UI; then authorization and LLM orchestration; do not claim production integration or mastery.
 
 **Next suggested session:** Complete Module 00 curriculum/baseline review; use `docs/architecture-foundation-assessment.md` to decide database and identity boundary, then scope the first Project Foundation implementation PR. No build or tests have been run for the assessment.
 
