@@ -9,7 +9,10 @@
 .tools-search-row{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
 .tools-search{display:block;flex:1 1 260px;min-width:0;box-sizing:border-box;padding:13px 16px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--content);font:inherit;font-size:13px}
 .tools-search::placeholder{color:var(--muted)}
-.tools-category{flex:none;width:190px;box-sizing:border-box;padding:13px 14px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--content);font:inherit;font-size:13px;cursor:pointer}
+.tools-category-wrap{position:relative;flex:none;width:190px}
+.tools-category{display:block;appearance:none;-webkit-appearance:none;width:100%;box-sizing:border-box;padding:13px 40px 13px 14px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--content);font:inherit;font-size:13px;line-height:1.5;cursor:pointer}
+.tools-category:hover{border-color:var(--line-strong)}
+.tools-category-chevron{position:absolute;right:14px;top:50%;width:16px;height:16px;transform:translateY(-50%);pointer-events:none;color:var(--muted)}
 .tools-category:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .tools-search:focus-visible,.tool-card:focus-visible,.tool-back:focus-visible,.tool-breadcrumb a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .tools-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
@@ -37,4 +40,4 @@
 .tool-divider{height:1px;background:var(--line);margin:26px 0}
 .tool-schema{padding:20px;border:1px solid var(--line);background:var(--app);border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;overflow-x:auto;font-size:12px;line-height:1.7;color:var(--content)}
 @media(max-width:900px){.tools-grid{grid-template-columns:1fr}}
-@media(max-width:640px){.tools-search-row{flex-direction:column;align-items:stretch}.tools-category{width:100%}.tools-add-button{width:100%;align-self:stretch}.tool-card{padding:16px;gap:13px;min-height:90px}.tool-icon{width:46px;height:46px;font-size:22px}.tool-detail{padding:18px}}
+@media(max-width:640px){.tools-search-row{flex-direction:column;align-items:stretch}.tools-category-wrap{width:100%}.tools-category{width:100%}.tools-add-button{width:100%;align-self:stretch}.tool-card{padding:16px;gap:13px;min-height:90px}.tool-icon{width:46px;height:46px;font-size:22px}.tool-detail{padding:18px}}
