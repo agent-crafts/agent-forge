@@ -14,3 +14,8 @@
 #toolParameterRows .param-name{flex:2 1 180px;min-width:0}
 #toolParameterRows .param-type{flex:1 1 130px;min-width:0;width:auto}
 #toolParameterRows .param-required{margin-right:4px}
+
+/* Quiet icon-only delete action for parameter rows. */
+#toolParameterRows .param-remove{display:inline-flex;align-items:center;justify-content:center;flex:0 0 36px;width:36px;height:36px;padding:0;border:0;background:transparent;color:var(--muted);border-radius:8px;cursor:pointer}
+#toolParameterRows .param-remove:hover{background:var(--surface-raised);color:#dc2626}
+#toolParameterRows .param-remove:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
