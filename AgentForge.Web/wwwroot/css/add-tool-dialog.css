@@ -50,3 +50,9 @@
 #addToolDialog .ui-modal-choice strong{font-size:12px;line-height:1.25}
 #addToolDialog .ui-modal-choice small{font-size:10px;line-height:1.3;margin-top:2px}
 #addToolDialog [data-tool-panel="custom"] > h3:first-child{margin-top:0}
+
+/* Slightly larger tool choices with left-aligned icons and copy. */
+#addToolDialog .ui-modal-choice{flex-direction:row;justify-content:flex-start;align-items:center;text-align:left;gap:10px;padding:12px 14px}
+#addToolDialog .ui-modal-choice::before{width:26px;height:26px;flex:none}
+#addToolDialog .ui-modal-choice strong{font-size:13px;line-height:1.35}
+#addToolDialog .ui-modal-choice small{font-size:11px;line-height:1.35}
