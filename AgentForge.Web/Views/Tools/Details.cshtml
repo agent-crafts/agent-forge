@@ -91,11 +91,11 @@
         <div class="ui-stack">
             <section class="ui-panel" id="tool-schema">
                 <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8v1c0 2-1 3-3 3 2 0 3 1 3 3v1c0 2 0 4 3 4M16 4c3 0 3 2 3 4v1c0 2 1 3 3 3-2 0-3 1-3 3v1c0 2 0 4-3 4"/></svg></span> JSON Schema</h2><p>The registered input contract for this tool.</p></div><button class="ui-copy" type="button" data-copy-target="tool-schema-code">Copy</button></div>
-                <pre class="ui-code"><code id="tool-schema-code" data-json-highlight>@formattedSchema</code></pre>
+                <partial name="_JsonViewer" model='"tool-schema-code"' />
             </section>
             <section class="ui-panel" id="tool-example">
                 <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="m7 9 3 3-3 3M12 15h5"/></svg></span> Example Input</h2><p>Illustrative values based on the schema; not executed.</p></div><button class="ui-copy" type="button" data-copy-target="tool-example-code">Copy</button></div>
-                <pre class="ui-code"><code id="tool-example-code" data-json-highlight>@exampleJson</code></pre>
+                <partial name="_JsonViewer" model='"tool-example-code"' />
             </section>
             <p class="ui-footnote">The GitHub issue tool supports a limited read-only test in the Try Now tab. Other tools require an approved execution adapter.</p>
         </div>
@@ -157,7 +157,7 @@
                         <button id="githubToolCopy" type="button" disabled class="rounded-lg border border-line bg-surface px-3 py-2 text-xs font-semibold text-heading disabled:cursor-not-allowed disabled:opacity-50">Copy</button>
                     </div>
                     <div id="githubResponseJsonPanel" role="tabpanel" aria-labelledby="githubResponseJsonTab" class="mt-4 min-h-80">
-                        <pre class="ui-code h-full min-h-80 max-h-[560px] overflow-auto rounded-xl border border-line bg-[#151d2b] p-4 text-xs leading-6"><code id="githubToolResultJson">Run the tool to view the response.</code></pre>
+                        <partial name="_JsonViewer" model='"githubToolResultJson"' />
                     </div>
                     <div id="githubResponseFormattedPanel" role="tabpanel" aria-labelledby="githubResponseFormattedTab" hidden class="mt-4 min-h-80 rounded-xl border border-line bg-raised p-5">
                         <div id="githubToolResultFormatted" class="grid gap-4 text-sm text-content">Run the tool to view formatted issue details.</div>
