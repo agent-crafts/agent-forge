@@ -93,3 +93,7 @@
 /* SVG icons configured per tool, shared between gallery and details. */
 .tool-card .tool-icon svg{display:block;width:30px;height:30px;color:var(--heading)}
 @media(max-width:640px){.tool-card .tool-icon svg{width:26px;height:26px}}
+
+/* Tool details sections without a tab bar. */
+.tool-details-columns{margin-top:16px}
+.tool-panel .tool-section-description{margin:-4px 0 14px;color:var(--muted);font-size:12px;line-height:1.55}
