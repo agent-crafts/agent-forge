@@ -54,7 +54,8 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Knowledge:** Generated JSON Schema versus C# runtime validation; external `issue_number` versus internal `issueNumber`; schema-to-invocation mapping explored.
 - **Engineering:** On PR #10, GitHub tool factory generates the public schema with `issue_number`, `minimum: 1`, and no `CancellationToken` property. User ran the SchemaVerification console lab and supplied output showing schema assertions, successful stubbed invocation with 42, and rejection of 0/-5 (ArgumentOutOfRangeException) and string input (ArgumentException); invalid arguments never reached the stub GitHub client.
 - **Mastery:** Not assessed; successful lab execution is not independent mastery evidence.
-- **Next action:** Design a Tool Registry after reviewing DI and available tools; then review authorization and LLM orchestration. Full build/CI and real GitHub/LLM invocation remain unverified.
+- **Registry/UI follow-up:** On `feature/tool-execution-security-registry`, implemented an application-owned `IToolRegistry`/`ToolRegistry`, DI registration, and a read-only `/tools` MVC catalog showing registered function metadata and input schema. Implementation is not yet build/browser verified; no execution authorization or LLM orchestration exists.
+- **Next action:** Verify the new Tool Registry and read-only /tools UI with a build and browser check; then design authorization and controlled tool execution before LLM orchestration. Full build/CI and real GitHub/LLM invocation remain unverified.
 
 - **Pending verification:** `ToolResult<T>` and `ToolError` are now shared contracts directly under `Application/Tools`; GitHubTools returns `ToolResult<GitHubIssue>` with a safe `issue_not_found` error on HTTP 404. User-provided console output confirms the stubbed 404 and 500 checks passed; full build/CI remains unverified.
 
