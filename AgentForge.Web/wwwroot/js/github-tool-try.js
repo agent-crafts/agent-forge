@@ -58,7 +58,7 @@
     status.className = "rounded-full bg-raised px-3 py-1.5 text-xs font-semibold text-muted";
     duration.hidden = true; timestamp.hidden = true;
     setText(durationDetail, "Not run");
-    setText(json, "Run the tool to view the response.");
+    window.AgentForgeJsonViewer.clear(json);
     setText(raw, "Run the tool to view the raw response.");
     setText(formatted, "Run the tool to view formatted issue details.");
     copy.disabled = true; setText(copy, "Copy"); showTab("Json");
@@ -77,7 +77,7 @@
     run.disabled = true; setText(runLabel, "Running...");
     setText(status, "Running");
     status.className = "rounded-full bg-active px-3 py-1.5 text-xs font-semibold text-accent";
-    setText(json, "Loading GitHub issue...");
+    window.AgentForgeJsonViewer.clear(json, "Loading GitHub issue...");
     const started = performance.now();
     try {
       const response = await fetch(form.action, {
@@ -88,7 +88,7 @@
       if (!contentType.includes("application/json")) throw new Error("Unexpected server response.");
       rawText = await response.text();
       lastResult = JSON.parse(rawText);
-      setText(json, JSON.stringify(lastResult, null, 2));
+      window.AgentForgeJsonViewer.render(json, lastResult);
       setText(raw, rawText);
       renderFormatted(lastResult);
       const ok = response.ok && lastResult.success === true;
@@ -98,7 +98,7 @@
     } catch {
       lastResult = { success: false, error: "Could not complete the request. Check the application connection and try again." };
       rawText = JSON.stringify(lastResult);
-      setText(json, JSON.stringify(lastResult, null, 2));
+      window.AgentForgeJsonViewer.render(json, lastResult);
       setText(raw, rawText);
       renderFormatted(lastResult);
       setText(status, "✕ Failed");
