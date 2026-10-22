@@ -3,6 +3,7 @@
     Layout = "_AppLayout";
 }
 <link rel="stylesheet" href="~/css/tools.css" asp-append-version="true" />
+<div class="tools-gallery-intro"><h2>Explore tools</h2><p>Discover capabilities for your projects.</p></div>
 <div class="tools-count">@Model.Count registered @(Model.Count == 1 ? "tool" : "tools")</div>
 <div class="tools-grid">
     @foreach (var tool in Model)
