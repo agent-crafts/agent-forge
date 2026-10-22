@@ -56,7 +56,7 @@
     lastResult = null; rawText = "";
     setText(status, "Not run");
     status.className = "rounded-full bg-raised px-3 py-1.5 text-xs font-semibold text-muted";
-    duration.hidden = true; timestamp.hidden = true;
+    duration.hidden = true; setText(timestamp, 'Not run');
     setText(durationDetail, "Not run");
     window.AgentForgeJsonViewer.clear(json);
     setText(raw, "Run the tool to view the raw response.");
@@ -107,7 +107,7 @@
     } finally {
       const elapsed = ((performance.now() - started) / 1000).toFixed(2) + "s";
       duration.hidden = false; setText(duration, elapsed); setText(durationDetail, elapsed);
-      timestamp.hidden = false;
+      
       const now = new Date(); timestamp.dateTime = now.toISOString();
       setText(timestamp, now.toLocaleString());
       run.disabled = false; setText(runLabel, "Run Tool");
