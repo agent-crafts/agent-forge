@@ -117,3 +117,24 @@
 #githubResponseJsonPanel,#githubResponseRawPanel,#githubResponseFormattedPanel{margin-top:16px;min-height:320px}
 #githubResponseJsonPanel .ui-code,#githubResponseRawPanel .ui-code{min-height:320px;max-height:560px;white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:1000px){#toolTryPanel>div{grid-template-columns:1fr}}
+
+/* Stable Try Now response composition; works with or without generated Tailwind. */
+#toolTryPanel .tool-try-layout{display:grid;grid-template-columns:minmax(0,0.95fr) minmax(0,1.35fr);gap:18px;align-items:start}
+#toolTryPanel .tool-try-layout>section{box-sizing:border-box;min-width:0;max-width:100%;padding:24px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+#toolTryPanel .tool-try-layout>section:nth-child(2){display:flex;flex-direction:column;gap:0;overflow:hidden}
+#toolTryPanel .tool-try-layout>section:nth-child(2)>div:first-child{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+#toolTryPanel .tool-try-layout>section:nth-child(2)>div:first-child>div:last-child{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--muted)}
+#githubToolStatus,#githubToolDuration{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:var(--surface-raised);font-size:12px;font-weight:600}
+#toolTryPanel .tool-try-layout>section:nth-child(2)>div:nth-child(2){display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:20px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+#toolTryPanel .tool-try-layout>section:nth-child(2)>div:nth-child(2)>div{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+#toolTryPanel .tool-try-layout>section:nth-child(2)>div:nth-child(2) button{flex:none;white-space:nowrap}
+#githubResponseJsonPanel,#githubResponseRawPanel,#githubResponseFormattedPanel{box-sizing:border-box;min-width:0;width:100%;margin-top:16px}
+#githubResponseJsonPanel pre,#githubResponseRawPanel pre{box-sizing:border-box;display:block;width:100%;max-width:100%;min-height:320px;max-height:560px;margin:0;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+#githubResponseJsonPanel code,#githubResponseRawPanel code{white-space:inherit;overflow-wrap:anywhere}
+#githubResponseFormattedPanel{padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--surface-raised)}
+#githubToolResultFormatted{display:grid;gap:16px;min-width:0}
+#toolTryPanel .tool-try-layout>section:nth-child(2)>details{margin-top:20px;padding:14px 16px;border:1px solid var(--line);border-radius:12px}
+#toolTryPanel .tool-try-layout>section:nth-child(2)>details dl{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#toolTryPanel .tool-try-layout>section:nth-child(2)>details dd{margin:0;overflow-wrap:anywhere}
+@media(max-width:1150px){#toolTryPanel .tool-try-layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:550px){#toolTryPanel .tool-try-layout>section{padding:16px}#toolTryPanel .tool-try-layout>section:nth-child(2)>div:nth-child(2){align-items:stretch}#githubToolCopy{margin-left:auto}}
