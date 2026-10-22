@@ -100,8 +100,33 @@
         </div>
     </div>
 </div>
-<script src="~/js/json-highlight.js" asp-append-version="true"></script>
+
 <script>
+document.querySelectorAll('code[data-json-highlight]').forEach(code => {
+    const json = code.textContent || '';
+    const output = document.createDocumentFragment();
+    const tokens = json.split(/("(?:[^"\\]|\\.)*")/g);
+    tokens.forEach((part, index) => {
+        if (!part) return;
+        if (index % 2 === 1) {
+            const span = document.createElement('span');
+            span.className = /^\s*:/.test(tokens[index + 1] || '') ? 'ui-json-key' : 'ui-json-string';
+            span.textContent = part;
+            output.append(span);
+        } else {
+            part.split(/(\btrue\b|\bfalse\b|\bnull\b|-?\d+(?:\.\d+)?)/g).forEach(value => {
+                if (!value) return;
+                if (/^(true|false|null|-?\d+(?:\.\d+)?)$/.test(value)) {
+                    const span = document.createElement('span');
+                    span.className = /^(true|false|null)$/.test(value) ? 'ui-json-literal' : 'ui-json-number';
+                    span.textContent = value;
+                    output.append(span);
+                } else output.append(document.createTextNode(value));
+            });
+        }
+    });
+    code.replaceChildren(output);
+});
 document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
     button.addEventListener('click', async () => {
         const code = document.getElementById(button.dataset.copyTarget);
