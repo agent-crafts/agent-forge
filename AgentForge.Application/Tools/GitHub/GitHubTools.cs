@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using AgentForge.Core.Clients.GitHub;
+using Microsoft.Extensions.AI;
 
 namespace AgentForge.Application.Tools.GitHub;
 
@@ -8,6 +9,7 @@ public sealed class GitHubTools(IGitHubIssueClient githubIssueClient)
 {
     [Description("Get details of a GitHub issue by its number.")]
     public Task<GitHubIssue> GetGitHubIssueAsync(
+        [AIParameterName("issue_number")]
         [Description("The positive GitHub issue number.")] int issueNumber,
         CancellationToken cancellationToken = default)
     {
