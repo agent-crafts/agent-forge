@@ -37,18 +37,45 @@ if (!root.GetProperty("required").EnumerateArray()
 Console.WriteLine("PASS: public name, type, required, minimum and cancellationToken exclusion.");
 
 await function.InvokeAsync(new AIFunctionArguments { ["issue_number"] = 42 });
-if (stub.LastIssueNumber != 42)
+if (stub.LastIssueNumber != 42 || stub.CallCount != 1)
     throw new Exception("Runtime argument mapping failed.");
 
-Console.WriteLine("PASS: issue_number maps to GitHubTools issueNumber at runtime.");
+Console.WriteLine("PASS: issue_number=42 maps to GitHubTools issueNumber at runtime.");
+
+await ExpectRejectedAsync("zero", new AIFunctionArguments { ["issue_number"] = 0 });
+await ExpectRejectedAsync("negative", new AIFunctionArguments { ["issue_number"] = -5 });
+await ExpectRejectedAsync("wrong type", new AIFunctionArguments { ["issue_number"] = "hello" });
+
+Console.WriteLine("PASS: invalid arguments did not reach GitHub client.");
+
+async Task ExpectRejectedAsync(string scenario, AIFunctionArguments arguments)
+{
+    var callsBefore = stub.CallCount;
+    try
+    {
+        await function.InvokeAsync(arguments);
+    }
+    catch (Exception exception)
+    {
+        if (stub.CallCount != callsBefore)
+            throw new Exception($"{scenario}: GitHub client was called despite invalid input.", exception);
+
+        Console.WriteLine($"PASS: {scenario} rejected ({exception.GetType().Name}).");
+        return;
+    }
+
+    throw new Exception($"{scenario}: invalid argument was accepted.");
+}
 
 sealed class StubGitHubIssueClient : IGitHubIssueClient
 {
     public int? LastIssueNumber { get; private set; }
+    public int CallCount { get; private set; }
 
     public Task<GitHubIssue> GetIssueAsync(int issueNumber, CancellationToken cancellationToken = default)
     {
         LastIssueNumber = issueNumber;
+        CallCount++;
         return Task.FromResult(new GitHubIssue(issueNumber, "Test", "open", "https://example.invalid/issue/42"));
     }
 }
