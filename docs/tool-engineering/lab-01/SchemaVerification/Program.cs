@@ -48,6 +48,20 @@ await ExpectRejectedAsync("wrong type", new AIFunctionArguments { ["issue_number
 
 Console.WriteLine("PASS: invalid arguments did not reach GitHub client.");
 
+stub.ReturnNotFound = true;
+var missingResult = await function.InvokeAsync(new AIFunctionArguments { ["issue_number"] = 999999 });
+var missingJson = JsonSerializer.Serialize(missingResult);
+using (var missingDocument = JsonDocument.Parse(missingJson))
+{
+    var result = missingDocument.RootElement;
+    // AIFunction invocation may wrap results; serialize the result for inspection.
+    if (!missingJson.Contains("issue_not_found", StringComparison.Ordinal) ||
+        !missingJson.Contains("not found or is not accessible", StringComparison.Ordinal))
+        throw new Exception($"404 did not produce a safe tool error: {missingJson}");
+}
+Console.WriteLine("PASS: 404 returns a safe issue_not_found result.");
+
+
 async Task ExpectRejectedAsync(string scenario, AIFunctionArguments arguments)
 {
     var callsBefore = stub.CallCount;
@@ -71,11 +85,14 @@ sealed class StubGitHubIssueClient : IGitHubIssueClient
 {
     public int? LastIssueNumber { get; private set; }
     public int CallCount { get; private set; }
+    public bool ReturnNotFound { get; set; }
 
     public Task<GitHubIssue> GetIssueAsync(int issueNumber, CancellationToken cancellationToken = default)
     {
         LastIssueNumber = issueNumber;
         CallCount++;
+        if (ReturnNotFound)
+            throw new HttpRequestException("GitHub returned 404.", null, System.Net.HttpStatusCode.NotFound);
         return Task.FromResult(new GitHubIssue(issueNumber, "Test", "open", "https://example.invalid/issue/42"));
     }
 }
