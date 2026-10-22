@@ -35,3 +35,13 @@
 /* Destructive parameter action is red even before hover. */
 #toolParameterRows .param-remove{color:#dc2626}
 #toolParameterRows .param-remove:hover{background:#fee2e2;color:#b91c1c}
+
+/* Center tool-type artwork and keep native radio controls accessible but visually hidden. */
+#addToolDialog .ui-modal-choice{position:relative;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:8px;min-height:120px}
+#addToolDialog .ui-modal-choice input[type=radio]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+#addToolDialog .ui-modal-choice:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:3px}
+#addToolDialog .ui-modal-choice .ui-tool-kind-icon{display:none}
+#addToolDialog .ui-modal-choice::before{content:"";display:block;width:28px;height:28px;background-color:var(--muted);mask-position:center;mask-repeat:no-repeat;mask-size:contain}
+#addToolDialog .ui-modal-choice:has(input:checked)::before{background-color:var(--accent)}
+#addToolDialog .ui-modal-choice:has(input[value="custom"])::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.7 6.3a5 5 0 0 0-6.4 6.4l-5.1 5.1a2 2 0 0 0 2.8 2.8l5.1-5.1a5 5 0 0 0 6.4-6.4L14 12l-2-2 2.7-3.7Z'/%3E%3C/svg%3E")}
+#addToolDialog .ui-modal-choice:has(input[value="external"])::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22v-6M9 8V2m6 6V2M7 8h10v3a5 5 0 0 1-10 0V8Z'/%3E%3C/svg%3E")}
