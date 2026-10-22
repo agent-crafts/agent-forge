@@ -3,6 +3,16 @@
     Layout = "_AppLayout";
 }
 <link rel="stylesheet" href="~/css/tools.css" asp-append-version="true" />
+<header class="tools-page-header">
+    <div class="tools-page-heading">
+        <h1>Tools</h1>
+        <p>Explore and manage tools available for your projects.</p>
+    </div>
+    <button class="tools-add-button" type="button" disabled title="Adding tools is coming soon">
+        <span aria-hidden="true">+</span> Add Tool
+        <span class="tools-coming-soon">(Coming soon)</span>
+    </button>
+</header>
 <div class="tools-search-row">
     <label class="sr-only" for="toolSearch">Search tools</label>
     <input id="toolSearch" class="tools-search" type="search" placeholder="Search tools..." autocomplete="off" />
