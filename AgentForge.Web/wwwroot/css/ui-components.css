@@ -176,12 +176,14 @@
 #addToolDialog fieldset label:has(input:checked) svg{color:var(--accent)}
 #addToolDialog fieldset strong{display:block;font-size:13px}
 #addToolDialog fieldset small{display:block;margin-top:2px;font-size:11px}
-#addToolDialog [data-tool-panel]{display:grid;gap:10px}
+#addToolDialog [data-tool-panel]{display:grid;grid-auto-rows:max-content;align-content:start;gap:8px}
 #addToolDialog [hidden]{display:none!important}
 #addToolDialog [data-tool-panel] .ui-input,#addToolDialog [data-tool-panel] .ui-select{width:100%;min-width:0}
 #addToolDialog [data-tool-panel] textarea{min-height:96px}
 #addToolDialog [data-tool-panel] label{font-size:13px;font-weight:600}
-#addToolDialog [data-tool-panel] p{font-size:13px;color:var(--muted)}
+#addToolDialog [data-tool-panel] p{margin:0;font-size:13px;line-height:1.5;color:var(--muted)}
+#addToolDialog [data-tool-panel] h3{margin:8px 0 0;line-height:1.4}
+#addToolDialog [data-tool-panel] label{margin-top:4px}
 #toolParameterRows{display:grid;gap:16px}
 #toolParameterRows .ui-modal-parameter{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 #toolParameterRows .param-name{flex:2 1 180px;min-width:0}
