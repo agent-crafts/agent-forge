@@ -11,3 +11,6 @@ public sealed record ToolResult<T>(
     public static ToolResult<T> Fail(string code, string message) =>
         new(false, default, new ToolError(code, message));
 }
+
+/// <summary>Safe, machine-readable error returned by an agent tool.</summary>
+public sealed record ToolError(string Code, string Message);
