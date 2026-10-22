@@ -1,4 +1,4 @@
-@model (string Id, string TitleId, string DescriptionId, string Title, string Description, string BodyPartial, string FooterPartial, string CloseAttribute)
+@model (string Id, string TitleId, string DescriptionId, string Title, string Description, string BodyPartial, string FooterPartial)
 <dialog id="@Model.Id" class="w-[min(720px,95vw)] max-h-[90vh] rounded-2xl border-0 bg-surface p-0 text-content shadow-2xl backdrop:bg-slate-950/70" aria-labelledby="@Model.TitleId" aria-describedby="@Model.DescriptionId">
     <div class="flex max-h-[90vh] flex-col">
         <header class="flex items-center justify-between gap-4 border-b border-line px-6 py-3">
@@ -6,7 +6,7 @@
                 <h2 id="@Model.TitleId" class="m-0 text-lg font-bold leading-snug text-heading">@Model.Title</h2>
                 <p id="@Model.DescriptionId" class="mt-0.5 mb-0 text-[13px] leading-snug text-muted">@Model.Description</p>
             </div>
-            <button type="button" class="cursor-pointer rounded-lg border-0 bg-transparent px-2 text-[26px] text-muted hover:bg-hover focus-visible:outline-2 focus-visible:outline-accent" data-tool-close aria-label="Close dialog">×</button>
+            <button type="button" class="cursor-pointer rounded-lg border-0 bg-transparent px-2 text-[26px] text-muted hover:bg-hover focus-visible:outline-2 focus-visible:outline-accent" data-modal-close aria-label="Close dialog">×</button>
         </header>
         <div class="min-h-0 overflow-y-auto px-6 pt-3 pb-5">
             <partial name="@Model.BodyPartial" />
