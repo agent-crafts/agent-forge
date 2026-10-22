@@ -8,6 +8,20 @@
   const formatted = get("githubToolResultFormatted"), copy = get("githubToolCopy");
   const tabs = ["Json", "Formatted", "Raw"];
   let lastResult = null, rawText = "";
+  let copyFeedbackTimer = null;
+  const clearCopyFeedback = () => {
+    if (copyFeedbackTimer !== null) clearTimeout(copyFeedbackTimer);
+    copyFeedbackTimer = null;
+    setText(copy, "Copy");
+  };
+  const showCopyFeedback = message => {
+    clearCopyFeedback();
+    setText(copy, message);
+    copyFeedbackTimer = setTimeout(() => {
+      setText(copy, "Copy");
+      copyFeedbackTimer = null;
+    }, 2000);
+  };
   const setText = (node, value) => { node.textContent = value; };
   const showTab = selected => tabs.forEach(name => {
     const active = name === selected;
@@ -52,6 +66,7 @@
     }
   };
   const reset = () => {
+    clearCopyFeedback();
     lastResult = null; rawText = "";
     setText(status, "Not run");
     status.className = "rounded-full bg-raised px-3 py-1.5 text-xs font-semibold text-muted";
@@ -59,19 +74,20 @@
     window.AgentForgeJsonViewer.clear(json);
     setText(raw, "Run the tool to view the raw response.");
     setText(formatted, "Run the tool to view formatted issue details.");
-    copy.disabled = true; setText(copy, "Copy"); showTab("Json");
+    copy.disabled = true; showTab("Json");
   };
   form.addEventListener("reset", reset);
   copy.addEventListener("click", async () => {
     if (!lastResult || !navigator.clipboard) return;
     const selected = tabs.find(name => get("githubResponse" + name + "Tab").getAttribute("aria-selected") === "true");
     const value = selected === "Raw" ? rawText : JSON.stringify(lastResult, null, 2);
-    try { await navigator.clipboard.writeText(value); setText(copy, "Copied"); }
-    catch { setText(copy, "Copy failed"); }
+    try { await navigator.clipboard.writeText(value); showCopyFeedback("Copied"); }
+    catch { showCopyFeedback("Copy failed"); }
   });
   form.addEventListener("submit", async event => {
     event.preventDefault();
     if (!form.reportValidity()) return;
+    clearCopyFeedback();
     run.disabled = true; setText(runLabel, "Running...");
     setText(status, "Running");
     status.className = "rounded-full bg-active px-3 py-1.5 text-xs font-semibold text-accent";
