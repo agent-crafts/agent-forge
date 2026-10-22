@@ -1,5 +1,6 @@
 using AgentForge.Application.Chat.Commands;
 using AgentForge.Application.Services;
+using AgentForge.Application.Tools.GitHub;
 using AgentForge.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,8 @@ public static class DependencyInjection
         services.AddSingleton<IConfigService, ConfigService>();
 
         services.AddScoped<ChatCommand>();
-        
+        services.AddScoped<GitHubTools>();
+
         return services;
     }
 }
