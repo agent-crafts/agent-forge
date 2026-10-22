@@ -18,6 +18,6 @@ public sealed class UiButtonModel
     public string Type { get; init; } = "button";
     public string? Id { get; init; }
     public string? CssClass { get; init; }
-    public string? DataAttribute { get; init; }
+    public bool CloseDialog { get; init; }
     public bool Disabled { get; init; }
 }
