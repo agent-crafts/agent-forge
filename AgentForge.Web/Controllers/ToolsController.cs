@@ -24,8 +24,11 @@ public sealed class ToolsController(IToolRegistry registry) : Controller
             candidate => string.Equals(candidate.Name, name, StringComparison.Ordinal));
         if (tool is null) return NotFound();
 
-        SetPage("Tool Details", "Review the tool's description and input contract.");
-        return View(CreateCatalogItem(tool.Name, tool.Description ?? "", tool.JsonSchema.ToString()));
+        var item = CreateCatalogItem(tool.Name, tool.Description ?? "", tool.JsonSchema.ToString());
+        SetPage(item.DisplayName, "Review the tool's description and input contract.");
+        ViewData["ParentTitle"] = "Tools";
+        ViewData["ParentController"] = "Tools";
+        return View(item);
     }
 
     private void SetPage(string title, string description)
