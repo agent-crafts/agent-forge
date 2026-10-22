@@ -1,0 +1,18 @@
+@model AgentForge.Web.Controllers.ToolsController.ToolCatalogItem
+@{
+    Layout = "_AppLayout";
+}
+<link rel="stylesheet" href="~/css/tools.css" asp-append-version="true" />
+<a class="tool-back" asp-controller="Tools" asp-action="Index">← Back to tools</a>
+<article class="tool-detail">
+    <div class="tool-card-top">
+        <span class="tool-icon" aria-hidden="true">⚒</span>
+        <span class="tool-status"><span class="tool-status-dot"></span>Registered</span>
+    </div>
+    <h2>@Model.Name</h2>
+    <p>@Model.Description</p>
+    <div class="tool-divider"></div>
+    <h3>Input schema</h3>
+    <p class="tool-hint">Arguments accepted by this tool. Execution is not available from this page.</p>
+    <pre class="tool-schema"><code>@Model.JsonSchema</code></pre>
+</article>
