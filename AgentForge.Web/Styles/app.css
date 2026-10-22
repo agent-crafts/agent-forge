@@ -1,16 +1,19 @@
-@import "tailwindcss";
-@import "../wwwroot/css/agent-chat.css";
-
-/* Tailwind semantic utilities: bg-app, bg-surface, text-content, border-line, etc. */
-@theme inline {
-  --color-app:var(--app);
-  --color-sidebar:var(--sidebar);
-  --color-surface:var(--surface);
-  --color-content:var(--content);
-  --color-heading:var(--heading);
-  --color-muted:var(--muted);
-  --color-line:var(--line);
-  --color-accent:var(--accent);
-}
+/* Tailwind v4 utilities; legacy MVC styles are loaded separately. No Preflight reset. */
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
 @source "../Views/**/*.cshtml";
 @source "../wwwroot/js/**/*.js";
+@theme inline {
+  --color-app: var(--app);
+  --color-sidebar: var(--sidebar);
+  --color-surface: var(--surface);
+  --color-raised: var(--surface-raised);
+  --color-content: var(--content);
+  --color-heading: var(--heading);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-hover: var(--hover);
+  --color-accent: var(--accent);
+}
+[hidden] { display: none !important; }
