@@ -142,7 +142,7 @@
                     </div>
                     <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
                         <div class="flex items-center gap-2" role="tablist" aria-label="Response format">
-                            <button id="githubResponseJsonTab" type="button" role="tab" aria-selected="true" aria-controls="githubResponseJsonPanel" class="rounded-lg border border-accent bg-active px-3 py-2 text-xs font-semibold text-accent">JSON</button>
+                            <partial name="_Button" model='new UiButtonModel { Text = "JSON", Variant = UiButtonVariant.Outlined, Id = "githubResponseJsonTab", Role = "tab", AriaSelected = "true", AriaControls = "githubResponseJsonPanel" }' />
                             <button id="githubResponseFormattedTab" type="button" role="tab" aria-selected="false" aria-controls="githubResponseFormattedPanel" class="rounded-lg border border-line px-3 py-2 text-xs font-semibold text-muted">Formatted</button>
                             <button id="githubResponseRawTab" type="button" role="tab" aria-selected="false" aria-controls="githubResponseRawPanel" class="rounded-lg border border-line px-3 py-2 text-xs font-semibold text-muted">Raw</button>
                         </div>
