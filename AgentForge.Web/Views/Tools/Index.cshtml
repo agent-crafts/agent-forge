@@ -31,14 +31,7 @@
            aria-label="View details for @tool.DisplayName"
            class="ui-item-card group flex min-w-0 items-center gap-4 rounded-xl border border-line bg-surface px-4 py-4 text-content no-underline transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
             <span aria-hidden="true" class="ui-icon-tile">
-                @if (tool.Icon == "github")
-                {
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M9 19c-4 1-4-2-6-2m12 4v-3.2a3 3 0 0 0-.8-2.3c2.7-.3 5.5-1.3 5.5-6a4.7 4.7 0 0 0-1.3-3.3 4.4 4.4 0 0 0-.1-3.2s-1 0-3.3 1.8a11 11 0 0 0-6 0C6.7 3 5.7 3 5.7 3a4.4 4.4 0 0 0-.1 3.2A4.7 4.7 0 0 0 4.3 9.5c0 4.7 2.8 5.7 5.5 6A3 3 0 0 0 9 17.8V21"/></svg>
-                }
-                else
-                {
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false"><path d="M12 3v4m0 10v4M3 12h4m10 0h4M5.6 5.6l2.8 2.8m7.2 7.2 2.8 2.8m0-12.8-2.8 2.8m-7.2 7.2-2.8 2.8"/><circle cx="12" cy="12" r="4"/></svg>
-                }
+                <partial name="_ToolIcon" model="tool.Icon" />
             </span>
             <span class="ui-item-content flex min-w-0 flex-1 flex-col gap-1">
                 <span class="ui-item-title break-words text-sm font-semibold text-heading">@tool.DisplayName</span>
