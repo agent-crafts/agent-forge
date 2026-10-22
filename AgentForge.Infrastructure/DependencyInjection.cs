@@ -1,6 +1,8 @@
 ﻿using AgentForge.Core.Clients;
+using AgentForge.Core.Clients.GitHub;
 using AgentForge.Core.Services;
 using AgentForge.Infrastructure.Clients;
+using AgentForge.Infrastructure.Clients.GitHub;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
