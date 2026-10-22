@@ -89,3 +89,7 @@
 .tool-execution-note{margin:0;padding:0 3px;color:var(--muted);font-size:12px;line-height:1.6}
 @media(max-width:1100px){.tool-profile-meta{flex-basis:240px;gap:14px}.tool-profile{gap:16px}.tool-details-columns{grid-template-columns:1fr}}
 @media(max-width:700px){.tool-profile{align-items:flex-start;flex-wrap:wrap;padding:18px}.tool-profile-icon{width:65px;height:65px}.tool-profile-icon svg{width:40px;height:40px}.tool-profile-main{flex:1 1 calc(100% - 90px)}.tool-profile-title h1{font-size:19px}.tool-profile-meta{flex:1 1 100%}.tool-panel{padding:16px}.tool-details-tabs a{padding:12px 10px;font-size:12px}}
+
+/* SVG icons configured per tool, shared between gallery and details. */
+.tool-card .tool-icon svg{display:block;width:30px;height:30px;color:var(--heading)}
+@media(max-width:640px){.tool-card .tool-icon svg{width:26px;height:26px}}
