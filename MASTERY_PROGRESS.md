@@ -52,9 +52,9 @@ These phases are **provisional** until reconciled with the project's training ma
 ### Parallel lab — Tool Engineering (Module 03 preparation)
 
 - **Knowledge:** Generated JSON Schema versus C# runtime validation; external `issue_number` versus internal `issueNumber`; schema-to-invocation mapping explored.
-- **Engineering:** On PR #10, GitHub tool factory generates the public schema with `issue_number`, `minimum: 1`, and no `CancellationToken` property. User ran the SchemaVerification console lab and supplied output showing both schema assertions and stubbed runtime invocation passed.
+- **Engineering:** On PR #10, GitHub tool factory generates the public schema with `issue_number`, `minimum: 1`, and no `CancellationToken` property. User ran the SchemaVerification console lab and supplied output showing schema assertions, successful stubbed invocation with 42, and rejection of 0/-5 (ArgumentOutOfRangeException) and string input (ArgumentException); invalid arguments never reached the stub GitHub client.
 - **Mastery:** Not assessed; successful lab execution is not independent mastery evidence.
-- **Next action:** Review error handling and invalid arguments; then test actual tool orchestration with an LLM. Build/CI for latest commit and real GitHub/LLM invocation remain unverified.
+- **Next action:** Review exception-to-tool-result error handling and authorization; then test actual tool orchestration with an LLM. Build/CI for latest commit and real GitHub/LLM invocation remain unverified.
 
 ## 4. Decisions & unresolved gaps
 
@@ -75,7 +75,7 @@ These phases are **provisional** until reconciled with the project's training ma
 4. Resume from the first unresolved learning objective or engineering dependency.
 5. At the end of the session, update the snapshot, roadmap status, active module, gaps, and handoff based on verified progress.
 
-**Parallel Tool Engineering handoff:** Schema verification and stubbed argument binding passed per user-provided console output. Next: invalid-input/error behavior and LLM orchestration; do not claim production integration or mastery.
+**Parallel Tool Engineering handoff:** Schema verification, stubbed argument binding, and invalid-input rejection passed per user-provided console output. Next: exception-to-result handling, authorization, and LLM orchestration; do not claim production integration or mastery.
 
 **Next suggested session:** Complete Module 00 curriculum/baseline review; use `docs/architecture-foundation-assessment.md` to decide database and identity boundary, then scope the first Project Foundation implementation PR. No build or tests have been run for the assessment.
 
