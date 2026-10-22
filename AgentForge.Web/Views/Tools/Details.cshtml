@@ -127,7 +127,7 @@
                         </div>
                         <div class="flex flex-col gap-3 sm:flex-row">
                             <button id="githubToolRun" type="submit" class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-white hover:opacity-90 disabled:cursor-wait disabled:opacity-60"><span aria-hidden="true" class="mr-2">▷</span><span id="githubToolRunLabel">Run Tool</span></button>
-                            <button id="githubToolReset" type="reset" class="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-surface px-6 py-3 text-sm font-semibold text-heading hover:bg-raised"><span aria-hidden="true">↻</span> Reset</button>
+                            <partial name="_Button" model='new UiButtonModel { Text = "Reset", Variant = UiButtonVariant.Secondary, Type = "reset", Id = "githubToolReset", Icon = "↻" }' />
                         </div>
                     </form>
                 </section>
