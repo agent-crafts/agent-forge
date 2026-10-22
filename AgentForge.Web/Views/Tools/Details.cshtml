@@ -54,6 +54,11 @@
             <div><small>EXECUTION</small><strong>Not enabled</strong></div>
         </div>
     </section>
+    <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Tool details sections">
+        <button type="button" id="toolOverviewTab" role="tab" aria-controls="toolOverviewPanel" aria-selected="true" class="border-b-2 border-accent px-5 py-3 text-sm font-semibold text-heading">Overview</button>
+        <button type="button" id="toolTryTab" role="tab" aria-controls="toolTryPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Try Now</button>
+    </div>
+    <div id="toolOverviewPanel" role="tabpanel" aria-labelledby="toolOverviewTab">
     <div class="ui-columns">
         <div class="ui-stack">
             <section class="ui-panel" id="tool-overview">
@@ -95,6 +100,16 @@
             <p class="ui-footnote">Tool execution is not available from this page. No authorization or runtime controls are exposed.</p>
         </div>
     </div>
+    </div>
+    <section id="toolTryPanel" role="tabpanel" aria-labelledby="toolTryTab" hidden class="mt-6 rounded-2xl border border-line bg-surface p-6">
+        <h2 class="text-xl font-semibold text-heading">Try Now</h2>
+        <p class="mt-2 text-sm text-muted">Run this tool with validated input once secure execution is enabled.</p>
+        <div class="mt-5 rounded-xl border border-line bg-raised p-4">
+            <h3 class="text-sm font-semibold text-heading">Execution not available</h3>
+            <p class="mt-2 text-sm text-muted">AgentForge currently provides a read-only tool registry. Authentication, authorization, and a controlled executor are required before testing tools.</p>
+        </div>
+        <button type="button" disabled class="mt-5 cursor-not-allowed rounded-xl border border-line bg-raised px-5 py-3 text-sm font-semibold text-muted opacity-70">Run Tool</button>
+    </section>
 </div>
 
 <script>
@@ -136,4 +151,32 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
         }
     });
 });
+</script>
+
+<script>
+(() => {
+    const tabs = [document.getElementById('toolOverviewTab'), document.getElementById('toolTryTab')];
+    const panels = [document.getElementById('toolOverviewPanel'), document.getElementById('toolTryPanel')];
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+            tabs.forEach((item, i) => {
+                const active = i === index;
+                item.setAttribute('aria-selected', String(active));
+                item.tabIndex = active ? 0 : -1;
+                item.classList.toggle('border-accent', active);
+                item.classList.toggle('border-transparent', !active);
+                item.classList.toggle('text-heading', active);
+                item.classList.toggle('text-muted', !active);
+                panels[i].hidden = !active;
+            });
+        });
+        tab.addEventListener('keydown', event => {
+            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+            event.preventDefault();
+            const next = (index + (event.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+            tabs[next].focus();
+            tabs[next].click();
+        });
+    });
+})();
 </script>
