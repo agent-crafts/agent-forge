@@ -22,3 +22,16 @@
 #toolParameterRows .param-remove{display:inline-flex;align-items:center;justify-content:center;flex:0 0 36px;width:36px;height:36px;padding:0;border:0;background:transparent;color:var(--muted);border-radius:8px;cursor:pointer}
 #toolParameterRows .param-remove:hover{background:var(--surface-raised);color:#dc2626}
 #toolParameterRows .param-remove:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Tool type: clean selectable cards with meaningful icon emphasis. */
+#addToolDialog .ui-modal-choice{align-items:center;gap:12px;padding:14px 16px;border:0;border-radius:12px;cursor:pointer;transition:background .15s ease,box-shadow .15s ease}
+#addToolDialog .ui-modal-choice:hover{background:var(--hover,var(--surface-raised))}
+#addToolDialog .ui-modal-choice:has(input:checked){background:var(--active);box-shadow:inset 0 0 0 1px var(--accent)}
+#addToolDialog .ui-modal-choice input[type=radio]{accent-color:var(--accent);flex:none}
+#addToolDialog .ui-tool-kind-icon{width:22px;height:22px;flex:none;color:var(--muted)}
+#addToolDialog .ui-modal-choice:has(input:checked) .ui-tool-kind-icon{color:var(--accent)}
+#addToolDialog .ui-modal-choice strong,#addToolDialog .ui-modal-choice small{display:block}
+#addToolDialog .ui-modal-choice small{margin-top:4px;line-height:1.45}
+/* Destructive parameter action is red even before hover. */
+#toolParameterRows .param-remove{color:#dc2626}
+#toolParameterRows .param-remove:hover{background:#fee2e2;color:#b91c1c}
