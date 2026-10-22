@@ -13,8 +13,8 @@
             if (item.ValueKind == JsonValueKind.String && item.GetString() is { } name) required.Add(name);
         }
     }
-    var isGitHub = Model.Name.Contains("github", StringComparison.OrdinalIgnoreCase);
-    var source = isGitHub ? "GitHub" : "Registered tool";
+    var isGitHub = Model.Icon == "github";
+    var source = Model.Category == "github" ? "GitHub" : "Registered tool";
     var example = new Dictionary<string, object?>();
     if (hasProperties)
     {
@@ -49,9 +49,9 @@
             else { <span>⚒</span> }
         </div>
         <div class="tool-profile-main">
-            <div class="tool-profile-title"><h1>@Model.Name</h1><span class="tool-registered">Registered</span></div>
+            <div class="tool-profile-title"><h1>@Model.DisplayName</h1><span class="tool-registered">Registered</span></div>
             <p>@Model.Description</p>
-            <div class="tool-tags"><span>@source</span><span>API Tool</span><span>Read-only catalog</span></div>
+            <div class="tool-tags"><span>@Model.Name</span><span>@source</span><span>API Tool</span><span>Read-only catalog</span></div>
         </div>
         <div class="tool-profile-meta">
             <div><small>TYPE</small><strong>API Tool</strong></div>
