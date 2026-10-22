@@ -1,0 +1,24 @@
+/* Read-only Tools catalog and detail pages. Uses existing AgentForge theme tokens. */
+.tools-count{font-size:13px;color:var(--muted);margin-bottom:18px}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:18px}
+.tool-card,.tool-detail{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px}
+.tool-card{display:flex;flex-direction:column;min-height:235px;transition:border-color .15s,transform .15s}
+.tool-card:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+.tool-card-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.tool-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--surface-raised);font-size:22px;color:var(--accent)}
+.tool-status{display:inline-flex;align-items:center;gap:7px;border-radius:999px;background:var(--surface-raised);padding:7px 10px;color:var(--muted);font-size:11px;font-weight:650}
+.tool-status-dot{width:7px;height:7px;background:#22a775;border-radius:50%}
+.tool-card h2,.tool-detail h2{font-size:17px;color:var(--heading);overflow-wrap:anywhere;margin:0 0 10px}
+.tool-card p,.tool-detail p{color:var(--muted);font-size:13px;line-height:1.65;margin:0 0 22px}
+.tool-link{display:flex;align-items:center;justify-content:space-between;margin-top:auto;border:1px solid var(--line);border-radius:9px;padding:11px 13px;color:var(--content);text-decoration:none;font-size:13px;font-weight:600}
+.tool-link:hover{background:var(--hover);border-color:var(--line-strong)}
+.tool-link:focus-visible,.tool-back:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.tool-back{display:inline-block;color:var(--accent);text-decoration:none;font-size:13px;font-weight:600;margin-bottom:22px}
+.tool-detail{max-width:900px}
+.tool-detail h2{font-size:24px}
+.tool-detail h3{font-size:15px;margin:0 0 8px}
+.tool-detail .tool-hint{margin-bottom:14px}
+.tool-divider{height:1px;background:var(--line);margin:26px 0}
+.tool-schema{padding:20px;border:1px solid var(--line);background:var(--app);border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;overflow-x:auto;font-size:12px;line-height:1.7;color:var(--content)}
+.tool-empty{padding:30px;border:1px dashed var(--line);border-radius:12px;color:var(--muted)}
+@media(max-width:640px){.tool-card,.tool-detail{padding:18px}.tools-grid{grid-template-columns:1fr}}
