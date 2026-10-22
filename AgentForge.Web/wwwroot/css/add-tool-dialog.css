@@ -64,3 +64,7 @@
 #addToolDialog .ui-modal-header{padding-top:10px;padding-bottom:10px}
 #addToolDialog .ui-modal-header h2{font-size:18px;line-height:1.3}
 #addToolDialog .ui-modal-header p{margin-top:2px;line-height:1.3}
+
+/* Explicit equal vertical spacing in the modal header, regardless of utility styles. */
+#addToolDialog .ui-modal-header{padding-block:12px;align-items:center}
+#addToolDialog .ui-modal-header h2,#addToolDialog .ui-modal-header p{margin-bottom:0}
