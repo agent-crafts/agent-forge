@@ -22,3 +22,12 @@
 .tool-schema{padding:20px;border:1px solid var(--line);background:var(--app);border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;overflow-x:auto;font-size:12px;line-height:1.7;color:var(--content)}
 .tool-empty{padding:30px;border:1px dashed var(--line);border-radius:12px;color:var(--muted)}
 @media(max-width:640px){.tool-card,.tool-detail{padding:18px}.tools-grid{grid-template-columns:1fr}}
+
+/* Gallery refinements */
+.tools-gallery-intro{margin-bottom:20px}
+.tools-gallery-intro h2{font-size:19px;color:var(--heading);margin:0 0 7px}
+.tools-gallery-intro p{font-size:13px;color:var(--muted);margin:0}
+.tools-search{display:block;width:min(100%,460px);padding:13px 15px;margin-bottom:18px;background:var(--surface);color:var(--content);border:1px solid var(--line-strong);border-radius:11px;font:inherit;font-size:13px}
+.tools-search:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tool-card[hidden],#toolSearchEmpty[hidden]{display:none}
+.tool-card h2{font-size:16px}
