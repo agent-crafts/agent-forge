@@ -12,8 +12,8 @@
             @Model.Body(null)
         </div>
         <footer class="flex items-center justify-end gap-2.5 border-t border-line px-6 py-4 [&_button]:w-auto [&_button]:flex-none">
-            <button type="button" class="ui-button" data-modal-close>@Model.CancelButtonText</button>
-            <button type="button" class="ui-button border-accent bg-accent text-white" id="@Model.PrimaryButtonId">@Model.PrimaryButtonText</button>
+            <partial name="_Button" model='new UiButtonModel { Text = Model.CancelButtonText, Variant = UiButtonVariant.Cancel, CloseDialog = true }' />
+            <partial name="_Button" model='new UiButtonModel { Text = Model.PrimaryButtonText, Variant = UiButtonVariant.Primary, Id = Model.PrimaryButtonId }' />
         </footer>
     </div>
 </dialog>
