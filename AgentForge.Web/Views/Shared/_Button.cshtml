@@ -1,0 +1,2 @@
+@model UiButtonModel
+<button type="@Model.Type" id="@Model.Id" class="ui-button ui-button--@Model.Variant.ToString().ToLowerInvariant()" disabled="@Model.Disabled">@Model.Text</button>
