@@ -188,6 +188,7 @@
 #toolParameterRows .ui-modal-parameter{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 #toolParameterRows .param-name{flex:2 1 180px;min-width:0}
 #toolParameterRows .param-type{flex:1 1 130px;min-width:0}
-#toolParameterRows .param-remove{color:#dc2626}
+#toolParameterRows .param-remove{background:transparent;border:0;box-shadow:none;color:#dc2626}
+#toolParameterRows .param-remove:hover,#toolParameterRows .param-remove:focus-visible{background:transparent;box-shadow:none}
 #addToolDialog .ui-modal-schema-preview{max-height:208px;overflow:auto}
 @media(max-width:540px){#addToolDialog fieldset{grid-template-columns:1fr}}
