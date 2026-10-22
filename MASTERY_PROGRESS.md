@@ -12,10 +12,10 @@
 | --- | --- |
 | Current phase | Module 00 — Baseline & Roadmap Alignment (planned) |
 | Current learning module | Not started |
-| Current engineering milestone | UI foundation merged; architecture assessment documented (PR pending); Project Foundation implementation not started |
+| Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI and read-only endpoint implemented on PR #12 (build/browser unverified); Project Foundation implementation not started |
 | Current mastery assessment | Not assessed |
 | Next recommended action | Review training resources; decide database and identity boundary; scope first Project domain/application slice |
-| Last progress review | 2026-10-22 (GitHub tool schema verification; architecture assessment unchanged) |
+| Last progress review | 2026-10-22 (GitHub Try Now UI implementation; verification pending) |
 
 ## 2. Learning & engineering roadmap
 
@@ -55,10 +55,12 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Engineering:** On PR #10, GitHub tool factory generates the public schema with `issue_number`, `minimum: 1`, and no `CancellationToken` property. User ran the SchemaVerification console lab and supplied output showing schema assertions, successful stubbed invocation with 42, and rejection of 0/-5 (ArgumentOutOfRangeException) and string input (ArgumentException); invalid arguments never reached the stub GitHub client.
 - **Mastery:** Not assessed; successful lab execution is not independent mastery evidence.
 - **Registry/UI follow-up:** On `feature/tool-execution-security-registry`, implemented an application-owned `IToolRegistry`/`ToolRegistry`, DI registration, and a read-only `/tools` MVC gallery with compact horizontal two-column cards, combined search and GitHub/Jira category dropdown (Jira currently empty), and a `/tools/{name}` details page showing function metadata, overview and input schema. The gallery design was updated on PR #12; Tools gallery/details Razor views now use Tailwind v4 utility classes and semantic theme colors, with CSS compilation documented in AgentForge.Web/TAILWIND.md. Tools gallery card spacing, typography, and hover states were refined using Tailwind utilities. The approved Tool Details dashboard (profile, schema-derived parameter table, copyable JSON and example input) and per-tool gallery display names/icons are now applied directly to feature/tool-execution-security-registry. Stable registry names and routes are unchanged; no execution controls were added. Shared shell/chat still use legacy CSS. Nested Tool Details uses a shared topbar breadcrumb (Tools / display name), with no redundant back link or section tabs; overview and parameters now include descriptive subtitles. Build/browser verification remains pending. Implementation is not yet build/browser verified; no execution authorization or LLM orchestration exists.
-- **Next action:** Verify the new Tool Registry, searchable gallery, and detail page with a build and browser check; then design authorization and controlled tool execution before LLM orchestration. Full build/CI and real GitHub/LLM invocation remain unverified.
+- **Next action:** Build and browser-test the registry gallery, Details tabs, and GitHub Try Now workflow, including success/404/invalid-input paths; add access controls and rate limiting before wider exposure. Full build/CI and live UI invocation remain unverified.
 
 - **Pending verification:** `ToolResult<T>` and `ToolError` are now shared contracts directly under `Application/Tools`; GitHubTools returns `ToolResult<GitHubIssue>` with a safe `issue_not_found` error on HTTP 404. User-provided console output confirms the stubbed 404 and 500 checks passed; full build/CI remains unverified.
 
+
+**Tool Try Now (2026-10-22):** On PR #12, added a narrowly scoped, antiforgery-protected GitHub issue lookup endpoint and a two-column Try Now UI with fixed repository metadata, issue-number input, JSON/formatted/raw response tabs, copy, reset, execution status, and elapsed time. The UI is designed around the existing `get_github_issue` handler; build/browser/live GitHub verification is pending. This is engineering implementation, not mastery evidence.
 
 **UI engineering (2026-10-22):** Replaced the page-specific `wwwroot/css/tools.css` with globally loaded `wwwroot/css/ui-components.css` containing reusable UI primitives (toolbar, form controls, cards, profile, badges, panels, tables, code blocks). Both Tools views now use shared classes. Tailwind utilities remain supported; CSS build automation and browser/build verification are still pending. This is engineering progress, not mastery evidence.
 
