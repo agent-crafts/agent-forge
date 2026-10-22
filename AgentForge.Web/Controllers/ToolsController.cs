@@ -10,7 +10,7 @@ public sealed class ToolsController(IToolRegistry registry) : Controller
     [HttpGet("")]
     public IActionResult Index()
     {
-        SetPage("Tools", "Explore the capabilities available to your agents.");
+        SetPage("Tools", "Explore and manage tools available for your projects.");
         var tools = registry.GetTools()
             .Select(tool => new ToolCatalogItem(tool.Name, tool.Description ?? "", tool.JsonSchema.ToString()))
             .ToArray();
