@@ -3,30 +3,28 @@
     Layout = "_AppLayout";
 }
 <link rel="stylesheet" href="~/css/tools.css" asp-append-version="true" />
-<div class="tools-gallery-intro"><h2>Explore tools</h2><p>Discover capabilities for your projects.</p></div>
-<label class="sr-only" for="toolSearch">Search tools</label>
-<input id="toolSearch" class="tools-search" type="search" placeholder="Search tools..." autocomplete="off" />
-<div class="tools-count">@Model.Count registered @(Model.Count == 1 ? "tool" : "tools")</div>
+<div class="tools-search-row">
+    <label class="sr-only" for="toolSearch">Search tools</label>
+    <input id="toolSearch" class="tools-search" type="search" placeholder="Search tools..." autocomplete="off" />
+</div>
 <div class="tools-grid">
     @foreach (var tool in Model)
     {
-        <article class="tool-card" data-search="@($"{tool.Name} {tool.Description}".ToLowerInvariant())">
-            <div class="tool-card-top">
-                <span class="tool-icon" aria-hidden="true">⚒</span>
-                <span class="tool-status"><span class="tool-status-dot"></span>Registered</span>
-            </div>
-            <h2>@tool.Name</h2>
-            <p>@tool.Description</p>
-            <a class="tool-link" asp-controller="Tools" asp-action="Details" asp-route-name="@tool.Name">
-                View details <span aria-hidden="true">→</span>
-            </a>
-        </article>
-    }
-    @if (Model.Count == 0)
-    {
-        <div class="tool-empty">No tools registered yet.</div>
+        <a class="tool-card" data-search="@($"{tool.Name} {tool.Description}".ToLowerInvariant())"
+           asp-controller="Tools" asp-action="Details" asp-route-name="@tool.Name"
+           aria-label="View details for @tool.Name">
+            <span class="tool-icon" aria-hidden="true">⚒</span>
+            <span class="tool-card-copy">
+                <span class="tool-card-name">@tool.Name</span>
+                <span class="tool-card-description">@tool.Description</span>
+            </span>
+            <span class="tool-card-arrow" aria-hidden="true">→</span>
+        </a>
     }
 </div>
-
+@if (Model.Count == 0)
+{
+    <p class="tool-empty">No tools registered yet.</p>
+}
 <p id="toolSearchEmpty" class="tool-empty" hidden>No tools match your search.</p>
 <script src="~/js/tools-gallery.js" asp-append-version="true"></script>
