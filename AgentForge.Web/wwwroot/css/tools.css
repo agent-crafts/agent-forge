@@ -1,7 +1,9 @@
 /* Tools gallery: minimal two-column horizontal cards. Theme colors come from AgentForge. */
-.tools-search-row{margin-bottom:22px}
-.tools-search{display:block;width:100%;max-width:100%;box-sizing:border-box;padding:13px 16px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--content);font:inherit;font-size:13px}
+.tools-search-row{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.tools-search{display:block;flex:1;min-width:0;box-sizing:border-box;padding:13px 16px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--content);font:inherit;font-size:13px}
 .tools-search::placeholder{color:var(--muted)}
+.tools-category{flex:none;width:190px;box-sizing:border-box;padding:13px 14px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--content);font:inherit;font-size:13px;cursor:pointer}
+.tools-category:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .tools-search:focus-visible,.tool-card:focus-visible,.tool-back:focus-visible,.tool-breadcrumb a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .tools-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .tool-card{display:flex;align-items:center;gap:18px;min-width:0;min-height:104px;box-sizing:border-box;padding:20px 22px;border:1px solid var(--line);border-radius:13px;background:var(--surface);text-decoration:none;color:var(--content);transition:border-color .15s,background .15s}
@@ -28,4 +30,4 @@
 .tool-divider{height:1px;background:var(--line);margin:26px 0}
 .tool-schema{padding:20px;border:1px solid var(--line);background:var(--app);border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;overflow-x:auto;font-size:12px;line-height:1.7;color:var(--content)}
 @media(max-width:900px){.tools-grid{grid-template-columns:1fr}}
-@media(max-width:640px){.tool-card{padding:16px;gap:13px;min-height:90px}.tool-icon{width:46px;height:46px;font-size:22px}.tool-detail{padding:18px}}
+@media(max-width:640px){.tools-search-row{flex-direction:column;align-items:stretch}.tools-category{width:100%}.tool-card{padding:16px;gap:13px;min-height:90px}.tool-icon{width:46px;height:46px;font-size:22px}.tool-detail{padding:18px}}
