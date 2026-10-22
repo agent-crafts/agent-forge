@@ -1,48 +1,48 @@
-<dialog id="addToolDialog" class="ui-modal" aria-labelledby="addToolTitle" aria-describedby="addToolIntro">
-    <div class="ui-modal-shell">
-        <header class="ui-modal-header">
-            <div><h2 id="addToolTitle">Add Tool</h2><p id="addToolIntro">Configure a custom tool or connect an external source.</p></div>
-            <button type="button" class="ui-modal-close" data-tool-close aria-label="Close dialog">×</button>
+<dialog id="addToolDialog" class="ui-modal w-[min(720px,95vw)] max-h-[90vh] rounded-2xl border border-line bg-surface p-0 text-content shadow-2xl backdrop:bg-slate-950/70" aria-labelledby="addToolTitle" aria-describedby="addToolIntro">
+    <div class="ui-modal-shell flex max-h-[90vh] flex-col">
+        <header class="ui-modal-header flex items-start justify-between gap-4 border-b border-line px-6 py-5">
+            <div><h2 id="addToolTitle" class="text-xl font-bold text-heading">Add Tool</h2><p id="addToolIntro" class="mt-1 text-sm text-muted">Configure a custom tool or connect an external source.</p></div>
+            <button type="button" class="ui-modal-close rounded-lg px-2 text-2xl text-muted hover:bg-hover focus-visible:outline-2 focus-visible:outline-accent" data-tool-close aria-label="Close dialog">×</button>
         </header>
-        <div class="ui-modal-body">
-            <fieldset class="ui-modal-options">
-                <legend class="ui-field-label">Tool type</legend>
-                <label class="ui-modal-choice"><input type="radio" name="toolKind" value="custom" checked /><span><strong>Custom Tool</strong><small>Define a tool built for AgentForge.</small></span></label>
-                <label class="ui-modal-choice"><input type="radio" name="toolKind" value="external" /><span><strong>External Tool</strong><small>Discover tools from a trusted external provider.</small></span></label>
+        <div class="ui-modal-body min-h-0 overflow-y-auto px-6 py-5">
+            <fieldset class="ui-modal-options mb-6 grid grid-cols-1 gap-3 border-0 p-0 sm:grid-cols-2">
+                <legend class="ui-field-label mt-2 block text-sm font-semibold text-heading">Tool type</legend>
+                <label class="ui-modal-choice flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-surface p-4 has-[:checked]:border-accent has-[:checked]:bg-active"><input type="radio" name="toolKind" value="custom" checked /><span><strong class="block text-sm text-heading">Custom Tool</strong><small class="mt-1 block text-xs text-muted">Define a tool built for AgentForge.</small></span></label>
+                <label class="ui-modal-choice flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-surface p-4 has-[:checked]:border-accent has-[:checked]:bg-active"><input type="radio" name="toolKind" value="external" /><span><strong class="block text-sm text-heading">External Tool</strong><small class="mt-1 block text-xs text-muted">Discover tools from a trusted external provider.</small></span></label>
             </fieldset>
-            <section data-tool-panel="custom" class="ui-modal-panel" aria-label="Custom tool configuration">
-                <h3>Basic information</h3>
-                <label class="ui-field-label" for="newToolName">Tool name</label>
+            <section data-tool-panel="custom" class="ui-modal-panel grid gap-3" aria-label="Custom tool configuration">
+                <h3 class="mt-2 text-base font-semibold text-heading">Basic information</h3>
+                <label class="ui-field-label mt-2 block text-sm font-semibold text-heading" for="newToolName">Tool name</label>
                 <input class="ui-input" id="newToolName" name="name" placeholder="read_project_status" pattern="[a-z][a-z0-9_]*" maxlength="100" />
-                <label class="ui-field-label" for="newToolDisplayName">Display name</label>
+                <label class="ui-field-label mt-2 block text-sm font-semibold text-heading" for="newToolDisplayName">Display name</label>
                 <input class="ui-input" id="newToolDisplayName" name="displayName" placeholder="Read Project Status" maxlength="120" />
-                <label class="ui-field-label" for="newToolDescription">Description</label>
+                <label class="ui-field-label mt-2 block text-sm font-semibold text-heading" for="newToolDescription">Description</label>
                 <textarea class="ui-input ui-modal-textarea" id="newToolDescription" name="description" placeholder="What does this tool do?"></textarea>
-                <h3>Parameters</h3>
-                <p class="ui-modal-help">Define input parameters. The JSON Schema preview is generated automatically.</p>
-                <div id="toolParameterRows" class="ui-modal-parameters"></div>
+                <h3 class="mt-2 text-base font-semibold text-heading">Parameters</h3>
+                <p class="ui-modal-help text-sm leading-6 text-muted">Define input parameters. The JSON Schema preview is generated automatically.</p>
+                <div id="toolParameterRows" class="ui-modal-parameters grid gap-3"></div>
                 <button type="button" id="addToolParameter" class="ui-button">+ Add parameter</button>
-                <label class="ui-field-label" for="newToolSchema">Generated JSON Schema</label>
-                <pre class="ui-modal-code"><code id="newToolSchema"></code></pre>
-                <p class="ui-modal-help">An approved implementation and execution policy are required before this tool can run.</p>
+                <label class="ui-field-label mt-2 block text-sm font-semibold text-heading" for="newToolSchema">Generated JSON Schema</label>
+                <pre class="ui-modal-code max-h-52 overflow-auto rounded-xl border border-line bg-raised p-4 text-xs text-content"><code id="newToolSchema"></code></pre>
+                <p class="ui-modal-help text-sm leading-6 text-muted">An approved implementation and execution policy are required before this tool can run.</p>
             </section>
-            <section data-tool-panel="external" class="ui-modal-panel" aria-label="External tool configuration" hidden>
-                <h3>Choose source</h3>
-                <label class="ui-field-label" for="externalToolSource">Source type</label>
+            <section data-tool-panel="external" class="ui-modal-panel grid gap-3" aria-label="External tool configuration" hidden>
+                <h3 class="mt-2 text-base font-semibold text-heading">Choose source</h3>
+                <label class="ui-field-label mt-2 block text-sm font-semibold text-heading" for="externalToolSource">Source type</label>
                 <select class="ui-select" id="externalToolSource"><option value="openapi">OpenAPI / Swagger</option><option value="mcp">MCP Server</option><option value="integration">Existing integration</option></select>
                 <div id="externalEndpointField">
-                    <label class="ui-field-label" for="externalToolEndpoint">Specification URL / server endpoint</label>
+                    <label class="ui-field-label mt-2 block text-sm font-semibold text-heading" for="externalToolEndpoint">Specification URL / server endpoint</label>
                     <input class="ui-input" id="externalToolEndpoint" type="url" placeholder="https://example.com/openapi.json" />
                 </div>
                 <div id="externalIntegrationField" hidden>
-                    <label class="ui-field-label" for="externalToolIntegration">Integration</label>
+                    <label class="ui-field-label mt-2 block text-sm font-semibold text-heading" for="externalToolIntegration">Integration</label>
                     <select class="ui-select" id="externalToolIntegration"><option value="">Choose an integration</option><option value="github">GitHub</option><option value="jira">Jira</option></select>
                 </div>
-                <p class="ui-modal-help">Discovery requires a trusted connection, validation, and explicit review of imported tools. No external endpoint is contacted by this form.</p>
+                <p class="ui-modal-help text-sm leading-6 text-muted">Discovery requires a trusted connection, validation, and explicit review of imported tools. No external endpoint is contacted by this form.</p>
             </section>
-            <p id="addToolFeedback" class="ui-modal-feedback" role="status" aria-live="polite"></p>
+            <p id="addToolFeedback" class="ui-modal-feedback mt-4 min-h-5 text-sm text-accent" role="status" aria-live="polite"></p>
         </div>
-        <footer class="ui-modal-footer">
+        <footer class="ui-modal-footer flex justify-end gap-3 border-t border-line px-6 py-4">
             <button type="button" class="ui-button" data-tool-close>Cancel</button>
             <button type="button" class="ui-button ui-modal-primary" id="previewToolConfiguration">Preview configuration</button>
         </footer>
