@@ -18,6 +18,13 @@ public static class DependencyInjection
             client.Timeout = TimeSpan.FromSeconds(config.AI.TimeoutSeconds ?? 0);
         });
         
+        services.AddHttpClient<IGitHubIssueClient, GitHubIssueClient>(client =>
+        {
+            client.BaseAddress = new Uri("https://api.github.com/");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("AgentForge-ToolEngineeringLab/1.0");
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
+        });
+
         //services.AddScoped<ILlmClient, LlmClient>();
         return services;
     }
