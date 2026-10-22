@@ -61,13 +61,13 @@
     <div class="ui-columns">
         <div class="ui-stack">
             <section class="ui-panel" id="tool-overview">
-                <h2><span class="ui-panel-icon" aria-hidden="true">▤</span> Overview</h2>
+                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M8 3h7l6 6h-6V3"/><path d="M8 13h8M8 17h8"/></svg></span> Overview</h2>
                 <p class="ui-subtitle">What this tool does and when to use it.</p>
                 <p>@Model.Description</p>
                 <div class="ui-note"><strong>When to use this tool</strong><p>Use this tool when its registered capability matches your task. Review the input contract before integrating it into an agent workflow.</p></div>
             </section>
             <section class="ui-panel" id="tool-parameters">
-                <h2><span class="ui-panel-icon" aria-hidden="true">⚙</span> Parameters</h2>
+                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="var(--surface-raised)"/><circle cx="15" cy="17" r="2" fill="var(--surface-raised)"/></svg></span> Parameters</h2>
                 <p class="ui-subtitle">Required inputs, types, and descriptions from the registered schema.</p>
                 @if (hasProperties)
                 {
@@ -89,11 +89,11 @@
         </div>
         <div class="ui-stack">
             <section class="ui-panel" id="tool-schema">
-                <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true">&lt;/&gt;</span> JSON Schema</h2><p>The registered input contract for this tool.</p></div><button class="ui-copy" type="button" data-copy-target="tool-schema-code">Copy</button></div>
+                <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4 3 8l5 4-5 4 5 4M16 4l5 4-5 4 5 4"/><path d="m14 3-4 18"/></svg></span> JSON Schema</h2><p>The registered input contract for this tool.</p></div><button class="ui-copy" type="button" data-copy-target="tool-schema-code">Copy</button></div>
                 <pre class="ui-code"><code id="tool-schema-code">@formattedSchema</code></pre>
             </section>
             <section class="ui-panel" id="tool-example">
-                <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true">▶</span> Example Input</h2><p>Illustrative values based on the schema; not executed.</p></div><button class="ui-copy" type="button" data-copy-target="tool-example-code">Copy</button></div>
+                <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="m7 9 3 3-3 3M12 15h5"/></svg></span> Example Input</h2><p>Illustrative values based on the schema; not executed.</p></div><button class="ui-copy" type="button" data-copy-target="tool-example-code">Copy</button></div>
                 <pre class="ui-code"><code id="tool-example-code">@exampleJson</code></pre>
             </section>
             <p class="ui-footnote">Tool execution is not available from this page. No authorization or runtime controls are exposed.</p>
