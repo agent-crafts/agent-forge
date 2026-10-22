@@ -69,3 +69,9 @@
 /* Generic section heading icon: identical tile and SVG dimensions across panels. */
 .ui-panel-icon{width:36px;height:36px;border-radius:10px}
 .ui-panel-icon svg{display:block;width:20px;height:20px;flex:none}
+
+/* Shared JSON token palette for dark code surfaces. */
+.ui-code .ui-json-key{color:#93c5fd}
+.ui-code .ui-json-string{color:#86efac}
+.ui-code .ui-json-number{color:#fdba74}
+.ui-code .ui-json-literal{color:#c4b5fd}
