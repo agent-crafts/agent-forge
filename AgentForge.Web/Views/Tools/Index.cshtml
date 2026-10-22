@@ -6,11 +6,18 @@
 <div class="tools-search-row">
     <label class="sr-only" for="toolSearch">Search tools</label>
     <input id="toolSearch" class="tools-search" type="search" placeholder="Search tools..." autocomplete="off" />
+    <label class="sr-only" for="toolCategory">Filter by integration</label>
+    <select id="toolCategory" class="tools-category" aria-label="Filter tools by integration">
+        <option value="all">All Categories</option>
+        <option value="github">GitHub</option>
+        <option value="jira">Jira</option>
+    </select>
 </div>
 <div class="tools-grid">
     @foreach (var tool in Model)
     {
         <a class="tool-card" data-search="@($"{tool.Name} {tool.Description}".ToLowerInvariant())"
+           data-category="@(tool.Name.Contains("github", StringComparison.OrdinalIgnoreCase) ? "github" : tool.Name.Contains("jira", StringComparison.OrdinalIgnoreCase) ? "jira" : "other")"
            asp-controller="Tools" asp-action="Details" asp-route-name="@tool.Name"
            aria-label="View details for @tool.Name">
             <span class="tool-icon" aria-hidden="true">⚒</span>
