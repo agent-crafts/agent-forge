@@ -15,7 +15,7 @@
 | Current engineering milestone | UI foundation merged; architecture assessment documented (PR pending); Project Foundation implementation not started |
 | Current mastery assessment | Not assessed |
 | Next recommended action | Review training resources; decide database and identity boundary; scope first Project domain/application slice |
-| Last progress review | 2026-10-21 (architecture assessment) |
+| Last progress review | 2026-10-22 (GitHub tool schema verification; architecture assessment unchanged) |
 
 ## 2. Learning & engineering roadmap
 
@@ -49,10 +49,20 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Mastery criteria and evidence:** TBD
 - **Open questions / blockers:** TBD
 
+### Parallel lab — Tool Engineering (Module 03 preparation)
+
+- **Knowledge:** Generated JSON Schema versus C# runtime validation; external `issue_number` versus internal `issueNumber`; schema-to-invocation mapping explored.
+- **Engineering:** On PR #10, GitHub tool factory generates the public schema with `issue_number`, `minimum: 1`, and no `CancellationToken` property. User ran the SchemaVerification console lab and supplied output showing schema assertions, successful stubbed invocation with 42, and rejection of 0/-5 (ArgumentOutOfRangeException) and string input (ArgumentException); invalid arguments never reached the stub GitHub client.
+- **Mastery:** Not assessed; successful lab execution is not independent mastery evidence.
+- **Next action:** Design a Tool Registry after reviewing DI and available tools; then review authorization and LLM orchestration. Full build/CI and real GitHub/LLM invocation remain unverified.
+
+- **Pending verification:** `ToolResult<T>` and `ToolError` are now shared contracts directly under `Application/Tools`; GitHubTools returns `ToolResult<GitHubIssue>` with a safe `issue_not_found` error on HTTP 404. User-provided console output confirms the stubbed 404 and 500 checks passed; full build/CI remains unverified.
+
 ## 4. Decisions & unresolved gaps
 
 | Date | Decision / gap | Rationale | Evidence / follow-up |
 | --- | --- | --- | --- |
+| 2026-10-22 | External tool contract uses `issue_number` and `minimum: 1` | Stable factory schema customization plus adapter mapping; user-confirmed schema/runtime stub checks | PR #10; no live LLM call yet |
 | 2026-10-21 | Track learning, implementation, and mastery independently | Merged code alone does not establish understanding | This tracker |
 | 2026-10-21 | Align training resources before finalizing the phase order | Prevent prerequisite gaps and disconnected feature work | Module 00 |
 | 2026-10-21 | Project-centric Agent Studio is proposed; database and identity model remain open | Establish a project boundary before agents and orchestration | docs/architecture-foundation-assessment.md |
@@ -66,6 +76,8 @@ These phases are **provisional** until reconciled with the project's training ma
 3. Identify the active module and distinguish proven outcomes from plans.
 4. Resume from the first unresolved learning objective or engineering dependency.
 5. At the end of the session, update the snapshot, roadmap status, active module, gaps, and handoff based on verified progress.
+
+**Parallel Tool Engineering handoff:** Schema verification, stubbed argument binding, invalid-input rejection, safe 404 result, and propagated 500 exception passed per user-provided console output. Next: Tool Registry design, authorization, and LLM orchestration; do not claim production integration or mastery.
 
 **Next suggested session:** Complete Module 00 curriculum/baseline review; use `docs/architecture-foundation-assessment.md` to decide database and identity boundary, then scope the first Project Foundation implementation PR. No build or tests have been run for the assessment.
 
