@@ -20,4 +20,11 @@ public sealed class UiButtonModel
     public string? CssClass { get; init; }
     public bool CloseDialog { get; init; }
     public bool Disabled { get; init; }
+    public string? Role { get; init; }
+    public string? AriaControls { get; init; }
+    public string? AriaSelected { get; init; }
+    public int? TabIndex { get; init; }
+    public string? CopyTarget { get; init; }
+    public string? Icon { get; init; }
+    public string? LabelId { get; init; }
 }
