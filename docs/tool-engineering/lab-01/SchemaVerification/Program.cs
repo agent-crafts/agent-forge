@@ -61,6 +61,23 @@ using (var missingDocument = JsonDocument.Parse(missingJson))
 }
 Console.WriteLine("PASS: 404 returns a safe issue_not_found result.");
 
+stub.ReturnNotFound = false;
+stub.ReturnServerError = true;
+var callsBeforeServerError = stub.CallCount;
+try
+{
+    await function.InvokeAsync(new AIFunctionArguments { ["issue_number"] = 500 });
+    throw new Exception("500 was incorrectly returned as a successful tool result.");
+}
+catch (HttpRequestException exception) when (exception.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+{
+    if (stub.CallCount != callsBeforeServerError + 1)
+        throw new Exception("Expected the GitHub client to be called exactly once for 500.");
+
+    Console.WriteLine("PASS: 500 propagates as HttpRequestException (not issue_not_found).");
+}
+
+
 
 async Task ExpectRejectedAsync(string scenario, AIFunctionArguments arguments)
 {
@@ -86,6 +103,7 @@ sealed class StubGitHubIssueClient : IGitHubIssueClient
     public int? LastIssueNumber { get; private set; }
     public int CallCount { get; private set; }
     public bool ReturnNotFound { get; set; }
+    public bool ReturnServerError { get; set; }
 
     public Task<GitHubIssue> GetIssueAsync(int issueNumber, CancellationToken cancellationToken = default)
     {
@@ -93,6 +111,8 @@ sealed class StubGitHubIssueClient : IGitHubIssueClient
         CallCount++;
         if (ReturnNotFound)
             throw new HttpRequestException("GitHub returned 404.", null, System.Net.HttpStatusCode.NotFound);
+        if (ReturnServerError)
+            throw new HttpRequestException("GitHub returned 500.", null, System.Net.HttpStatusCode.InternalServerError);
         return Task.FromResult(new GitHubIssue(issueNumber, "Test", "open", "https://example.invalid/issue/42"));
     }
 }
