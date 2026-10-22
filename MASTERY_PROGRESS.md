@@ -56,7 +56,7 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Mastery:** Not assessed; successful lab execution is not independent mastery evidence.
 - **Next action:** Run the newly added 404-to-safe-result verification (not yet verified); then review authorization and LLM orchestration. Build/CI for latest commit, 404 scenario, and real GitHub/LLM invocation remain unverified.
 
-- **Pending verification:** GitHubTools now maps HTTP 404 to a structured `issue_not_found` result; unexpected errors still propagate. A stubbed 404 check was added but has not been run yet.
+- **Pending verification:** `ToolResult<T>` and `ToolError` are now shared contracts directly under `Application/Tools`; GitHubTools returns `ToolResult<GitHubIssue>` with a safe `issue_not_found` error on HTTP 404. The updated build and stubbed 404 check have not yet been run.
 
 ## 4. Decisions & unresolved gaps
 
