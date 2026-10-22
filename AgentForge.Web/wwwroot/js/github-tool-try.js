@@ -1,33 +1,117 @@
 (() => {
   const form = document.getElementById("githubToolTryForm");
   if (!form) return;
-  const button = document.getElementById("githubToolRun");
-  const panel = document.getElementById("githubToolResult");
-  const output = document.getElementById("githubToolResultJson");
+  const get = id => document.getElementById(id);
+  const run = get("githubToolRun"), runLabel = get("githubToolRunLabel");
+  const status = get("githubToolStatus"), duration = get("githubToolDuration");
+  const timestamp = get("githubToolTimestamp"), durationDetail = get("githubToolDurationDetail");
+  const json = get("githubToolResultJson"), raw = get("githubToolResultRaw");
+  const formatted = get("githubToolResultFormatted"), copy = get("githubToolCopy");
+  const tabs = ["Json", "Formatted", "Raw"];
+  let lastResult = null, rawText = "";
+  const setText = (node, value) => { node.textContent = value; };
+  const showTab = selected => tabs.forEach(name => {
+    const active = name === selected;
+    const tab = get("githubResponse" + name + "Tab");
+    const panel = get("githubResponse" + name + "Panel");
+    tab.setAttribute("aria-selected", String(active));
+    tab.classList.toggle("border-accent", active);
+    tab.classList.toggle("bg-active", active);
+    tab.classList.toggle("text-accent", active);
+    tab.classList.toggle("border-line", !active);
+    tab.classList.toggle("text-muted", !active);
+    panel.hidden = !active;
+  });
+  tabs.forEach(name => get("githubResponse" + name + "Tab").addEventListener("click", () => showTab(name)));
+  const field = (label, value) => {
+    const row = document.createElement("div");
+    const heading = document.createElement("div");
+    heading.className = "text-xs font-semibold text-muted";
+    heading.textContent = label;
+    const body = document.createElement("div");
+    body.className = "mt-1 break-words text-sm text-heading";
+    body.textContent = value == null ? "—" : String(value);
+    row.append(heading, body);
+    return row;
+  };
+  const renderFormatted = result => {
+    formatted.replaceChildren();
+    if (!result || !result.success || !result.data) {
+      formatted.append(field("Result", result?.error?.message || result?.error || "No issue data returned."));
+      return;
+    }
+    const issue = result.data;
+    formatted.append(field("Issue number", issue.number), field("Title", issue.title), field("State", issue.state));
+    if (typeof issue.url === "string" && /^https:\/\/github\.com\//.test(issue.url)) {
+      const link = document.createElement("a");
+      link.href = issue.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.className = "text-sm text-accent underline break-all";
+      link.textContent = issue.url;
+      formatted.append(link);
+    }
+  };
+  const reset = () => {
+    lastResult = null; rawText = "";
+    setText(status, "Not run");
+    status.className = "rounded-full bg-raised px-3 py-1.5 text-xs font-semibold text-muted";
+    duration.hidden = true; timestamp.hidden = true;
+    setText(durationDetail, "Not run");
+    setText(json, "Run the tool to view the response.");
+    setText(raw, "Run the tool to view the raw response.");
+    setText(formatted, "Run the tool to view formatted issue details.");
+    copy.disabled = true; setText(copy, "Copy"); showTab("Json");
+  };
+  form.addEventListener("reset", reset);
+  copy.addEventListener("click", async () => {
+    if (!lastResult || !navigator.clipboard) return;
+    const selected = tabs.find(name => get("githubResponse" + name + "Tab").getAttribute("aria-selected") === "true");
+    const value = selected === "Raw" ? rawText : JSON.stringify(lastResult, null, 2);
+    try { await navigator.clipboard.writeText(value); setText(copy, "Copied"); }
+    catch { setText(copy, "Copy failed"); }
+  });
   form.addEventListener("submit", async event => {
     event.preventDefault();
     if (!form.reportValidity()) return;
-    button.disabled = true;
-    button.textContent = "Running...";
-    panel.hidden = false;
-    output.textContent = "Loading GitHub issue...";
+    run.disabled = true; setText(runLabel, "Running...");
+    setText(status, "Running");
+    status.className = "rounded-full bg-active px-3 py-1.5 text-xs font-semibold text-accent";
+    setText(json, "Loading GitHub issue...");
+    const started = performance.now();
     try {
       const response = await fetch(form.action, {
-        method: "POST",
-        body: new FormData(form),
-        credentials: "same-origin",
-        headers: { "Accept": "application/json" }
+        method: "POST", body: new FormData(form), credentials: "same-origin",
+        headers: { Accept: "application/json" }
       });
       const contentType = response.headers.get("content-type") || "";
       if (!contentType.includes("application/json")) throw new Error("Unexpected server response.");
-      const result = await response.json();
-      output.textContent = JSON.stringify(result, null, 2);
-      if (!response.ok) output.textContent = "Request failed: " + output.textContent;
+      rawText = await response.text();
+      lastResult = JSON.parse(rawText);
+      setText(json, JSON.stringify(lastResult, null, 2));
+      setText(raw, rawText);
+      renderFormatted(lastResult);
+      const ok = response.ok && lastResult.success === true;
+      setText(status, ok ? "✓ Success" : "✕ Failed");
+      status.className = "rounded-full px-3 py-1.5 text-xs font-semibold " + (ok ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700");
+      copy.disabled = false;
     } catch {
-      output.textContent = "Could not complete the request. Check the application connection and try again.";
+      lastResult = { success: false, error: "Could not complete the request. Check the application connection and try again." };
+      rawText = JSON.stringify(lastResult);
+      setText(json, JSON.stringify(lastResult, null, 2));
+      setText(raw, rawText);
+      renderFormatted(lastResult);
+      setText(status, "✕ Failed");
+      status.className = "rounded-full bg-red-100 px-3 py-1.5 text-xs font-semibold text-red-700";
+      copy.disabled = false;
     } finally {
-      button.disabled = false;
-      button.textContent = "Run Tool";
+      const elapsed = ((performance.now() - started) / 1000).toFixed(2) + "s";
+      duration.hidden = false; setText(duration, elapsed); setText(durationDetail, elapsed);
+      timestamp.hidden = false;
+      const now = new Date(); timestamp.dateTime = now.toISOString();
+      setText(timestamp, now.toLocaleString());
+      run.disabled = false; setText(runLabel, "Run Tool");
     }
   });
+  reset();
 })();
