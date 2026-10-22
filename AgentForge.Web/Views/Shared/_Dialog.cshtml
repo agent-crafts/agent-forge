@@ -1,4 +1,4 @@
-@model (string Id, string TitleId, string DescriptionId, string Title, string Description, Func<dynamic, Microsoft.AspNetCore.Html.IHtmlContent> Body, Func<dynamic, Microsoft.AspNetCore.Html.IHtmlContent> Footer)
+@model (string Id, string TitleId, string DescriptionId, string Title, string Description, Func<dynamic, Microsoft.AspNetCore.Html.IHtmlContent> Body, string PrimaryButtonText, string PrimaryButtonId, string CancelButtonText)
 <dialog id="@Model.Id" class="w-[min(720px,95vw)] max-h-[90vh] rounded-2xl border-0 bg-surface p-0 text-content shadow-2xl backdrop:bg-slate-950/70" aria-labelledby="@Model.TitleId" aria-describedby="@Model.DescriptionId">
     <div class="flex max-h-[90vh] flex-col">
         <header class="flex items-center justify-between gap-4 border-b border-line px-6 py-3">
@@ -12,7 +12,8 @@
             @Model.Body(null)
         </div>
         <footer class="flex items-center justify-end gap-2.5 border-t border-line px-6 py-4 [&_button]:w-auto [&_button]:flex-none">
-            @Model.Footer(null)
+            <button type="button" class="ui-button" data-modal-close>@Model.CancelButtonText</button>
+            <button type="button" class="ui-button border-accent bg-accent text-white" id="@Model.PrimaryButtonId">@Model.PrimaryButtonText</button>
         </footer>
     </div>
 </dialog>
