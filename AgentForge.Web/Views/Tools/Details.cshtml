@@ -130,7 +130,7 @@
                             <p class="mt-2 text-xs leading-5 text-muted">This tool currently has no configurable advanced options. The GitHub repository and endpoint are defined by the registered implementation.</p>
                         </details>
                         <div class="flex flex-col gap-3 sm:flex-row">
-                            <button id="githubToolRun" type="submit" class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-white hover:opacity-90 disabled:cursor-wait disabled:opacity-60"><span aria-hidden="true">▷</span><span id="githubToolRunLabel">Run Tool</span></button>
+                            <button id="githubToolRun" type="submit" class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-white hover:opacity-90 disabled:cursor-wait disabled:opacity-60"><span aria-hidden="true" class="mr-2">▷</span><span id="githubToolRunLabel">Run Tool</span></button>
                             <button id="githubToolReset" type="reset" class="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-surface px-6 py-3 text-sm font-semibold text-heading hover:bg-raised"><span aria-hidden="true">↻</span> Reset</button>
                         </div>
                     </form>
@@ -161,10 +161,7 @@
                     <div id="githubResponseRawPanel" role="tabpanel" aria-labelledby="githubResponseRawTab" hidden class="mt-4 min-h-80">
                         <pre class="ui-code h-full min-h-80 max-h-[560px] overflow-auto rounded-xl border border-line bg-[#151d2b] p-4 text-xs leading-6"><code id="githubToolResultRaw">Run the tool to view the raw response.</code></pre>
                     </div>
-                    <details class="mt-5 rounded-xl border border-line px-4 py-3 text-sm text-content">
-                        <summary class="cursor-pointer font-semibold text-heading">Execution Details</summary>
-                        <dl class="mt-3 grid grid-cols-2 gap-3 text-xs"><dt class="text-muted">Operation</dt><dd class="text-heading">get_github_issue</dd><dt class="text-muted">Method</dt><dd class="text-heading">Read-only GET via backend</dd><dt class="text-muted">Repository</dt><dd class="text-heading">agent-crafts/agent-forge</dd><dt class="text-muted">Duration</dt><dd id="githubToolDurationDetail" class="text-heading">Not run</dd><dt class="text-muted">Executed at</dt><dd><time id="githubToolTimestamp" class="text-heading">Not run</time></dd></dl>
-                    </details>
+
                 </section>
             </div>
         }
