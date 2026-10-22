@@ -103,12 +103,27 @@
     </div>
     <section id="toolTryPanel" role="tabpanel" aria-labelledby="toolTryTab" hidden class="mt-6 rounded-2xl border border-line bg-surface p-6">
         <h2 class="text-xl font-semibold text-heading">Try Now</h2>
-        <p class="mt-2 text-sm text-muted">Run this tool with validated input once secure execution is enabled.</p>
-        <div class="mt-5 rounded-xl border border-line bg-raised p-4">
-            <h3 class="text-sm font-semibold text-heading">Execution not available</h3>
-            <p class="mt-2 text-sm text-muted">AgentForge currently provides a read-only tool registry. Authentication, authorization, and a controlled executor are required before testing tools.</p>
-        </div>
-        <button type="button" disabled class="mt-5 cursor-not-allowed rounded-xl border border-line bg-raised px-5 py-3 text-sm font-semibold text-muted opacity-70">Run Tool</button>
+        @if (Model.Name == "get_github_issue")
+        {
+            <p class="mt-2 text-sm text-muted">Read an issue from agent-crafts/agent-forge using the registered GitHub tool.</p>
+            <form id="githubToolTryForm" method="post" action="/tools/get_github_issue/try" class="mt-5 grid max-w-xl gap-4">
+                @Html.AntiForgeryToken()
+                <label for="githubIssueNumber" class="text-sm font-semibold text-heading">Issue number <span class="text-accent">*</span></label>
+                <input id="githubIssueNumber" name="issueNumber" type="number" min="1" step="1" required placeholder="e.g. 1"
+                       class="ui-input w-full rounded-xl border border-line bg-surface px-4 py-3 text-sm text-content focus-visible:outline-2 focus-visible:outline-accent" />
+                <button id="githubToolRun" type="submit" class="ui-button w-fit rounded-xl border border-accent bg-accent px-5 py-3 text-sm font-semibold text-white">Run Tool</button>
+            </form>
+            <div id="githubToolResult" class="mt-6" role="status" aria-live="polite" hidden>
+                <h3 class="mb-3 text-sm font-semibold text-heading">Execution result</h3>
+                <pre class="ui-code overflow-auto rounded-xl border border-line bg-raised p-4"><code id="githubToolResultJson"></code></pre>
+            </div>
+            <p class="mt-4 text-xs text-muted">Read-only test. Public GitHub issues only; no write operations or credentials are used.</p>
+        }
+        else
+        {
+            <p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p>
+            <button type="button" disabled class="mt-5 cursor-not-allowed rounded-xl border border-line bg-raised px-5 py-3 text-sm font-semibold text-muted opacity-70">Run Tool</button>
+        }
     </section>
 </div>
 
@@ -180,3 +195,5 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
     });
 })();
 </script>
+
+<script src="~/js/github-tool-try.js" asp-append-version="true"></script>
