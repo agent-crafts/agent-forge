@@ -56,3 +56,6 @@
 #addToolDialog .ui-modal-choice::before{width:26px;height:26px;flex:none}
 #addToolDialog .ui-modal-choice strong{font-size:13px;line-height:1.35}
 #addToolDialog .ui-modal-choice small{font-size:11px;line-height:1.35}
+
+/* Balance the source cards against Basic Information without changing its spacing. */
+#addToolDialog .ui-modal-body{padding-top:12px}
