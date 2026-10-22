@@ -54,7 +54,9 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Knowledge:** Generated JSON Schema versus C# runtime validation; external `issue_number` versus internal `issueNumber`; schema-to-invocation mapping explored.
 - **Engineering:** On PR #10, GitHub tool factory generates the public schema with `issue_number`, `minimum: 1`, and no `CancellationToken` property. User ran the SchemaVerification console lab and supplied output showing schema assertions, successful stubbed invocation with 42, and rejection of 0/-5 (ArgumentOutOfRangeException) and string input (ArgumentException); invalid arguments never reached the stub GitHub client.
 - **Mastery:** Not assessed; successful lab execution is not independent mastery evidence.
-- **Next action:** Review exception-to-tool-result error handling and authorization; then test actual tool orchestration with an LLM. Build/CI for latest commit and real GitHub/LLM invocation remain unverified.
+- **Next action:** Run the newly added 404-to-safe-result verification (not yet verified); then review authorization and LLM orchestration. Build/CI for latest commit, 404 scenario, and real GitHub/LLM invocation remain unverified.
+
+- **Pending verification:** GitHubTools now maps HTTP 404 to a structured `issue_not_found` result; unexpected errors still propagate. A stubbed 404 check was added but has not been run yet.
 
 ## 4. Decisions & unresolved gaps
 
