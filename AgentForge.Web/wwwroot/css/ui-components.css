@@ -150,3 +150,7 @@
 
 /* Shared form focus: understated neutral cue instead of the accent outline. */
 .ui-input:focus-visible,.ui-select:focus-visible{outline:0;border-color:var(--line-strong);box-shadow:0 0 0 2px var(--surface-raised)}
+
+/* Explicit icon-to-label spacing for the Try Now primary action (works without Tailwind build). */
+#githubToolRun{display:inline-flex;align-items:center;justify-content:center;column-gap:12px}
+#githubToolRun [aria-hidden="true"]{margin-right:0}
