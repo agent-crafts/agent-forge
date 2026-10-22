@@ -43,10 +43,6 @@
             </section>
             <p id="addToolFeedback" class="mt-4 min-h-5 text-[13px] text-accent" role="status" aria-live="polite"></p>
 </text>;
-    Func<dynamic, Microsoft.AspNetCore.Html.IHtmlContent> footer = @<text>
-            <button type="button" class="ui-button" data-tool-close>Cancel</button>
-            <button type="button" class="ui-button border-accent bg-accent text-white" id="previewToolConfiguration">Save</button>
-</text>;
-    var dialog = (Id: "addToolDialog", TitleId: "addToolTitle", DescriptionId: "addToolIntro", Title: "Add Tool", Description: "Configure a custom tool or connect an external source.", Body: body, Footer: footer);
+    var dialog = (Id: "addToolDialog", TitleId: "addToolTitle", DescriptionId: "addToolIntro", Title: "Add Tool", Description: "Configure a custom tool or connect an external source.", Body: body, PrimaryButtonText: "Save", PrimaryButtonId: "previewToolConfiguration", CancelButtonText: "Cancel");
 }
 <partial name="_Dialog" model="dialog" />
