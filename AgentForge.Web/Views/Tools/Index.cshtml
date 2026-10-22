@@ -1,0 +1,26 @@
+@model IReadOnlyList<AgentForge.Web.Controllers.ToolsController.ToolCatalogItem>
+@{
+    Layout = "_AppLayout";
+}
+<div class="page-grid">
+    @foreach (var tool in Model)
+    {
+        <article class="page-card">
+            <div class="page-card-icon">⚒</div>
+            <h2>@tool.Name</h2>
+            <p>@tool.Description</p>
+            <p><strong>Registered · Read-only catalog</strong></p>
+            <details>
+                <summary>Input schema</summary>
+                <pre style="white-space:pre-wrap;overflow-wrap:anywhere">@tool.JsonSchema</pre>
+            </details>
+        </article>
+    }
+    @if (Model.Count == 0)
+    {
+        <article class="page-card">
+            <h2>No tools registered</h2>
+            <p>Tools will appear here after they are registered in the application.</p>
+        </article>
+    }
+</div>
