@@ -18,17 +18,17 @@
  let saving=false;
  const fieldError=(field,message)=>{
   field.setAttribute("aria-invalid","true");
-  field.classList.add("border-red-600","ring-1","ring-red-600");
+  field.classList.add("ui-field-invalid");
   let node=document.getElementById(field.id+"Error");
   if(!node){node=document.createElement("p");node.id=field.id+"Error";node.setAttribute("role","alert");field.insertAdjacentElement("afterend",node);}
-  node.className="text-xs text-red-600";
+  node.className="ui-field-error";
   node.textContent=message;
   const described=field.getAttribute("aria-describedby")||"";
   if(!described.split(" ").includes(node.id))field.setAttribute("aria-describedby",(described+" "+node.id).trim());
  };
  const clearFieldError=field=>{
   field.removeAttribute("aria-invalid");
-  field.classList.remove("border-red-600","ring-1","ring-red-600");
+  field.classList.remove("ui-field-invalid");
   const node=document.getElementById(field.id+"Error");
   if(node){node.textContent="";node.classList.add("hidden");}
  };
