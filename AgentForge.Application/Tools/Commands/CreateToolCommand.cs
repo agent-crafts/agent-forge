@@ -1,16 +1,17 @@
 using AgentForge.Core.Domains;
 using AgentForge.Core.Enums;
 using AgentForge.Core.Repositories;
+using Mediator;
 
 namespace AgentForge.Application.Tools.Commands;
 
 public sealed record CreateToolCommand(
     string Name, string DisplayName, string Description,
-    ToolKind Kind, ToolCategory Category, string JsonSchema, string? ImageUrl = null);
+    ToolKind Kind, ToolCategory Category, string JsonSchema, string? ImageUrl = null) : ICommand<Guid>;
 
-public sealed class CreateToolCommandHandler(IToolRepository tools, IUnitOfWork unitOfWork)
+public sealed class CreateToolCommandHandler(IToolRepository tools, IUnitOfWork unitOfWork) : ICommandHandler<CreateToolCommand, Guid>
 {
-    public async Task<Guid> HandleAsync(CreateToolCommand command, CancellationToken cancellationToken = default)
+    public async ValueTask<Guid> Handle(CreateToolCommand command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
         var tool = Tool.Create(command.Name, command.DisplayName, command.Description,
