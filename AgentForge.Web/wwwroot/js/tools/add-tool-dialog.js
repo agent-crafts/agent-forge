@@ -25,17 +25,18 @@
   dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.checked=r.value==="custom";r.disabled=true;});
   update();
   rows.replaceChildren();
-  // Preserve the persisted schema verbatim. Schema editing needs a dedicated contract-aware editor.
+  // Keep unexposed JSON Schema constraints when editing parameter rows.
   for(const [name,definition] of Object.entries(originalSchema.properties||{})){
    get("addToolParameter").click();
    const row=rows.lastElementChild;
    row.querySelector(".param-name").value=name;
+   row.dataset.originalName=name;
    row.querySelector(".param-type").value=definition.type||"string";
    row.querySelector(".param-required").checked=(originalSchema.required||[]).includes(name);
-   row.querySelectorAll("input,select,button").forEach(el=>el.disabled=true);
+
   }
-  get("addToolParameter").disabled=true;
-  get("addToolParameter").title="Parameter editing is not available in Edit mode.";
+  get("addToolParameter").disabled=false;
+  get("addToolParameter").removeAttribute("title");
   schema();
   dialog.showModal();
  });
@@ -43,7 +44,25 @@
  dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>r.addEventListener("change",update));
  get("externalToolSource").addEventListener("change",()=>{const integration=get("externalToolSource").value==="integration";get("externalEndpointField").hidden=integration;get("externalIntegrationField").hidden=!integration;});
  const rows=get("toolParameterRows");
- const schema=()=>{const properties={},required=[];rows.querySelectorAll(".ui-modal-parameter").forEach(r=>{const n=r.querySelector(".param-name").value.trim();if(!n)return;properties[n]={type:r.querySelector(".param-type").value};if(r.querySelector(".param-required").checked)required.push(n);});const value=editMode&&originalSchema?originalSchema:{type:"object",properties,required,additionalProperties:false};if(window.AgentForgeJsonViewer){window.AgentForgeJsonViewer.render(get("newToolSchema"),value);}else{get("newToolSchema").textContent=JSON.stringify(value,null,2);}};
+ const buildEditedSchema=()=>{
+  const next=structuredClone(originalSchema);
+  const properties={};
+  const required=[];
+  rows.querySelectorAll(".ui-modal-parameter").forEach(row=>{
+   const name=row.querySelector(".param-name").value.trim();
+   if(!name)return;
+   const old=row.dataset.originalName;
+   const source=old&&originalSchema.properties&&originalSchema.properties[old];
+   const definition=source?structuredClone(source):{};
+   definition.type=row.querySelector(".param-type").value;
+   properties[name]=definition;
+   if(row.querySelector(".param-required").checked)required.push(name);
+  });
+  next.properties=properties;
+  next.required=required;
+  return next;
+ };
+ const schema=()=>{const properties={},required=[];rows.querySelectorAll(".ui-modal-parameter").forEach(r=>{const n=r.querySelector(".param-name").value.trim();if(!n)return;properties[n]={type:r.querySelector(".param-type").value};if(r.querySelector(".param-required").checked)required.push(n);});const value=editMode&&originalSchema?buildEditedSchema():{type:"object",properties,required,additionalProperties:false};if(window.AgentForgeJsonViewer){window.AgentForgeJsonViewer.render(get("newToolSchema"),value);}else{get("newToolSchema").textContent=JSON.stringify(value,null,2);}};
  get("addToolParameter").addEventListener("click",()=>{const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required pattern="[a-z][a-z0-9_]*" maxlength="155" placeholder="parameter_name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").onclick=()=>{r.remove();schema();};r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
  const kindValues={custom:1,external:2};
  const categoryValues={general:1,development:2,integration:3,data:4,automation:5};
@@ -119,7 +138,7 @@
    properties[key]={type:row.querySelector(".param-type").value};
    if(row.querySelector(".param-required").checked)required.push(key);
   });
-  const jsonSchema=editMode?JSON.stringify(originalSchema):JSON.stringify({type:"object",properties,required,additionalProperties:false});
+  const jsonSchema=editMode?JSON.stringify(buildEditedSchema()):JSON.stringify({type:"object",properties,required,additionalProperties:false});
   status.textContent="";
   saving=true;
   saveButton.disabled=true;
