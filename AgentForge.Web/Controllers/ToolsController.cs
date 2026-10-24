@@ -1,5 +1,6 @@
 using AgentForge.Application.Tools;
 using AgentForge.Application.Tools.GitHub;
+using AgentForge.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgentForge.Web.Controllers;
@@ -67,17 +68,17 @@ public sealed class ToolsController(IToolRegistry registry, GitHubTools githubTo
     private static readonly IReadOnlyDictionary<string, (string DisplayName, string Icon, string Category)> ToolPresentation =
         new Dictionary<string, (string, string, string)>(StringComparer.OrdinalIgnoreCase)
         {
-            ["get_github_issue"] = ("Get GitHub Issue", "github", "github")
+            ["get_github_issue"] = ("Get GitHub Issue", "github", nameof(ToolCategory.Integration))
         };
 
     private static ToolCatalogItem CreateCatalogItem(string name, string description, string jsonSchema)
     {
         if (ToolPresentation.TryGetValue(name, out var presentation))
-            return new ToolCatalogItem(name, description, jsonSchema, presentation.DisplayName, presentation.Icon, presentation.Category);
+            return new ToolCatalogItem(name, description, jsonSchema, presentation.DisplayName, presentation.Icon, presentation.Category.ToLowerInvariant());
 
         var displayName = string.Join(" ", name.Split(new[] { '_', '-' }, StringSplitOptions.RemoveEmptyEntries)
             .Select(part => char.ToUpperInvariant(part[0]) + part[1..]));
-        return new ToolCatalogItem(name, description, jsonSchema, displayName, "tool", "other");
+        return new ToolCatalogItem(name, description, jsonSchema, displayName, "tool", nameof(ToolCategory.General).ToLowerInvariant());
     }
 
     public sealed record ToolCatalogItem(
