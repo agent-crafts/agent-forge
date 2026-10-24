@@ -18,7 +18,7 @@ The application registers the DbContext but **does not automatically migrate** a
 
 ## Architecture
 
-- `AgentForge.Core`: framework-independent Project entity.
+- `AgentForge.Core`: framework-independent Project entity in `AgentForge.Core/Domains/Projects`.
 - `AgentForge.Infrastructure`: Npgsql DbContext, mappings, design-time factory, and versioned migrations.
 - `AgentForge.Web`: configuration composition root.
 - Secrets must be supplied externally; `appsettings.json` contains no password.
