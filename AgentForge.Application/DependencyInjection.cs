@@ -1,4 +1,6 @@
 using AgentForge.Application.Chat.Commands;
+using AgentForge.Application.Tools.Commands;
+using AgentForge.Application.Tools.Queries;
 using AgentForge.Application.Services;
 using AgentForge.Application.Tools;
 using AgentForge.Application.Tools.GitHub;
@@ -17,6 +19,9 @@ public static class DependencyInjection
         services.AddScoped<ChatCommand>();
         services.AddScoped<GitHubTools>();
         services.AddScoped<IToolRegistry, ToolRegistry>();
+        services.AddScoped<CreateToolCommandHandler>();
+        services.AddScoped<GetToolByIdQueryHandler>();
+        services.AddScoped<GetToolsPageQueryHandler>();
 
         return services;
     }
