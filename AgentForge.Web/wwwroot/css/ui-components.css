@@ -167,6 +167,8 @@
 #addToolDialog>div>footer{justify-content:flex-end;gap:10px;border-top:1px solid var(--line);border-bottom:0}
 #addToolDialog>div>footer button{flex:none;width:auto}
 .ui-button--primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.ui-button--primary:disabled{color:#f1f5f9;opacity:.65;cursor:not-allowed}
+.ui-button--primary:disabled:hover{background:var(--accent);border-color:var(--accent);color:#f1f5f9}
 .ui-button--secondary{background:var(--surface-raised);color:var(--content)}
 .ui-button--cancel{background:transparent;border-color:transparent;color:var(--muted)}
 .ui-button--outlined{background:transparent;border-color:var(--accent);color:var(--accent)}
