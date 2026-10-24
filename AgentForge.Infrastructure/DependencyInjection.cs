@@ -1,5 +1,3 @@
-using AgentForge.Core.Application.Tools.Commands;
-using AgentForge.Core.Application.Tools.Queries;
 using AgentForge.Core.Clients;
 using AgentForge.Core.Clients.GitHub;
 using AgentForge.Core.Services;
@@ -26,9 +24,6 @@ public static class DependencyInjection
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IToolRepository, ToolRepository>();
-        services.AddScoped<CreateToolCommandHandler>();
-        services.AddScoped<GetToolByIdQueryHandler>();
-        services.AddScoped<GetToolsPageQueryHandler>();
 
         services.AddHttpClient<ILlmClient, LlmClient>((provider, client) =>
         {
