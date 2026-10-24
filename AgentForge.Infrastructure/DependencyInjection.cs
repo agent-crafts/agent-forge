@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddDbContext<AgentForgeDbContext>(options => options.UseNpgsql(connectionString));
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IToolRepository, ToolRepository>();
 
         services.AddHttpClient<ILlmClient, LlmClient>((provider, client) =>
         {
