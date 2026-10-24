@@ -43,4 +43,6 @@ public sealed class ToolsController(ISender sender) : ControllerBase
             cancellationToken);
         return Ok(result);
     }
+    // Compatibility model for legacy Razor views; not used by API actions.
+    public sealed record ToolCatalogItem(string Name, string Description, string JsonSchema, string DisplayName, string Icon, string Category);
 }
