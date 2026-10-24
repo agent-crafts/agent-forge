@@ -37,6 +37,14 @@
     var formattedSchema = JsonSerializer.Serialize(schema, new JsonSerializerOptions { WriteIndented = true });
 }
 <div class="ui-detail">
+    <div class="flex justify-end gap-2" role="group" aria-label="Tool actions">
+        <button type="button" id="openEditToolDialog" aria-label="Edit tool" title="Edit tool" class="inline-flex size-10 items-center justify-center rounded-lg border border-line bg-surface text-content hover:bg-hover focus-visible:outline-2 focus-visible:outline-accent" >
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg>
+        </button>
+        <button type="button" disabled aria-label="Delete tool" title="Delete tool (coming soon)" class="inline-flex size-10 items-center justify-center rounded-lg border border-line bg-surface text-red-600 opacity-50">
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg>
+        </button>
+    </div>
     <section class="ui-profile">
         <div class="ui-profile-icon" aria-hidden="true">
             <partial name="_ToolIcon" model="Model.Icon" />
@@ -46,14 +54,7 @@
             <p>@Model.Description</p>
             <div class="ui-tags"><span>@Model.Name</span><span>@Model.Category</span></div>
         </div>
-        <div class="ml-auto flex shrink-0 items-start gap-2" role="group" aria-label="Tool actions">
-            <button type="button" id="openEditToolDialog" aria-label="Edit tool" title="Edit tool" class="inline-flex size-10 items-center justify-center rounded-lg border border-line bg-surface text-content hover:bg-hover focus-visible:outline-2 focus-visible:outline-accent" >
-                <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg>
-            </button>
-            <button type="button" disabled aria-label="Delete tool" title="Delete tool (coming soon)" class="inline-flex size-10 items-center justify-center rounded-lg border border-line bg-surface text-red-600 opacity-50">
-                <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg>
-            </button>
-        </div>
+
     </section>
     <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Tool details sections">
         <partial name="_Button" model='new UiButtonModel { Text = "Overview", Variant = UiButtonVariant.Ghost, Id = "toolOverviewTab", Role = "tab", AriaControls = "toolOverviewPanel", AriaSelected = "true", CssClass = "border-b-2 border-accent px-5 py-3 text-heading" }' />
