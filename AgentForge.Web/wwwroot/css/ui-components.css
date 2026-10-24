@@ -198,3 +198,17 @@
 #toolParameterRows .param-remove:hover,#toolParameterRows .param-remove:focus-visible{background:transparent;box-shadow:none}
 #addToolDialog .ui-modal-schema-preview{max-height:208px;overflow:auto}
 @media(max-width:540px){#addToolDialog fieldset{grid-template-columns:1fr}}
+
+
+/* Tool detail tabs: compact segmented navigation, independent of Tailwind output. */
+.ui-detail [role="tablist"]{box-sizing:border-box}
+.ui-detail [aria-label="Tool details sections"]{display:inline-flex;align-items:center;gap:4px;margin-top:24px;padding:5px;border:1px solid var(--line);border-radius:13px;background:var(--surface-raised);max-width:100%;flex-wrap:wrap}
+.ui-detail [aria-label="Tool details sections"] .ui-button[role="tab"]{min-height:40px;padding:10px 20px;border:1px solid transparent;border-radius:9px;background:transparent;color:var(--muted);font-size:13px;font-weight:650;line-height:1.25;box-shadow:none;transition:background .15s,color .15s,box-shadow .15s}
+.ui-detail [aria-label="Tool details sections"] .ui-button[role="tab"]:hover:not([aria-selected="true"]){background:var(--hover);color:var(--heading)}
+.ui-detail [aria-label="Tool details sections"] .ui-button[role="tab"][aria-selected="true"]{border-color:var(--line);background:var(--surface);color:var(--heading);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.ui-detail [aria-label="Response format"]{display:inline-flex;align-items:center;gap:4px;padding:4px;border:1px solid var(--line);border-radius:11px;background:var(--surface-raised);flex-wrap:wrap}
+#toolTryPanel [aria-label="Response format"] .ui-button[role="tab"]{padding:8px 14px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--muted);font-size:12px;font-weight:650;box-shadow:none;transition:background .15s,color .15s}
+#toolTryPanel [aria-label="Response format"] .ui-button[role="tab"]:hover:not([aria-selected="true"]){background:var(--hover);color:var(--heading)}
+#toolTryPanel [aria-label="Response format"] .ui-button[role="tab"][aria-selected="true"]{border-color:var(--line);background:var(--surface);color:var(--heading);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.ui-detail [role="tab"]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(max-width:480px){.ui-detail [aria-label="Tool details sections"]{display:flex}.ui-detail [aria-label="Tool details sections"] .ui-button[role="tab"]{flex:1;padding:10px 12px}}
