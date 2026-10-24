@@ -15,7 +15,7 @@ public sealed class UpdateToolCommandHandler(IToolRepository tools, IUnitOfWork 
     {
         ArgumentNullException.ThrowIfNull(command);
         var tool = await tools.GetByIdAsync(command.Id, cancellationToken);
-        if (tool is null) return false;
+        if (tool is null || !tool.IsActive) return false;
         tool.UpdateDetails(command.DisplayName, command.Description, command.Category,
             command.JsonSchema, command.ImageUrl);
         tools.Update(tool);
