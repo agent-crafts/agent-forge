@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddApplicationServices(builder.Configuration);
-builder.Services.AddMediator();
+builder.Services.AddMediator(options => options.Assemblies = [typeof(DependencyInjection)]);
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
