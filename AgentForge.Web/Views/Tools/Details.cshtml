@@ -41,7 +41,7 @@
     <section class="ui-profile ui-tool-profile">
     <div class="ui-tool-actions" role="group" aria-label="Tool actions">
         <partial name="_Button" model='new UiButtonModel { Text = "Edit tool", IconName = "pencil", Variant = UiButtonVariant.Outlined, Id = "openEditToolDialog", CssClass = "ui-tool-action ui-tool-action--edit" }' />
-        <partial name="_Button" model='new UiButtonModel { Text = "Delete tool", IconName = "trash-2", Variant = UiButtonVariant.Outlined, Disabled = true, CssClass = "ui-tool-action ui-tool-action--delete" }' />
+        <partial name="_Button" model='new UiButtonModel { Text = "Delete tool", IconName = "trash-2", Variant = UiButtonVariant.Outlined, Id = "deleteToolButton", CssClass = "ui-tool-action ui-tool-action--delete" }' />
     </div>
         <div class="ui-profile-icon" aria-hidden="true">
             <partial name="_ToolIcon" model="Model.Icon" />
@@ -216,3 +216,4 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
 <div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@Model.Category" data-tool-kind="@Model.Kind" data-tool-image-url="@Model.ImageUrl" data-tool-schema="@Model.JsonSchema"></div>
 <partial name="~/Views/Tools/_AddToolDialog.cshtml" />
 <script src="~/js/tools/add-tool-dialog.js" asp-append-version="true"></script>
+\n<script src="~/js/tools/delete-tool.js" asp-append-version="true"></script>\n
