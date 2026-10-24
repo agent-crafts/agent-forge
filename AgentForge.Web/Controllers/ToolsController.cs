@@ -1,4 +1,9 @@
 using AgentForge.Application.Tools;
+using AgentForge.Application.Tools.Commands;
+using AgentForge.Application.Tools.Queries;
+using AgentForge.Core.Domains;
+using AgentForge.Core.Utilities;
+using Mediator;
 using AgentForge.Application.Tools.GitHub;
 using AgentForge.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +12,7 @@ namespace AgentForge.Web.Controllers;
 
 /// <summary>Read-only catalog. Tool execution is deliberately not exposed by this controller.</summary>
 [Route("tools")]
-public sealed class ToolsController(IToolRegistry registry, GitHubTools githubTools, ILogger<ToolsController> logger) : Controller
+public sealed class ToolsController(IToolRegistry registry, GitHubTools githubTools, ILogger<ToolsController> logger, ISender sender) : Controller
 {
     [HttpGet("")]
     public IActionResult Index()
@@ -55,6 +60,35 @@ public sealed class ToolsController(IToolRegistry registry, GitHubTools githubTo
         {
             return StatusCode(504, new { success = false, error = "GitHub request timed out." });
         }
+    }
+
+    [HttpPost("/api/tools")]
+    public async Task<IActionResult> CreateTool([FromBody] CreateToolCommand command, CancellationToken cancellationToken)
+    {
+        var id = await sender.Send(command, cancellationToken);
+        return CreatedAtAction(nameof(GetToolById), new { id }, new { id });
+    }
+
+    [HttpGet("/api/tools/{id:guid}")]
+    public async Task<IActionResult> GetToolById(Guid id, CancellationToken cancellationToken)
+    {
+        var tool = await sender.Send(new GetToolByIdQuery(id), cancellationToken);
+        return tool is null ? NotFound() : Ok(tool);
+    }
+
+    [HttpGet("/api/tools")]
+    public async Task<IActionResult> GetToolsPage(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default)
+    {
+        if (pageNumber < 1 || pageSize is < 1 or > 100)
+            return BadRequest("Invalid pagination parameters.");
+
+        var result = await sender.Send(
+            new GetToolsPageQuery(new PagedQuery<Tool>(pageNumber, pageSize)),
+            cancellationToken);
+        return Ok(result);
     }
 
     private void SetPage(string title, string description)
