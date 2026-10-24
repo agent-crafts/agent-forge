@@ -18,11 +18,11 @@ public sealed class Tool : Base
     public static Tool Create(string name, string displayName, string description, ToolKind kind,
         ToolCategory category, string jsonSchema, string? imageUrl = null)
     {
-        if (string.IsNullOrWhiteSpace(name) || name.Length > 100 ||
+        if (string.IsNullOrWhiteSpace(name) || name.Length > 155 ||
             !System.Text.RegularExpressions.Regex.IsMatch(name, @"^[a-z][a-z0-9_]*$"))
-            throw new ArgumentException("Tool name must be lowercase snake_case and at most 100 characters.", nameof(name));
-        if (string.IsNullOrWhiteSpace(displayName) || displayName.Length > 120)
-            throw new ArgumentException("Display name is required and must be at most 120 characters.", nameof(displayName));
+            throw new ArgumentException("Tool name must be lowercase snake_case and at most 155 characters.", nameof(name));
+        if (string.IsNullOrWhiteSpace(displayName) || displayName.Length > 155)
+            throw new ArgumentException("Display name is required and must be at most 155 characters.", nameof(displayName));
         if (!Enum.IsDefined(kind) || !Enum.IsDefined(category))
             throw new ArgumentException("Invalid tool kind or category.");
         if (description is null || description.Length > 4000)
