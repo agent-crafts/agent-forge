@@ -15,9 +15,29 @@
  const kindValues={custom:1,external:2};
  const categoryValues={general:1,development:2,integration:3,data:4,automation:5};
  const saveButton=get("previewToolConfiguration");
+ let saving=false;
+ const fieldError=(field,message)=>{
+  field.setAttribute("aria-invalid","true");
+  field.classList.add("border-red-600","ring-1","ring-red-600");
+  let node=document.getElementById(field.id+"Error");
+  if(!node){node=document.createElement("p");node.id=field.id+"Error";node.setAttribute("role","alert");field.insertAdjacentElement("afterend",node);}
+  node.className="text-xs text-red-600";
+  node.textContent=message;
+  const described=field.getAttribute("aria-describedby")||"";
+  if(!described.split(" ").includes(node.id))field.setAttribute("aria-describedby",(described+" "+node.id).trim());
+ };
+ const clearFieldError=field=>{
+  field.removeAttribute("aria-invalid");
+  field.classList.remove("border-red-600","ring-1","ring-red-600");
+  const node=document.getElementById(field.id+"Error");
+  if(node){node.textContent="";node.classList.add("hidden");}
+ };
+ dialog.addEventListener("input",e=>{if(e.target.matches("input,textarea,select"))clearFieldError(e.target);});
+ dialog.addEventListener("cancel",e=>{if(saving)e.preventDefault();});
+ saveButton.type="button";
  saveButton.addEventListener("click",async event=>{
   event.preventDefault();
-  if(saveButton.disabled)return;
+  if(saving)return;
   const kind=dialog.querySelector('input[name="toolKind"]:checked').value;
   if(kind!=="custom"){status.textContent="External tool discovery is not implemented yet.";return;}
   const name=get("newToolName").value.trim();
@@ -25,32 +45,37 @@
   const description=get("newToolDescription").value.trim();
   const imageUrl=get("newToolImage").value.trim()||null;
   const category=categoryValues[get("newToolCategory").value];
-  const fail=(field,message)=>{status.textContent=message;field?.focus();field?.setAttribute("aria-invalid","true");};
+  const errors=[];
   const requiredFields=[
-   [get("newToolName"),"Tool name is required and must use lowercase snake_case."],
+   [get("newToolName"),"Tool name is required."],
    [get("newToolDisplayName"),"Display name is required."],
    [get("newToolDescription"),"Description is required."],
    [get("newToolCategory"),"Category is required."]
   ];
   for(const [field,message] of requiredFields){
-   field.removeAttribute("aria-invalid");
-   if(!field.value.trim()||!field.checkValidity()){fail(field,message);return;}
+   clearFieldError(field);
+   if(!field.value.trim())errors.push([field,message]);
+   else if(!field.checkValidity())errors.push([field,"Enter a valid value."]);
   }
-  if(!/^[a-z][a-z0-9_]*$/.test(name)){fail(get("newToolName"),"Tool name must use lowercase snake_case.");return;}
-  if(!category){fail(get("newToolCategory"),"Select a valid category.");return;}
-  if(imageUrl&&(!get("newToolImage").checkValidity()||!imageUrl.startsWith("https://"))){
-   fail(get("newToolImage"),"Image URL must be a valid HTTPS URL, or leave it empty.");return;
-  }
+  if(name&&!/^[a-z][a-z0-9_]*$/.test(name)&&!errors.some(([f])=>f===get("newToolName")))errors.push([get("newToolName"),"Use lowercase snake_case."]);
+  if(!category&&!errors.some(([f])=>f===get("newToolCategory")))errors.push([get("newToolCategory"),"Select a valid category."]);
+  if(imageUrl&&(!get("newToolImage").checkValidity()||!imageUrl.startsWith("https://")))errors.push([get("newToolImage"),"Enter a valid HTTPS URL."]);
   const parameterNames=new Set();
   for(const row of rows.querySelectorAll(".ui-modal-parameter")){
    const field=row.querySelector(".param-name");
+   if(!field.id)field.id="toolParam"+Array.from(rows.children).indexOf(row);
    const value=field.value.trim();
-   field.removeAttribute("aria-invalid");
-   if(!/^[a-z][a-z0-9_]*$/.test(value)||!field.checkValidity()){
-    fail(field,"Every added parameter needs a valid lowercase snake_case name.");return;
-   }
-   if(parameterNames.has(value)){fail(field,"Parameter names must be unique.");return;}
+   clearFieldError(field);
+   if(!value)errors.push([field,"Parameter name is required."]);
+   else if(!/^[a-z][a-z0-9_]*$/.test(value)||!field.checkValidity())errors.push([field,"Use lowercase snake_case."]);
+   else if(parameterNames.has(value))errors.push([field,"Parameter names must be unique."]);
    parameterNames.add(value);
+  }
+  if(errors.length){
+   errors.forEach(([field,message])=>fieldError(field,message));
+   status.textContent="Correct the highlighted fields.";
+   errors[0][0].focus();
+   return;
   }
   const properties={},required=[];
   rows.querySelectorAll(".ui-modal-parameter").forEach(row=>{
@@ -79,7 +104,7 @@
    window.location.reload();
   }catch(error){
    status.textContent="Could not save tool: "+(error.message||"Unknown error");
-  }finally{saveButton.disabled=false;}
+  }finally{saving=false;saveButton.disabled=false;saveButton.removeAttribute("aria-busy");saveButton.innerHTML=originalContent;}
  });
  update();schema();
  if(!window.AgentForgeJsonViewer){const script=document.createElement("script");script.src="/js/shared/json-viewer.js";script.onload=schema;document.head.append(script);}
