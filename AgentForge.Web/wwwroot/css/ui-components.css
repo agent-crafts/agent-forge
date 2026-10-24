@@ -217,3 +217,7 @@
 .ui-field-error{color:#dc2626;font-size:12px;line-height:1.4;margin-top:2px}
 .ui-field-error.hidden{display:none}
 .ui-input[aria-invalid="true"],.ui-select[aria-invalid="true"]{border:2px solid #dc2626!important;box-shadow:0 0 0 1px #dc2626!important}
+
+/* Ensure dialog validation colors override theme and generated utility rules. */
+#addToolDialog .ui-required-mark,#addToolDialog .ui-field-error:not(.hidden),#addToolDialog #addToolFeedback[data-state="error"]{color:#dc2626!important;-webkit-text-fill-color:#dc2626}
+#addToolDialog .ui-input[aria-invalid="true"],#addToolDialog .ui-select[aria-invalid="true"]{border-color:#dc2626!important;outline-color:#dc2626!important}
