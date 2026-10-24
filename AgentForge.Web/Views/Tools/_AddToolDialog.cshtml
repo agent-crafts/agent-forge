@@ -21,8 +21,13 @@
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolDisplayName">Display Name</label>
                 <input class="ui-input" id="newToolDisplayName" name="displayName" placeholder="Read Project Status" maxlength="120" />
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolCategory">Category</label>
-                <select class="ui-select" id="newToolCategory" name="category" disabled aria-describedby="toolCategoryHelp"><option value="">Awaiting backend category enum</option></select>
-                <p id="toolCategoryHelp" class="text-[13px] text-muted">Category options will come from the backend enum; no categories are hardcoded in this preview.</p>
+                <select class="ui-select" id="newToolCategory" name="category" aria-describedby="toolCategoryHelp">
+                    @foreach (var category in Enum.GetValues<ToolCategory>())
+                    {
+                        <option value="@category.ToString().ToLowerInvariant()">@enumLabel(category)</option>
+                    }
+                </select>
+                <p id="toolCategoryHelp" class="text-[13px] text-muted">Select the category that best describes this tool.</p>
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolImage">Image URL</label>
                 <input class="ui-input" id="newToolImage" name="imageUrl" type="url" placeholder="https://example.com/tool-icon.png" aria-describedby="toolImageHelp" />
                 <p id="toolImageHelp" class="text-[13px] text-muted">Optional HTTPS image URL for the tool icon. Image upload is not implemented yet.</p>
