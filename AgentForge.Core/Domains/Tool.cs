@@ -15,6 +15,16 @@ public sealed class Tool : Base
     public string? ImageUrl { get; private set; }
     public string JsonSchema { get; private set; } = "{}";
 
+    public void UpdateDetails(string displayName, string description, ToolCategory category, string jsonSchema, string? imageUrl)
+    {
+        var validated = Create(Name, displayName, description, Kind, category, jsonSchema, imageUrl);
+        DisplayName = validated.DisplayName;
+        Description = validated.Description;
+        Category = validated.Category;
+        JsonSchema = validated.JsonSchema;
+        ImageUrl = validated.ImageUrl;
+    }
+
     public static Tool Create(string name, string displayName, string description, ToolKind kind,
         ToolCategory category, string jsonSchema, string? imageUrl = null)
     {
