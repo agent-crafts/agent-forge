@@ -1,4 +1,4 @@
-using AgentForge.Core.Projects;
+using AgentForge.Core.Domains.Projects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
