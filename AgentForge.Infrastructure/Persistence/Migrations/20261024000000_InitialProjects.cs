@@ -17,6 +17,7 @@ public partial class InitialProjects : Migration
                 name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                 description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
                 is_archived = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                is_active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                 created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                 updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
             },
