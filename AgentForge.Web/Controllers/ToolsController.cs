@@ -28,6 +28,12 @@ public sealed class ToolsController(ISender sender) : ControllerBase
         return updated ? NoContent() : NotFound();
     }
 
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    {
+        return await sender.Send(new DeleteToolCommand(id), cancellationToken) ? NoContent() : NotFound();
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(
         Guid id,
