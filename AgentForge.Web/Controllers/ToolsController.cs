@@ -59,9 +59,7 @@ public sealed class ToolsController(ISender sender) : ControllerBase
             var result = await githubTools.GetGitHubIssueAsync(issueNumber, cancellationToken);
             return result.Success
                 ? Ok(new { success = true, data = result.Data })
-                : result.Error?.Code == "not_an_issue"
-                    ? UnprocessableEntity(new { success = false, error = result.Error })
-                    : NotFound(new { success = false, error = result.Error });
+                : NotFound(new { success = false, error = result.Error });
         }
         catch (HttpRequestException ex)
         {
