@@ -15,13 +15,13 @@
             <section data-tool-panel="custom" class="grid gap-2.5 [&_.ui-input]:w-full [&_.ui-select]:w-full [&_.ui-input]:min-w-0 [&_.ui-select]:min-w-0" aria-label="Custom tool configuration">
                 
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolName">Tool Name</label>
-                <input class="ui-input" id="newToolName" name="name" placeholder="read_project_status" pattern="[a-z][a-z0-9_]*" maxlength="100" />
+                <input class="ui-input" id="newToolName" name="name" placeholder="read_project_status" pattern="[a-z][a-z0-9_]*" maxlength="100" required aria-required="true" />
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolDescription">Description</label>
-                <textarea class="ui-input min-h-24" id="newToolDescription" name="description" placeholder="What does this tool do?"></textarea>
+                <textarea class="ui-input min-h-24" id="newToolDescription" name="description" placeholder="What does this tool do?" maxlength="4000" required aria-required="true"></textarea>
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolDisplayName">Display Name</label>
-                <input class="ui-input" id="newToolDisplayName" name="displayName" placeholder="Read Project Status" maxlength="120" />
+                <input class="ui-input" id="newToolDisplayName" name="displayName" placeholder="Read Project Status" maxlength="120" required aria-required="true" />
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolCategory">Category</label>
-                <select class="ui-select" id="newToolCategory" name="category" aria-describedby="toolCategoryHelp">
+                <select class="ui-select" id="newToolCategory" name="category" required aria-required="true" aria-describedby="toolCategoryHelp">
                     @foreach (var category in Enum.GetValues<ToolCategory>())
                     {
                         <option value="@category.ToString().ToLowerInvariant()">@enumLabel(category)</option>
