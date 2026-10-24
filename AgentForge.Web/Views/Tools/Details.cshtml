@@ -108,7 +108,7 @@
                 <section class="min-w-0 rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
                     <h2 class="text-lg font-bold text-heading">Try this tool</h2>
                     <p class="mt-1 text-sm leading-6 text-muted">Provide the input parameters and run the tool to see the response.</p>
-                    <form id="githubToolTryForm" method="post" action="@Url.Action("TryGitHubIssue", "Tools")" class="mt-6 grid gap-5">
+                    <form id="githubToolTryForm" method="post" action="/api/tools/github-issue/try" class="mt-6 grid gap-5">
                         @Html.AntiForgeryToken()
                         <div class="grid gap-2">
                             <label for="githubRepoOwner" class="text-sm font-semibold text-heading">Repository Owner <span class="text-muted" title="Fixed by the GitHub client configuration">ⓘ</span></label>
