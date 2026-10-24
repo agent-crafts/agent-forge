@@ -21,7 +21,9 @@
   get("newToolDisplayName").value=d.toolDisplayName;
   get("newToolDescription").value=d.toolDescription;
   get("newToolCategory").value=d.toolCategory;
-  dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=true;});
+  get("newToolImage").value=d.toolImageUrl||"";
+  dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.checked=r.value==="custom";r.disabled=true;});
+  update();
   rows.replaceChildren();
   // Preserve the persisted schema verbatim. Schema editing needs a dedicated contract-aware editor.
   get("addToolParameter").disabled=true;
