@@ -215,6 +215,6 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
 <script src="~/js/shared/json-viewer.js" asp-append-version="true"></script>
 <script src="~/js/tools/github-tool-try.js" asp-append-version="true"></script>
 
-<div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@Model.Category" data-tool-schema="@Model.JsonSchema"></div>
+<div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@Model.Category" data-tool-kind="@Model.Kind" data-tool-image-url="@Model.ImageUrl" data-tool-schema="@Model.JsonSchema"></div>
 <partial name="~/Views/Tools/_AddToolDialog.cshtml" />
 <script src="~/js/tools/add-tool-dialog.js" asp-append-version="true"></script>
