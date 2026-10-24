@@ -9,7 +9,7 @@ public partial class AgentForgeDbContextModelSnapshot : ModelSnapshot
 {
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity("AgentForge.Core.Projects.Project", b =>
+        modelBuilder.Entity("AgentForge.Core.Domains.Projects.Project", b =>
         {
             b.Property<Guid>("Id").ValueGeneratedNever().HasColumnType("uuid").HasColumnName("id");
             b.Property<string>("Name").IsRequired().HasMaxLength(200).HasColumnType("character varying(200)").HasColumnName("name");
