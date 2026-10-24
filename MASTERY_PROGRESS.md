@@ -12,9 +12,9 @@
 | --- | --- |
 | Current phase | Module 00 — Baseline & Roadmap Alignment (planned) |
 | Current learning module | Not started |
-| Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation implemented on feature branch (unverified); Project application use cases not started |
+| Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation and Tool metadata model/mapping added on feature branch (unverified); Tool CRUD and Project application use cases not started |
 | Current mastery assessment | Not assessed |
-| Next recommended action | Verify PostgreSQL migration/build and integration tests; then implement Project application use cases |
+| Next recommended action | Verify PostgreSQL migration/build and integration tests; remove deferred ProjectLink changes; then implement Tool catalog persistence and Project application use cases |
 | Last progress review | 2026-10-24 (PostgreSQL foundation PR; verification pending) |
 
 ## 2. Learning & engineering roadmap
