@@ -221,3 +221,5 @@
 /* Ensure dialog validation colors override theme and generated utility rules. */
 #addToolDialog .ui-required-mark,#addToolDialog .ui-field-error:not(.hidden),#addToolDialog #addToolFeedback[data-state="error"]{color:#dc2626!important;-webkit-text-fill-color:#dc2626}
 #addToolDialog .ui-input[aria-invalid="true"],#addToolDialog .ui-select[aria-invalid="true"]{border-color:#dc2626!important;outline-color:#dc2626!important}
+
+#addToolDialog #addToolFeedback{color:#dc2626!important;-webkit-text-fill-color:#dc2626}
