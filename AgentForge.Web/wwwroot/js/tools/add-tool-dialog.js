@@ -8,9 +8,10 @@
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
  const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);status.textContent="";};
- if(open)open.addEventListener("click",()=>{editMode=false;dialog.showModal();});
+ if(open)open.addEventListener("click",()=>{editMode=false;get("toolKindSelector").hidden=false;dialog.showModal();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
+  get("toolKindSelector").hidden=true;
   const d=editContext.dataset;
   originalSchema=JSON.parse(d.toolSchema);
   get("addToolTitle").textContent="Edit Tool";
