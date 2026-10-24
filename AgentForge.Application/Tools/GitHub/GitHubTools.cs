@@ -17,13 +17,7 @@ public sealed class GitHubTools(IGitHubIssueClient githubIssueClient)
             var issue = await githubIssueClient.GetIssueAsync(issueNumber, cancellationToken);
             return ToolResult<GitHubIssue>.Ok(issue);
         }
-        catch (HttpRequestException exception) when (exception.StatusCode == HttpStatusCode.UnprocessableEntity)
-        {
-            return ToolResult<GitHubIssue>.Fail(
-                "not_an_issue",
-                $"GitHub item #{issueNumber} is a pull request, not an issue.");
-        }
-        catch (HttpRequestException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
+        catch (HttpRequestException exception) when (exception.StatusCode is HttpStatusCode.UnprocessableEntity or HttpStatusCode.NotFound)
         {
             // A 404 may also conceal an inaccessible private repository/issue.
             return ToolResult<GitHubIssue>.Fail(
