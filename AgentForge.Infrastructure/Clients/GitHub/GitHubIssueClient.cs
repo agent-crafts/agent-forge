@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Net;
 using System.Text.Json.Serialization;
 using AgentForge.Core.Clients.GitHub;
 
@@ -22,6 +23,9 @@ public sealed class GitHubIssueClient(HttpClient client) : IGitHubIssueClient
             cancellationToken: cancellationToken)
             ?? throw new InvalidOperationException("GitHub returned an empty issue response.");
 
+        if (issue.PullRequest is not null)
+            throw new HttpRequestException("The requested item is a pull request, not an issue.", null, HttpStatusCode.UnprocessableEntity);
+
         return new GitHubIssue(issue.Number, issue.Title, issue.State, issue.HtmlUrl);
     }
 
@@ -29,5 +33,6 @@ public sealed class GitHubIssueClient(HttpClient client) : IGitHubIssueClient
         [property: JsonPropertyName("number")] int Number,
         [property: JsonPropertyName("title")] string Title,
         [property: JsonPropertyName("state")] string State,
-        [property: JsonPropertyName("html_url")] string HtmlUrl);
+        [property: JsonPropertyName("html_url")] string HtmlUrl,
+        [property: JsonPropertyName("pull_request")] System.Text.Json.JsonElement? PullRequest);
 }
