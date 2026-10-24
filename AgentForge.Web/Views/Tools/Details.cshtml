@@ -62,18 +62,17 @@
             </section>
             <section class="ui-panel" id="tool-parameters">
                 <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="var(--surface-raised)"/><circle cx="15" cy="17" r="2" fill="var(--surface-raised)"/></svg></span> Parameters</h2>
-                <p class="ui-subtitle">Required inputs, types, and descriptions from the registered schema.</p>
+                <p class="ui-subtitle">Required inputs and types from the registered schema.</p>
                 @if (hasProperties)
                 {
                     <div class="ui-table-scroll"><table class="ui-table">
-                        <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                        <thead><tr><th>Parameter</th><th>Type</th><th>Required</th></tr></thead>
                         <tbody>
                         @foreach (var property in properties.EnumerateObject())
                         {
                             var parameter = property.Value;
                             var type = parameter.TryGetProperty("type", out var parameterType) ? parameterType.ToString() : "any";
-                            var description = parameter.TryGetProperty("description", out var parameterDescription) ? parameterDescription.GetString() : "—";
-                            <tr><td><code>@property.Name</code></td><td>@type</td><td>@if (required.Contains(property.Name)) { <span class="ui-required">Yes</span> } else { <span>No</span> }</td><td>@description</td></tr>
+                            <tr><td><code>@property.Name</code></td><td>@type</td><td>@if (required.Contains(property.Name)) { <span class="ui-required">Yes</span> } else { <span>No</span> }</td></tr>
                         }
                         </tbody>
                     </table></div>
