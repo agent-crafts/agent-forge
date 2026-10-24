@@ -12,8 +12,8 @@
             @Model.Body(null)
         </div>
         <footer class="flex items-center justify-end gap-2.5 border-t border-line px-6 py-4 [&_button]:w-auto [&_button]:flex-none">
-            <partial name="_Button" model='new UiButtonModel { Text = Model.CancelButtonText, Variant = UiButtonVariant.Cancel, CloseDialog = true }' />
             <button type="button" id="@Model.PrimaryButtonId" class="ui-button ui-button--primary" onclick="event.preventDefault(); event.stopPropagation();">@Model.PrimaryButtonText</button>
+            <partial name="_Button" model='new UiButtonModel { Text = Model.CancelButtonText, Variant = UiButtonVariant.Cancel, CloseDialog = true }' />
         </footer>
     </div>
 </dialog>
