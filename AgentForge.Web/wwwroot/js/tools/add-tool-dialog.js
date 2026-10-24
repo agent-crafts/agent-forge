@@ -38,6 +38,7 @@
  saveButton.type="button";
  saveButton.addEventListener("click",async event=>{
   event.preventDefault();
+  event.stopPropagation();
   if(saving)return;
   const kind=dialog.querySelector('input[name="toolKind"]:checked').value;
   if(kind!=="custom"){status.textContent="External tool discovery is not implemented yet.";return;}
@@ -87,7 +88,11 @@
   });
   const jsonSchema=JSON.stringify({type:"object",properties,required,additionalProperties:false});
   status.textContent="";
+  saving=true;
   saveButton.disabled=true;
+  saveButton.setAttribute("aria-busy","true");
+  const originalContent=saveButton.innerHTML;
+  saveButton.innerHTML='<span class="inline-flex items-center gap-2"><span class="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden="true"></span>Saving…</span>';
   status.textContent="Saving tool...";
   try{
    const response=await fetch("/api/tools",{
