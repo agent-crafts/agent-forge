@@ -1,4 +1,5 @@
 using AgentForge.Infrastructure.Persistence;
+using AgentForge.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -29,8 +30,8 @@ public partial class AgentForgeDbContextModelSnapshot : ModelSnapshot
             b.Property<string>("Name").IsRequired().HasMaxLength(100).HasColumnType("character varying(100)").HasColumnName("name");
             b.Property<string>("DisplayName").IsRequired().HasMaxLength(120).HasColumnType("character varying(120)").HasColumnName("display_name");
             b.Property<string>("Description").IsRequired().HasMaxLength(4000).HasColumnType("character varying(4000)").HasColumnName("description");
-            b.Property<string>("Kind").IsRequired().HasMaxLength(32).HasColumnType("character varying(32)").HasColumnName("kind");
-            b.Property<string>("Category").IsRequired().HasMaxLength(32).HasColumnType("character varying(32)").HasColumnName("category");
+            b.Property<ToolKind>("Kind").HasConversion<string>().IsRequired().HasMaxLength(32).HasColumnType("character varying(32)").HasColumnName("kind");
+            b.Property<ToolCategory>("Category").HasConversion<string>().IsRequired().HasMaxLength(32).HasColumnType("character varying(32)").HasColumnName("category");
             b.Property<string>("ImageUrl").HasMaxLength(2048).HasColumnType("character varying(2048)").HasColumnName("image_url");
             b.Property<string>("JsonSchema").IsRequired().HasColumnType("jsonb").HasColumnName("json_schema");
             b.HasKey("Id");
