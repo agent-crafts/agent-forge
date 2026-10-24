@@ -14,7 +14,6 @@
         }
     }
     var isGitHub = Model.Icon == "github";
-    var source = Model.Category == "github" ? "GitHub" : "Registered tool";
     var example = new Dictionary<string, object?>();
     if (hasProperties)
     {
@@ -43,9 +42,9 @@
             <partial name="_ToolIcon" model="Model.Icon" />
         </div>
         <div class="ui-profile-main">
-            <div class="ui-profile-title"><h1>@Model.DisplayName</h1><span class="ui-badge ui-badge-success">Registered</span></div>
+            <div class="ui-profile-title"><h1>@Model.DisplayName</h1></div>
             <p>@Model.Description</p>
-            <div class="ui-tags"><span>@Model.Name</span><span>@source</span><span>API Tool</span><span>Read-only GitHub tool</span></div>
+            <div class="ui-tags"><span>@Model.Name</span><span>@Model.Category</span></div>
         </div>
     </section>
     <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Tool details sections">
