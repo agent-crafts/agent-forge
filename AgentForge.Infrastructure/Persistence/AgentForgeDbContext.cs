@@ -1,4 +1,4 @@
-using AgentForge.Core.Domains.Projects;
+using AgentForge.Core.Domains;
 using Microsoft.EntityFrameworkCore;
 
 namespace AgentForge.Infrastructure.Persistence;
