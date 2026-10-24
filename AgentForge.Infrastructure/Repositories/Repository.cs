@@ -50,7 +50,4 @@ public class Repository<TEntity>(AgentForgeDbContext context) : IRepository<TEnt
     public void Update(TEntity entity) => Entities.Update(entity);
 
     public void Remove(TEntity entity) => Entities.Remove(entity);
-
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        => context.SaveChangesAsync(cancellationToken);
 }
