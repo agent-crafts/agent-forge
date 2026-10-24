@@ -26,7 +26,7 @@ public sealed class WorkspaceController(ISender sender) : Controller
     [HttpGet("tools")]
     public async Task<IActionResult> Tools(CancellationToken cancellationToken)
     {
-        var page = await sender.Send(new GetToolsPageQuery(new PagedQuery<Tool>(1, 100)), cancellationToken);
+        var page = await sender.Send(new GetToolsPageQuery(new PagedQuery<Tool>(1, 100, t => t.IsActive)), cancellationToken);
         ViewData["Title"] = "Tools";
         ViewData["Section"] = "tools";
         var items = page.Items.Select(tool => new ToolsController.ToolCatalogItem(
@@ -39,7 +39,7 @@ public sealed class WorkspaceController(ISender sender) : Controller
     [HttpGet("tools/{name}")]
     public async Task<IActionResult> ToolDetails(string name, CancellationToken cancellationToken)
     {
-        var page = await sender.Send(new GetToolsPageQuery(new PagedQuery<Tool>(1, 100, t => t.Name == name)), cancellationToken);
+        var page = await sender.Send(new GetToolsPageQuery(new PagedQuery<Tool>(1, 100, t => t.IsActive && t.Name == name)), cancellationToken);
         var tool = page.Items.FirstOrDefault();
         if (tool is null) return NotFound();
         ViewData["Title"] = tool.DisplayName;
