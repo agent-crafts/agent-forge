@@ -18,11 +18,11 @@ The application registers the DbContext but **does not automatically migrate** a
 
 ## Architecture
 
-- `AgentForge.Core`: framework-independent Project entity in `AgentForge.Core/Domains`.
+- `AgentForge.Core`: framework-independent `Base` entity (`Id`, `IsActive`) and derived `Project` entity in `AgentForge.Core/Domains`.
 - `AgentForge.Infrastructure`: Npgsql DbContext, mappings, design-time factory, and versioned migrations.
 - `AgentForge.Web`: configuration composition root.
 - Secrets must be supplied externally; `appsettings.json` contains no password.
-- First schema: `projects` with a UUID key, name/description constraints, archive state, UTC timestamps, and creation-time index.
+- First schema: `projects` with a UUID key, name/description constraints, activation and archive states, UTC timestamps, and creation-time index.
 - Identity and project membership are intentionally deferred.
 
 ## Verification checklist (not yet executed)
