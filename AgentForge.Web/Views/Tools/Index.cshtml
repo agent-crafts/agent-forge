@@ -31,7 +31,7 @@
     {
         <a data-search="@($"{tool.DisplayName} {tool.Name} {tool.Description}".ToLowerInvariant())"
            data-category="@tool.Category"
-           asp-controller="Tools" asp-action="Details" asp-route-name="@tool.Name"
+           href="/tools/@Uri.EscapeDataString(tool.Name)"
            aria-label="View details for @tool.DisplayName"
            class="ui-item-card group flex min-w-0 items-center gap-4 rounded-xl border border-line bg-surface px-4 py-4 text-content no-underline transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
             <span aria-hidden="true" class="ui-icon-tile">
@@ -50,7 +50,7 @@
     <p class="mt-4 rounded-xl border border-dashed border-line p-6 text-sm text-muted">No tools registered yet.</p>
 }
 <p id="toolSearchEmpty" class="mt-4 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No tools match your search.</p>
-<partial name="_AddToolDialog" />
+<partial name="~/Views/Tools/_AddToolDialog.cshtml" />
 <script src="~/js/tools/tools-gallery.js" asp-append-version="true"></script>
 
 <script src="~/js/tools/add-tool-dialog.js" asp-append-version="true"></script>
