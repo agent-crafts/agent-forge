@@ -14,27 +14,32 @@
             </fieldset>
             <section data-tool-panel="custom" class="grid gap-2.5 [&_.ui-input]:w-full [&_.ui-select]:w-full [&_.ui-input]:min-w-0 [&_.ui-select]:min-w-0" aria-label="Custom tool configuration">
                 
-                <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolName">Tool Name <span class="text-red-600" aria-hidden="true">*</span></label>
-                <input class="ui-input" id="newToolName" name="name" placeholder="read_project_status" pattern="[a-z][a-z0-9_]*" maxlength="100" required aria-required="true" / aria-describedby="newToolNameError">
-                <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolDescription">Description <span class="text-red-600" aria-hidden="true">*</span></label>
+                <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolName">Tool Name <span class="ui-required-mark" aria-hidden="true">*</span></label>
+                <input class="ui-input" id="newToolName" name="name" placeholder="read_project_status" pattern="[a-z][a-z0-9_]*" maxlength="100" required aria-required="true" aria-describedby="newToolNameError" />
+                <p id="newToolNameError" class="ui-field-error hidden" role="alert"></p>
+                <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolDescription">Description <span class="ui-required-mark" aria-hidden="true">*</span></label>
                 <textarea class="ui-input min-h-24" id="newToolDescription" name="description" placeholder="What does this tool do?" maxlength="4000" required aria-required="true" aria-describedby="newToolDescriptionError"></textarea>
-                <p id="newToolDescriptionError" class="hidden text-xs text-red-600" role="alert"></p>
-                <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolDisplayName">Display Name <span class="text-red-600" aria-hidden="true">*</span></label>
-                <input class="ui-input" id="newToolDisplayName" name="displayName" placeholder="Read Project Status" maxlength="120" required aria-required="true" / aria-describedby="newToolDisplayNameError">
-                <p id="newToolNameError" class="hidden text-xs text-red-600" role="alert"></p>
-                <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolCategory">Category <span class="text-red-600" aria-hidden="true">*</span></label>
+                <p id="newToolDescriptionError" class="ui-field-error hidden" role="alert"></p>
+                
+                <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolDisplayName">Display Name <span class="ui-required-mark" aria-hidden="true">*</span></label>
+                <input class="ui-input" id="newToolDisplayName" name="displayName" placeholder="Read Project Status" maxlength="120" required aria-required="true" aria-describedby="newToolDisplayNameError" />
+                <p id="newToolDisplayNameError" class="ui-field-error hidden" role="alert"></p>
+                
+                <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolCategory">Category <span class="ui-required-mark" aria-hidden="true">*</span></label>
                 <select class="ui-select" id="newToolCategory" name="category" required aria-required="true" aria-describedby="toolCategoryHelp newToolCategoryError">
                     @foreach (var category in Enum.GetValues<ToolCategory>())
                     {
                         <option value="@category.ToString().ToLowerInvariant()">@enumLabel(category)</option>
                     }
                 </select>
-                <p id="newToolCategoryError" class="hidden text-xs text-red-600" role="alert"></p>
+                <p id="newToolCategoryError" class="ui-field-error hidden" role="alert"></p>
+                
                 <p id="toolCategoryHelp" class="text-[13px] text-muted">Select the category that best describes this tool.</p>
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolImage">Image URL</label>
                 <input class="ui-input" id="newToolImage" name="imageUrl" type="url" placeholder="https://example.com/tool-icon.png" aria-describedby="toolImageHelp newToolImageError" />
-                <p id="newToolDisplayNameError" class="hidden text-xs text-red-600" role="alert"></p>
-                <p id="newToolImageError" class="hidden text-xs text-red-600" role="alert"></p>
+                <p id="newToolImageError" class="ui-field-error hidden" role="alert"></p>
+                
+                
                 <p id="toolImageHelp" class="text-[13px] text-muted">Optional HTTPS image URL for the tool icon. Image upload is not implemented yet.</p>
                 <h3 class="mt-2 text-base font-semibold text-heading">Parameters</h3>
                 <p class="text-[13px] leading-6 text-muted">Define input parameters. The JSON Schema preview is generated automatically.</p>
