@@ -47,12 +47,6 @@
             <p>@Model.Description</p>
             <div class="ui-tags"><span>@Model.Name</span><span>@source</span><span>API Tool</span><span>Read-only GitHub tool</span></div>
         </div>
-        <div class="ui-metadata">
-            <div><small>TYPE</small><strong>API Tool</strong></div>
-            <div><small>SOURCE</small><strong>@source</strong></div>
-            <div><small>REGISTRY</small><strong>Available</strong></div>
-            <div><small>EXECUTION</small><strong>@(Model.Name == "get_github_issue" ? "Read-only Try Now" : "Not enabled")</strong></div>
-        </div>
     </section>
     <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Tool details sections">
         <partial name="_Button" model='new UiButtonModel { Text = "Overview", Variant = UiButtonVariant.Ghost, Id = "toolOverviewTab", Role = "tab", AriaControls = "toolOverviewPanel", AriaSelected = "true", CssClass = "border-b-2 border-accent px-5 py-3 text-heading" }' />
