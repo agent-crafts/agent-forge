@@ -27,8 +27,8 @@ public partial class AgentForgeDbContextModelSnapshot : ModelSnapshot
         {
             b.Property<Guid>("Id").ValueGeneratedNever().HasColumnType("uuid").HasColumnName("id");
             b.Property<bool>("IsActive").HasDefaultValue(true).HasColumnType("boolean").HasColumnName("is_active");
-            b.Property<string>("Name").IsRequired().HasMaxLength(100).HasColumnType("character varying(100)").HasColumnName("name");
-            b.Property<string>("DisplayName").IsRequired().HasMaxLength(120).HasColumnType("character varying(120)").HasColumnName("display_name");
+            b.Property<string>("Name").IsRequired().HasMaxLength(155).HasColumnType("character varying(155)").HasColumnName("name");
+            b.Property<string>("DisplayName").IsRequired().HasMaxLength(155).HasColumnType("character varying(155)").HasColumnName("display_name");
             b.Property<string>("Description").IsRequired().HasMaxLength(4000).HasColumnType("character varying(4000)").HasColumnName("description");
             b.Property<ToolKind>("Kind").HasConversion<string>().IsRequired().HasMaxLength(32).HasColumnType("character varying(32)").HasColumnName("kind");
             b.Property<ToolCategory>("Category").HasConversion<string>().IsRequired().HasMaxLength(32).HasColumnType("character varying(32)").HasColumnName("category");
