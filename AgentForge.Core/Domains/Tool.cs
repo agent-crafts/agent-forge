@@ -25,9 +25,9 @@ public sealed class Tool : Base
             throw new ArgumentException("Display name is required and must be at most 120 characters.", nameof(displayName));
         if (!Enum.IsDefined(kind) || !Enum.IsDefined(category))
             throw new ArgumentException("Invalid tool kind or category.");
-        if (description.Length > 4000)
+        if (description is null || description.Length > 4000)
             throw new ArgumentException("Description must be at most 4000 characters.", nameof(description));
-        if (jsonSchema.Length > 65536)
+        if (string.IsNullOrWhiteSpace(jsonSchema) || jsonSchema.Length > 65536)
             throw new ArgumentException("Schema is too large.", nameof(jsonSchema));
         using var schema = System.Text.Json.JsonDocument.Parse(jsonSchema);
         if (schema.RootElement.ValueKind != System.Text.Json.JsonValueKind.Object)
