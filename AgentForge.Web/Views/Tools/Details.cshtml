@@ -38,10 +38,10 @@
 }
 <div class="ui-detail">
 
-    <section class="ui-profile relative pr-28 sm:pr-32">
-    <div class="absolute end-0 top-0 z-10 flex items-start gap-2 p-2 sm:p-3" role="group" aria-label="Tool actions">
-        <partial name="_Button" model='new UiButtonModel { Text = "Edit tool", IconName = "pencil", Variant = UiButtonVariant.Outlined, Id = "openEditToolDialog", CssClass = "inline-flex size-10 items-center justify-center !p-2 transition-colors hover:!border-accent hover:!bg-hover hover:!text-accent focus-visible:outline-2 focus-visible:outline-accent" }' />
-        <partial name="_Button" model='new UiButtonModel { Text = "Delete tool", IconName = "trash-2", Variant = UiButtonVariant.Outlined, Disabled = true, CssClass = "inline-flex size-10 items-center justify-center !p-2 !border-red-600 !text-red-600 transition-colors hover:!border-red-700 hover:!bg-red-50 hover:!text-red-700 dark:hover:!bg-red-950/30" }' />
+    <section class="ui-profile ui-tool-profile">
+    <div class="ui-tool-actions" role="group" aria-label="Tool actions">
+        <partial name="_Button" model='new UiButtonModel { Text = "Edit tool", IconName = "pencil", Variant = UiButtonVariant.Outlined, Id = "openEditToolDialog", CssClass = "ui-tool-action ui-tool-action--edit" }' />
+        <partial name="_Button" model='new UiButtonModel { Text = "Delete tool", IconName = "trash-2", Variant = UiButtonVariant.Outlined, Disabled = true, CssClass = "ui-tool-action ui-tool-action--delete" }' />
     </div>
         <div class="ui-profile-icon" aria-hidden="true">
             <partial name="_ToolIcon" model="Model.Icon" />
