@@ -1,9 +1,11 @@
 using AgentForge.Core.Clients;
 using AgentForge.Core.Clients.GitHub;
 using AgentForge.Core.Services;
+using AgentForge.Core.Repositories;
 using AgentForge.Infrastructure.Clients;
 using AgentForge.Infrastructure.Clients.GitHub;
 using AgentForge.Infrastructure.Persistence;
+using AgentForge.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +21,7 @@ public static class DependencyInjection
             throw new InvalidOperationException("ConnectionStrings:AgentForge is required. Configure it using user-secrets or environment variables.");
 
         services.AddDbContext<AgentForgeDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         services.AddHttpClient<ILlmClient, LlmClient>((provider, client) =>
         {
