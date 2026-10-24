@@ -20,6 +20,14 @@ public sealed class ToolsController(ISender sender) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id }, new { id });
     }
 
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateToolCommand command, CancellationToken cancellationToken)
+    {
+        if (id != command.Id) return BadRequest();
+        var updated = await sender.Send(command, cancellationToken);
+        return updated ? NoContent() : NotFound();
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(
         Guid id,
