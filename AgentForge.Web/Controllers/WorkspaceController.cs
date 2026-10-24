@@ -43,6 +43,9 @@ public sealed class WorkspaceController(ISender sender) : Controller
         var tool = page.Items.FirstOrDefault();
         if (tool is null) return NotFound();
         ViewData["Title"] = tool.DisplayName;
+        ViewData["ParentTitle"] = "Tools";
+        ViewData["ParentController"] = "Workspace";
+        ViewData["ParentAction"] = nameof(Tools);
         ViewData["Section"] = "tools";
         var item = new ToolsController.ToolCatalogItem(
             tool.Name, tool.Description, tool.JsonSchema, tool.DisplayName,
