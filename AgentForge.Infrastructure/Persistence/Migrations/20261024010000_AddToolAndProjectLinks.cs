@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgentForge.Infrastructure.Persistence.Migrations;
 
 [DbContext(typeof(AgentForgeDbContext))]
-[Migration("20261024010000_AddToolAndProjectLinks")]
-public partial class AddToolAndProjectLinks : Migration
+[Migration("20261024010000_AddTool")]
+public partial class AddTool : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)
     {
@@ -28,32 +28,10 @@ public partial class AddToolAndProjectLinks : Migration
         migrationBuilder.CreateIndex(
             name: "ix_tools_name", table: "tools", column: "name", unique: true);
 
-        migrationBuilder.CreateTable(
-            name: "project_links",
-            columns: table => new
-            {
-                id = table.Column<Guid>(type: "uuid", nullable: false),
-                is_active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
-                project_id = table.Column<Guid>(type: "uuid", nullable: false),
-                title = table.Column<string>(type: "character varying(120)", maxLength: 120, nullable: false),
-                url = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
-                type = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("pk_project_links", x => x.id);
-                table.ForeignKey("fk_project_links_projects_project_id", x => x.project_id,
-                    "projects", "id", onDelete: ReferentialAction.Cascade);
-            });
-
-        migrationBuilder.CreateIndex(
-            name: "ix_project_links_project_id", table: "project_links", column: "project_id");
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.DropTable("project_links");
         migrationBuilder.DropTable("tools");
     }
 }
