@@ -1,10 +1,9 @@
 namespace AgentForge.Core.Domains;
 
-public sealed class Project
+public sealed class Project : Base
 {
     private Project() { } // EF Core
 
-    public Guid Id { get; private set; }
     public string Name { get; private set; } = string.Empty;
     public string? Description { get; private set; }
     public bool IsArchived { get; private set; }
@@ -21,7 +20,6 @@ public sealed class Project
         var now = DateTimeOffset.UtcNow;
         return new Project
         {
-            Id = Guid.NewGuid(),
             Name = name.Trim(),
             Description = description,
             CreatedAt = now,
