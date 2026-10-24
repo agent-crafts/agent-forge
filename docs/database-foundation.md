@@ -23,7 +23,9 @@ The application registers the DbContext but **does not automatically migrate** a
 - `AgentForge.Web`: configuration composition root.
 - Secrets must be supplied externally; `appsettings.json` contains no password.
 - First schema: `projects` with a UUID key, name/description constraints, activation and archive states, UTC timestamps, and creation-time index.
-- `ProjectLink` stores external resource references per project (`project_links` with a project foreign key).\n- `Tool` stores catalog metadata (`tools`): stable name, display name, description, kind, category, icon URL, and JSON input schema. These fields reflect the existing Tool gallery/Add Tool form on `feature/tool-execution-security-registry`.\n- **Important:** The existing `IToolRegistry` provides executable `AIFunction` definitions in memory; persisted `Tool` rows do not become executable or authorized automatically. Synchronization, CRUD endpoints, schema safety, and execution permissions are separate follow-up work.\n- Identity and project membership are intentionally deferred.
+- `Tool` stores catalog metadata (`tools`): stable name, display name, description, kind, category, icon URL, and JSON input schema. These fields reflect the existing Tool gallery/Add Tool form on `feature/tool-execution-security-registry`.
+- **Important:** The existing `IToolRegistry` provides executable `AIFunction` definitions in memory; persisted `Tool` rows do not become executable or authorized automatically. Synchronization, CRUD endpoints, schema safety, and execution permissions are separate follow-up work.
+- Identity and project membership are intentionally deferred.
 
 ## Verification checklist (not yet executed)
 
