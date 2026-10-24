@@ -1,16 +1,39 @@
 (() => {
  const dialog=document.getElementById("addToolDialog");
  const open=document.getElementById("openAddToolDialog");
- if(!dialog||!open)return;
+ const editOpen=document.getElementById("openEditToolDialog");
+ const editContext=document.getElementById("toolEditContext");
+ if(!dialog||(!open&&!editOpen))return;
+ let editMode=false, originalSchema=null;
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
  const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);status.textContent="";};
- open.addEventListener("click",()=>dialog.showModal());
+ if(open)open.addEventListener("click",()=>{editMode=false;dialog.showModal();});
+ if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
+  editMode=true;
+  const d=editContext.dataset;
+  originalSchema=JSON.parse(d.toolSchema);
+  get("addToolTitle").textContent="Edit Tool";
+  get("addToolIntro").textContent="Update saved tool configuration.";
+  saveButton.textContent="Save Changes";
+  get("newToolName").value=d.toolName;
+  get("newToolName").readOnly=true;
+  get("newToolDisplayName").value=d.toolDisplayName;
+  get("newToolDescription").value=d.toolDescription;
+  get("newToolCategory").value=d.toolCategory;
+  dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=true;});
+  rows.replaceChildren();
+  // Preserve the persisted schema verbatim. Schema editing needs a dedicated contract-aware editor.
+  get("addToolParameter").disabled=true;
+  get("addToolParameter").title="Parameter editing is not available in Edit mode.";
+  schema();
+  dialog.showModal();
+ });
  dialog.querySelectorAll("[data-modal-close], [data-tool-close]").forEach(b=>b.addEventListener("click",()=>dialog.close()));
  dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>r.addEventListener("change",update));
  get("externalToolSource").addEventListener("change",()=>{const integration=get("externalToolSource").value==="integration";get("externalEndpointField").hidden=integration;get("externalIntegrationField").hidden=!integration;});
  const rows=get("toolParameterRows");
- const schema=()=>{const properties={},required=[];rows.querySelectorAll(".ui-modal-parameter").forEach(r=>{const n=r.querySelector(".param-name").value.trim();if(!n)return;properties[n]={type:r.querySelector(".param-type").value};if(r.querySelector(".param-required").checked)required.push(n);});const value={type:"object",properties,required,additionalProperties:false};if(window.AgentForgeJsonViewer){window.AgentForgeJsonViewer.render(get("newToolSchema"),value);}else{get("newToolSchema").textContent=JSON.stringify(value,null,2);}};
+ const schema=()=>{const properties={},required=[];rows.querySelectorAll(".ui-modal-parameter").forEach(r=>{const n=r.querySelector(".param-name").value.trim();if(!n)return;properties[n]={type:r.querySelector(".param-type").value};if(r.querySelector(".param-required").checked)required.push(n);});const value=editMode&&originalSchema?originalSchema:{type:"object",properties,required,additionalProperties:false};if(window.AgentForgeJsonViewer){window.AgentForgeJsonViewer.render(get("newToolSchema"),value);}else{get("newToolSchema").textContent=JSON.stringify(value,null,2);}};
  get("addToolParameter").addEventListener("click",()=>{const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required pattern="[a-z][a-z0-9_]*" maxlength="155" placeholder="parameter_name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").onclick=()=>{r.remove();schema();};r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
  const kindValues={custom:1,external:2};
  const categoryValues={general:1,development:2,integration:3,data:4,automation:5};
@@ -41,7 +64,7 @@
   event.stopPropagation();
   if(saving)return;
   const kind=dialog.querySelector('input[name="toolKind"]:checked').value;
-  if(kind!=="custom"){status.textContent="External tool discovery is not implemented yet.";return;}
+  if(kind!=="custom"&&!editMode){status.textContent="External tool discovery is not implemented yet.";return;}
   const name=get("newToolName").value.trim();
   const displayName=get("newToolDisplayName").value.trim();
   const description=get("newToolDescription").value.trim();
@@ -86,7 +109,7 @@
    properties[key]={type:row.querySelector(".param-type").value};
    if(row.querySelector(".param-required").checked)required.push(key);
   });
-  const jsonSchema=JSON.stringify({type:"object",properties,required,additionalProperties:false});
+  const jsonSchema=editMode?JSON.stringify(originalSchema):JSON.stringify({type:"object",properties,required,additionalProperties:false});
   status.textContent="";
   saving=true;
   saveButton.disabled=true;
@@ -95,9 +118,9 @@
   saveButton.innerHTML='<span class="inline-flex items-center gap-2"><span class="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden="true"></span>Saving…</span>';
   status.textContent="Saving tool...";
   try{
-   const response=await fetch("/api/tools",{
-    method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({name,displayName,description,kind:kindValues[kind],category,jsonSchema,imageUrl})
+   const response=await fetch(editMode?"/api/tools/"+editContext.dataset.toolId:"/api/tools",{
+    method:editMode?"PUT":"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({...(editMode?{id:editContext.dataset.toolId}:{}),name,displayName,description,kind:kindValues[kind],category,jsonSchema,imageUrl})
    });
    if(!response.ok){
     const contentType=response.headers.get("content-type")||"";
