@@ -231,3 +231,5 @@
 .ui-tool-actions .ui-tool-action--delete,.ui-tool-actions .ui-tool-action--delete:disabled{border-color:#dc2626;color:#dc2626}
 .ui-tool-actions .ui-tool-action--delete:hover{background:rgba(220,38,38,.1);border-color:#b91c1c}
 @media(max-width:560px){.ui-tool-profile{padding-right:24px;padding-top:68px}}
+
+#toolKindSelector[hidden]{display:none}
