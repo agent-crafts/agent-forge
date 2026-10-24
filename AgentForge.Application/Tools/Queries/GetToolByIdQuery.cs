@@ -1,15 +1,16 @@
 using AgentForge.Core.Domains;
 using AgentForge.Core.Repositories;
+using Mediator;
 
 namespace AgentForge.Application.Tools.Queries;
 
-public sealed record GetToolByIdQuery(Guid Id);
+public sealed record GetToolByIdQuery(Guid Id) : IQuery<Tool?>;
 
-public sealed class GetToolByIdQueryHandler(IToolRepository tools)
+public sealed class GetToolByIdQueryHandler(IToolRepository tools) : IQueryHandler<GetToolByIdQuery, Tool?>
 {
-    public Task<Tool?> HandleAsync(GetToolByIdQuery query, CancellationToken cancellationToken = default)
+    public async ValueTask<Tool?> Handle(GetToolByIdQuery query, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(query);
-        return tools.GetByIdAsync(query.Id, cancellationToken);
+        return await tools.GetByIdAsync(query.Id, cancellationToken);
     }
 }
