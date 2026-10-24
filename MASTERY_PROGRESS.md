@@ -12,10 +12,10 @@
 | --- | --- |
 | Current phase | Module 00 — Baseline & Roadmap Alignment (planned) |
 | Current learning module | Not started |
-| Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation and Tool metadata model/mapping added on feature branch (unverified); Tool CRUD and Project application use cases not started |
+| Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation, generic/specialized repositories, unit of work, and initial Tool create/get/page application handlers added on feature branch (unverified); Tool update/deactivate and Project use cases pending |
 | Current mastery assessment | Not assessed |
-| Next recommended action | Verify PostgreSQL migration/build and integration tests; then implement Tool catalog persistence and Project application use cases |
-| Last progress review | 2026-10-24 (PostgreSQL foundation PR; verification pending) |
+| Next recommended action | Verify build, migrations and integration tests for Tool create/get/page handlers; then add Tool update/deactivate and Project use cases |
+| Last progress review | 2026-10-25 (Tool application vertical slice committed; verification pending) |
 
 ## 2. Learning & engineering roadmap
 
@@ -23,7 +23,7 @@ These phases are **provisional** until reconciled with the project's training ma
 
 | Phase | Focus | Knowledge | Engineering | Mastery |
 | --- | --- | --- | --- | --- |
-| 00 | Baseline, curriculum alignment, repository architecture | In progress | UI foundation exists; PostgreSQL persistence implementation on feature branch, unverified | Not assessed |
+| 00 | Baseline, curriculum alignment, repository architecture | In progress | UI foundation exists; persistence and initial Tool application handlers committed on feature branch, unverified | Not assessed |
 | 01 | LLM foundations: tokens, attention, transformers, inference | Not started | Not started | Not assessed |
 | 02 | LLM application engineering: messages, context, persistence, streaming | Not started | Not started | Not assessed |
 | 03 | Agent runtime: tool calling, state, execution loops, guardrails | Not started | Not started | Not assessed |
