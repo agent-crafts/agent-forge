@@ -26,6 +26,14 @@
   update();
   rows.replaceChildren();
   // Preserve the persisted schema verbatim. Schema editing needs a dedicated contract-aware editor.
+  for(const [name,definition] of Object.entries(originalSchema.properties||{})){
+   get("addToolParameter").click();
+   const row=rows.lastElementChild;
+   row.querySelector(".param-name").value=name;
+   row.querySelector(".param-type").value=definition.type||"string";
+   row.querySelector(".param-required").checked=(originalSchema.required||[]).includes(name);
+   row.querySelectorAll("input,select,button").forEach(el=>el.disabled=true);
+  }
   get("addToolParameter").disabled=true;
   get("addToolParameter").title="Parameter editing is not available in Edit mode.";
   schema();
