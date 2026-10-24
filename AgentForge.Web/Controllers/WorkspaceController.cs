@@ -15,12 +15,11 @@ public sealed class WorkspaceController : Controller
         ["reviews"] = ("Reviews & Approvals", "Review changes and manage human approval checkpoints."),
         ["pipelines"] = ("Pipelines", "Track build, test, and delivery pipelines."),
         ["agents"] = ("Agents", "Create, configure, and test your AI agents."),
-        ["tools"] = ("Tools", "Manage the capabilities your agents can use."),
         ["knowledge"] = ("Knowledge", "Connect documents and knowledge sources to your agents."),
         ["runs"] = ("Runs", "Inspect agent executions, steps, and tool calls.")
     };
 
-    [HttpGet("{section:regex(^(projects|specifications|workflows|tasks|reviews|pipelines|agents|tools|knowledge|runs)$)}")]
+    [HttpGet("{section:regex(^(projects|specifications|workflows|tasks|reviews|pipelines|agents|knowledge|runs)$)}")]
     public IActionResult Index(string section)
     {
         if (!Pages.TryGetValue(section, out var page)) return NotFound();

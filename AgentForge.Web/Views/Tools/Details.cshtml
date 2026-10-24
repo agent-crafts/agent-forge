@@ -1,0 +1,216 @@
+@model AgentForge.Web.Controllers.ToolsController.ToolCatalogItem
+@using System.Text.Json
+@{
+    Layout = "_AppLayout";
+    using var schemaDocument = JsonDocument.Parse(Model.JsonSchema);
+    var schema = schemaDocument.RootElement;
+    var hasProperties = schema.TryGetProperty("properties", out var properties) && properties.ValueKind == JsonValueKind.Object;
+    var required = new HashSet<string>(StringComparer.Ordinal);
+    if (schema.TryGetProperty("required", out var requiredElement) && requiredElement.ValueKind == JsonValueKind.Array)
+    {
+        foreach (var item in requiredElement.EnumerateArray())
+        {
+            if (item.ValueKind == JsonValueKind.String && item.GetString() is { } name) required.Add(name);
+        }
+    }
+    var isGitHub = Model.Icon == "github";
+    var source = Model.Category == "github" ? "GitHub" : "Registered tool";
+    var example = new Dictionary<string, object?>();
+    if (hasProperties)
+    {
+        foreach (var property in properties.EnumerateObject())
+        {
+            var value = property.Value;
+            var type = value.TryGetProperty("type", out var typeElement) ? typeElement.GetString() : "string";
+            example[property.Name] = type switch
+            {
+                "integer" => value.TryGetProperty("minimum", out var minimum) && minimum.TryGetInt32(out var min) ? Math.Max(1, min) : 1,
+                "number" => 1,
+                "boolean" => true,
+                "array" => Array.Empty<string>(),
+                "object" => new Dictionary<string, object>(),
+                _ => property.Name.Equals("owner", StringComparison.OrdinalIgnoreCase) ? "octocat"
+                    : property.Name.Equals("repo", StringComparison.OrdinalIgnoreCase) ? "hello-world" : "example"
+            };
+        }
+    }
+    var exampleJson = JsonSerializer.Serialize(example, new JsonSerializerOptions { WriteIndented = true });
+    var formattedSchema = JsonSerializer.Serialize(schema, new JsonSerializerOptions { WriteIndented = true });
+}
+<div class="ui-detail">
+    <section class="ui-profile">
+        <div class="ui-profile-icon" aria-hidden="true">
+            <partial name="_ToolIcon" model="Model.Icon" />
+        </div>
+        <div class="ui-profile-main">
+            <div class="ui-profile-title"><h1>@Model.DisplayName</h1><span class="ui-badge ui-badge-success">Registered</span></div>
+            <p>@Model.Description</p>
+            <div class="ui-tags"><span>@Model.Name</span><span>@source</span><span>API Tool</span><span>Read-only GitHub tool</span></div>
+        </div>
+        <div class="ui-metadata">
+            <div><small>TYPE</small><strong>API Tool</strong></div>
+            <div><small>SOURCE</small><strong>@source</strong></div>
+            <div><small>REGISTRY</small><strong>Available</strong></div>
+            <div><small>EXECUTION</small><strong>@(Model.Name == "get_github_issue" ? "Read-only Try Now" : "Not enabled")</strong></div>
+        </div>
+    </section>
+    <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Tool details sections">
+        <partial name="_Button" model='new UiButtonModel { Text = "Overview", Variant = UiButtonVariant.Ghost, Id = "toolOverviewTab", Role = "tab", AriaControls = "toolOverviewPanel", AriaSelected = "true", CssClass = "border-b-2 border-accent px-5 py-3 text-heading" }' />
+        <partial name="_Button" model='new UiButtonModel { Text = "Try Now", Variant = UiButtonVariant.Ghost, Id = "toolTryTab", Role = "tab", AriaControls = "toolTryPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
+    </div>
+    <div id="toolOverviewPanel" role="tabpanel" aria-labelledby="toolOverviewTab">
+    <div class="ui-columns">
+        <div class="ui-stack">
+            <section class="ui-panel" id="tool-overview">
+                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M8 3h7l6 6h-6V3"/><path d="M8 13h8M8 17h8"/></svg></span> Overview</h2>
+                <p class="ui-subtitle">What this tool does and when to use it.</p>
+                <p>@Model.Description</p>
+                <div class="ui-note"><strong>When to use this tool</strong><p>Use this tool when its registered capability matches your task. Review the input contract before integrating it into an agent workflow.</p></div>
+            </section>
+            <section class="ui-panel" id="tool-parameters">
+                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="var(--surface-raised)"/><circle cx="15" cy="17" r="2" fill="var(--surface-raised)"/></svg></span> Parameters</h2>
+                <p class="ui-subtitle">Required inputs, types, and descriptions from the registered schema.</p>
+                @if (hasProperties)
+                {
+                    <div class="ui-table-scroll"><table class="ui-table">
+                        <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                        <tbody>
+                        @foreach (var property in properties.EnumerateObject())
+                        {
+                            var parameter = property.Value;
+                            var type = parameter.TryGetProperty("type", out var parameterType) ? parameterType.ToString() : "any";
+                            var description = parameter.TryGetProperty("description", out var parameterDescription) ? parameterDescription.GetString() : "—";
+                            <tr><td><code>@property.Name</code></td><td>@type</td><td>@if (required.Contains(property.Name)) { <span class="ui-required">Yes</span> } else { <span>No</span> }</td><td>@description</td></tr>
+                        }
+                        </tbody>
+                    </table></div>
+                }
+                else { <p>No individual input parameters are declared in the schema.</p> }
+            </section>
+        </div>
+        <div class="ui-stack">
+            <section class="ui-panel" id="tool-schema">
+                <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8v1c0 2-1 3-3 3 2 0 3 1 3 3v1c0 2 0 4 3 4M16 4c3 0 3 2 3 4v1c0 2 1 3 3 3-2 0-3 1-3 3v1c0 2 0 4-3 4"/></svg></span> JSON Schema</h2><p>The registered input contract for this tool.</p></div><partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, CssClass = "ui-copy", CopyTarget = "tool-schema-code" }' /></div>
+                <partial name="_JsonViewer" model='("tool-schema-code", (string?)formattedSchema)' />
+            </section>
+            <section class="ui-panel" id="tool-example">
+                <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="m7 9 3 3-3 3M12 15h5"/></svg></span> Example Input</h2><p>Illustrative values based on the schema; not executed.</p></div><partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, CssClass = "ui-copy", CopyTarget = "tool-example-code" }' /></div>
+                <partial name="_JsonViewer" model='("tool-example-code", (string?)exampleJson)' />
+            </section>
+            <p class="ui-footnote">The GitHub issue tool supports a limited read-only test in the Try Now tab. Other tools require an approved execution adapter.</p>
+        </div>
+    </div>
+    </div>
+    <section id="toolTryPanel" role="tabpanel" aria-labelledby="toolTryTab" hidden class="mt-6">
+        @if (Model.Name == "get_github_issue")
+        {
+            <div class="tool-try-layout grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.35fr)]">
+                <section class="min-w-0 rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
+                    <h2 class="text-lg font-bold text-heading">Try this tool</h2>
+                    <p class="mt-1 text-sm leading-6 text-muted">Provide the input parameters and run the tool to see the response.</p>
+                    <form id="githubToolTryForm" method="post" action="@Url.Action("TryGitHubIssue", "Tools")" class="mt-6 grid gap-5">
+                        @Html.AntiForgeryToken()
+                        <div class="grid gap-2">
+                            <label for="githubRepoOwner" class="text-sm font-semibold text-heading">Repository Owner <span class="text-muted" title="Fixed by the GitHub client configuration">ⓘ</span></label>
+                            <input id="githubRepoOwner" type="text" value="agent-crafts" readonly aria-describedby="githubRepoOwnerHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
+                            <p id="githubRepoOwnerHelp" class="text-xs text-muted">The GitHub organization or user. Fixed for this tool.</p>
+                        </div>
+                        <div class="grid gap-2">
+                            <label for="githubRepoName" class="text-sm font-semibold text-heading">Repository Name <span class="text-muted" title="Fixed by the GitHub client configuration">ⓘ</span></label>
+                            <input id="githubRepoName" type="text" value="agent-forge" readonly aria-describedby="githubRepoNameHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
+                            <p id="githubRepoNameHelp" class="text-xs text-muted">The repository name. Fixed for this tool.</p>
+                        </div>
+                        <div class="grid gap-2">
+                            <label for="githubIssueNumber" class="text-sm font-semibold text-heading">Issue Number <span class="text-red-500">*</span> <span class="text-muted" title="Required positive integer">ⓘ</span></label>
+                            <input id="githubIssueNumber" name="issueNumber" type="number" min="1" step="1" required placeholder="e.g. 12" aria-describedby="githubIssueNumberHelp" class="ui-input w-full rounded-xl border border-line bg-surface px-4 py-3 text-sm text-content focus-visible:outline-2 focus-visible:outline-accent" />
+                            <p id="githubIssueNumberHelp" class="text-xs text-muted">The number of the issue to retrieve.</p>
+                        </div>
+                        <div class="flex flex-col gap-3 sm:flex-row">
+                            <partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Type = "submit", Id = "githubToolRun", Icon = "▷", LabelId = "githubToolRunLabel", CssClass = "flex-1" }' />
+                            <partial name="_Button" model='new UiButtonModel { Text = "Reset", Variant = UiButtonVariant.Secondary, Type = "reset", Id = "githubToolReset", Icon = "↻" }' />
+                        </div>
+                    </form>
+                </section>
+                <section class="flex min-w-0 flex-col rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
+                    <div class="flex flex-wrap items-start justify-between gap-3">
+                        <div><h2 class="text-lg font-bold text-heading">Response</h2><p class="mt-1 text-sm text-muted">The tool response will appear here after execution.</p></div>
+                        <div class="flex flex-wrap items-center gap-2 text-xs text-muted">
+                            <span id="githubToolStatus" class="rounded-full bg-raised px-3 py-1.5 font-semibold">Not run</span>
+                            <span id="githubToolDuration" class="rounded-full bg-raised px-3 py-1.5" hidden></span>
+                            
+                        </div>
+                    </div>
+                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
+                        <div class="flex items-center gap-2" role="tablist" aria-label="Response format">
+                            <partial name="_Button" model='new UiButtonModel { Text = "JSON", Variant = UiButtonVariant.Outlined, Id = "githubResponseJsonTab", Role = "tab", AriaSelected = "true", AriaControls = "githubResponseJsonPanel" }' />
+                            <partial name="_Button" model='new UiButtonModel { Text = "Formatted", Variant = UiButtonVariant.Outlined, Id = "githubResponseFormattedTab", Role = "tab", AriaSelected = "false", AriaControls = "githubResponseFormattedPanel" }' />
+                            <partial name="_Button" model='new UiButtonModel { Text = "Raw", Variant = UiButtonVariant.Outlined, Id = "githubResponseRawTab", Role = "tab", AriaSelected = "false", AriaControls = "githubResponseRawPanel" }' />
+                        </div>
+                        <partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, Id = "githubToolCopy", Disabled = true }' />
+                    </div>
+                    <div id="githubResponseJsonPanel" role="tabpanel" aria-labelledby="githubResponseJsonTab" class="mt-4 min-h-80">
+                        <partial name="_JsonViewer" model='("githubToolResultJson", (string?)null)' />
+                    </div>
+                    <div id="githubResponseFormattedPanel" role="tabpanel" aria-labelledby="githubResponseFormattedTab" hidden class="mt-4 min-h-80 rounded-xl border border-line bg-raised p-5">
+                        <div id="githubToolResultFormatted" class="grid gap-4 text-sm text-content">Run the tool to view formatted issue details.</div>
+                    </div>
+                    <div id="githubResponseRawPanel" role="tabpanel" aria-labelledby="githubResponseRawTab" hidden class="mt-4 min-h-80">
+                        <pre class="ui-code h-full min-h-80 max-h-[560px] overflow-auto rounded-xl border border-line bg-[#151d2b] p-4 text-xs leading-6"><code id="githubToolResultRaw">Run the tool to view the raw response.</code></pre>
+                    </div>
+
+                </section>
+            </div>
+        }
+        else
+        {
+            <div class="rounded-2xl border border-line bg-surface p-6"><h2 class="text-lg font-bold text-heading">Try Now</h2><p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></div>
+        }
+    </section>
+</div>
+
+<script>
+document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
+    button.addEventListener('click', async () => {
+        const code = document.getElementById(button.dataset.copyTarget);
+        if (!code || !navigator.clipboard) return;
+        try {
+            await navigator.clipboard.writeText(code.textContent || '');
+            button.textContent = 'Copied';
+            button.setAttribute('aria-label', 'Copied to clipboard');
+        } catch {
+            button.textContent = 'Copy failed';
+        }
+    });
+});
+</script>
+
+<script>
+(() => {
+    const tabs = [document.getElementById('toolOverviewTab'), document.getElementById('toolTryTab')];
+    const panels = [document.getElementById('toolOverviewPanel'), document.getElementById('toolTryPanel')];
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+            tabs.forEach((item, i) => {
+                const active = i === index;
+                item.setAttribute('aria-selected', String(active));
+                item.tabIndex = active ? 0 : -1;
+                item.classList.toggle('border-accent', active);
+                item.classList.toggle('border-transparent', !active);
+                item.classList.toggle('text-heading', active);
+                item.classList.toggle('text-muted', !active);
+                panels[i].hidden = !active;
+            });
+        });
+        tab.addEventListener('keydown', event => {
+            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+            event.preventDefault();
+            const next = (index + (event.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+            tabs[next].focus();
+            tabs[next].click();
+        });
+    });
+})();
+</script>
+
+<script src="~/js/shared/json-viewer.js" asp-append-version="true"></script>
+<script src="~/js/tools/github-tool-try.js" asp-append-version="true"></script>

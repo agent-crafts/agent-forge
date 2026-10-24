@@ -1,0 +1,2 @@
+@model (string Id, string? Json)
+<pre class="ui-code json-viewer"><code id="@Model.Id" data-json-viewer data-json-source="@(Model.Json is null ? "dynamic" : "static")">@(Model.Json ?? "Run the tool to view the response.")</code></pre>
