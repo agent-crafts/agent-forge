@@ -1,16 +1,17 @@
 using AgentForge.Core.Domains;
 using AgentForge.Core.Repositories;
 using AgentForge.Core.Utilities;
+using Mediator;
 
 namespace AgentForge.Application.Tools.Queries;
 
-public sealed record GetToolsPageQuery(PagedQuery<Tool> Page);
+public sealed record GetToolsPageQuery(PagedQuery<Tool> Page) : IQuery<PagedResult<Tool>>;
 
-public sealed class GetToolsPageQueryHandler(IToolRepository tools)
+public sealed class GetToolsPageQueryHandler(IToolRepository tools) : IQueryHandler<GetToolsPageQuery, PagedResult<Tool>>
 {
-    public Task<PagedResult<Tool>> HandleAsync(GetToolsPageQuery query, CancellationToken cancellationToken = default)
+    public async ValueTask<PagedResult<Tool>> Handle(GetToolsPageQuery query, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(query);
-        return tools.GetPagedAsync(query.Page, cancellationToken);
+        return await tools.GetPagedAsync(query.Page, cancellationToken);
     }
 }
