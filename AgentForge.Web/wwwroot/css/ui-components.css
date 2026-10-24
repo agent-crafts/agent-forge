@@ -223,3 +223,11 @@
 #addToolDialog .ui-input[aria-invalid="true"],#addToolDialog .ui-select[aria-invalid="true"]{border-color:#dc2626!important;outline-color:#dc2626!important}
 
 #addToolDialog #addToolFeedback{color:#dc2626!important;-webkit-text-fill-color:#dc2626}
+
+.ui-tool-profile{position:relative;padding-right:128px}
+.ui-tool-actions{position:absolute;top:12px;right:12px;display:flex;gap:8px;z-index:1}
+.ui-tool-actions .ui-tool-action{width:40px;height:40px;padding:8px;border:1px solid var(--accent);border-radius:10px;background:transparent;color:var(--accent);transition:background-color .15s,border-color .15s}
+.ui-tool-actions .ui-tool-action--edit:hover{background:var(--hover)}
+.ui-tool-actions .ui-tool-action--delete,.ui-tool-actions .ui-tool-action--delete:disabled{border-color:#dc2626;color:#dc2626}
+.ui-tool-actions .ui-tool-action--delete:hover{background:rgba(220,38,38,.1);border-color:#b91c1c}
+@media(max-width:560px){.ui-tool-profile{padding-right:24px;padding-top:68px}}
