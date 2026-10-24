@@ -15,6 +15,7 @@ public partial class AgentForgeDbContextModelSnapshot : ModelSnapshot
             b.Property<string>("Name").IsRequired().HasMaxLength(200).HasColumnType("character varying(200)").HasColumnName("name");
             b.Property<string>("Description").HasMaxLength(2000).HasColumnType("character varying(2000)").HasColumnName("description");
             b.Property<bool>("IsArchived").HasDefaultValue(false).HasColumnType("boolean").HasColumnName("is_archived");
+            b.Property<bool>("IsActive").HasDefaultValue(true).HasColumnType("boolean").HasColumnName("is_active");
             b.Property<DateTimeOffset>("CreatedAt").HasColumnType("timestamp with time zone").HasColumnName("created_at");
             b.Property<DateTimeOffset>("UpdatedAt").HasColumnType("timestamp with time zone").HasColumnName("updated_at");
             b.HasKey("Id");
