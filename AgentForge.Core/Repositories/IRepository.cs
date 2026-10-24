@@ -1,4 +1,5 @@
 using AgentForge.Core.Domains;
+using AgentForge.Core.Utilities;
 using System.Linq.Expressions;
 
 namespace AgentForge.Core.Repositories;
