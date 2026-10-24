@@ -1,10 +1,14 @@
+using AgentForge.Application.Tools.Queries;
+using AgentForge.Core.Domains;
+using AgentForge.Core.Utilities;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgentForge.Web.Controllers;
 
 /// <summary>Navigation-only workspace pages; no agent runtime is wired yet.</summary>
 [Route("")]
-public sealed class WorkspaceController : Controller
+public sealed class WorkspaceController(ISender sender) : Controller
 {
     private static readonly Dictionary<string, (string Title, string Description)> Pages = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -18,6 +22,34 @@ public sealed class WorkspaceController : Controller
         ["knowledge"] = ("Knowledge", "Connect documents and knowledge sources to your agents."),
         ["runs"] = ("Runs", "Inspect agent executions, steps, and tool calls.")
     };
+
+    [HttpGet("tools")]
+    public async Task<IActionResult> Tools(CancellationToken cancellationToken)
+    {
+        var page = await sender.Send(new GetToolsPageQuery(new PagedQuery<Tool>(1, 100)), cancellationToken);
+        ViewData["Title"] = "Tools";
+        ViewData["Section"] = "tools";
+        var items = page.Items.Select(tool => new ToolsController.ToolCatalogItem(
+            tool.Name, tool.Description, tool.JsonSchema, tool.DisplayName,
+            tool.Name == "get_github_issue" ? "github" : "wrench",
+            tool.Category.ToString().ToLowerInvariant())).ToList();
+        return View("~/Views/Tools/Index.cshtml", items);
+    }
+
+    [HttpGet("tools/{name}")]
+    public async Task<IActionResult> ToolDetails(string name, CancellationToken cancellationToken)
+    {
+        var page = await sender.Send(new GetToolsPageQuery(new PagedQuery<Tool>(1, 100, t => t.Name == name)), cancellationToken);
+        var tool = page.Items.FirstOrDefault();
+        if (tool is null) return NotFound();
+        ViewData["Title"] = tool.DisplayName;
+        ViewData["Section"] = "tools";
+        var item = new ToolsController.ToolCatalogItem(
+            tool.Name, tool.Description, tool.JsonSchema, tool.DisplayName,
+            tool.Name == "get_github_issue" ? "github" : "wrench",
+            tool.Category.ToString().ToLowerInvariant());
+        return View("~/Views/Tools/Details.cshtml", item);
+    }
 
     [HttpGet("{section:regex(^(projects|specifications|workflows|tasks|reviews|pipelines|agents|knowledge|runs)$)}")]
     public IActionResult Index(string section)
