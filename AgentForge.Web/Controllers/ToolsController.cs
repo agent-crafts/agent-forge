@@ -40,7 +40,7 @@ public sealed class ToolsController(ISender sender) : ControllerBase
         CancellationToken cancellationToken)
     {
         var tool = await sender.Send(new GetToolByIdQuery(id), cancellationToken);
-        return tool is null ? NotFound() : Ok(tool);
+        return tool is null || !tool.IsActive ? NotFound() : Ok(tool);
     }
 
     [HttpGet]
@@ -53,7 +53,7 @@ public sealed class ToolsController(ISender sender) : ControllerBase
             return BadRequest("Invalid pagination parameters.");
 
         var result = await sender.Send(
-            new GetToolsPageQuery(new PagedQuery<Tool>(pageNumber, pageSize)),
+            new GetToolsPageQuery(new PagedQuery<Tool>(pageNumber, pageSize, tool => tool.IsActive)),
             cancellationToken);
         return Ok(result);
     }
