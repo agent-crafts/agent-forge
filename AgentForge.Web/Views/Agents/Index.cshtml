@@ -28,7 +28,7 @@
 <div id="agentGrid" class="ui-grid grid grid-cols-1 gap-3 lg:grid-cols-2">
     @foreach (var agent in Model)
     {
-        <article class="agent-card ui-item-card group flex min-w-0 items-start cursor-default gap-3 rounded-xl border border-line bg-surface px-3 py-3 text-content transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm"
+        <a href="/agents/@Uri.EscapeDataString(agent.Id)" aria-label="View details for @agent.Name" class="agent-card ui-item-card group flex min-w-0 items-start cursor-default gap-3 rounded-xl border border-line bg-surface px-3 py-3 text-content transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm"
                  data-search="@($"{agent.Name} {agent.Description} {string.Join(" ", agent.Tags)}".ToLowerInvariant())"
                  data-category="@agent.Category.ToLowerInvariant()">
             <span aria-hidden="true" class="ui-icon-tile self-start text-xl font-semibold">@agent.Icon</span>
@@ -43,7 +43,7 @@
                     }
                 </div>
             </div>
-        </article>
+        </a>
     }
 </div>
 <p id="agentEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No agents match your filters.</p>
