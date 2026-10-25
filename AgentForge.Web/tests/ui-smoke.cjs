@@ -7,7 +7,7 @@ const { chromium } = require('playwright');
       const page = await browser.newPage({ viewport });
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
-      await page.goto(base + '/chat', { waitUntil: 'domcontentloaded' });
+      await page.goto(base + '/chat', { waitUntil: 'load' });
       await page.locator('#chatForm').waitFor();
       if (await page.locator('.shell').count() !== 1) throw new Error('Chat shell duplicated');
       if (await page.locator('#workspaceSidebar').count() !== 1) throw new Error('Sidebar duplicated');
