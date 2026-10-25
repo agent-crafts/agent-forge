@@ -34,25 +34,24 @@
 </div>
 <p id="agentCount" class="mb-4 text-xs text-muted" role="status" aria-live="polite">@Model.Count agents</p>
 
-<div id="agentGrid" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+<div id="agentGrid" class="grid grid-cols-1 items-start gap-3 md:grid-cols-2 xl:grid-cols-3">
     @foreach (var agent in Model)
     {
-        <article class="agent-card flex min-w-0 flex-col rounded-xl border border-line bg-surface p-5 transition-all duration-150 hover:border-line-strong hover:shadow-sm"
+        <article class="agent-card flex min-w-0 flex-col rounded-xl border border-line bg-surface p-4 transition-all duration-150 hover:border-line-strong hover:shadow-sm"
                  data-search="@($"{agent.Name} {agent.Description} {string.Join(" ", agent.Tags)}".ToLowerInvariant())"
                  data-category="@agent.Category.ToLowerInvariant()">
-            <div class="mb-4 flex items-start justify-between gap-3">
-                <span aria-hidden="true" class="flex size-12 items-center justify-center rounded-xl bg-hover text-xl font-semibold text-heading">@agent.Icon</span>
+            <div class="mb-3 flex items-start justify-between gap-2">
+                <span aria-hidden="true" class="flex size-10 items-center justify-center rounded-xl bg-hover text-xl font-semibold text-heading">@agent.Icon</span>
                 <span class="rounded-full border border-line px-2 py-1 text-xs text-muted">@agent.Category</span>
             </div>
             <h2 class="text-base font-semibold text-heading">@agent.Name</h2>
-            <p class="mt-2 flex-1 text-sm leading-6 text-muted">@agent.Description</p>
-            <div class="mt-4 flex flex-wrap gap-2" aria-label="Agent capabilities">
+            <p class="mt-1 text-sm leading-5 text-muted">@agent.Description</p>
+            <div class="mt-3 flex flex-wrap gap-1.5" aria-label="Agent capabilities">
                 @foreach (var tag in agent.Tags)
                 {
-                    <span class="rounded-md bg-hover px-2 py-1 text-xs text-muted">@tag</span>
+                    <span class="rounded-md bg-hover px-2 py-0.5 text-xs text-muted">@tag</span>
                 }
             </div>
-            
         </article>
     }
 </div>
