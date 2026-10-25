@@ -3,42 +3,76 @@
     Layout = "_AppLayout";
 }
 <div class="ui-detail">
-    <nav class="mb-4 text-sm text-muted" aria-label="Breadcrumb">
-        <a href="/agents" class="text-muted hover:text-heading">Agents</a>
-        <span aria-hidden="true"> / </span>
-        <span aria-current="page" class="text-heading">@Model.Name</span>
-    </nav>
-    <section class="ui-profile">
+    <section class="ui-profile ui-tool-profile">
         <div class="ui-profile-icon" aria-hidden="true"><span class="text-2xl">@Model.Icon</span></div>
         <div class="ui-profile-main">
             <div class="ui-profile-title"><h1>@Model.Name</h1></div>
             <p>@Model.Description</p>
-            <div class="ui-tags"><span>@Model.Category</span><span>Sample agent</span></div>
+            <div class="ui-tags"><span>@Model.Id</span><span>@Model.Category</span><span>Sample agent</span></div>
         </div>
     </section>
-    <div class="ui-columns mt-6">
-        <div class="ui-stack">
-            <section class="ui-panel">
-                <h2>Overview</h2>
-                <p class="ui-subtitle">What this agent is designed to help with.</p>
-                <p>@Model.Description</p>
-            </section>
+    <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Agent details sections">
+        <button type="button" id="agentOverviewTab" role="tab" aria-controls="agentOverviewPanel" aria-selected="true" tabindex="0" class="border-b-2 border-accent px-5 py-3 text-sm font-semibold text-heading">Overview</button>
+        <button type="button" id="agentCapabilitiesTab" role="tab" aria-controls="agentCapabilitiesPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Capabilities</button>
+    </div>
+    <div id="agentOverviewPanel" role="tabpanel" aria-labelledby="agentOverviewTab">
+        <div class="ui-columns">
+            <div class="ui-stack">
+                <section class="ui-panel">
+                    <h2>Overview</h2>
+                    <p class="ui-subtitle">What this agent is designed to help with.</p>
+                    <p>@Model.Description</p>
+                </section>
+            </div>
+            <div class="ui-stack">
+                <section class="ui-panel">
+                    <h2>Availability</h2>
+                    <p>This is a sample agent profile. Configuration and execution are not available yet.</p>
+                </section>
+            </div>
         </div>
-        <div class="ui-stack">
-            <section class="ui-panel">
-                <h2>Capabilities</h2>
-                <p class="ui-subtitle">Capabilities shown in this preview.</p>
-                <div class="ui-tags">
-                    @foreach (var tag in Model.Tags)
-                    {
-                        <span>@tag</span>
-                    }
-                </div>
-            </section>
-            <section class="ui-panel">
-                <h2>Availability</h2>
-                <p>This is a sample agent profile. Configuration and execution are not available yet.</p>
-            </section>
+    </div>
+    <div id="agentCapabilitiesPanel" role="tabpanel" aria-labelledby="agentCapabilitiesTab" hidden>
+        <div class="ui-columns">
+            <div class="ui-stack">
+                <section class="ui-panel">
+                    <h2>Capabilities</h2>
+                    <p class="ui-subtitle">Capabilities shown in this preview.</p>
+                    <div class="ui-tags">
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <span>@tag</span>
+                        }
+                    </div>
+                </section>
+            </div>
         </div>
     </div>
 </div>
+<script>
+(() => {
+    const tabs = [document.getElementById('agentOverviewTab'), document.getElementById('agentCapabilitiesTab')];
+    const panels = [document.getElementById('agentOverviewPanel'), document.getElementById('agentCapabilitiesPanel')];
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+            tabs.forEach((item, i) => {
+                const active = i === index;
+                item.setAttribute('aria-selected', String(active));
+                item.tabIndex = active ? 0 : -1;
+                item.classList.toggle('border-accent', active);
+                item.classList.toggle('border-transparent', !active);
+                item.classList.toggle('text-heading', active);
+                item.classList.toggle('text-muted', !active);
+                panels[i].hidden = !active;
+            });
+        });
+        tab.addEventListener('keydown', event => {
+            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+            event.preventDefault();
+            const next = (index + (event.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+            tabs[next].focus();
+            tabs[next].click();
+        });
+    });
+})();
+</script>
