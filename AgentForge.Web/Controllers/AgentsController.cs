@@ -20,6 +20,17 @@ public sealed class AgentsController : Controller
         new("data", "Data Agent", "Analyze data and prepare actionable reports.", "Data", "▥", ["Analytics", "Reporting"])
     ];
 
+    [HttpGet("{id}")]
+    public IActionResult Details(string id)
+    {
+        var agent = SampleAgents.FirstOrDefault(item => string.Equals(item.Id, id, StringComparison.OrdinalIgnoreCase));
+        if (agent is null) return NotFound();
+
+        ViewData["Title"] = agent.Name;
+        ViewData["Section"] = "agents";
+        return View(agent);
+    }
+
     [HttpGet("")]
     public IActionResult Index()
     {
