@@ -3,6 +3,7 @@ using AgentForge.Application.Services;
 using AgentForge.Application.Tools;
 using AgentForge.Application.Tools.GitHub;
 using AgentForge.Application.Tools.Execution;
+using AgentForge.Application.Tools.Execution.GitHub;
 using AgentForge.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
