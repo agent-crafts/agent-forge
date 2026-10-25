@@ -17,10 +17,13 @@ const { chromium } = require('playwright');
         await page.keyboard.press('Escape');
         if (await page.locator('#workspaceMenu').getAttribute('aria-expanded') !== 'false') throw new Error('Mobile menu failed to close');
       }
+      const beforeTheme = await page.locator('html').getAttribute('data-theme');
       await page.locator('[data-theme-toggle]').click();
+      if (await page.locator('html').getAttribute('data-theme') === beforeTheme) throw new Error('Theme did not change');
       if (!['light','dark'].includes(await page.locator('html').getAttribute('data-theme'))) throw new Error('Theme toggle failed');
       await page.locator('#newChat').click();
       if (await page.locator('#prompt').count() !== 1) throw new Error('Chat composer unavailable');
+      if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) throw new Error('Horizontal overflow on Chat');
       if (errors.length) throw new Error('Browser JS errors: ' + errors.join('; '));
       await page.close();
     }
