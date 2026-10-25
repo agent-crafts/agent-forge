@@ -13,7 +13,7 @@ npm run build:css
 dotnet run
 ```
 
-During UI work, run `npm run watch:css` in a second terminal. For publishing, run `npm run build:css` before `dotnet publish`. The generated output is `wwwroot/css/app.css`, linked by `Views/Shared/_Layout.cshtml`. The checked-in `app.css` is an older minimal placeholder, **not** a complete Tailwind build: it must be regenerated before checking the migrated pages.
+During UI work, run `npm run watch:css` in a second terminal. For publishing, run `npm run build:css` before `dotnet publish`. The generated output is `wwwroot/css/app.css`, linked by `Views/Shared/_Layout.cshtml`. The checked-in `app.css` is a minimal placeholder, **not** a complete Tailwind build. Normal `dotnet build` and `dotnet run` now execute an MSBuild target that installs npm dependencies and compiles Tailwind before the web build. Use `npm run watch:css` for live CSS updates. The target can be skipped with `-p:SkipTailwindBuild=true` when CSS has already been compiled.
 
 ## Design conventions
 
