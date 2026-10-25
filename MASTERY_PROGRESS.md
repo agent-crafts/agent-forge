@@ -15,7 +15,7 @@
 | Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation, generic/specialized repositories, unit of work, and initial Tool create/get/page application handlers added on feature branch (unverified); Tool update/deactivate and Project use cases pending |
 | Current mastery assessment | Not assessed |
 | Next recommended action | Verify build, migrations and integration tests for Tool create/get/page handlers; then add Tool update/deactivate and Project use cases |
-| Last progress review | 2026-10-25 (UI foundation draft PR #16 opened; CI/browser verification pending) |
+| Last progress review | 2026-10-25 (UI foundation PR #16 initial CI passed; shared Chat shell migration committed; latest CI/browser verification pending) |
 
 ## 2. Learning & engineering roadmap
 
@@ -69,7 +69,7 @@ These phases are **provisional** until reconciled with the project's training ma
 ### Parallel UI engineering (2026-10-25)
 
 - **Knowledge:** No new learning module assessment.
-- **Engineering:** Draft PR #16 adds a Tailwind/.NET CI workflow, mobile sidebar close behavior, and responsive Tools toolbar wrapping. Source changes committed; CI, build, and browser checks pending. This is the first slice, not the full UI redesign.
+- **Engineering:** Draft PR #16 adds a Tailwind/.NET CI workflow, mobile sidebar close behavior, responsive Tools toolbar wrapping, and a shared Chat layout/sidebar migration. Initial workflow checks passed; checks for latest Chat commits and browser verification pending. This is the first slice, not the full UI redesign.
 - **Mastery:** Not assessed.
 - **Next action:** Verify PR #16 checks and responsive behavior; then implement design tokens, shared shell/Chat migration, and component consistency in separate reviewable PRs.
 
