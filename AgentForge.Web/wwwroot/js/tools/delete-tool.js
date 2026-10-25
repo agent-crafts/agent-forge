@@ -19,10 +19,11 @@
         method: "DELETE"
       });
       if (!response.ok) throw new Error("Unable to delete tool (" + response.status + ").");
+      window.AgentForgeToast?.afterNavigation({type:"success",title:"Tool deleted successfully",message:"The tool has been removed from the catalog."});
       window.location.assign("/tools");
     } catch (error) {
       button.disabled = false;
-      window.alert(error.message || "Unable to delete tool.");
+      window.AgentForgeToast?.show({type:"error",title:"Could not delete tool",message:error.message || "Please try again."});
     }
   });
 })();
