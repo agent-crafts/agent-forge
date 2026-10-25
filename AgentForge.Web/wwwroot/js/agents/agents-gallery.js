@@ -2,9 +2,8 @@
     const search = document.getElementById('agentSearch');
     const category = document.getElementById('agentCategory');
     const cards = Array.from(document.querySelectorAll('.agent-card'));
-    const count = document.getElementById('agentCount');
     const empty = document.getElementById('agentEmpty');
-    if (!search || !category || !count || !empty) return;
+    if (!search || !category || !empty) return;
 
     function update() {
         const query = search.value.trim().toLocaleLowerCase();
@@ -16,7 +15,6 @@
             card.style.display = matches ? '' : 'none';
             if (matches) visible++;
         }
-        count.textContent = visible === 1 ? '1 agent' : visible + ' agents';
         empty.hidden = visible !== 0;
     }
     search.addEventListener('input', update);
