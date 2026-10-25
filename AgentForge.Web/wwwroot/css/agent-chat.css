@@ -110,3 +110,10 @@
 
 /* Keep breadcrumb separators aligned; override the generic heading span spacing. */
 .model-heading .topbar-breadcrumb .topbar-breadcrumb-separator{display:inline-flex;align-items:center;justify-content:center;align-self:center;flex:none;margin:0;font-size:15px;line-height:1}
+
+
+/* Shared shell Chat route: preserve the scrollable conversation and fixed composer. */
+.chat-content{display:flex;flex:1;min-height:0;min-width:0;flex-direction:column;overflow:hidden}
+.chat-content>.conversation{min-height:0}
+.chat-content>.composer-wrap{flex:none}
+@media(max-width:640px){.chat-content{min-height:0}}
