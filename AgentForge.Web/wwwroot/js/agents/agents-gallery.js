@@ -13,7 +13,7 @@
         for (const card of cards) {
             const matches = card.dataset.search.includes(query) &&
                 (selectedCategory === 'all' || card.dataset.category === selectedCategory);
-            card.hidden = !matches;
+            card.style.display = matches ? '' : 'none';
             if (matches) visible++;
         }
         count.textContent = visible === 1 ? '1 agent' : visible + ' agents';
