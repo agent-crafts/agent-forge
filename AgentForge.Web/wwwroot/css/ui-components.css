@@ -274,3 +274,8 @@
 /* Button keyboard focus: no border, ring, or outline; retain a subtle fill cue. */
 button:focus-visible,[role="button"]:focus-visible{outline:none!important;box-shadow:none!important}
 button:focus-visible:not(:disabled){filter:brightness(.9)}
+
+/* Compact metadata badges for Tools gallery cards. */
+.ui-tool-card-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+.ui-tool-card-badge{display:inline-flex;align-items:center;gap:5px;max-width:100%;padding:3px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface-raised);color:var(--content);font-size:10px;font-weight:600;line-height:1.4;overflow-wrap:anywhere}
+.ui-tool-card-badge-label{color:var(--muted);font-weight:500}
