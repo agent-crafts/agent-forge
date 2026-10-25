@@ -266,3 +266,7 @@
 /* Primary actions retain a strong accent fill on hover, in both themes. */
 .ui-button--primary:not(:disabled):hover{background:color-mix(in srgb,var(--accent) 82%,#000 18%);border-color:color-mix(in srgb,var(--accent) 82%,#000 18%);color:#fff}
 .ui-button--primary:not(:disabled):active{background:color-mix(in srgb,var(--accent) 74%,#000 26%)}
+
+/* Modal secondary action: Cancel uses the outlined button treatment. */
+.ui-button--cancel{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+.ui-button--cancel:not(:disabled):hover{background:var(--hover);border-color:var(--accent);color:var(--accent)}
