@@ -117,3 +117,9 @@
 .chat-content>.conversation{min-height:0}
 .chat-content>.composer-wrap{flex:none}
 @media(max-width:640px){.chat-content{min-height:0}}
+
+/* Keep every navigation icon and label on one horizontal baseline. */
+.app-nav .side-link{display:flex;flex-direction:row;align-items:center;flex-wrap:nowrap;justify-content:flex-start;white-space:nowrap;gap:12px}
+.app-nav .side-link>span:first-child{display:inline-flex;align-items:center;justify-content:center;flex:0 0 26px;width:26px;height:26px;margin:0;line-height:1}
+.chat-group-toggle{display:flex;flex-direction:row;align-items:center;flex-wrap:nowrap;white-space:nowrap}
+.chat-group-toggle>span:first-child{display:inline-flex;align-items:center;justify-content:center;flex:0 0 26px;width:26px;height:26px;line-height:1}
