@@ -117,25 +117,3 @@
 .chat-content>.conversation{min-height:0}
 .chat-content>.composer-wrap{flex:none}
 @media(max-width:640px){.chat-content{min-height:0}}
-
-
-/* Compact sidebar: preserve existing routes, chat behavior, and mobile drawer. */
-.sidebar{width:240px;padding:18px 12px;gap:11px}
-.sidebar .brand{gap:10px;font-size:17px}
-.sidebar .brand-mark{width:36px;height:36px;border-radius:11px;font-size:23px}
-.app-nav{gap:2px;padding-right:2px}
-.app-nav .side-label{margin:0 0 5px;padding:0 10px;font-size:10px;letter-spacing:1.1px}
-.app-nav .side-link{min-height:39px;padding:7px 10px;gap:11px;font-size:13px;line-height:1.25}
-.sidebar-icon{display:block;width:22px;height:22px;flex:0 0 22px;color:var(--accent)}
-.app-nav .side-link .sidebar-icon{margin:0}
-.app-nav .side-link .sidebar-link-label{display:inline;flex:auto;width:auto;height:auto;margin:0;color:inherit;font-size:inherit;line-height:inherit;font-weight:inherit}
-.nav-section-break{margin-top:10px!important;padding-top:12px!important}
-.chat-group-toggle{min-height:39px;padding:7px 10px;gap:11px;font-size:13px}
-.chat-group-toggle>.sidebar-icon{width:22px;height:22px;flex-basis:22px}
-.chat-tabs{padding:4px 0 0 11px;gap:2px}
-.chat-tab,.chat-tab-new{padding:7px 10px;font-size:12px}
-.chat-tab-list{max-height:148px}
-.sidebar .side-footer{padding-top:11px}
-.app-nav .side-link:focus-visible,.chat-group-toggle:focus-visible,.chat-tab:focus-visible,.chat-tab-new:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-@media(max-width:850px){.sidebar{width:225px}}
-@media(max-width:640px){.sidebar{width:min(260px,85vw);padding:18px 12px}}
