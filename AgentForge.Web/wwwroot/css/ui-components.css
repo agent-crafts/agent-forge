@@ -13,7 +13,7 @@
 .ui-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .ui-item-card{display:flex;align-items:center;gap:16px;min-width:0;padding:17px;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--content);text-decoration:none;transition:border-color .15s,background .15s,transform .15s}
 .ui-item-card:hover{border-color:var(--line-strong);background:var(--hover);transform:translateY(-2px)}
-.ui-item-card,.ui-item-card:hover,.ui-item-card *{cursor:default}
+.ui-item-card:hover,.ui-item-card:hover *{cursor:pointer}
 .ui-icon-tile{display:grid;place-items:center;flex:none;width:50px;height:50px;border-radius:11px;background:var(--surface-raised);color:var(--heading)}
 .ui-icon-tile svg{display:block;width:30px;height:30px}
 .ui-item-content{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
