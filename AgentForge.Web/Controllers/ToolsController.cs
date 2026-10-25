@@ -57,32 +57,35 @@ public sealed class ToolsController(ISender sender) : ControllerBase
             cancellationToken);
         return Ok(result);
     }
-    [HttpPost("github-issue/try")]
+    [HttpPost("{id:guid}/execute")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> TryGitHubIssue(
-        [FromForm] int issueNumber,
-        [FromServices] AgentForge.Application.Tools.GitHub.GitHubTools githubTools,
+    public async Task<IActionResult> Execute(
+        Guid id,
+        [FromBody] System.Text.Json.JsonElement input,
         [FromServices] ILogger<ToolsController> logger,
         CancellationToken cancellationToken)
     {
-        if (issueNumber <= 0)
-            return BadRequest(new { success = false, error = new { code = "invalid_issue_number", message = "Issue number must be a positive integer." } });
-
         try
         {
-            var result = await githubTools.GetGitHubIssueAsync(issueNumber, cancellationToken);
-            return result.Success
-                ? Ok(new { success = true, data = result.Data })
-                : NotFound(new { success = false, error = result.Error });
+            var result = await sender.Send(new ExecuteToolCommand(id, input), cancellationToken);
+            if (result.Success) return Ok(result);
+
+            return result.Error?.Code switch
+            {
+                "tool_not_found" => NotFound(result),
+                "executor_unavailable" => Conflict(result),
+                "issue_not_found" => NotFound(result),
+                _ => BadRequest(result)
+            };
         }
         catch (HttpRequestException ex)
         {
-            logger.LogWarning(ex, "GitHub issue lookup failed for issue {IssueNumber}", issueNumber);
-            return StatusCode(502, new { success = false, error = new { code = "github_unavailable", message = "GitHub could not complete the lookup. Please try again." } });
+            logger.LogWarning(ex, "Tool execution provider failed for {ToolId}", id);
+            return StatusCode(502, new { success = false, error = new { code = "provider_unavailable", message = "Tool provider is unavailable." } });
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
-            return StatusCode(504, new { success = false, error = new { code = "github_timeout", message = "GitHub did not respond in time." } });
+            return StatusCode(504, new { success = false, error = new { code = "provider_timeout", message = "Tool provider timed out." } });
         }
     }
 
