@@ -293,3 +293,9 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .ui-button--danger:not(:disabled):active{background:#7f1d1d;border-color:#7f1d1d;color:#fff}
 .ui-tool-actions .ui-tool-action--delete:not(:disabled):hover{background:rgba(220,38,38,.12);border-color:#dc2626;color:#dc2626}
 .ui-tool-actions .ui-tool-action--delete:not(:disabled):active{background:rgba(220,38,38,.2);border-color:#b91c1c;color:#b91c1c}
+
+/* Tool Details: explicitly keep the destructive icon red across hover/focus states. */
+.ui-detail .ui-tool-actions #deleteToolButton:not(:disabled):hover,
+.ui-detail .ui-tool-actions #deleteToolButton:not(:disabled):focus-visible{background:rgba(220,38,38,.14);border-color:#dc2626;color:#dc2626;box-shadow:none;outline-color:#dc2626}
+.ui-detail .ui-tool-actions #deleteToolButton:not(:disabled):active{background:rgba(220,38,38,.24);border-color:#b91c1c;color:#b91c1c}
+.ui-detail .ui-tool-actions #deleteToolButton svg{stroke:currentColor}
