@@ -18,7 +18,9 @@
     if (chatTabs) chatTabs.hidden = !expanded;
   });
 
-  document.getElementById('newChat')?.addEventListener('click', () => window.location.assign('/chat?new=1'));
+  if (!document.getElementById('chatForm')) {
+    document.getElementById('newChat')?.addEventListener('click', () => window.location.assign('/chat?new=1'));
+  }
 
   button?.addEventListener('click', () => {
     if (!sidebar) return;
