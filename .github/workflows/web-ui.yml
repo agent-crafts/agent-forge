@@ -32,5 +32,7 @@ jobs:
         working-directory: AgentForge.Web
         run: |
           node -e "const css=require('fs').readFileSync('wwwroot/css/app.css','utf8'); for(const token of ['grid-cols-1','rounded-xl','text-heading']) { if(!css.includes(token)) { console.error('Missing Tailwind utility: '+token); process.exitCode=1; } }"
+      - name: Check JavaScript syntax
+        run: find AgentForge.Web/wwwroot/js -name '*.js' -print0 | xargs -0 -n1 node --check
       - name: Build web application
         run: dotnet build AgentForge.Web/AgentForge.Web.csproj --configuration Release
