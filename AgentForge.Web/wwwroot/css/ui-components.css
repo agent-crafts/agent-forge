@@ -262,3 +262,7 @@
 .ui-tool-actions .ui-tool-action{display:inline-flex;align-items:center;justify-content:center;flex:0 0 40px;gap:0}
 .ui-tool-actions .ui-tool-action svg{display:block;width:21px;height:21px;flex:none}
 .ui-tool-actions .ui-tool-action:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* Primary actions retain a strong accent fill on hover, in both themes. */
+.ui-button--primary:not(:disabled):hover{background:color-mix(in srgb,var(--accent) 82%,#000 18%);border-color:color-mix(in srgb,var(--accent) 82%,#000 18%);color:#fff}
+.ui-button--primary:not(:disabled):active{background:color-mix(in srgb,var(--accent) 74%,#000 26%)}
