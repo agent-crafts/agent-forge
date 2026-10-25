@@ -37,17 +37,19 @@
 <div id="agentGrid" class="grid grid-cols-1 items-start gap-3 md:grid-cols-2 xl:grid-cols-3">
     @foreach (var agent in Model)
     {
-        <article class="agent-card flex min-w-0 flex-col rounded-xl border border-line bg-surface p-4 transition-all duration-150 hover:border-line-strong hover:shadow-sm"
+        <article class="agent-card group flex min-w-0 flex-col rounded-xl border border-line bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-md"
                  data-search="@($"{agent.Name} {agent.Description} {string.Join(" ", agent.Tags)}".ToLowerInvariant())"
                  data-category="@agent.Category.ToLowerInvariant()">
-            <div class="mb-3 flex items-start justify-between gap-2">
-                <span aria-hidden="true" class="flex size-10 items-center justify-center rounded-xl bg-hover text-xl font-semibold text-heading">@agent.Icon</span>
-                <span class="rounded-full border border-line px-2 py-1 text-xs text-muted">@agent.Category</span>
+            <div class="flex min-w-0 items-start gap-3">
+                <span aria-hidden="true" class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-hover text-xl font-semibold text-heading">@agent.Icon</span>
+                <div class="min-w-0 flex-1">
+                    <span class="inline-flex rounded-md bg-hover px-2 py-0.5 text-xs font-medium text-muted">@agent.Category</span>
+                    <h2 class="mt-1 text-sm font-semibold leading-5 text-heading">@agent.Name</h2>
+                </div>
             </div>
-            <h2 class="text-base font-semibold text-heading">@agent.Name</h2>
-            <p class="mt-1 text-sm leading-5 text-muted">@agent.Description</p>
+            <p class="mt-3 text-sm leading-5 text-muted">@agent.Description</p>
             <div class="mt-3 flex flex-wrap gap-1.5" aria-label="Agent capabilities">
-                @foreach (var tag in agent.Tags)
+                @foreach (var tag in agent.Tags.Take(3))
                 {
                     <span class="rounded-md bg-hover px-2 py-0.5 text-xs text-muted">@tag</span>
                 }
