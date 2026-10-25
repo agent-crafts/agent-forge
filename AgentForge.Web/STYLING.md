@@ -1,6 +1,6 @@
 # AgentForge UI Styling
 
-The app uses Tailwind CSS v4 plus semantic CSS custom properties for Dark / Light / System themes.
+The app uses Tailwind CSS v4 plus semantic CSS custom properties for Dark / Light themes (with an initial system-preference default).
 
 ## Build
 
@@ -17,6 +17,6 @@ The Tailwind CLI compiles `Styles/app.css` into `wwwroot/css/app.css`. The check
 
 ## Themes
 
-The theme switcher in the chat header supports System, Light and Dark. `wwwroot/js/theme.js` persists the selection in localStorage and updates `data-theme` on the root HTML element. System follows `prefers-color-scheme` changes.
+The header toggle switches between Light and Dark. `wwwroot/js/theme.js` persists an explicit choice in localStorage and updates `data-theme` on the root HTML element. When no choice is saved, the initial theme follows `prefers-color-scheme` changes. There is currently no separate System selection control.
 
 Shared semantic tokens live in `wwwroot/css/agent-chat.css`. Tailwind exposes `bg-app`, `bg-surface`, `text-content`, `border-line`, and `text-accent` through `@theme inline`. Prefer semantic colors over hardcoded color utilities in new views.
