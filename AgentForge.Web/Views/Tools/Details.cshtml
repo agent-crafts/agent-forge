@@ -14,7 +14,6 @@
         }
     }
     var isGitHub = Model.Icon == "github";
-    var source = Model.Category == "github" ? "GitHub" : "Registered tool";
     var example = new Dictionary<string, object?>();
     if (hasProperties)
     {
@@ -38,21 +37,21 @@
     var formattedSchema = JsonSerializer.Serialize(schema, new JsonSerializerOptions { WriteIndented = true });
 }
 <div class="ui-detail">
-    <section class="ui-profile">
+
+    <section class="ui-profile ui-tool-profile">
+    <div class="ui-tool-actions" role="group" aria-label="Tool actions">
+        <partial name="_Button" model='new UiButtonModel { Text = "Edit tool", IconName = "pencil", Variant = UiButtonVariant.Outlined, Id = "openEditToolDialog", CssClass = "ui-tool-action ui-tool-action--edit" }' />
+        <partial name="_Button" model='new UiButtonModel { Text = "Delete tool", IconName = "trash-2", Variant = UiButtonVariant.Outlined, Id = "deleteToolButton", CssClass = "ui-tool-action ui-tool-action--delete" }' />
+    </div>
         <div class="ui-profile-icon" aria-hidden="true">
             <partial name="_ToolIcon" model="Model.Icon" />
         </div>
         <div class="ui-profile-main">
-            <div class="ui-profile-title"><h1>@Model.DisplayName</h1><span class="ui-badge ui-badge-success">Registered</span></div>
+            <div class="ui-profile-title"><h1>@Model.DisplayName</h1></div>
             <p>@Model.Description</p>
-            <div class="ui-tags"><span>@Model.Name</span><span>@source</span><span>API Tool</span><span>Read-only GitHub tool</span></div>
+            <div class="ui-tags"><span>@Model.Name</span><span>@Model.Category</span></div>
         </div>
-        <div class="ui-metadata">
-            <div><small>TYPE</small><strong>API Tool</strong></div>
-            <div><small>SOURCE</small><strong>@source</strong></div>
-            <div><small>REGISTRY</small><strong>Available</strong></div>
-            <div><small>EXECUTION</small><strong>@(Model.Name == "get_github_issue" ? "Read-only Try Now" : "Not enabled")</strong></div>
-        </div>
+
     </section>
     <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Tool details sections">
         <partial name="_Button" model='new UiButtonModel { Text = "Overview", Variant = UiButtonVariant.Ghost, Id = "toolOverviewTab", Role = "tab", AriaControls = "toolOverviewPanel", AriaSelected = "true", CssClass = "border-b-2 border-accent px-5 py-3 text-heading" }' />
@@ -69,18 +68,17 @@
             </section>
             <section class="ui-panel" id="tool-parameters">
                 <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="var(--surface-raised)"/><circle cx="15" cy="17" r="2" fill="var(--surface-raised)"/></svg></span> Parameters</h2>
-                <p class="ui-subtitle">Required inputs, types, and descriptions from the registered schema.</p>
+                <p class="ui-subtitle">Required inputs and types from the registered schema.</p>
                 @if (hasProperties)
                 {
                     <div class="ui-table-scroll"><table class="ui-table">
-                        <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                        <thead><tr><th>Parameter</th><th>Type</th><th>Required</th></tr></thead>
                         <tbody>
                         @foreach (var property in properties.EnumerateObject())
                         {
                             var parameter = property.Value;
                             var type = parameter.TryGetProperty("type", out var parameterType) ? parameterType.ToString() : "any";
-                            var description = parameter.TryGetProperty("description", out var parameterDescription) ? parameterDescription.GetString() : "—";
-                            <tr><td><code>@property.Name</code></td><td>@type</td><td>@if (required.Contains(property.Name)) { <span class="ui-required">Yes</span> } else { <span>No</span> }</td><td>@description</td></tr>
+                            <tr><td><code>@property.Name</code></td><td>@type</td><td>@if (required.Contains(property.Name)) { <span class="ui-required">Yes</span> } else { <span>No</span> }</td></tr>
                         }
                         </tbody>
                     </table></div>
@@ -108,7 +106,7 @@
                 <section class="min-w-0 rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
                     <h2 class="text-lg font-bold text-heading">Try this tool</h2>
                     <p class="mt-1 text-sm leading-6 text-muted">Provide the input parameters and run the tool to see the response.</p>
-                    <form id="githubToolTryForm" method="post" action="@Url.Action("TryGitHubIssue", "Tools")" class="mt-6 grid gap-5">
+                    <form id="githubToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-6 grid gap-5">
                         @Html.AntiForgeryToken()
                         <div class="grid gap-2">
                             <label for="githubRepoOwner" class="text-sm font-semibold text-heading">Repository Owner <span class="text-muted" title="Fixed by the GitHub client configuration">ⓘ</span></label>
@@ -214,3 +212,8 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
 
 <script src="~/js/shared/json-viewer.js" asp-append-version="true"></script>
 <script src="~/js/tools/github-tool-try.js" asp-append-version="true"></script>
+
+<div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@Model.Category" data-tool-kind="@Model.Kind" data-tool-image-url="@Model.ImageUrl" data-tool-schema="@Model.JsonSchema"></div>
+<partial name="~/Views/Tools/_AddToolDialog.cshtml" />
+<script src="~/js/tools/add-tool-dialog.js" asp-append-version="true"></script>
+\n<script src="~/js/tools/delete-tool.js" asp-append-version="true"></script>\n

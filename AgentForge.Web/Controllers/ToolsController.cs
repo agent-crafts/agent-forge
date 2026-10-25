@@ -1,86 +1,94 @@
-using AgentForge.Application.Tools;
-using AgentForge.Application.Tools.GitHub;
-using AgentForge.Core.Enums;
+using AgentForge.Application.Tools.Commands;
+using AgentForge.Application.Tools.Queries;
+using AgentForge.Core.Domains;
+using AgentForge.Core.Utilities;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgentForge.Web.Controllers;
 
-/// <summary>Read-only catalog. Tool execution is deliberately not exposed by this controller.</summary>
-[Route("tools")]
-public sealed class ToolsController(IToolRegistry registry, GitHubTools githubTools, ILogger<ToolsController> logger) : Controller
+[ApiController]
+[Route("api/tools")]
+public sealed class ToolsController(ISender sender) : ControllerBase
 {
-    [HttpGet("")]
-    public IActionResult Index()
+    [HttpPost]
+    public async Task<IActionResult> Create(
+        [FromBody] CreateToolCommand command,
+        CancellationToken cancellationToken)
     {
-        SetPage("Tools", "Explore and manage tools available for your projects.");
-        var tools = registry.GetTools()
-            .Select(tool => CreateCatalogItem(tool.Name, tool.Description ?? "", tool.JsonSchema.ToString()))
-            .ToArray();
-        return View(tools);
+        var id = await sender.Send(command, cancellationToken);
+        return CreatedAtAction(nameof(GetById), new { id }, new { id });
     }
 
-    [HttpGet("{name}")]
-    public IActionResult Details(string name)
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateToolCommand command, CancellationToken cancellationToken)
     {
-        var tool = registry.GetTools().FirstOrDefault(
-            candidate => string.Equals(candidate.Name, name, StringComparison.Ordinal));
-        if (tool is null) return NotFound();
-
-        var item = CreateCatalogItem(tool.Name, tool.Description ?? "", tool.JsonSchema.ToString());
-        SetPage(item.DisplayName, "Review the tool's description and input contract.");
-        ViewData["ParentTitle"] = "Tools";
-        ViewData["ParentController"] = "Tools";
-        return View(item);
+        if (id != command.Id) return BadRequest();
+        var updated = await sender.Send(command, cancellationToken);
+        return updated ? NoContent() : NotFound();
     }
 
-    // Narrow, read-only demo execution. No arbitrary tool invocation is exposed.
-    [HttpPost("get_github_issue/try")]
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    {
+        return await sender.Send(new DeleteToolCommand(id), cancellationToken) ? NoContent() : NotFound();
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var tool = await sender.Send(new GetToolByIdQuery(id), cancellationToken);
+        return tool is null || !tool.IsActive ? NotFound() : Ok(tool);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetPaged(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default)
+    {
+        if (pageNumber < 1 || pageSize is < 1 or > 100)
+            return BadRequest("Invalid pagination parameters.");
+
+        var result = await sender.Send(
+            new GetToolsPageQuery(new PagedQuery<Tool>(pageNumber, pageSize, tool => tool.IsActive)),
+            cancellationToken);
+        return Ok(result);
+    }
+    [HttpPost("{id:guid}/execute")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> TryGitHubIssue([FromForm] int issueNumber, CancellationToken cancellationToken)
+    public async Task<IActionResult> Execute(
+        Guid id,
+        [FromBody] System.Text.Json.JsonElement input,
+        [FromServices] ILogger<ToolsController> logger,
+        CancellationToken cancellationToken)
     {
-        if (issueNumber <= 0)
-            return BadRequest(new { success = false, error = "Issue number must be a positive integer." });
-
         try
         {
-            var result = await githubTools.GetGitHubIssueAsync(issueNumber, cancellationToken);
-            return Json(result);
+            var result = await sender.Send(new ExecuteToolCommand(id, input), cancellationToken);
+            if (result.Success) return Ok(result);
+
+            return result.Error?.Code switch
+            {
+                "tool_not_found" => NotFound(result),
+                "executor_unavailable" => Conflict(result),
+                "issue_not_found" => NotFound(result),
+                _ => BadRequest(result)
+            };
         }
-        catch (HttpRequestException exception)
+        catch (HttpRequestException ex)
         {
-            logger.LogWarning(exception, "GitHub issue lookup failed for issue {IssueNumber}", issueNumber);
-            return StatusCode(502, new { success = false, error = "GitHub could not complete the request. Please try again." });
+            logger.LogWarning(ex, "Tool execution provider failed for {ToolId}", id);
+            return StatusCode(502, new { success = false, error = new { code = "provider_unavailable", message = "Tool provider is unavailable." } });
         }
-        catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
-            return StatusCode(504, new { success = false, error = "GitHub request timed out." });
+            return StatusCode(504, new { success = false, error = new { code = "provider_timeout", message = "Tool provider timed out." } });
         }
     }
 
-    private void SetPage(string title, string description)
-    {
-        ViewData["Title"] = title;
-        ViewData["Section"] = "tools";
-        ViewData["Description"] = description;
-    }
-
-    // Presentation metadata is keyed by the stable tool name; execution identity stays unchanged.
-    private static readonly IReadOnlyDictionary<string, (string DisplayName, string Icon, string Category)> ToolPresentation =
-        new Dictionary<string, (string, string, string)>(StringComparer.OrdinalIgnoreCase)
-        {
-            ["get_github_issue"] = ("Get GitHub Issue", "github", nameof(ToolCategory.Integration))
-        };
-
-    private static ToolCatalogItem CreateCatalogItem(string name, string description, string jsonSchema)
-    {
-        if (ToolPresentation.TryGetValue(name, out var presentation))
-            return new ToolCatalogItem(name, description, jsonSchema, presentation.DisplayName, presentation.Icon, presentation.Category.ToLowerInvariant());
-
-        var displayName = string.Join(" ", name.Split(new[] { '_', '-' }, StringSplitOptions.RemoveEmptyEntries)
-            .Select(part => char.ToUpperInvariant(part[0]) + part[1..]));
-        return new ToolCatalogItem(name, description, jsonSchema, displayName, "tool", nameof(ToolCategory.General).ToLowerInvariant());
-    }
-
-    public sealed record ToolCatalogItem(
-        string Name, string Description, string JsonSchema, string DisplayName, string Icon, string Category);
+    // Compatibility model for legacy Razor views; not used by API actions.
+    public sealed record ToolCatalogItem(string Name, string Description, string JsonSchema, string DisplayName, string Icon, string Category, Guid Id = default, string? ImageUrl = null, string Kind = "custom");
 }

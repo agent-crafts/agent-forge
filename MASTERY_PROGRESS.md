@@ -12,10 +12,10 @@
 | --- | --- |
 | Current phase | Module 00 — Baseline & Roadmap Alignment (planned) |
 | Current learning module | Not started |
-| Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); Project Foundation implementation not started |
+| Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation, generic/specialized repositories, unit of work, and initial Tool create/get/page application handlers added on feature branch (unverified); Tool update/deactivate and Project use cases pending |
 | Current mastery assessment | Not assessed |
-| Next recommended action | Review training resources; decide database and identity boundary; scope first Project domain/application slice |
-| Last progress review | 2026-10-22 (GitHub Try Now UI implementation; verification pending) |
+| Next recommended action | Verify build, migrations and integration tests for Tool create/get/page handlers; then add Tool update/deactivate and Project use cases |
+| Last progress review | 2026-10-25 (Tool application vertical slice committed; verification pending) |
 
 ## 2. Learning & engineering roadmap
 
@@ -23,7 +23,7 @@ These phases are **provisional** until reconciled with the project's training ma
 
 | Phase | Focus | Knowledge | Engineering | Mastery |
 | --- | --- | --- | --- | --- |
-| 00 | Baseline, curriculum alignment, repository architecture | In progress | UI foundation exists; architecture inspected, no implementation verified | Not assessed |
+| 00 | Baseline, curriculum alignment, repository architecture | In progress | UI foundation exists; persistence and initial Tool application handlers committed on feature branch, unverified | Not assessed |
 | 01 | LLM foundations: tokens, attention, transformers, inference | Not started | Not started | Not assessed |
 | 02 | LLM application engineering: messages, context, persistence, streaming | Not started | Not started | Not assessed |
 | 03 | Agent runtime: tool calling, state, execution loops, guardrails | Not started | Not started | Not assessed |
@@ -36,18 +36,18 @@ These phases are **provisional** until reconciled with the project's training ma
 
 ## 3. Active module
 
-- **Module ID / title:** TBD
-- **Problem and why it matters:** TBD
+- **Module ID / title:** Module 00 — PostgreSQL persistence foundation
+- **Problem and why it matters:** Project metadata needs durable, versioned relational persistence.
 - **Prerequisites:** TBD
 - **Learning objectives:** TBD
 - **Theory and internals covered:** TBD
 - **Minimal implementation / experiment:** TBD
 - **Production design and trade-offs:** TBD
-- **AgentForge files / architecture touched:** TBD
-- **Tests and evaluations:** TBD
+- **AgentForge files / architecture touched:** Core Project entity; Infrastructure DbContext, mappings, migrations, DI; Web configuration; Docker Compose.
+- **Tests and evaluations:** Pending: .NET build, migration application, schema constraints, model drift and integration tests.
 - **Practice / debugging challenges:** TBD
 - **Mastery criteria and evidence:** TBD
-- **Open questions / blockers:** TBD
+- **Open questions / blockers:** .NET SDK and PostgreSQL runtime not available in this execution environment; no verified migration execution.
 
 ### Parallel lab — Tool Engineering (Module 03 preparation)
 
@@ -70,7 +70,7 @@ These phases are **provisional** until reconciled with the project's training ma
 
 | Date | Decision / gap | Rationale | Evidence / follow-up |
 | --- | --- | --- | --- |
-| 2026-10-22 | External tool contract uses `issue_number` and `minimum: 1` | Stable factory schema customization plus adapter mapping; user-confirmed schema/runtime stub checks | PR #10; no live LLM call yet |
+| 2026-10-24 | PostgreSQL and single-user local-first boundary chosen | Versioned EF Core migrations in Infrastructure; identity/membership deferred | Feature branch; build/migration verification pending |\n| 2026-10-22 | External tool contract uses `issue_number` and `minimum: 1` | Stable factory schema customization plus adapter mapping; user-confirmed schema/runtime stub checks | PR #10; no live LLM call yet |
 | 2026-10-21 | Track learning, implementation, and mastery independently | Merged code alone does not establish understanding | This tracker |
 | 2026-10-21 | Align training resources before finalizing the phase order | Prevent prerequisite gaps and disconnected feature work | Module 00 |
 | 2026-10-21 | Project-centric Agent Studio is proposed; database and identity model remain open | Establish a project boundary before agents and orchestration | docs/architecture-foundation-assessment.md |
@@ -87,7 +87,7 @@ These phases are **provisional** until reconciled with the project's training ma
 
 **Parallel Tool Engineering handoff:** Shared JSON viewer added to Overview and Try Now on PR #12; verify compilation and UI appearance in browser.  Schema verification, stubbed argument binding, invalid-input rejection, safe 404 result, and propagated 500 exception passed per user-provided console output. Next: verify Tool Registry and card/detail UI; then authorization and LLM orchestration; do not claim production integration or mastery.
 
-**Next suggested session:** Complete Module 00 curriculum/baseline review; use `docs/architecture-foundation-assessment.md` to decide database and identity boundary, then scope the first Project Foundation implementation PR. No build or tests have been run for the assessment.
+**Next suggested session:** Verify the PostgreSQL foundation PR with .NET build, EF migration drift check, fresh PostgreSQL migration and persistence tests; then scope Project application services. Identity is single-user local-first; multi-user authorization is deferred.
 
 ## 6. Update rules for ChatGPT
 

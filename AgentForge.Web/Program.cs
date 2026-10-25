@@ -5,6 +5,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddMediator(options =>
+{
+    options.Assemblies = [typeof(AgentForge.Application.DependencyInjection)];
+    options.ServiceLifetime = Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped;
+});
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();

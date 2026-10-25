@@ -26,5 +26,6 @@ public sealed class UiButtonModel
     public int? TabIndex { get; init; }
     public string? CopyTarget { get; init; }
     public string? Icon { get; init; }
+    public string? IconName { get; init; }
     public string? LabelId { get; init; }
 }

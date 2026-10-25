@@ -8,6 +8,7 @@
         <ProjectReference Include="..\AgentForge.Core\AgentForge.Core.csproj" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="Mediator.Abstractions" Version="3.0.2" />
         <PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="10.11.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.13" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.13" />

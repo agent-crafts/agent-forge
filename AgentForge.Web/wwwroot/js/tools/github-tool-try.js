@@ -95,11 +95,17 @@
     const started = performance.now();
     try {
       const response = await fetch(form.action, {
-        method: "POST", body: new FormData(form), credentials: "same-origin",
-        headers: { Accept: "application/json" }
+        method: "POST",
+        body: JSON.stringify({ owner: get("githubRepoOwner").value, repo: get("githubRepoName").value, issue_number: Number(get("githubIssueNumber").value) }),
+        credentials: "same-origin",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "RequestVerificationToken": form.querySelector('input[name="__RequestVerificationToken"]').value
+        }
       });
       const contentType = response.headers.get("content-type") || "";
-      if (!contentType.includes("application/json")) throw new Error("Unexpected server response.");
+      if (!contentType.includes("application/json")) throw new Error("HTTP " + response.status + ": Unexpected server response.");
       rawText = await response.text();
       lastResult = JSON.parse(rawText);
       window.AgentForgeJsonViewer.render(json, lastResult);
@@ -109,8 +115,8 @@
       setText(status, ok ? "✓ Success" : "✕ Failed");
       status.className = "rounded-full px-3 py-1.5 text-xs font-semibold " + (ok ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700");
       copy.disabled = false;
-    } catch {
-      lastResult = { success: false, error: "Could not complete the request. Check the application connection and try again." };
+    } catch (error) {
+      lastResult = { success: false, error: { code: "request_failed", message: error.message || "Could not complete the request." } };
       rawText = JSON.stringify(lastResult);
       window.AgentForgeJsonViewer.render(json, lastResult);
       setText(raw, rawText);
