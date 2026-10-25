@@ -96,7 +96,7 @@
     try {
       const response = await fetch(form.action, {
         method: "POST",
-        body: JSON.stringify({ issue_number: Number(get("githubIssueNumber").value) }),
+        body: JSON.stringify({ owner: get("githubRepoOwner").value, repo: get("githubRepoName").value, issue_number: Number(get("githubIssueNumber").value) }),
         credentials: "same-origin",
         headers: {
           Accept: "application/json",
