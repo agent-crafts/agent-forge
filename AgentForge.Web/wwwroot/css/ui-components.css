@@ -287,3 +287,9 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 :root[data-theme="dark"] #githubToolRun:not(:disabled):hover{background:#2858b6;border-color:#2858b6;color:#fff}
 :root[data-theme="dark"] .ui-button--primary:not(:disabled):active,
 :root[data-theme="dark"] #githubToolRun:not(:disabled):active{background:#214a9a;border-color:#214a9a}
+
+/* Danger controls must not inherit the generic accent hover treatment. */
+.ui-button--danger:not(:disabled):hover{background:#991b1b;border-color:#991b1b;color:#fff}
+.ui-button--danger:not(:disabled):active{background:#7f1d1d;border-color:#7f1d1d;color:#fff}
+.ui-tool-actions .ui-tool-action--delete:not(:disabled):hover{background:rgba(220,38,38,.12);border-color:#dc2626;color:#dc2626}
+.ui-tool-actions .ui-tool-action--delete:not(:disabled):active{background:rgba(220,38,38,.2);border-color:#b91c1c;color:#b91c1c}
