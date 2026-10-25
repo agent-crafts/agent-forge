@@ -16,13 +16,13 @@
         @foreach (var item in new[] { ("projects", "▣", "Projects"), ("specifications", "▤", "Specifications"), ("workflows", "⑂", "Workflows"), ("tasks", "☑", "Tasks"), ("reviews", "✓", "Reviews & Approvals"), ("pipelines", "⇢", "Pipelines") })
         {
             var active = item.Item1 == section;
-            <a class="side-link @(active ? "active" : "")" aria-current="@(active ? "page" : null)" href="/@(item.Item1)"><span>@item.Item2</span> @item.Item3</a>
+            <a class="side-link @(active ? "active" : "")" aria-current="@(active ? "page" : null)" href="/@(item.Item1)"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg><span class="sidebar-nav-label">@item.Item3</span></a>
         }
         <div class="side-label nav-section-break">AGENT STUDIO</div>
         @foreach (var item in new[] { ("agents", "✧", "Agents"), ("tools", "⚒", "Tools"), ("knowledge", "▤", "Knowledge"), ("runs", "◷", "Runs") })
         {
             var active = item.Item1 == section;
-            <a class="side-link @(active ? "active" : "")" aria-current="@(active ? "page" : null)" href="/@(item.Item1)"><span>@item.Item2</span> @item.Item3</a>
+            <a class="side-link @(active ? "active" : "")" aria-current="@(active ? "page" : null)" href="/@(item.Item1)"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg><span class="sidebar-nav-label">@item.Item3</span></a>
         }
     </nav>
     <div class="side-footer"><span class="status-dot"></span> Local workspace</div>
