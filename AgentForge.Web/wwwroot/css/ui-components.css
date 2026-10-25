@@ -270,3 +270,7 @@
 /* Modal secondary action: Cancel uses the outlined button treatment. */
 .ui-button--cancel{background:transparent;border:1px solid var(--accent);color:var(--accent)}
 .ui-button--cancel:not(:disabled):hover{background:var(--hover);border-color:var(--accent);color:var(--accent)}
+
+/* Button keyboard focus: no border, ring, or outline; retain a subtle fill cue. */
+button:focus-visible,[role="button"]:focus-visible{outline:none!important;box-shadow:none!important}
+button:focus-visible:not(:disabled){filter:brightness(.9)}
