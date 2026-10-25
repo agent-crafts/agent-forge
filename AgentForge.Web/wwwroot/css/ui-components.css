@@ -257,3 +257,8 @@
 .ui-tool-actions{display:flex;flex-wrap:wrap;gap:8px}
 @media(max-width:640px){.ui-grid{grid-template-columns:minmax(0,1fr)}.ui-profile{flex-wrap:wrap;padding:18px}.ui-tool-actions{width:100%;justify-content:flex-end}}
 @media(prefers-reduced-motion:reduce){.ui-item-card{transition:none}.ui-item-card:hover{transform:none}}
+
+/* Tool detail actions: compact, accessible SVG-only buttons. */
+.ui-tool-actions .ui-tool-action{display:inline-flex;align-items:center;justify-content:center;flex:0 0 40px;gap:0}
+.ui-tool-actions .ui-tool-action svg{display:block;width:21px;height:21px;flex:none}
+.ui-tool-actions .ui-tool-action:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
