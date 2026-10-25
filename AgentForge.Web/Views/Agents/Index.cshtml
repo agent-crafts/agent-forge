@@ -1,0 +1,52 @@
+@model IReadOnlyList<AgentForge.Web.Controllers.AgentsController.AgentCard>
+@{
+    Layout = "_AppLayout";
+    var categories = Model.Select(agent => agent.Category).Distinct().OrderBy(category => category);
+}
+<header class="mb-6 flex flex-wrap items-start justify-between gap-4">
+    <div>
+        <h1 class="text-2xl font-semibold text-heading">Agent Gallery</h1>
+        <p class="mt-1 text-sm text-muted">Explore the agents available in your workspace.</p>
+    </div>
+    <span class="rounded-lg border border-line px-3 py-2 text-xs text-muted">Sample agents · Preview</span>
+</header>
+
+<div class="mb-6 flex flex-wrap items-center gap-3">
+    <label class="ui-visually-hidden" for="agentSearch">Search agents</label>
+    <input id="agentSearch" type="search" placeholder="Search agents..." autocomplete="off"
+           class="ui-input min-w-0 flex-1 rounded-xl border border-line bg-surface px-4 py-3 text-sm text-content placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" />
+    <label class="ui-visually-hidden" for="agentCategory">Filter agents by category</label>
+    <select id="agentCategory" class="ui-select rounded-xl border border-line bg-surface px-4 py-3 text-sm text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+        <option value="all">All Categories</option>
+        @foreach (var category in categories)
+        {
+            <option value="@category.ToLowerInvariant()">@category</option>
+        }
+    </select>
+    <span id="agentCount" class="text-xs text-muted" role="status" aria-live="polite">@Model.Count agents</span>
+</div>
+
+<div id="agentGrid" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+    @foreach (var agent in Model)
+    {
+        <article class="agent-card flex min-w-0 flex-col rounded-xl border border-line bg-surface p-5 transition-all duration-150 hover:border-line-strong hover:shadow-sm"
+                 data-search="@($"{agent.Name} {agent.Description} {string.Join(" ", agent.Tags)}".ToLowerInvariant())"
+                 data-category="@agent.Category.ToLowerInvariant()">
+            <div class="mb-4 flex items-start justify-between gap-3">
+                <span aria-hidden="true" class="flex size-12 items-center justify-center rounded-xl bg-hover text-xl font-semibold text-heading">@agent.Icon</span>
+                <span class="rounded-full border border-line px-2 py-1 text-xs text-muted">@agent.Category</span>
+            </div>
+            <h2 class="text-base font-semibold text-heading">@agent.Name</h2>
+            <p class="mt-2 flex-1 text-sm leading-6 text-muted">@agent.Description</p>
+            <div class="mt-4 flex flex-wrap gap-2" aria-label="Agent capabilities">
+                @foreach (var tag in agent.Tags)
+                {
+                    <span class="rounded-md bg-hover px-2 py-1 text-xs text-muted">@tag</span>
+                }
+            </div>
+            <div class="mt-5 border-t border-line pt-4 text-xs text-muted">Configuration and Try Now coming next</div>
+        </article>
+    }
+</div>
+<p id="agentEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No agents match your filters.</p>
+<script src="~/js/agents/agents-gallery.js" asp-append-version="true"></script>
