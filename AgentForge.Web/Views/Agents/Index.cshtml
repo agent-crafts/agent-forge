@@ -42,13 +42,13 @@
                  data-category="@agent.Category.ToLowerInvariant()">
             <span aria-hidden="true" class="ui-icon-tile self-start text-xl font-semibold">@agent.Icon</span>
             <div class="ui-item-content flex min-w-0 flex-1 flex-col gap-0.5">
-                <h2 class="ui-item-title break-words text-sm font-semibold text-heading">@agent.Name</h2>
-                <p class="ui-item-description break-words text-xs leading-5 text-muted">@agent.Description</p>
+                <span class="ui-item-title break-words text-sm font-semibold text-heading">@agent.Name</span>
+                <span class="ui-item-description break-words text-xs leading-5 text-muted">@agent.Description</span>
                 <div class="ui-tool-card-badges" aria-label="Agent category and capabilities">
                     <span class="ui-tool-card-badge"><span class="ui-tool-card-badge-label">Category</span> @agent.Category</span>
-                    @foreach (var tag in agent.Tags.Take(3))
+                    @if (agent.Tags.Length > 0)
                     {
-                        <span class="ui-tool-card-badge">@tag</span>
+                        <span class="ui-tool-card-badge"><span class="ui-tool-card-badge-label">Capability</span> @agent.Tags[0]</span>
                     }
                 </div>
             </div>
