@@ -5,7 +5,7 @@
     Layout = "_AppLayout";
     Func<Enum, string> enumLabel = value => value.GetType().GetField(value.ToString())?.GetCustomAttributes(typeof(DescriptionAttribute), false).OfType<DescriptionAttribute>().FirstOrDefault()?.Description ?? value.ToString();
 }
-<div class="ui-toolbar mb-6 flex flex-nowrap items-center gap-3">
+<div class="ui-toolbar mb-6 flex flex-wrap items-center gap-3">
     <label class="ui-visually-hidden" for="toolSearch">Search tools</label>
     <input id="toolSearch" type="search" placeholder="Search tools..." autocomplete="off"
            class="ui-input min-w-0 flex-1 rounded-xl border border-line bg-surface px-4 py-3 text-sm text-content placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" />
