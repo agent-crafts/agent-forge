@@ -78,7 +78,7 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Knowledge:** No new mastery assessment.
 - **Engineering:** Draft PR #19 adds `/agents` Razor gallery with nine static agents, search, category filtering, responsive cards, and empty state. No persistence, execution, or orchestration. Build and browser verification pending.
 - **Mastery:** Not assessed.
-- **Next action:** Verify compilation, filter behavior, accessibility and responsive layout before starting Agent Builder and Playground.
+- **Build investigation:** Local build log reported 25 missing Mediator / Microsoft.Extensions.AI type errors. Both packages are declared in Application csproj but absent from the compiler references. Added forced NuGet restore/build script and PR CI. Successful build not yet verified; Infrastructure also reports vulnerable cryptography dependencies.\n- **Next action:** Run restore/build CI, then verify gallery browser behavior.
 
 ## 4. Decisions & unresolved gaps
 
