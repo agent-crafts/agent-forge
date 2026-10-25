@@ -33,11 +33,11 @@
            data-category="@tool.Category.ToString().ToLowerInvariant()"
            href="/tools/@Uri.EscapeDataString(tool.Name)"
            aria-label="View details for @tool.DisplayName"
-           class="ui-item-card group flex min-w-0 items-start cursor-default gap-4 rounded-xl border border-line bg-surface px-4 py-4 text-content no-underline transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+           class="ui-item-card group flex min-w-0 items-start cursor-default gap-3 rounded-xl border border-line bg-surface px-3 py-3 text-content no-underline transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
             <span aria-hidden="true" class="ui-icon-tile self-start">
                 <partial name="_ToolIcon" model="tool.Icon" />
             </span>
-            <span class="ui-item-content flex min-w-0 flex-1 flex-col gap-1">
+            <span class="ui-item-content flex min-w-0 flex-1 flex-col gap-0.5">
                 <span class="ui-item-title break-words text-sm font-semibold text-heading">@tool.DisplayName</span>
                 <span class="ui-item-description break-words text-xs leading-5 text-muted">@tool.Description</span>
                 <span class="ui-tool-card-badges" aria-label="Tool kind and category">
