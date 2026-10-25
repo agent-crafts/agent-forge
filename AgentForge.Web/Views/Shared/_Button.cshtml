@@ -23,9 +23,9 @@
             }
         </svg>
     }
-    @if (Model.IconName is not null)
+    @if (Model.IconName is not null && !string.IsNullOrWhiteSpace(Model.Text))
     {
-        <span class="sr-only">@Model.Text</span>
+        <span>@Model.Text</span>
     }
     else if (Model.LabelId is { } labelId)
     {

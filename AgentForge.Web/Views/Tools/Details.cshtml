@@ -40,8 +40,8 @@
 
     <section class="ui-profile ui-tool-profile">
     <div class="ui-tool-actions" role="group" aria-label="Tool actions">
-        <partial name="_Button" model='new UiButtonModel { Text = "Edit tool", IconName = "pencil", Variant = UiButtonVariant.Outlined, Id = "openEditToolDialog", CssClass = "ui-tool-action ui-tool-action--edit" }' />
-        <partial name="_Button" model='new UiButtonModel { Text = "Delete tool", IconName = "trash-2", Variant = UiButtonVariant.Outlined, Id = "deleteToolButton", CssClass = "ui-tool-action ui-tool-action--delete" }' />
+        <button type="button" id="openEditToolDialog" class="ui-button ui-tool-action ui-tool-action--edit" aria-label="Edit tool" title="Edit tool"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg></button>
+        <button type="button" id="deleteToolButton" class="ui-button ui-tool-action ui-tool-action--delete" aria-label="Delete tool" title="Delete tool"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>
     </div>
         <div class="ui-profile-icon" aria-hidden="true">
             <partial name="_ToolIcon" model="Model.Icon" />
@@ -49,7 +49,7 @@
         <div class="ui-profile-main">
             <div class="ui-profile-title"><h1>@Model.DisplayName</h1></div>
             <p>@Model.Description</p>
-            <div class="ui-tags"><span>@Model.Name</span><span>@Model.Category</span></div>
+            <div class="ui-tags"><span>@Model.Name</span><span>@Model.Category</span><span>@Model.Kind</span></div>
         </div>
 
     </section>

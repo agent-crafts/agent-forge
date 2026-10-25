@@ -31,4 +31,5 @@
 
     search.addEventListener("input", filter);
     category.addEventListener("change", filter);
+    filter();
 })();

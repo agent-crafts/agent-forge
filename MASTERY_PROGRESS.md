@@ -14,8 +14,8 @@
 | Current learning module | Not started |
 | Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation, generic/specialized repositories, unit of work, and initial Tool create/get/page application handlers added on feature branch (unverified); Tool update/deactivate and Project use cases pending |
 | Current mastery assessment | Not assessed |
-| Next recommended action | Verify build, migrations and integration tests for Tool create/get/page handlers; then add Tool update/deactivate and Project use cases |
-| Last progress review | 2026-10-25 (Tool application vertical slice committed; verification pending) |
+| Next recommended action | Confirm latest PR #16 Chromium CI passes; expand Tools Add/Edit/Delete and Try Now browser coverage with test data; review accessibility/visual QA. Separately verify persistence migrations and integration tests |
+| Last progress review | 2026-10-25 (UI PR #16: component and Tools polish committed; Chromium smoke checks added; initial browser CI exposed launch-profile port mismatch, fixed in workflow; retest pending) |
 
 ## 2. Learning & engineering roadmap
 
@@ -65,6 +65,13 @@ These phases are **provisional** until reconciled with the project's training ma
 **Tool Try Now (2026-10-22):** On PR #12, added a narrowly scoped, antiforgery-protected GitHub issue lookup endpoint and a two-column Try Now UI with fixed repository metadata, issue-number input, JSON/formatted/raw response tabs, copy, reset, execution status, and elapsed time. The UI is designed around the existing `get_github_issue` handler; build/browser/live GitHub verification is pending. This is engineering implementation, not mastery evidence.
 
 **UI engineering (2026-10-22):** Replaced the page-specific `wwwroot/css/tools.css` with globally loaded `wwwroot/css/ui-components.css` containing reusable UI primitives (toolbar, form controls, cards, profile, badges, panels, tables, code blocks). Both Tools views now use shared classes. Tailwind utilities remain supported; CSS build automation and browser/build verification are still pending. This is engineering progress, not mastery evidence.
+
+### Parallel UI engineering (2026-10-25)
+
+- **Knowledge:** No new learning module assessment.
+- **Engineering:** Draft PR #16 adds a Tailwind/.NET CI workflow, mobile sidebar close behavior, responsive Tools toolbar wrapping, and a shared Chat layout/sidebar migration. Initial workflow checks passed; checks for latest Chat commits and browser verification pending. This is the first slice, not the full UI redesign.
+- **Mastery:** Not assessed.
+- **Next action:** Verify PR #16 checks and responsive behavior; then implement design tokens, shared shell/Chat migration, and component consistency in separate reviewable PRs.
 
 ## 4. Decisions & unresolved gaps
 

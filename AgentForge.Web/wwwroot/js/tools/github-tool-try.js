@@ -34,8 +34,19 @@
     tab.classList.toggle("border-line", !active);
     tab.classList.toggle("text-muted", !active);
     panel.hidden = !active;
+    tab.tabIndex = active ? 0 : -1;
   });
-  tabs.forEach(name => get("githubResponse" + name + "Tab").addEventListener("click", () => showTab(name)));
+  tabs.forEach((name, index) => {
+    const tab = get("githubResponse" + name + "Tab");
+    tab.addEventListener("click", () => showTab(name));
+    tab.addEventListener("keydown", event => {
+      if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+      showTab(tabs[next]);
+      get("githubResponse" + tabs[next] + "Tab").focus();
+    });
+  });
   const field = (label, value) => {
     const row = document.createElement("div");
     const heading = document.createElement("div");

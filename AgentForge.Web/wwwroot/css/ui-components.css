@@ -235,3 +235,55 @@
 @media(max-width:560px){.ui-tool-profile{padding-right:24px;padding-top:68px}}
 
 #toolKindSelector[hidden]{display:none}
+
+
+/* Responsive controls: retain usable input widths instead of clipping the toolbar. */
+@media (max-width: 700px) {
+  .ui-toolbar { flex-wrap: wrap; align-items: stretch; }
+  .ui-toolbar > .ui-input { flex: 1 1 100%; }
+  .ui-toolbar > .ui-select-wrap { flex: 1 1 150px; }
+  .ui-toolbar > .ui-button { flex: 0 0 auto; }
+}
+@media (max-width: 380px) {
+  .ui-toolbar > .ui-select-wrap,
+  .ui-toolbar > .ui-button { flex: 1 1 100%; }
+}
+
+
+/* Shared interaction and responsive states */
+.ui-button:not(:disabled):hover{background:var(--hover);border-color:var(--accent)}
+.ui-button:active:not(:disabled){transform:translateY(1px)}
+.ui-input:disabled,.ui-select:disabled{opacity:.65;cursor:not-allowed}
+.ui-tool-actions{display:flex;flex-wrap:wrap;gap:8px}
+@media(max-width:640px){.ui-grid{grid-template-columns:minmax(0,1fr)}.ui-profile{flex-wrap:wrap;padding:18px}.ui-tool-actions{width:100%;justify-content:flex-end}}
+@media(prefers-reduced-motion:reduce){.ui-item-card{transition:none}.ui-item-card:hover{transform:none}}
+
+/* Tool detail actions: compact, accessible SVG-only buttons. */
+.ui-tool-actions .ui-tool-action{display:inline-flex;align-items:center;justify-content:center;flex:0 0 40px;gap:0}
+.ui-tool-actions .ui-tool-action svg{display:block;width:21px;height:21px;flex:none}
+.ui-tool-actions .ui-tool-action:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* Primary actions retain a strong accent fill on hover, in both themes. */
+.ui-button--primary:not(:disabled):hover{background:color-mix(in srgb,var(--accent) 82%,#000 18%);border-color:color-mix(in srgb,var(--accent) 82%,#000 18%);color:#fff}
+.ui-button--primary:not(:disabled):active{background:color-mix(in srgb,var(--accent) 74%,#000 26%)}
+
+/* Modal secondary action: Cancel uses the outlined button treatment. */
+.ui-button--cancel{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+.ui-button--cancel:not(:disabled):hover{background:var(--hover);border-color:var(--accent);color:var(--accent)}
+
+/* Button keyboard focus: no border, ring, or outline; retain a subtle fill cue. */
+button:focus-visible,[role="button"]:focus-visible{outline:none!important;box-shadow:none!important}
+button:focus-visible:not(:disabled){filter:brightness(.9)}
+
+/* Compact metadata badges for Tools gallery cards. */
+.ui-tool-card-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+.ui-tool-card-badge{display:inline-flex;align-items:center;gap:5px;max-width:100%;padding:3px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface-raised);color:var(--content);font-size:10px;font-weight:600;line-height:1.4;overflow-wrap:anywhere}
+.ui-tool-card-badge-label{color:var(--muted);font-weight:500}
+
+/* Keep primary action buttons as saturated blue in dark mode, matching light mode. */
+:root[data-theme="dark"] .ui-button--primary,
+:root[data-theme="dark"] #githubToolRun{background:#356bd7;border-color:#356bd7;color:#fff}
+:root[data-theme="dark"] .ui-button--primary:not(:disabled):hover,
+:root[data-theme="dark"] #githubToolRun:not(:disabled):hover{background:#2858b6;border-color:#2858b6;color:#fff}
+:root[data-theme="dark"] .ui-button--primary:not(:disabled):active,
+:root[data-theme="dark"] #githubToolRun:not(:disabled):active{background:#214a9a;border-color:#214a9a}

@@ -84,11 +84,6 @@
     resize();
     prompt.focus();
   }
-  chatToggle?.addEventListener('click', () => {
-    const expanded = chatToggle.getAttribute('aria-expanded') !== 'true';
-    chatToggle.setAttribute('aria-expanded', String(expanded));
-    chatTabs.hidden = !expanded;
-  });
   let busy = false;
   let activeController = null;
   function scrollDown() { conversation.scrollTop = conversation.scrollHeight; }
@@ -156,7 +151,6 @@
   document.getElementById('newChat').addEventListener('click', createChat);
   saveChats();
   if (new URLSearchParams(location.search).has('new')) createChat(); else selectChat(currentChatId);
-  document.getElementById('mobileMenu').addEventListener('click', () => document.querySelector('.sidebar').classList.toggle('open'));
   document.querySelectorAll('[data-prompt]').forEach(button => button.addEventListener('click', () => {
     prompt.value = button.dataset.prompt;
     resize();
