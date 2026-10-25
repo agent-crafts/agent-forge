@@ -14,8 +14,8 @@
 | Current learning module | Not started |
 | Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation, generic/specialized repositories, unit of work, and initial Tool create/get/page application handlers added on feature branch (unverified); Tool update/deactivate and Project use cases pending |
 | Current mastery assessment | Not assessed |
-| Next recommended action | Verify build, migrations and integration tests for Tool create/get/page handlers; then add Tool update/deactivate and Project use cases |
-| Last progress review | 2026-10-25 (UI PR #16: component and Tools polish committed; Chromium smoke checks added; browser CI result pending) |
+| Next recommended action | Confirm latest PR #16 Chromium CI passes; expand Tools Add/Edit/Delete and Try Now browser coverage with test data; review accessibility/visual QA. Separately verify persistence migrations and integration tests |
+| Last progress review | 2026-10-25 (UI PR #16: component and Tools polish committed; Chromium smoke checks added; initial browser CI exposed launch-profile port mismatch, fixed in workflow; retest pending) |
 
 ## 2. Learning & engineering roadmap
 
