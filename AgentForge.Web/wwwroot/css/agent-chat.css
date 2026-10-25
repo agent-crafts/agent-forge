@@ -140,3 +140,6 @@
 .sidebar .side-footer{padding-top:12px}
 @media(max-width:850px){.sidebar{width:228px}}
 @media(max-width:640px){.sidebar{width:min(248px,85vw)}}
+
+.app-nav .side-link .sidebar-nav-icon{display:block;width:24px;height:24px;flex:0 0 24px;color:var(--accent);stroke-linecap:round;stroke-linejoin:round}
+.app-nav .side-link .sidebar-nav-label{display:inline;width:auto;height:auto;flex:1;margin:0;font:inherit;color:inherit;line-height:1.3}
