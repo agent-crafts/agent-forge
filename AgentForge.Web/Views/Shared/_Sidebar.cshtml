@@ -17,7 +17,7 @@
 <aside class="sidebar" id="workspaceSidebar">
     <a class="brand" href="/chat"><span class="brand-mark">✦</span><span>AgentForge <small>AGENT WORKSPACE</small></span></a>
     <div class="chat-sidebar-group">
-        <button type="button" class="chat-group-toggle" id="chatGroupToggle" aria-expanded="@(isChat ? "true" : "false")" aria-controls="chatTabs"><span>◈</span> Chat <span class="chat-chevron">⌄</span></button>
+        <button type="button" class="chat-group-toggle" id="chatGroupToggle" aria-expanded="@(isChat ? "true" : "false")" aria-controls="chatTabs"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 11a8 8 0 0 1-8 8 9 9 0 0 1-4-1l-6 3 2-6a8 8 0 1 1 16-4Z"/></svg> Chat <span class="chat-chevron">⌄</span></button>
         <div class="chat-tabs" id="chatTabs" hidden="@(!isChat)">
             <button class="chat-tab-new" id="newChat" type="button"><span>＋</span> New Chat</button>
             <div id="chatTabList" class="chat-tab-list" aria-label="Conversations">@if (!isChat) { <a class="chat-tab" href="/chat">Open conversations →</a> }</div>
