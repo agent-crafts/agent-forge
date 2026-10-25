@@ -158,11 +158,12 @@
     const message=typeof error==="string"?error:(error.detail||error.title||JSON.stringify(error.errors||error));
     throw new Error(message||"HTTP "+response.status);
    }
-   status.textContent="Tool saved successfully.";
+   window.AgentForgeToast?.afterNavigation({type:"success",title:editMode?"Tool updated successfully":"Tool created successfully",message:editMode?"Your changes have been saved.":"Your new tool is ready to use."});
    dialog.close();
    window.location.reload();
   }catch(error){
    status.textContent="Could not save tool: "+(error.message||"Unknown error");
+   window.AgentForgeToast?.show({type:"error",title:editMode?"Could not update tool":"Could not create tool",message:error.message||"Please try again."});
   }finally{saving=false;saveButton.disabled=false;saveButton.removeAttribute("aria-busy");saveButton.innerHTML=originalContent;}
  });
  update();schema();
