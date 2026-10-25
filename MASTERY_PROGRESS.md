@@ -17,7 +17,7 @@
 | Next recommended action | Confirm latest PR #16 Chromium CI passes; expand Tools Add/Edit/Delete and Try Now browser coverage with test data; review accessibility/visual QA. Separately verify persistence migrations and integration tests |
 | Last progress review | 2026-10-25 (UI PR #16: component and Tools polish committed; Chromium smoke checks added; initial browser CI exposed launch-profile port mismatch, fixed in workflow; retest pending) |
 
-**Agents Gallery design update (2026-10-25):** Option 6 (Modern Elevated) card markup committed on draft PR #19; compact icon/title grouping, subtle elevation, hover border/shadow, and up to three capability tags. Static preview only; build and browser verification pending. No mastery assessment evidence.\n\n## 2. Learning & engineering roadmap
+**Agents Gallery design update (2026-10-25):** Cards now reuse the Tools gallery's shared `ui-item-card`, `ui-icon-tile`, `ui-item-content`, and badge styles in a two-column grid on draft PR #19. Static preview only; build and browser verification pending. No mastery assessment evidence.\n\n## 2. Learning & engineering roadmap
 
 These phases are **provisional** until reconciled with the project's training materials and learning roadmaps.
 
