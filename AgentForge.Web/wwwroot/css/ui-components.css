@@ -248,3 +248,12 @@
   .ui-toolbar > .ui-select-wrap,
   .ui-toolbar > .ui-button { flex: 1 1 100%; }
 }
+
+
+/* Shared interaction and responsive states */
+.ui-button:not(:disabled):hover{background:var(--hover);border-color:var(--accent)}
+.ui-button:active:not(:disabled){transform:translateY(1px)}
+.ui-input:disabled,.ui-select:disabled{opacity:.65;cursor:not-allowed}
+.ui-tool-actions{display:flex;flex-wrap:wrap;gap:8px}
+@media(max-width:640px){.ui-grid{grid-template-columns:minmax(0,1fr)}.ui-profile{flex-wrap:wrap;padding:18px}.ui-tool-actions{width:100%;justify-content:flex-end}}
+@media(prefers-reduced-motion:reduce){.ui-item-card{transition:none}.ui-item-card:hover{transform:none}}
