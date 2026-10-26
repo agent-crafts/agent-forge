@@ -118,3 +118,5 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Scope:** Distinguish **planned**, **implemented**, **verified**, and **mastered**.
 - **Completion:** Summarize what changed and link the PR. If repository write access is unavailable, supply the exact proposed Markdown patch and state that it was not committed.
 - **Continuity:** Keep this file as the progress ledger; use the project's Mastery Framework and Roadmaps as the detailed curriculum, not duplicated here.
+
+**Agent creation form (2026-10-26):** Draft PR #20 adds `/agents/create` UI with identity, category, tags, system instructions, live preview, browser validation, and gallery entry. UI-only: no save endpoint or persistence; build/browser verification pending. Next action: inspect existing domain/persistence conventions, implement Agent aggregate + application create/get commands + API, then connect form and add tests. Knowledge: implementation patterns under review; Engineering: UI committed; Mastery: not assessed.
