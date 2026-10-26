@@ -507,7 +507,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 /* Shared Razor component visual states. Keep control appearance here, not in pages. */
 .ui-button{transition:background-color .15s,border-color .15s,color .15s,box-shadow .15s}
 .ui-button--primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.ui-button--secondary,.ui-button--outline{background:var(--surface-raised);border-color:var(--line-strong);color:var(--content)}
+.ui-button--secondary,.ui-button--outline{background:transparent;border-color:var(--line-strong);color:var(--content)}
 .ui-button--ghost{background:transparent;border-color:transparent;color:var(--content)}
 .ui-button--danger{background:#b91c1c;border-color:#b91c1c;color:#fff}
 .ui-button:not(:disabled):hover{filter:brightness(.94);border-color:var(--accent)}
@@ -555,3 +555,6 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .ds-cards>.ui-card{min-width:0}
 .ds-note{margin:14px 0 0}
 @media(max-width:680px){.ds-section{padding:16px}.ds-form-grid,.ds-cards{grid-template-columns:minmax(0,1fr)}.ds-wide{grid-column:auto}}
+
+/* Outline variants remain unfilled in every interaction state. */
+.ui-button--outline:not(:disabled):hover,.ui-button--outline:not(:disabled):active,.ui-button--outline:focus-visible,.ui-button--outlined:not(:disabled):hover,.ui-button--outlined:not(:disabled):active,.ui-button--outlined:focus-visible{background:transparent}
