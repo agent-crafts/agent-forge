@@ -18,6 +18,8 @@ For all engineering work: keep PRs small and reviewable, verify when tools permi
 
 ## Vertical-slice UI components (mandatory)
 
-Shared reusable controls use ASP.NET Core **ViewComponents with strongly typed models**. Co-locate C# implementation and model per slice at `AgentForge.Web/Features/Shared/Components/{ComponentName}/` (e.g., `ButtonViewComponent.cs`, `ButtonViewModel.cs`). Put Razor views at the framework-conventional `AgentForge.Web/Views/Shared/Components/{ComponentName}/Default.cshtml`.
+Shared reusable controls use ASP.NET Core **ViewComponents with strongly typed models**. Co-locate C# implementation and model per slice at `AgentForge.Web/Features/Shared/Components/{ComponentName}/` (e.g., `ButtonViewComponent.cs`, `ButtonViewModel.cs`). Put Razor views alongside C# files at `AgentForge.Web/Features/Shared/Components/{ComponentName}/Default.cshtml`. `Program.cs` registers the custom Razor view location.
 
 Feature-specific UI logic stays in its feature slice (e.g., `Features/Agents/CreateAgent/`), not in Shared. Do not add a global `ViewComponents/` or `Models/Components/` dumping ground. Use typed models, not `ViewDataDictionary`, for component contracts. Central CSS in `wwwroot/css/ui-components.css` owns visual states. Migrate existing flat `_Button.cshtml` etc. partials incrementally; do not treat them as the target architecture. Follow `docs/design-system.md` and verify builds/browser behavior before claiming migration complete.
+
+**Final folder rule:** Each component's `.cs`, ViewModel `.cs`, and `Default.cshtml` must be in the SAME `Features/Shared/Components/{Name}/` folder. No component Razor files under `Views/Shared/Components/` for new code. `Program.cs` configures `options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml")` to resolve ViewComponent view names. The Button slice is implemented as the first example; other flat partials still require migration.
