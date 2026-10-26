@@ -15,3 +15,6 @@ Read `MASTERY_PROGRESS.md` before starting work. Verify current repository, bran
 - Include design-system compliance and regression evidence in UI PR descriptions. If a new control is necessary, update design-system documentation with its API, states and usage example.
 
 For all engineering work: keep PRs small and reviewable, verify when tools permit, disclose what remains untested, and update `MASTERY_PROGRESS.md` after meaningful milestones. Backend persistence and UI design-system changes should be reviewed separately.
+
+## Razor component location (mandatory)
+Reusable UI markup belongs in `AgentForge.Web/Views/Shared/Components/`. Use the existing `_Button`, `_Input`, `_Select`, `_Textarea`, `_Field`, `_Modal`, `_Badge`, and `_Card` partials instead of duplicating markup. Invoke with `<partial name="~/Views/Shared/Components/_Button.cshtml" view-data="..." />` and supply component properties through `ViewDataDictionary`. Shared CSS in `wwwroot/css/ui-components.css` owns states. Do not create per-feature copies. Some components are foundational and require further adoption/verification before claiming migration complete.
