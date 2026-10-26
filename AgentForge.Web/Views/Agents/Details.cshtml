@@ -18,6 +18,7 @@
     <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Agent details sections">
         <button type="button" id="agentOverviewTab" role="tab" aria-controls="agentOverviewPanel" aria-selected="true" tabindex="0" class="border-b-2 border-accent px-5 py-3 text-sm font-semibold text-heading">Overview</button>
         <button type="button" id="agentInstructionsTab" role="tab" aria-controls="agentInstructionsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Instructions</button>
+        <button type="button" id="agentToolsTab" role="tab" aria-controls="agentToolsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Tools</button>
         <button type="button" id="agentCapabilitiesTab" role="tab" aria-controls="agentCapabilitiesPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Capabilities</button>
     </div>
     <div id="agentOverviewPanel" role="tabpanel" aria-labelledby="agentOverviewTab">
@@ -26,14 +27,15 @@
     <div id="agentInstructionsPanel" role="tabpanel" aria-labelledby="agentInstructionsTab" hidden>
         <partial name="_InstructionsTab" model="Model" />
     </div>
+    <div id="agentToolsPanel" role="tabpanel" aria-labelledby="agentToolsTab" hidden><partial name="_ToolsTab" model="Model" /></div>
     <div id="agentCapabilitiesPanel" role="tabpanel" aria-labelledby="agentCapabilitiesTab" hidden>
         <partial name="_CapabilitiesTab" model="Model" />
     </div>
 </div>
 <script>
 (() => {
-    const tabs = [document.getElementById('agentOverviewTab'), document.getElementById('agentInstructionsTab'), document.getElementById('agentCapabilitiesTab')];
-    const panels = [document.getElementById('agentOverviewPanel'), document.getElementById('agentInstructionsPanel'), document.getElementById('agentCapabilitiesPanel')];
+    const tabs = [document.getElementById('agentOverviewTab'), document.getElementById('agentInstructionsTab'), document.getElementById('agentToolsTab'), document.getElementById('agentCapabilitiesTab')];
+    const panels = [document.getElementById('agentOverviewPanel'), document.getElementById('agentInstructionsPanel'), document.getElementById('agentToolsPanel'), document.getElementById('agentCapabilitiesPanel')];
     tabs.forEach((tab, index) => {
         tab.addEventListener('click', () => {
             tabs.forEach((item, i) => {
