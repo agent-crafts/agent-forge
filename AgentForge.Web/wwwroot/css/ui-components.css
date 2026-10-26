@@ -352,7 +352,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 #agentInstructionsPanel .agent-instructions-badge::before{content:"";width:8px;height:8px;border:2px solid currentColor;border-radius:50%;opacity:.75}
 #agentInstructionsPanel .agent-instructions-body{padding-top:0}
 #agentInstructionsPanel .agent-instructions-body h3{font-size:16px;margin:0 0 6px}
-#agentInstructionsPanel .agent-instructions-body>.ui-subtitle{margin:0 0 18px;line-height:1.6}
+#agentInstructionsPanel .agent-instructions-body>.ui-subtitle{margin:0 0 16px;line-height:1.6}
 #agentInstructionsPanel .agent-prompt-preview{max-height:640px;padding:24px 28px;border-radius:12px;background:color-mix(in srgb,var(--surface-raised) 90%,var(--active) 10%);font-size:13px;line-height:1.85;white-space:normal}
 #agentInstructionsPanel .agent-prompt-preview p:first-child{font-weight:500;color:var(--heading)}
 #agentInstructionsPanel .agent-prompt-preview p:has(>strong){margin:22px 0 6px;color:var(--heading)}
@@ -367,7 +367,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 
 /* Match the Instructions card heading to the Overview card headings. */
 #agentInstructionsPanel .agent-instructions{padding:var(--panel-padding,20px)}
-#agentInstructionsPanel .agent-instructions>h2{margin:0 0 6px}
+#agentInstructionsPanel .agent-instructions>h2{margin:0 0 12px}
 
 /* Agent tools catalog (sample UI only). */
 .agent-tools{margin-top:16px}
