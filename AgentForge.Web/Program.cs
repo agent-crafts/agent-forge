@@ -3,7 +3,10 @@ using AgentForge.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorOptions(options =>
+{
+    options.ViewLocationFormats.Add("/Features/Shared/Components/{0}.cshtml");
+});
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddMediator(options =>
 {
