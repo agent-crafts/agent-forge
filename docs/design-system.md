@@ -87,7 +87,7 @@ DS-01 and DS-02 should precede broad Agent/Tools UI work. Backend Agent persiste
 
 ## Vertical-slice component architecture (target)
 
-The canonical implementation is a **typed ASP.NET Core ViewComponent**, with its C# code and ViewModel co-located by component slice. Razor views retain the ASP.NET Core discovery path:
+The canonical implementation is a **typed ASP.NET Core ViewComponent**, with its C# code and ViewModel co-located by component slice. Razor views are co-located using a custom Razor view location configured in `Program.cs`:
 
 ```text
 AgentForge.Web/
@@ -109,17 +109,8 @@ AgentForge.Web/
     Agents/
       CreateAgent/
         ...feature-specific behavior...
-  Views/
-    Shared/
-      Components/
-        Button/Default.cshtml
-        Input/Default.cshtml
-        Select/Default.cshtml
-        Textarea/Default.cshtml
-        FormField/Default.cshtml
-        Modal/Default.cshtml
-        Badge/Default.cshtml
-        Card/Default.cshtml
 ```
 
 Invoke via `@await Component.InvokeAsync("Button", new { model = new ButtonViewModel { Text = "Create Agent", Variant = "Primary" } })` (import the model namespace through `_ViewImports.cshtml` as appropriate). A component's model specifies options; its view renders markup; shared CSS owns hover/focus/invalid states. Do not place all models in one global folder. The current flat `Views/Shared/Components/_Button.cshtml`-style partials are **transitional**, not the intended architecture. Migration must replace usages and delete obsolete partials only after checking references. Feature-specific components stay inside their feature slice.
+
+**Final folder rule:** Each component's `.cs`, ViewModel `.cs`, and `Default.cshtml` must be in the SAME `Features/Shared/Components/{Name}/` folder. No component Razor files under `Views/Shared/Components/` for new code. `Program.cs` configures `options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml")` to resolve ViewComponent view names. The Button slice is implemented as the first example; other flat partials still require migration.
