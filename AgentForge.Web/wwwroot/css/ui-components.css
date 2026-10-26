@@ -324,3 +324,20 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .agent-info-list dd{margin:0;color:var(--heading);font-weight:600;text-align:right;overflow-wrap:anywhere}
 @media(max-width:1050px){.agent-overview-layout{grid-template-columns:1fr}}
 @media(max-width:540px){.agent-capability-grid{grid-template-columns:1fr}}
+
+/* Agent Instructions: one readable system prompt panel. */
+.agent-instructions{margin-top:16px}
+.agent-instructions-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.agent-instructions-heading .ui-subtitle{margin-bottom:0}
+.agent-instructions-badge{flex:none;display:inline-flex;align-items:center;padding:7px 12px;border-radius:10px;background:var(--active);color:var(--accent);font-size:12px;font-weight:600}
+.agent-instructions-body{padding-top:20px;min-width:0}
+.agent-instructions-body h3{margin:0 0 6px;color:var(--heading);font-size:17px;font-weight:700}
+.agent-instructions-body>.ui-subtitle{margin-bottom:16px}
+.agent-prompt-preview{max-height:680px;overflow:auto;padding:20px 24px;border:1px solid var(--line);border-radius:12px;background:var(--surface-raised);color:var(--content);font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;font-size:13px;line-height:1.75;overflow-wrap:anywhere}
+.agent-prompt-preview p{margin:0 0 14px}
+.agent-prompt-preview p:last-child{margin-bottom:0}
+.agent-prompt-preview ul{margin:0 0 18px;padding-left:24px}
+.agent-prompt-preview li{margin:3px 0}
+.agent-prompt-preview:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.agent-instructions-disclaimer{margin:12px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+@media(max-width:540px){.agent-instructions-heading{flex-wrap:wrap}.agent-prompt-preview{padding:16px;font-size:12px}}
