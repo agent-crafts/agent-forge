@@ -21,7 +21,6 @@
         <button type="button" id="agentToolsTab" role="tab" aria-controls="agentToolsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Tools</button>
         <button type="button" id="agentSkillsTab" role="tab" aria-controls="agentSkillsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Skills</button>
         <button type="button" id="agentKnowledgeTab" role="tab" aria-controls="agentKnowledgePanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Knowledge</button>
-        <button type="button" id="agentCapabilitiesTab" role="tab" aria-controls="agentCapabilitiesPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Capabilities</button>
         <button type="button" id="agentPlaygroundTab" role="tab" aria-controls="agentPlaygroundPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Playground</button>
         <button type="button" id="agentRunsTab" role="tab" aria-controls="agentRunsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Runs</button>
         <button type="button" id="agentSettingsTab" role="tab" aria-controls="agentSettingsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Settings</button>
@@ -38,14 +37,12 @@
     <div id="agentPlaygroundPanel" role="tabpanel" aria-labelledby="agentPlaygroundTab" hidden><partial name="_PlaygroundTab" model="Model" /></div>
     <div id="agentRunsPanel" role="tabpanel" aria-labelledby="agentRunsTab" hidden><partial name="_RunsTab" model="Model" /></div>
     <div id="agentSettingsPanel" role="tabpanel" aria-labelledby="agentSettingsTab" hidden><partial name="_SettingsTab" model="Model" /></div>
-    <div id="agentCapabilitiesPanel" role="tabpanel" aria-labelledby="agentCapabilitiesTab" hidden>
-        <partial name="_CapabilitiesTab" model="Model" />
     </div>
 </div>
 <script>
 (() => {
-    const tabs = [document.getElementById('agentOverviewTab'), document.getElementById('agentInstructionsTab'), document.getElementById('agentToolsTab'), document.getElementById('agentSkillsTab'), document.getElementById('agentKnowledgeTab'), document.getElementById('agentCapabilitiesTab'), document.getElementById('agentPlaygroundTab'), document.getElementById('agentRunsTab'), document.getElementById('agentSettingsTab')];
-    const panels = [document.getElementById('agentOverviewPanel'), document.getElementById('agentInstructionsPanel'), document.getElementById('agentToolsPanel'), document.getElementById('agentSkillsPanel'), document.getElementById('agentKnowledgePanel'), document.getElementById('agentCapabilitiesPanel'), document.getElementById('agentPlaygroundPanel'), document.getElementById('agentRunsPanel'), document.getElementById('agentSettingsPanel')];
+    const tabs = [document.getElementById('agentOverviewTab'), document.getElementById('agentInstructionsTab'), document.getElementById('agentToolsTab'), document.getElementById('agentSkillsTab'), document.getElementById('agentKnowledgeTab'), document.getElementById('agentPlaygroundTab'), document.getElementById('agentRunsTab'), document.getElementById('agentSettingsTab')];
+    const panels = [document.getElementById('agentOverviewPanel'), document.getElementById('agentInstructionsPanel'), document.getElementById('agentToolsPanel'), document.getElementById('agentSkillsPanel'), document.getElementById('agentKnowledgePanel'), document.getElementById('agentPlaygroundPanel'), document.getElementById('agentRunsPanel'), document.getElementById('agentSettingsPanel')];
     tabs.forEach((tab, index) => {
         tab.addEventListener('click', () => {
             tabs.forEach((item, i) => {
