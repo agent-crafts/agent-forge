@@ -1,5 +1,0 @@
-@{ var id = ViewData["Id"] as string ?? ""; var title = ViewData["Title"] as string ?? ""; var description = ViewData["Description"] as string ?? ""; }
-<dialog id="@id" class="ui-dialog" aria-label="@title" aria-description="@description">
-  <header class="ui-dialog-header"><h2>@title</h2><p>@description</p></header>
-  <div class="ui-dialog-body"><!-- Render feature-specific content in a dedicated dialog partial. --></div>
-</dialog>
