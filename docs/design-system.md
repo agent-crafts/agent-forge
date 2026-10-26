@@ -84,3 +84,6 @@ Example (target API, **not yet guaranteed implemented**):
 
 ## Dependency and PR boundaries
 DS-01 and DS-02 should precede broad Agent/Tools UI work. Backend Agent persistence is independent and should remain a separate PR. Prefer one focused PR per milestone; link follow-up PRs here as completed. Do not claim these milestones implemented until code and verification evidence exist.
+
+## Concrete Razor component location
+Reusable Razor partials live under `AgentForge.Web/Views/Shared/Components/`: `_Button.cshtml`, `_Input.cshtml`, `_Select.cshtml`, `_Textarea.cshtml`, `_Field.cshtml`, `_Modal.cshtml`, `_Badge.cshtml`, `_Card.cshtml`. Consumers pass options via `ViewDataDictionary` using `<partial name="~/Views/Shared/Components/_Button.cshtml" view-data="..." />`. Button options: `Id`, `Label`, `Variant`, `Type`, `Hidden`. Field options: `Id`, `Label`, `Hint`, `Required`, `Control`; control-specific options include `Name`, `Placeholder`, `Rows`, `MaxLength`, and `Options` (`IEnumerable<SelectListItem>`). Component CSS is centralized in `wwwroot/css/ui-components.css`. These are initial primitives, not a completed accessibility or browser verification milestone. The modal/gallery/form migration remains incremental.
