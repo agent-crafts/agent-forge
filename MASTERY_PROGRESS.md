@@ -118,3 +118,5 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Scope:** Distinguish **planned**, **implemented**, **verified**, and **mastered**.
 - **Completion:** Summarize what changed and link the PR. If repository write access is unavailable, supply the exact proposed Markdown patch and state that it was not committed.
 - **Continuity:** Keep this file as the progress ledger; use the project's Mastery Framework and Roadmaps as the detailed curriculum, not duplicated here.
+
+**Shared UI Design System plan (2026-10-26):** Documented DS-01–DS-06 implementation sequence in `docs/design-system.md` and mandatory guidance for future coding agents in root `AGENTS.md`. Identified mixed `.ui-button`/Tailwind styling and missing canonical hover variants. Documentation committed; design-system controls and migrations are **not implemented**. Knowledge: design contract documented; Engineering: planning only; Mastery: not assessed. Next: DS-01 audit followed by DS-02 button variants and Agent modal/gallery migration with browser verification.
