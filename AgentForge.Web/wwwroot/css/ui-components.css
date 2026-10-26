@@ -306,3 +306,21 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .ui-detail [aria-label="Agent details sections"] button[role="tab"]{min-height:44px;padding:12px 4px 11px;border:0;border-bottom:3px solid transparent;border-radius:0;background:transparent;color:var(--muted);font-size:14px;font-weight:600;cursor:pointer}
 .ui-detail [aria-label="Agent details sections"] button[role="tab"][aria-selected="true"]{border-bottom-color:var(--accent);color:var(--heading)}
 .ui-detail [aria-label="Agent details sections"] button[role="tab"]:hover{color:var(--heading)}
+
+.agent-overview-layout{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(260px,1fr);gap:16px;margin-top:16px;align-items:start}
+.agent-feature-list{padding-left:22px;margin:0;display:grid;gap:8px;font-size:13px;color:var(--content)}
+.agent-feature-list li::marker{color:var(--accent)}
+.agent-capability-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.agent-capability-card{display:flex;gap:12px;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--surface-raised)}
+.agent-capability-card strong{display:block;font-size:13px;color:var(--heading)}
+.agent-capability-card p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+.agent-capability-symbol{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:9px;background:var(--active);color:var(--accent)}
+.agent-use-cases{margin:0;padding-left:22px;display:grid;gap:12px;font-size:13px;color:var(--content)}
+.agent-use-cases li::marker{color:var(--accent);font-weight:700}
+.agent-info-list{display:grid;margin:0}
+.agent-info-list div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:12px}
+.agent-info-list div:last-child{border-bottom:0}
+.agent-info-list dt{color:var(--muted)}
+.agent-info-list dd{margin:0;color:var(--heading);font-weight:600;text-align:right;overflow-wrap:anywhere}
+@media(max-width:1050px){.agent-overview-layout{grid-template-columns:1fr}}
+@media(max-width:540px){.agent-capability-grid{grid-template-columns:1fr}}
