@@ -398,3 +398,46 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .agent-tool-toggle input:focus-visible+span{outline:2px solid var(--accent);outline-offset:3px}
 .agent-tools-empty{padding:30px;text-align:center;color:var(--muted);font-size:13px}
 @media(max-width:900px){.agent-tools-list{grid-template-columns:1fr}}@media(max-width:640px){.agent-tools-controls,.agent-tools-search,.agent-tools-search input{width:100%}.agent-tools-controls select{flex:1}.agent-tool-row{flex-wrap:nowrap}.agent-tool-description{flex-basis:auto}}
+
+/* Agent-owned Skills workspace: preview UI, aligned with the Tools gallery. */
+.agent-skills{margin-top:16px}
+.agent-skills-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.agent-skills-heading h2{margin:0 0 12px}
+.agent-skills-heading .ui-subtitle{margin:0}
+.agent-skills-primary{background:var(--accent);color:white;border:1px solid var(--accent);padding:9px 15px;border-radius:9px;cursor:pointer}
+.agent-skills-controls{display:flex;gap:12px;margin:20px 0 16px}
+.agent-skills-controls input,.agent-skills-controls select,.agent-skills-dialog input,.agent-skills-dialog textarea{padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--content);font:inherit}
+.agent-skills-controls input{flex:1;min-width:0}
+.agent-skills-controls select{min-width:170px}
+.agent-skills-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.agent-skill-card{display:flex;gap:12px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);min-width:0}
+.agent-skill-icon{flex:none}
+.agent-skill-content{flex:1;min-width:0}
+.agent-skill-content h3{font-size:14px;color:var(--heading);margin:0 0 5px;font-weight:700}
+.agent-skill-content p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 12px}
+.agent-skill-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.agent-skill-edit{background:transparent;border:1px solid var(--line);border-radius:8px;color:var(--accent);font-size:12px;padding:7px 10px;cursor:pointer}
+.agent-skills-empty{padding:24px;color:var(--muted);text-align:center}
+.agent-skills-empty[hidden],.agent-skills-choices[hidden],.agent-skills-dialog form[hidden],.agent-skills-dialog [hidden]{display:none!important}
+.agent-skills-dialog{width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 50px);overflow:auto;padding:24px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--content);box-shadow:0 18px 55px #0003}
+.agent-skills-dialog::backdrop{background:#0007}
+.agent-skills-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.agent-skills-dialog-heading h2{margin:0;font-size:20px}
+.agent-skills-close{background:transparent;border:0;color:var(--muted);font-size:26px;cursor:pointer}
+.agent-skills-choices{display:grid;gap:12px}
+.agent-skills-choices>button{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;padding:16px;border:1px solid var(--line);border-radius:12px;background:transparent;color:var(--content);cursor:pointer}
+.agent-skills-choices>button:hover{border-color:var(--accent)}
+.agent-skills-choices>button span,.agent-skills-note{font-size:12px;color:var(--muted)}
+.agent-skills-dialog form,.agent-skills-dialog form>label,.agent-skills-dialog form [data-skill-github],.agent-skills-dialog form [data-skill-github] label{display:grid;gap:9px}
+.agent-skills-dialog form{gap:15px}
+.agent-skills-dialog label{font-size:13px;font-weight:600}
+.agent-skills-dialog textarea{width:100%;box-sizing:border-box;resize:vertical}
+.agent-skills-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
+.agent-skills-editor{width:min(1000px,calc(100vw - 32px))}
+.agent-skills-editor-layout{display:grid;grid-template-columns:190px minmax(0,1fr);gap:18px;margin-top:18px}
+.agent-skills-editor-layout aside{display:flex;flex-direction:column;gap:12px;border-right:1px solid var(--line);font-size:13px;color:var(--muted);padding-right:16px}
+.agent-skills-editor-layout aside strong{color:var(--heading)}
+.agent-skills-editor-layout>div{min-width:0}
+.agent-skills-editor-layout textarea{display:block;margin-top:8px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:1.6}
+@media(max-width:900px){.agent-skills-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.agent-skills-controls{flex-direction:column}.agent-skills-controls select{width:100%}.agent-skills-editor-layout{grid-template-columns:1fr}.agent-skills-editor-layout aside{border-right:0;border-bottom:1px solid var(--line);padding-bottom:12px}}
