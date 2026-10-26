@@ -20,85 +20,10 @@
         <button type="button" id="agentCapabilitiesTab" role="tab" aria-controls="agentCapabilitiesPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Capabilities</button>
     </div>
     <div id="agentOverviewPanel" role="tabpanel" aria-labelledby="agentOverviewTab">
-        <div class="agent-overview-layout">
-            <div class="ui-stack">
-                <section class="ui-panel">
-                    <h2><span class="ui-panel-icon" aria-hidden="true">✦</span> About this agent</h2>
-                    <p>@Model.Description</p>
-                    <div class="ui-note">
-                        <strong>Key features</strong>
-                        <ul class="agent-feature-list">
-                            @foreach (var capability in Model.Tags)
-                            {
-                                <li>@capability</li>
-                            }
-                        </ul>
-                    </div>
-                </section>
-                <section class="ui-panel">
-                    <h2><span class="ui-panel-icon" aria-hidden="true">✧</span> Capabilities</h2>
-                    <div class="agent-capability-grid">
-                        @foreach (var capability in Model.Tags)
-                        {
-                            <div class="agent-capability-card">
-                                <span class="agent-capability-symbol" aria-hidden="true">✦</span>
-                                <div><strong>@capability</strong><p>Part of this agent's sample capabilities.</p></div>
-                            </div>
-                        }
-                    </div>
-                </section>
-                <section class="ui-panel">
-                    <h2><span class="ui-panel-icon" aria-hidden="true">☑</span> Typical use cases</h2>
-                    <ol class="agent-use-cases">
-                        @foreach (var capability in Model.Tags)
-                        {
-                            <li>Tasks involving @capability.ToLowerInvariant()</li>
-                        }
-                    </ol>
-                </section>
-            </div>
-            <div class="ui-stack">
-                <section class="ui-panel">
-                    <h2><span class="ui-panel-icon" aria-hidden="true">☷</span> Agent information</h2>
-                    <dl class="agent-info-list">
-                        <div><dt>Category</dt><dd>@Model.Category</dd></div>
-                        <div><dt>Type</dt><dd>Sample agent</dd></div>
-                        <div><dt>Agent ID</dt><dd>@Model.Id</dd></div>
-                        <div><dt>Execution</dt><dd>Not available</dd></div>
-                    </dl>
-                </section>
-                <section class="ui-panel">
-                    <h2><span class="ui-panel-icon" aria-hidden="true">⌗</span> Tags</h2>
-                    <div class="ui-tags">
-                        <span>@Model.Category</span>
-                        @foreach (var tag in Model.Tags)
-                        {
-                            <span>@tag</span>
-                        }
-                    </div>
-                </section>
-                <section class="ui-panel">
-                    <h2><span class="ui-panel-icon" aria-hidden="true">ⓘ</span> Preview status</h2>
-                    <p>This is a static sample agent. Model configuration, connected tools, execution history, and runtime settings are not available yet.</p>
-                </section>
-            </div>
-        </div>
+        <partial name="_OverviewTab" model="Model" />
     </div>
     <div id="agentCapabilitiesPanel" role="tabpanel" aria-labelledby="agentCapabilitiesTab" hidden>
-        <div class="ui-columns">
-            <div class="ui-stack">
-                <section class="ui-panel">
-                    <h2>Capabilities</h2>
-                    <p class="ui-subtitle">Capabilities shown in this preview.</p>
-                    <div class="ui-tags">
-                        @foreach (var tag in Model.Tags)
-                        {
-                            <span>@tag</span>
-                        }
-                    </div>
-                </section>
-            </div>
-        </div>
+        <partial name="_CapabilitiesTab" model="Model" />
     </div>
 </div>
 <script>
