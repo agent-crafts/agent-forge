@@ -1,0 +1,6 @@
+@model AgentForge.Web.Components.Button.ButtonViewModel
+@{
+    var variant = Model.Variant is "primary" or "secondary" or "outline" or "ghost" or "danger" ? Model.Variant : "secondary";
+    var type = Model.Type is "submit" or "reset" ? Model.Type : "button";
+}
+<button id="@Model.Id" type="@type" class="ui-button ui-button--@variant" disabled="@Model.Disabled" hidden="@Model.Hidden">@Model.Text</button>
