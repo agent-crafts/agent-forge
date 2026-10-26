@@ -44,8 +44,7 @@
                         default: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 10h16"/></svg> break;
                     }
                 </span>
-                <div class="agent-tool-description ui-item-content flex min-w-0 flex-1 flex-col gap-0.5"><h3 class="ui-item-title break-words text-sm font-semibold text-heading">@tool.Name</h3><p class="ui-item-description break-words text-xs leading-5 text-muted">@tool.Description</p></div>
-                <span class="agent-tool-category">@tool.Category</span>
+                <div class="agent-tool-description ui-item-content flex min-w-0 flex-1 flex-col gap-0.5"><h3 class="ui-item-title break-words text-sm font-semibold text-heading">@tool.Name</h3><p class="ui-item-description break-words text-xs leading-5 text-muted">@tool.Description</p><span class="ui-tool-card-badges" aria-label="Tool category"><span class="ui-tool-card-badge"><span class="ui-tool-card-badge-label">Category</span> @tool.Category</span></span></div>
                 <label class="agent-tool-toggle"><input type="checkbox" aria-label="Enable @tool.Name (local preview only)" checked="@(tool.Name != "Docker")" /><span aria-hidden="true"></span></label>
             </article>
         }
