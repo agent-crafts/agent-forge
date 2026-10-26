@@ -499,3 +499,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .agent-dialog-review dd{font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
 .agent-dialog-feedback{padding:0 32px 20px;color:var(--muted);font-size:12px}
 @media(max-width:600px){.agent-dialog-header,.agent-dialog-body,.agent-dialog-footer{padding-left:18px;padding-right:18px}.agent-dialog-steps{padding-left:18px;padding-right:18px;gap:8px}.agent-dialog-step{font-size:11px;gap:5px}.agent-dialog-step b{width:23px;height:23px}.agent-dialog-review dl div{grid-template-columns:100px 1fr}}
+
+.agent-dialog .is-invalid{border-color:#dc2626!important;outline-color:#dc2626}
+.agent-dialog .agent-field-error{color:#dc2626;font-size:12px}
+.agent-dialog .agent-field-error[hidden]{display:none}
