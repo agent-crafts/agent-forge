@@ -341,3 +341,26 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .agent-prompt-preview:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .agent-instructions-disclaimer{margin:12px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
 @media(max-width:540px){.agent-instructions-heading{flex-wrap:wrap}.agent-prompt-preview{padding:16px;font-size:12px}}
+
+/* Refined Instructions tab: clear hierarchy and comfortable prompt reading. */
+#agentInstructionsPanel .agent-instructions{padding:24px;border-radius:16px}
+#agentInstructionsPanel .agent-instructions-heading{align-items:center;padding-bottom:22px}
+#agentInstructionsPanel .agent-instructions-heading h2{display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:20px;line-height:1.35}
+#agentInstructionsPanel .agent-instructions-heading .ui-panel-icon{flex:none}
+#agentInstructionsPanel .agent-instructions-heading .ui-subtitle{margin:0;font-size:13px;line-height:1.6}
+#agentInstructionsPanel .agent-instructions-badge{gap:7px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;white-space:nowrap}
+#agentInstructionsPanel .agent-instructions-badge::before{content:"";width:8px;height:8px;border:2px solid currentColor;border-radius:50%;opacity:.75}
+#agentInstructionsPanel .agent-instructions-body{padding-top:24px}
+#agentInstructionsPanel .agent-instructions-body h3{font-size:16px;margin:0 0 6px}
+#agentInstructionsPanel .agent-instructions-body>.ui-subtitle{margin:0 0 18px;line-height:1.6}
+#agentInstructionsPanel .agent-prompt-preview{max-height:640px;padding:24px 28px;border-radius:12px;background:color-mix(in srgb,var(--surface-raised) 90%,var(--active) 10%);font-size:13px;line-height:1.85;white-space:normal}
+#agentInstructionsPanel .agent-prompt-preview p:first-child{font-weight:500;color:var(--heading)}
+#agentInstructionsPanel .agent-prompt-preview p:has(>strong){margin:22px 0 6px;color:var(--heading)}
+#agentInstructionsPanel .agent-prompt-preview p:has(>strong):first-of-type{margin-top:0}
+#agentInstructionsPanel .agent-prompt-preview strong{font-weight:700}
+#agentInstructionsPanel .agent-prompt-preview ul{margin:0 0 12px;padding-left:22px}
+#agentInstructionsPanel .agent-prompt-preview li{padding-left:3px;margin:4px 0}
+#agentInstructionsPanel .agent-prompt-preview li::marker{color:var(--accent)}
+#agentInstructionsPanel .agent-instructions-disclaimer{display:flex;align-items:flex-start;gap:8px;margin-top:14px;line-height:1.65}
+#agentInstructionsPanel .agent-instructions-disclaimer::before{content:"ⓘ";color:var(--accent);font-size:14px;line-height:1.4}
+@media(max-width:640px){#agentInstructionsPanel .agent-instructions{padding:16px}#agentInstructionsPanel .agent-instructions-heading{align-items:flex-start;gap:10px}#agentInstructionsPanel .agent-prompt-preview{padding:16px;font-size:12px;max-height:540px}}
