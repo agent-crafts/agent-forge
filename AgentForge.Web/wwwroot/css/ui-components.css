@@ -364,3 +364,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 #agentInstructionsPanel .agent-instructions-disclaimer{display:flex;align-items:flex-start;gap:8px;margin-top:14px;line-height:1.65}
 #agentInstructionsPanel .agent-instructions-disclaimer::before{content:"ⓘ";color:var(--accent);font-size:14px;line-height:1.4}
 @media(max-width:640px){#agentInstructionsPanel .agent-instructions{padding:16px}#agentInstructionsPanel .agent-instructions-heading{align-items:flex-start;gap:10px}#agentInstructionsPanel .agent-prompt-preview{padding:16px;font-size:12px;max-height:540px}}
+
+/* Match the Instructions card heading to the Overview card headings. */
+#agentInstructionsPanel .agent-instructions{padding:var(--panel-padding,20px)}
+#agentInstructionsPanel .agent-instructions>h2{margin:0 0 16px}
