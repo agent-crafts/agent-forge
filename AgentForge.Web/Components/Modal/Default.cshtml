@@ -1,7 +1,28 @@
-@{ var id = ViewData["Id"] as string ?? ""; var title = ViewData["Title"] as string ?? ""; var description = ViewData["Description"] as string ?? ""; }
-<dialog id="@id" class="ui-dialog" aria-labelledby="@(id)-title" aria-describedby="@(id)-description">
-  <header class="ui-dialog-header"><h2 id="@(id)-title">@title</h2><p id="@(id)-description">@description</p></header>
-  <div class="ui-dialog-body"><p>Use the shared modal shell for consistent dialog presentation.</p>
-    <form method="dialog"><button type="submit" class="ui-button ui-button--secondary">Close</button></form>
-  </div>
+@model AgentForge.Web.Components.Modal.ModalViewModel
+@{
+    var confirm = Model.Variant == "confirm";
+    var titleId = $"{Model.Id}-title";
+    var descriptionId = $"{Model.Id}-description";
+}
+<dialog id="@Model.Id" class="ui-dialog ui-dialog--@(confirm ? "confirm" : "standard")" aria-labelledby="@titleId" aria-describedby="@descriptionId">
+    <div class="ui-dialog-layout">
+        <header class="ui-dialog-header">
+            <div>
+                <h2 id="@titleId">@Model.Title</h2>
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <p id="@descriptionId">@Model.Description</p>
+                }
+            </div>
+            <form method="dialog"><button type="submit" class="ui-dialog-close" aria-label="Close dialog">×</button></form>
+        </header>
+        @if (!string.IsNullOrWhiteSpace(Model.BodyText))
+        {
+            <div class="ui-dialog-body"><p>@Model.BodyText</p></div>
+        }
+        <footer class="ui-dialog-footer">
+            <form method="dialog"><button type="submit" class="ui-button ui-button--secondary">@Model.CancelText</button></form>
+            <button type="button" id="@Model.PrimaryButtonId" class="ui-button ui-button--@(confirm ? "danger" : "primary")">@Model.PrimaryText</button>
+        </footer>
+    </div>
 </dialog>
