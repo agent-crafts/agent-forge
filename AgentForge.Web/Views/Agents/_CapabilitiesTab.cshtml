@@ -1,0 +1,16 @@
+@model AgentForge.Web.Controllers.AgentsController.AgentCard
+<div class="ui-columns">
+        <div class="ui-stack">
+            <section class="ui-panel">
+                <h2>Capabilities</h2>
+                <p class="ui-subtitle">Capabilities shown in this preview.</p>
+                <div class="ui-tags">
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <span>@tag</span>
+                    }
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
