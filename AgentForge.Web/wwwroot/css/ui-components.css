@@ -441,3 +441,11 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .agent-skills-editor-layout textarea{display:block;margin-top:8px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:1.6}
 @media(max-width:900px){.agent-skills-grid{grid-template-columns:1fr}}
 @media(max-width:640px){.agent-skills-controls{flex-direction:column}.agent-skills-controls select{width:100%}.agent-skills-editor-layout{grid-template-columns:1fr}.agent-skills-editor-layout aside{border-right:0;border-bottom:1px solid var(--line);padding-bottom:12px}}
+
+/* Planned agent detail tabs. */
+.agent-coming-soon{margin-top:16px}
+.agent-coming-soon>h2{margin:0 0 16px}
+.agent-coming-soon-content{padding:42px 18px;text-align:center;border:1px dashed var(--line);border-radius:12px}
+.agent-coming-soon-label{display:inline-block;padding:7px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;font-weight:600}
+.agent-coming-soon-content>p{margin:14px 0 0;color:var(--content);font-size:14px}
+.agent-coming-soon-content>.ui-subtitle{color:var(--muted);font-size:12px}
