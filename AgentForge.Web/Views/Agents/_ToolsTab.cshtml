@@ -21,13 +21,6 @@
         </div>
     </div>
     <p class="ui-subtitle">Choose which tools this agent may use. These are sample tools; selections are not saved or connected to a runtime.</p>
-    <div class="agent-tools-filters" role="group" aria-label="Tool category filters">
-        <button type="button" class="is-active" data-agent-tool-filter="" aria-pressed="true">All (@tools.Length)</button>
-        @foreach (var category in tools.GroupBy(tool => tool.Category))
-        {
-            <button type="button" data-agent-tool-filter="@category.Key" aria-pressed="false">@category.Key (@category.Count())</button>
-        }
-    </div>
     <div class="agent-tools-list ui-grid grid grid-cols-1 gap-3 lg:grid-cols-2">
         @foreach (var tool in tools)
         {
@@ -57,7 +50,6 @@
     if (!panel) return;
     const search = panel.querySelector('[data-agent-tool-search]');
     const select = panel.querySelector('[data-agent-tool-category]');
-    const buttons = [...panel.querySelectorAll('[data-agent-tool-filter]')];
     const rows = [...panel.querySelectorAll('[data-agent-tool-row]')];
     const empty = panel.querySelector('[data-agent-tool-empty]');
     function filter() {
@@ -70,14 +62,8 @@
             if (visible) count++;
         });
         empty.hidden = count !== 0;
-        buttons.forEach(button => {
-            const active = button.dataset.agentToolFilter === category;
-            button.classList.toggle('is-active', active);
-            button.setAttribute('aria-pressed', String(active));
-        });
     }
     search.addEventListener('input', filter);
     select.addEventListener('change', filter);
-    buttons.forEach(button => button.addEventListener('click', () => { select.value = button.dataset.agentToolFilter; filter(); }));
 })();
 </script>
