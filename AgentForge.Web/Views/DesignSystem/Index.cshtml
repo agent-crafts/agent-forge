@@ -1,0 +1,96 @@
+@using AgentForge.Web.Components.Button
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    Layout = "_AppLayout";
+    ViewData["Title"] = "Design System";
+    var categories = new List<SelectListItem>
+    {
+        new("Select a category", "", false, true),
+        new("Development", "development"),
+        new("Quality", "quality"),
+        new("Operations", "operations")
+    };
+}
+<div class="ds-showcase">
+    <header class="ds-header">
+        <p class="ds-eyebrow">AgentForge / UI foundation</p>
+        <h1>Design System</h1>
+        <p>Live component examples and interaction states. Shared component sources live in <code>AgentForge.Web/Components/</code>.</p>
+    </header>
+
+    <nav class="ds-nav" aria-label="Component sections">
+        <a href="#buttons">Buttons</a><a href="#inputs">Inputs</a><a href="#fields">Form fields</a><a href="#modal">Modal</a><a href="#badges">Badges</a><a href="#cards">Cards</a>
+    </nav>
+
+    <section class="ds-section" id="buttons">
+        <div class="ds-section-heading"><h2>Buttons</h2><p>Hover, focus, active, disabled, and semantic variants.</p></div>
+        <div class="ds-preview">
+            @foreach (var variant in new[] { "primary", "secondary", "outline", "ghost", "danger" })
+            {
+                @await Component.InvokeAsync("Button", new { model = new ButtonViewModel { Text = char.ToUpperInvariant(variant[0]) + variant[1..], Variant = variant } })
+            }
+            @await Component.InvokeAsync("Button", new { model = new ButtonViewModel { Text = "Disabled", Variant = "primary", Disabled = true } })
+        </div>
+        <p class="ds-note">Tab through the buttons to inspect keyboard focus; hover and press to compare states.</p>
+    </section>
+
+    <section class="ds-section" id="inputs">
+        <div class="ds-section-heading"><h2>Inputs, select &amp; textarea</h2><p>Shared primitives with labels and placeholders.</p></div>
+        <div class="ds-form-grid">
+            <div><label class="ui-field-label" for="dsName">Text input</label><partial name="~/Components/Input/Default.cshtml" view-data='new ViewDataDictionary(ViewData) { ["Id"] = "dsName", ["Name"] = "name", ["Placeholder"] = "Enter a name" }' /></div>
+            <div><label class="ui-field-label" for="dsCategory">Select</label><partial name="~/Components/Select/Default.cshtml" view-data='new ViewDataDictionary(ViewData) { ["Id"] = "dsCategory", ["Name"] = "category", ["Options"] = categories }' /></div>
+            <div class="ds-wide"><label class="ui-field-label" for="dsDescription">Textarea</label><partial name="~/Components/Textarea/Default.cshtml" view-data='new ViewDataDictionary(ViewData) { ["Id"] = "dsDescription", ["Name"] = "description", ["Rows"] = 3, ["Placeholder"] = "Describe your agent..." }' /></div>
+            <div><label class="ui-field-label" for="dsDisabled">Disabled input</label><input class="ui-input" id="dsDisabled" value="Not editable" disabled /></div>
+            <div><label class="ui-field-label" for="dsReadonly">Read-only input</label><input class="ui-input" id="dsReadonly" value="Read-only value" readonly /></div>
+        </div>
+    </section>
+
+    <section class="ds-section" id="fields">
+        <div class="ds-section-heading"><h2>Form fields &amp; validation</h2><p>Required fields, hint text, and accessible errors.</p></div>
+        <div class="ds-form-grid">
+            <partial name="~/Components/Field/Default.cshtml" view-data='new ViewDataDictionary(ViewData) { ["Id"] = "dsRequired", ["Label"] = "Agent name", ["Name"] = "agentName", ["Hint"] = "Give the agent a recognizable name.", ["Required"] = true, ["Placeholder"] = "e.g. Review Agent" }' />
+            <div class="ui-field"><label class="ui-field-label" for="dsInvalid">Invalid state <span aria-hidden="true">*</span></label><input class="ui-input" id="dsInvalid" aria-invalid="true" aria-describedby="dsInvalidError" value="!" /><small class="ui-field-error" id="dsInvalidError">Enter a valid name.</small></div>
+        </div>
+    </section>
+
+    <section class="ds-section" id="modal">
+        <div class="ds-section-heading"><h2>Modal</h2><p>Native dialog, backdrop, Escape key, and focus behavior.</p></div>
+        <div class="ds-preview">
+            <button type="button" class="ui-button ui-button--primary" id="dsOpenModal">Open example modal</button>
+        </div>
+        <partial name="~/Components/Modal/Default.cshtml" view-data='new ViewDataDictionary(ViewData) { ["Id"] = "dsExampleModal", ["Title"] = "Example dialog", ["Description"] = "A shared dialog shell from the design system." }' />
+    </section>
+
+    <section class="ds-section" id="badges">
+        <div class="ds-section-heading"><h2>Badges</h2><p>Semantic statuses.</p></div>
+        <div class="ds-preview">
+            @foreach (var variant in new[] { "neutral", "success", "warning", "danger" })
+            {
+                <partial name="~/Components/Badge/Default.cshtml" view-data='new ViewDataDictionary(ViewData) { ["Text"] = variant, ["Variant"] = variant }' />
+            }
+        </div>
+    </section>
+
+    <section class="ds-section" id="cards">
+        <div class="ds-section-heading"><h2>Cards</h2><p>Reusable content containers.</p></div>
+        <div class="ds-cards">
+            <partial name="~/Components/Card/Default.cshtml" view-data='new ViewDataDictionary(ViewData) { ["Title"] = "Planning Agent", ["Description"] = "Break down requirements and define a plan." }' />
+            <partial name="~/Components/Card/Default.cshtml" view-data='new ViewDataDictionary(ViewData) { ["Title"] = "Review Agent", ["Description"] = "Check implementation quality and security." }' />
+        </div>
+    </section>
+    <p class="ds-note">This page previews existing shared primitives. Most controls still use ViewData-based partials; Button uses a typed ViewComponent. Component behavior and appearance should be maintained centrally.</p>
+</div>
+
+@section Scripts {
+<script>
+(() => {
+    const trigger = document.getElementById('dsOpenModal');
+    const dialog = document.getElementById('dsExampleModal');
+    if (!trigger || !dialog) return;
+    trigger.addEventListener('click', () => dialog.showModal());
+    dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close();
+    });
+})();
+</script>
+}
