@@ -1,42 +1,38 @@
 @model AgentForge.Web.Controllers.AgentsController.AgentCard
-<div class="agent-overview-layout">
-    <div class="ui-stack">
-        <section class="ui-panel">
-            <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M8 3h7l6 6h-6V3M8 13h8M8 17h8"/></svg></span> System instructions</h2>
-            <p class="ui-subtitle">Illustrative draft based on the sample agent description. Not a saved or active system prompt.</p>
-            <div class="ui-note">
-                <strong>Draft instruction preview</strong>
-                <p>You are @Model.Name. Your purpose is to: @Model.Description</p>
-                <p>Explain your reasoning at a useful level, identify assumptions, and ask for clarification when requirements are ambiguous. Do not claim actions were completed without evidence.</p>
-            </div>
-        </section>
-        <section class="ui-panel">
-            <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 10 2 2 4-4M8 17h8"/></svg></span> Responsibilities</h2>
-            <p class="ui-subtitle">Sample capabilities that can inform future instructions.</p>
-            <ul class="agent-feature-list">
+<section class="ui-panel agent-instructions">
+    <div class="agent-instructions-heading">
+        <div>
+            <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M8 3h7l6 6h-6V3M8 13h8M8 17h8"/></svg></span> Instructions</h2>
+            <p class="ui-subtitle">Define how this agent should behave.</p>
+        </div>
+        <span class="agent-instructions-badge" aria-label="Read only preview">Read only</span>
+    </div>
+    <div class="agent-instructions-body">
+        <h3>System Prompt</h3>
+        <p class="ui-subtitle">Instructions describing the agent's role, responsibilities, guidelines, and constraints.</p>
+        <div class="agent-prompt-preview" role="region" aria-label="Example system prompt" tabindex="0">
+            <p>You are @Model.Name.</p>
+            <p><strong>Your role:</strong></p>
+            <ul>
+                <li>@Model.Description</li>
                 @foreach (var capability in Model.Tags)
                 {
-                    <li>@capability</li>
+                    <li>Support tasks involving @capability.</li>
                 }
             </ul>
-        </section>
-    </div>
-    <div class="ui-stack">
-        <section class="ui-panel">
-            <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v5c0 5 3.5 8 8 9 4.5-1 8-4 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg></span> Behavior guidelines</h2>
-            <ul class="agent-feature-list">
-                <li>Follow the task and clarify missing requirements.</li>
-                <li>Describe assumptions and limitations.</li>
-                <li>Report outcomes accurately.</li>
+            <p><strong>Guidelines:</strong></p>
+            <ul>
+                <li>Clarify ambiguous requirements before proceeding.</li>
+                <li>Explain relevant assumptions and limitations.</li>
+                <li>Report results accurately and distinguish suggestions from completed actions.</li>
             </ul>
-        </section>
-        <section class="ui-panel">
-            <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 21h20L12 3Z"/><path d="M12 9v5M12 17h.01"/></svg></span> Boundaries</h2>
-            <p>Tool permissions, approval requirements, and runtime guardrails have not been configured for this sample agent.</p>
-        </section>
-        <section class="ui-panel">
-            <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span> Preview only</h2>
-            <p>These instructions are examples for UI design. Editing, persistence, and runtime enforcement are not implemented.</p>
-        </section>
+            <p><strong>Constraints:</strong></p>
+            <ul>
+                <li>Do not claim an action was completed without evidence.</li>
+                <li>Do not expose sensitive information.</li>
+                <li>Stay within the scope of the assigned task.</li>
+            </ul>
+        </div>
+        <p class="agent-instructions-disclaimer">Example prompt generated for this sample agent. It is not saved, editable, or used by a running agent.</p>
     </div>
-</div>
+</section>
