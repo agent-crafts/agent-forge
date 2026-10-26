@@ -531,3 +531,27 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .ui-badge--danger{background:rgba(220,38,38,.12);color:#dc2626}
 .ui-badge--warning{background:rgba(245,158,11,.12);color:#b45309}
 .ui-badge--success{background:rgba(34,167,117,.12);color:#189563}
+
+/* Design-system live gallery: presentation only; component states remain shared. */
+.ds-showcase{max-width:1080px;margin:0 auto;padding:12px 0 64px}
+.ds-header{margin-bottom:24px}
+.ds-eyebrow{font-size:11px;font-weight:750;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.ds-header h1{margin:8px 0 10px;font-size:clamp(26px,3vw,36px);color:var(--heading)}
+.ds-header p,.ds-section-heading p,.ds-note{color:var(--muted);font-size:13px;line-height:1.6}
+.ds-header code{font-size:12px}
+.ds-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px}
+.ds-nav a{padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--content);font-size:12px;text-decoration:none}
+.ds-nav a:hover{border-color:var(--accent);background:var(--surface-raised)}
+.ds-nav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ds-section{margin-bottom:22px;padding:22px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.ds-section-heading{margin-bottom:18px}
+.ds-section-heading h2{margin:0 0 5px;font-size:18px;color:var(--heading)}
+.ds-section-heading p{margin:0}
+.ds-preview{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+.ds-form-grid,.ds-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.ds-form-grid>div{display:flex;flex-direction:column;gap:8px;min-width:0}
+.ds-form-grid>.ui-field{display:flex}
+.ds-wide{grid-column:1/-1}
+.ds-cards>.ui-card{min-width:0}
+.ds-note{margin:14px 0 0}
+@media(max-width:680px){.ds-section{padding:16px}.ds-form-grid,.ds-cards{grid-template-columns:minmax(0,1fr)}.ds-wide{grid-column:auto}}
