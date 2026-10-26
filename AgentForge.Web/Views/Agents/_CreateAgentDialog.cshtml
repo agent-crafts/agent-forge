@@ -1,0 +1,32 @@
+<dialog id="createAgentDialog" class="agent-dialog" aria-labelledby="createAgentTitle" aria-describedby="createAgentDescription">
+  <div class="agent-dialog-header">
+    <div><h2 id="createAgentTitle">Create New Agent</h2><p id="createAgentDescription">Define your agent's identity and core behavior. Configure tools, skills, and other settings later.</p></div>
+    <button type="button" class="agent-dialog-close" id="closeAgentDialog" aria-label="Close dialog">×</button>
+  </div>
+  <form id="agentCreateForm" class="agent-dialog-form">
+    <nav class="agent-dialog-steps" aria-label="Creation steps">
+      <span class="agent-dialog-step is-active" data-step-indicator="0"><b>1</b> Basic Information</span>
+      <span class="agent-dialog-step" data-step-indicator="1"><b>2</b> Instructions</span>
+      <span class="agent-dialog-step" data-step-indicator="2"><b>3</b> Review</span>
+    </nav>
+    <div class="agent-dialog-body">
+      <section data-agent-step="0" aria-label="Basic Information">
+        <div class="agent-form-grid">
+          <div class="agent-field"><label for="agentName">Agent Name <span aria-hidden="true">*</span></label><input id="agentName" name="name" class="ui-input" maxlength="80" required placeholder="e.g. Code Review Agent" /><small>A clear and descriptive name for your agent.</small></div>
+          <div class="agent-field"><label for="agentCategoryInput">Category <span aria-hidden="true">*</span></label><select id="agentCategoryInput" name="category" class="ui-select" required><option value="">Select category</option><option>Development</option><option>Planning</option><option>Quality</option><option>Testing</option><option>Operations</option><option>Documentation</option><option>Research</option><option>Data</option><option>Other</option></select><small>Choose the primary category.</small></div>
+          <div class="agent-field agent-field-wide"><label for="agentDescription">Description <span aria-hidden="true">*</span></label><textarea id="agentDescription" name="description" rows="4" maxlength="300" required placeholder="What does this agent do?"></textarea><small>Briefly describe what this agent does and when to use it.</small></div>
+          <div class="agent-field"><label for="agentIcon">Icon</label><select id="agentIcon" name="icon" class="ui-select"><option value="◈">◈ Default</option><option value="◇">◇ Review</option><option value="⚙">⚙ Operations</option><option value="▤">▤ Documentation</option></select><small>Choose an icon to represent your agent.</small></div>
+          <div class="agent-field"><label for="agentTags">Tags</label><input id="agentTags" name="tags" class="ui-input" maxlength="200" placeholder="e.g. code, review, quality" /><small>Separate tags with commas.</small></div>
+        </div>
+      </section>
+      <section data-agent-step="1" aria-label="Instructions" hidden>
+        <div class="agent-field"><label for="agentInstructions">System Instructions <span aria-hidden="true">*</span></label><textarea id="agentInstructions" name="instructions" rows="11" maxlength="12000" required placeholder="You are an AI agent responsible for..."></textarea><small>Describe the role, responsibilities, rules, and expected output. Do not include credentials.</small></div>
+      </section>
+      <section data-agent-step="2" aria-label="Review" hidden>
+        <div class="agent-dialog-review"><h3>Review your agent</h3><dl><div><dt>Name</dt><dd id="agentReviewName"></dd></div><div><dt>Category</dt><dd id="agentReviewCategory"></dd></div><div><dt>Description</dt><dd id="agentReviewDescription"></dd></div><div><dt>Icon</dt><dd id="agentReviewIcon"></dd></div><div><dt>Tags</dt><dd id="agentReviewTags"></dd></div><div><dt>Instructions</dt><dd id="agentReviewInstructions"></dd></div></dl><p class="agent-form-disclaimer">UI preview only. Creating an agent will require backend persistence, which is not connected yet.</p></div>
+      </section>
+    </div>
+    <div class="agent-dialog-footer"><button type="button" class="ui-button" id="cancelAgentDialog">Cancel</button><div class="agent-dialog-footer-right"><button type="button" class="ui-button" id="previousAgentStep" hidden>Back</button><button type="button" class="ui-button agent-form-primary" id="nextAgentStep">Next →</button><button type="submit" class="ui-button agent-form-primary" id="submitAgentForm" hidden>Review Complete</button></div></div>
+    <p class="agent-dialog-feedback" id="agentFormFeedback" role="status" hidden></p>
+  </form>
+</dialog>
