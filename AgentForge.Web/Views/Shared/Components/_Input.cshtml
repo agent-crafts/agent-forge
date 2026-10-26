@@ -1,0 +1,2 @@
+@{ var id = ViewData["Id"] as string ?? ""; var name = ViewData["Name"] as string ?? id; var placeholder = ViewData["Placeholder"] as string ?? ""; var required = ViewData["Required"] is true; var maxLength = ViewData["MaxLength"] as int?; }
+<input class="ui-input" id="@id" name="@name" placeholder="@placeholder" required="@required" maxlength="@maxLength" />
