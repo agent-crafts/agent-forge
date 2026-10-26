@@ -573,3 +573,6 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 /* Darker neutral label on hover, matching the stronger grey border. */
 .ui-button--secondary:not(:disabled):hover,.ui-button--outline:not(:disabled):hover{color:#111827}
 :root[data-theme="dark"] .ui-button--secondary:not(:disabled):hover,:root[data-theme="dark"] .ui-button--outline:not(:disabled):hover{color:#ffffff}
+
+/* Ghost hover uses the primary accent on text, without a filled background or border. */
+.ui-button--ghost:not(:disabled):hover{background:transparent;border-color:transparent;color:var(--accent);filter:none}
