@@ -1,0 +1,67 @@
+@model AgentForge.Web.Controllers.AgentsController.AgentCard
+@{
+    Layout = "_AppLayout";
+}
+<div class="ui-detail">
+    <section class="ui-profile ui-tool-profile">
+        <div class="ui-tool-actions" role="group" aria-label="Agent actions">
+            <button type="button" class="ui-button ui-tool-action ui-tool-action--edit" aria-label="Edit agent (coming soon)" title="Edit agent — coming soon" disabled aria-disabled="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg></button>
+            <button type="button" class="ui-button ui-tool-action ui-tool-action--delete" aria-label="Delete agent (coming soon)" title="Delete agent — coming soon" disabled aria-disabled="true"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>
+        </div>
+        <div class="ui-profile-icon" aria-hidden="true"><span class="text-2xl">@Model.Icon</span></div>
+        <div class="ui-profile-main">
+            <div class="ui-profile-title"><h1>@Model.Name</h1></div>
+            <p>@Model.Description</p>
+            <div class="ui-tags"><span>@Model.Id</span><span>@Model.Category</span><span>Sample agent</span></div>
+        </div>
+    </section>
+    <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Agent details sections">
+        <button type="button" id="agentOverviewTab" role="tab" aria-controls="agentOverviewPanel" aria-selected="true" tabindex="0" class="border-b-2 border-accent px-5 py-3 text-sm font-semibold text-heading">Overview</button>
+        <button type="button" id="agentInstructionsTab" role="tab" aria-controls="agentInstructionsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Instructions</button>
+        <button type="button" id="agentToolsTab" role="tab" aria-controls="agentToolsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Tools</button>
+        <button type="button" id="agentSkillsTab" role="tab" aria-controls="agentSkillsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Skills</button>
+        <button type="button" id="agentKnowledgeTab" role="tab" aria-controls="agentKnowledgePanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Knowledge</button>
+        <button type="button" id="agentPlaygroundTab" role="tab" aria-controls="agentPlaygroundPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Playground</button>
+        <button type="button" id="agentRunsTab" role="tab" aria-controls="agentRunsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Runs</button>
+        <button type="button" id="agentSettingsTab" role="tab" aria-controls="agentSettingsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Settings</button>
+    </div>
+    <div id="agentOverviewPanel" role="tabpanel" aria-labelledby="agentOverviewTab">
+        <partial name="_OverviewTab" model="Model" />
+    </div>
+    <div id="agentInstructionsPanel" role="tabpanel" aria-labelledby="agentInstructionsTab" hidden>
+        <partial name="_InstructionsTab" model="Model" />
+    </div>
+    <div id="agentToolsPanel" role="tabpanel" aria-labelledby="agentToolsTab" hidden><partial name="_ToolsTab" model="Model" /></div>
+    <div id="agentSkillsPanel" role="tabpanel" aria-labelledby="agentSkillsTab" hidden><partial name="_SkillsTab" model="Model" /></div>
+    <div id="agentKnowledgePanel" role="tabpanel" aria-labelledby="agentKnowledgeTab" hidden><partial name="_KnowledgeTab" model="Model" /></div>
+    <div id="agentPlaygroundPanel" role="tabpanel" aria-labelledby="agentPlaygroundTab" hidden><partial name="_PlaygroundTab" model="Model" /></div>
+    <div id="agentRunsPanel" role="tabpanel" aria-labelledby="agentRunsTab" hidden><partial name="_RunsTab" model="Model" /></div>
+    <div id="agentSettingsPanel" role="tabpanel" aria-labelledby="agentSettingsTab" hidden><partial name="_SettingsTab" model="Model" /></div>
+</div>
+<script>
+(() => {
+    const tabs = [document.getElementById('agentOverviewTab'), document.getElementById('agentInstructionsTab'), document.getElementById('agentToolsTab'), document.getElementById('agentSkillsTab'), document.getElementById('agentKnowledgeTab'), document.getElementById('agentPlaygroundTab'), document.getElementById('agentRunsTab'), document.getElementById('agentSettingsTab')];
+    const panels = [document.getElementById('agentOverviewPanel'), document.getElementById('agentInstructionsPanel'), document.getElementById('agentToolsPanel'), document.getElementById('agentSkillsPanel'), document.getElementById('agentKnowledgePanel'), document.getElementById('agentPlaygroundPanel'), document.getElementById('agentRunsPanel'), document.getElementById('agentSettingsPanel')];
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+            tabs.forEach((item, i) => {
+                const active = i === index;
+                item.setAttribute('aria-selected', String(active));
+                item.tabIndex = active ? 0 : -1;
+                item.classList.toggle('border-accent', active);
+                item.classList.toggle('border-transparent', !active);
+                item.classList.toggle('text-heading', active);
+                item.classList.toggle('text-muted', !active);
+                panels[i].hidden = !active;
+            });
+        });
+        tab.addEventListener('keydown', event => {
+            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+            event.preventDefault();
+            const next = (index + (event.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+            tabs[next].focus();
+            tabs[next].click();
+        });
+    });
+})();
+</script>

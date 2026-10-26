@@ -1,0 +1,26 @@
+name: Agent Gallery build
+
+on:
+  pull_request:
+    paths:
+      - 'AgentForge.Application/**'
+      - 'AgentForge.Core/**'
+      - 'AgentForge.Infrastructure/**'
+      - 'AgentForge.Web/**'
+      - 'scripts/verify-agent-gallery.sh'
+      - '.github/workflows/agent-gallery-build.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Restore and build
+        run: bash scripts/verify-agent-gallery.sh

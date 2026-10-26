@@ -1,0 +1,50 @@
+@model IReadOnlyList<AgentForge.Web.Controllers.AgentsController.AgentCard>
+@{
+    Layout = "_AppLayout";
+    var categories = Model.Select(agent => agent.Category).Distinct().OrderBy(category => category);
+}
+<div class="ui-toolbar mb-6 flex flex-wrap items-center gap-3">
+    <label class="ui-visually-hidden" for="agentSearch">Search agents</label>
+    <input id="agentSearch" type="search" placeholder="Search agents..." autocomplete="off"
+           class="ui-input box-border h-11 min-w-0 flex-1 rounded-xl border border-line bg-surface px-4 py-0 text-sm text-content placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" />
+    <label class="ui-visually-hidden" for="agentCategory">Filter agents by category</label>
+    <div class="ui-select-wrap relative h-11 shrink-0">
+        <select id="agentCategory" aria-label="Filter agents by category"
+                class="ui-select box-border h-11 w-full appearance-none cursor-pointer rounded-xl border border-line bg-surface py-0 pl-4 pr-10 text-sm text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+            <option value="all">All Categories</option>
+            @foreach (var category in categories)
+            {
+                <option value="@category.ToLowerInvariant()">@category</option>
+            }
+        </select>
+        <svg class="ui-select-chevron pointer-events-none absolute right-3 size-4 text-muted" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+    </div>
+    <button type="button" disabled title="Agent creation is coming soon"
+            class="ui-button box-border inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-line-strong bg-raised px-4 py-0 text-sm font-semibold leading-none text-content opacity-60 cursor-not-allowed">
+        <span aria-hidden="true" class="text-lg leading-none">+</span> Add Agent
+    </button>
+</div>
+
+<div id="agentGrid" class="ui-grid grid grid-cols-1 gap-3 lg:grid-cols-2">
+    @foreach (var agent in Model)
+    {
+        <a href="/agents/@Uri.EscapeDataString(agent.Id)" aria-label="View details for @agent.Name" class="agent-card ui-item-card group flex min-w-0 items-start cursor-default gap-3 rounded-xl border border-line bg-surface px-3 py-3 text-content transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm"
+                 data-search="@($"{agent.Name} {agent.Description} {string.Join(" ", agent.Tags)}".ToLowerInvariant())"
+                 data-category="@agent.Category.ToLowerInvariant()">
+            <span aria-hidden="true" class="ui-icon-tile self-start text-xl font-semibold">@agent.Icon</span>
+            <div class="ui-item-content flex min-w-0 flex-1 flex-col gap-0.5">
+                <span class="ui-item-title break-words text-sm font-semibold text-heading">@agent.Name</span>
+                <span class="ui-item-description break-words text-xs leading-5 text-muted">@agent.Description</span>
+                <div class="ui-tool-card-badges" aria-label="Agent category and capabilities">
+                    <span class="ui-tool-card-badge"><span class="ui-tool-card-badge-label">Category</span> @agent.Category</span>
+                    @if (agent.Tags.Length > 0)
+                    {
+                        <span class="ui-tool-card-badge"><span class="ui-tool-card-badge-label">Capability</span> @agent.Tags[0]</span>
+                    }
+                </div>
+            </div>
+        </a>
+    }
+</div>
+<p id="agentEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No agents match your filters.</p>
+<script src="~/js/agents/agents-gallery.js" asp-append-version="true"></script>

@@ -12,10 +12,14 @@
 | --- | --- |
 | Current phase | Module 00 — Baseline & Roadmap Alignment (planned) |
 | Current learning module | Not started |
-| Current engineering milestone | UI foundation merged; GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation, generic/specialized repositories, unit of work, and initial Tool create/get/page application handlers added on feature branch (unverified); Tool update/deactivate and Project use cases pending |
+| Current engineering milestone | UI foundation merged; static Agents Gallery added on draft PR #19 (build/browser unverified); GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation, generic/specialized repositories, unit of work, and initial Tool create/get/page application handlers added on feature branch (unverified); Tool update/deactivate and Project use cases pending |
 | Current mastery assessment | Not assessed |
 | Next recommended action | Confirm latest PR #16 Chromium CI passes; expand Tools Add/Edit/Delete and Try Now browser coverage with test data; review accessibility/visual QA. Separately verify persistence migrations and integration tests |
 | Last progress review | 2026-10-25 (UI PR #16: component and Tools polish committed; Chromium smoke checks added; initial browser CI exposed launch-profile port mismatch, fixed in workflow; retest pending) |
+
+**Agents Gallery design update (2026-10-25):** Cards now reuse the Tools gallery's shared `ui-item-card`, `ui-icon-tile`, `ui-item-content`, and badge styles in a two-column grid on draft PR #19. Static preview only; build and browser verification pending. No mastery assessment evidence.\n\n**Agent Details milestone (2026-10-25):** Read-only sample detail route (`/agents/{id}`), shared-style profile/overview/capabilities, gallery navigation, and unknown-ID 404 added on draft PR #19. Build and browser checks pending; configuration and runtime not implemented; mastery not assessed.
+
+**Agent Overview UI (2026-10-26):** Implemented responsive read-only Overview dashboard with About, capabilities, sample use cases, agent metadata, tags, and explicit preview limitations on PR #19. Uses existing sample-agent data; model, tools, author, version, and execution metrics are intentionally not fabricated. Build/browser verification pending; mastery not assessed.
 
 ## 2. Learning & engineering roadmap
 
@@ -73,6 +77,13 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Mastery:** Not assessed.
 - **Next action:** Verify PR #16 checks and responsive behavior; then implement design tokens, shared shell/Chat migration, and component consistency in separate reviewable PRs.
 
+### Parallel Agent Studio UI (2026-10-25)
+
+- **Knowledge:** No new mastery assessment.
+- **Engineering:** Draft PR #19 adds `/agents` Razor gallery with nine static agents, search, category filtering, responsive cards, and empty state. No persistence, execution, or orchestration. Build and browser verification pending.
+- **Mastery:** Not assessed.
+- **Build investigation:** Local build log reported 25 missing Mediator / Microsoft.Extensions.AI type errors. Both packages are declared in Application csproj but absent from the compiler references. Added forced NuGet restore/build script and PR CI. Successful build not yet verified; Infrastructure also reports vulnerable cryptography dependencies.\n- **Next action:** Run restore/build CI, then verify gallery browser behavior.
+
 ## 4. Decisions & unresolved gaps
 
 | Date | Decision / gap | Rationale | Evidence / follow-up |
@@ -91,6 +102,8 @@ These phases are **provisional** until reconciled with the project's training ma
 3. Identify the active module and distinguish proven outcomes from plans.
 4. Resume from the first unresolved learning objective or engineering dependency.
 5. At the end of the session, update the snapshot, roadmap status, active module, gaps, and handoff based on verified progress.
+
+**Agent Gallery handoff:** Draft PR #19 on `feature/agents-static-gallery`; validate .NET build and browser behavior, then proceed to Agent Builder/Playground in a separate PR.
 
 **Parallel Tool Engineering handoff:** Shared JSON viewer added to Overview and Try Now on PR #12; verify compilation and UI appearance in browser.  Schema verification, stubbed argument binding, invalid-input rejection, safe 404 result, and propagated 500 exception passed per user-provided console output. Next: verify Tool Registry and card/detail UI; then authorization and LLM orchestration; do not claim production integration or mastery.
 

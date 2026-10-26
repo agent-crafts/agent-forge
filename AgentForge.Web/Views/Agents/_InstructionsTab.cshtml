@@ -1,0 +1,31 @@
+@model AgentForge.Web.Controllers.AgentsController.AgentCard
+<section class="ui-panel agent-instructions">
+    <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M8 3h7l6 6h-6V3M8 13h8M8 17h8"/></svg></span> System Prompt</h2>
+    <div class="agent-instructions-body">
+        <p class="ui-subtitle">Instructions describing the agent's role, responsibilities, guidelines, and constraints.</p>
+        <div class="agent-prompt-preview" role="region" aria-label="Example system prompt" tabindex="0">
+            <p>You are @Model.Name.</p>
+            <p><strong>Your role:</strong></p>
+            <ul>
+                <li>@Model.Description</li>
+                @foreach (var capability in Model.Tags)
+                {
+                    <li>Support tasks involving @capability.</li>
+                }
+            </ul>
+            <p><strong>Guidelines:</strong></p>
+            <ul>
+                <li>Clarify ambiguous requirements before proceeding.</li>
+                <li>Explain relevant assumptions and limitations.</li>
+                <li>Report results accurately and distinguish suggestions from completed actions.</li>
+            </ul>
+            <p><strong>Constraints:</strong></p>
+            <ul>
+                <li>Do not claim an action was completed without evidence.</li>
+                <li>Do not expose sensitive information.</li>
+                <li>Stay within the scope of the assigned task.</li>
+            </ul>
+        </div>
+        <p class="agent-instructions-disclaimer">Example prompt generated for this sample agent. It is not saved, editable, or used by a running agent.</p>
+    </div>
+</section>
