@@ -1,0 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{ var id = ViewData["Id"] as string ?? ""; var name = ViewData["Name"] as string ?? id; var required = ViewData["Required"] is true; var options = ViewData["Options"] as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>(); }
+<select class="ui-select" id="@id" name="@name" required="@required">
+@foreach (var option in options) { <option value="@option.Value" selected="@option.Selected" disabled="@option.Disabled">@option.Text</option> }
+</select>
