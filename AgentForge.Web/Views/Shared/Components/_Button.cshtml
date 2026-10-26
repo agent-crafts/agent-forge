@@ -1,2 +1,0 @@
-@{ var id = ViewData["Id"] as string; var label = ViewData["Label"] as string ?? "Button"; var variant = ViewData["Variant"] as string ?? "secondary"; var type = ViewData["Type"] as string ?? "button"; var hidden = ViewData["Hidden"] is true; }
-<button type="@type" id="@id" class="ui-button ui-button--@variant" hidden="@hidden">@label</button>
