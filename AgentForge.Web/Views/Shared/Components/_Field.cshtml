@@ -1,0 +1,7 @@
+@{ var id = ViewData["Id"] as string ?? ""; var label = ViewData["Label"] as string ?? ""; var hint = ViewData["Hint"] as string ?? ""; var required = ViewData["Required"] is true; }
+<div class="ui-field">
+  <label class="ui-field-label" for="@id">@label @if (required) { <span aria-hidden="true">*</span> }</label>
+  @RenderBody()
+  @if (!string.IsNullOrEmpty(hint)) { <small class="ui-field-hint">@hint</small> }
+  <span class="ui-field-error" id="@(id)-error" role="alert" hidden></span>
+</div>
