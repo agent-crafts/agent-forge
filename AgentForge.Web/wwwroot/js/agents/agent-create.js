@@ -9,6 +9,7 @@
   const next = document.getElementById('nextAgentStep');
   const submit = document.getElementById('submitAgentForm');
   const feedback = document.getElementById('agentFormFeedback');
+  form.noValidate = true;
   let step = 0;
   function showStep(index) {
     step = index;
@@ -31,16 +32,44 @@
       document.getElementById('agentReviewInstructions').textContent = value('instructions') || '—';
     }
   }
+  function validateField(input) {
+    const empty = input.required && !input.value.trim();
+    const message = empty ? 'This field is required.' : (input.validity.valid ? '' : input.validationMessage);
+    const wrapper = input.closest('.agent-field');
+    let error = wrapper.querySelector('.agent-field-error');
+    if (!error) {
+      error = document.createElement('span');
+      error.className = 'agent-field-error';
+      error.id = input.id + '-error';
+      error.setAttribute('role', 'alert');
+      wrapper.appendChild(error);
+    }
+    error.textContent = message;
+    error.hidden = !message;
+    input.classList.toggle('is-invalid', Boolean(message));
+    input.setAttribute('aria-invalid', message ? 'true' : 'false');
+    if (message) input.setAttribute('aria-describedby', error.id);
+    else input.removeAttribute('aria-describedby');
+    return !message;
+  }
   function validateStep(index) {
-    const inputs = [...sections[index].querySelectorAll('input,select,textarea')];
-    for (const input of inputs) {
-      if (!input.value.trim() && input.required) input.setCustomValidity('This field is required.');
-      else input.setCustomValidity('');
-      if (!input.reportValidity()) { input.focus(); return false; }
+    let first = null;
+    sections[index].querySelectorAll('input,select,textarea').forEach(input => {
+      if (!validateField(input) && !first) first = input;
+    });
+    if (first) {
+      if (step !== index) showStep(index);
+      first.focus();
+      return false;
     }
     return true;
   }
-  form.addEventListener('input', event => { if (event.target.setCustomValidity) event.target.setCustomValidity(''); });
+  function updateField(event) {
+    const input = event.target;
+    if (input.matches('input,select,textarea') && input.hasAttribute('aria-invalid')) validateField(input);
+  }
+  form.addEventListener('input', updateField);
+  form.addEventListener('change', updateField);
   function close() { dialog.close(); }
   open.addEventListener('click', () => { showStep(0); dialog.showModal(); });
   document.getElementById('closeAgentDialog').addEventListener('click', close);
@@ -49,8 +78,8 @@
   back.addEventListener('click', () => showStep(step - 1));
   form.addEventListener('submit', event => {
     event.preventDefault();
-    if (!validateStep(0)) { showStep(0); validateStep(0); return; }
-    if (!validateStep(1)) { showStep(1); validateStep(1); return; }
+    if (!validateStep(0)) return;
+    if (!validateStep(1)) return;
     feedback.textContent = 'Form validated. Agent creation is not saved yet; backend integration is pending.';
     feedback.hidden = false;
   });
