@@ -1,2 +1,0 @@
-@{ var id = ViewData["Id"] as string ?? ""; var name = ViewData["Name"] as string ?? id; var placeholder = ViewData["Placeholder"] as string ?? ""; var required = ViewData["Required"] is true; var rows = ViewData["Rows"] as int? ?? 4; var maxLength = ViewData["MaxLength"] as int?; }
-<textarea class="ui-textarea" id="@id" name="@name" placeholder="@placeholder" required="@required" rows="@rows" maxlength="@maxLength"></textarea>
