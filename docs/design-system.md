@@ -85,5 +85,41 @@ Example (target API, **not yet guaranteed implemented**):
 ## Dependency and PR boundaries
 DS-01 and DS-02 should precede broad Agent/Tools UI work. Backend Agent persistence is independent and should remain a separate PR. Prefer one focused PR per milestone; link follow-up PRs here as completed. Do not claim these milestones implemented until code and verification evidence exist.
 
-## Concrete Razor component location
-Reusable Razor partials live under `AgentForge.Web/Views/Shared/Components/`: `_Button.cshtml`, `_Input.cshtml`, `_Select.cshtml`, `_Textarea.cshtml`, `_Field.cshtml`, `_Modal.cshtml`, `_Badge.cshtml`, `_Card.cshtml`. Consumers pass options via `ViewDataDictionary` using `<partial name="~/Views/Shared/Components/_Button.cshtml" view-data="..." />`. Button options: `Id`, `Label`, `Variant`, `Type`, `Hidden`. Field options: `Id`, `Label`, `Hint`, `Required`, `Control`; control-specific options include `Name`, `Placeholder`, `Rows`, `MaxLength`, and `Options` (`IEnumerable<SelectListItem>`). Component CSS is centralized in `wwwroot/css/ui-components.css`. These are initial primitives, not a completed accessibility or browser verification milestone. The modal/gallery/form migration remains incremental.
+## Vertical-slice component architecture (target)
+
+The canonical implementation is a **typed ASP.NET Core ViewComponent**, with its C# code and ViewModel co-located by component slice. Razor views retain the ASP.NET Core discovery path:
+
+```text
+AgentForge.Web/
+  Features/
+    Shared/
+      Components/
+        Button/
+          ButtonViewComponent.cs
+          ButtonViewModel.cs
+        Input/
+          InputViewComponent.cs
+          InputViewModel.cs
+        Select/
+        Textarea/
+        FormField/
+        Modal/
+        Badge/
+        Card/
+    Agents/
+      CreateAgent/
+        ...feature-specific behavior...
+  Views/
+    Shared/
+      Components/
+        Button/Default.cshtml
+        Input/Default.cshtml
+        Select/Default.cshtml
+        Textarea/Default.cshtml
+        FormField/Default.cshtml
+        Modal/Default.cshtml
+        Badge/Default.cshtml
+        Card/Default.cshtml
+```
+
+Invoke via `@await Component.InvokeAsync("Button", new { model = new ButtonViewModel { Text = "Create Agent", Variant = "Primary" } })` (import the model namespace through `_ViewImports.cshtml` as appropriate). A component's model specifies options; its view renders markup; shared CSS owns hover/focus/invalid states. Do not place all models in one global folder. The current flat `Views/Shared/Components/_Button.cshtml`-style partials are **transitional**, not the intended architecture. Migration must replace usages and delete obsolete partials only after checking references. Feature-specific components stay inside their feature slice.
