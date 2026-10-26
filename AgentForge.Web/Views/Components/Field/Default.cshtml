@@ -1,0 +1,13 @@
+@{ var id = ViewData["Id"] as string ?? ""; var label = ViewData["Label"] as string ?? ""; var hint = ViewData["Hint"] as string ?? ""; var required = ViewData["Required"] is true; var control = ViewData["Control"] as string ?? "input"; }
+<div class="ui-field">
+  <label class="ui-field-label" for="@id">@label @if (required) { <span aria-hidden="true">*</span> }</label>
+  @if (control == "textarea") {
+    <partial name="~/Views/Components/Textarea/Default.cshtml" view-data="ViewData" />
+  } else if (control == "select") {
+    <partial name="~/Views/Components/Select/Default.cshtml" view-data="ViewData" />
+  } else {
+    <partial name="~/Views/Components/Input/Default.cshtml" view-data="ViewData" />
+  }
+  @if (!string.IsNullOrEmpty(hint)) { <small class="ui-field-hint">@hint</small> }
+  <span class="ui-field-error" id="@(id)-error" role="alert" hidden></span>
+</div>
