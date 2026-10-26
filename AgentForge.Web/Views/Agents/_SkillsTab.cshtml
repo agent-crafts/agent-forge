@@ -1,0 +1,44 @@
+@model AgentForge.Web.Controllers.AgentsController.AgentCard
+<section class="ui-panel agent-skills" aria-labelledby="agentSkillsHeading" data-agent-skills>
+    <div class="agent-skills-heading">
+        <div><h2 id="agentSkillsHeading"><span class="ui-panel-icon" aria-hidden="true">◇</span> Skills</h2><p class="ui-subtitle">Create and manage skills owned by this agent. Sample workspace — changes are not saved.</p></div>
+        <button type="button" class="ui-button agent-skills-primary" data-skill-add>+ Add Skill</button>
+    </div>
+    <div class="agent-skills-controls">
+        <label class="sr-only" for="agentSkillSearch">Search skills</label>
+        <input id="agentSkillSearch" type="search" placeholder="Search skills..." data-skill-search />
+        <label class="sr-only" for="agentSkillFilter">Filter skills</label>
+        <select id="agentSkillFilter" data-skill-filter><option value="">All skills</option><option value="Created">Created</option><option value="Imported">Imported</option></select>
+    </div>
+    <div class="agent-skills-grid" data-skill-grid></div>
+    <p class="agent-skills-empty" data-skill-empty hidden>No skills match your search.</p>
+    <dialog class="agent-skills-dialog" data-skill-dialog aria-labelledby="skillDialogTitle">
+        <div class="agent-skills-dialog-heading"><h2 id="skillDialogTitle" data-skill-dialog-title>Add Skill</h2><button type="button" class="agent-skills-close" data-skill-close aria-label="Close">×</button></div>
+        <div data-skill-choices class="agent-skills-choices">
+            <p class="ui-subtitle">How would you like to add a skill to this agent?</p>
+            <button type="button" data-skill-mode="create"><strong>＋ Create Skill</strong><span>Write instructions and add resources from scratch.</span></button>
+            <button type="button" data-skill-mode="upload"><strong>↑ Upload Skill</strong><span>Choose a SKILL.md file or ZIP package (preview only).</span></button>
+            <button type="button" data-skill-mode="github"><strong>◇ Import from GitHub</strong><span>Specify a repository and skill path (preview only).</span></button>
+        </div>
+        <form data-skill-form hidden>
+            <p class="ui-subtitle" data-skill-form-note></p>
+            <label>Skill name<input name="name" required maxlength="80" placeholder="e.g. Code Review" /></label>
+            <label>Description<textarea name="description" rows="2" required maxlength="280" placeholder="What does this skill help the agent do?"></textarea></label>
+            <label data-skill-instructions>SKILL.md instructions<textarea name="instructions" rows="7" placeholder="# Instructions&#10;Describe the workflow..."></textarea></label>
+            <label data-skill-upload hidden>Skill file<input type="file" name="file" accept=".md,.zip" /></label>
+            <div data-skill-github hidden>
+                <label>Repository URL<input name="repo" type="url" placeholder="https://github.com/owner/repo" /></label>
+                <label>Skill path<input name="path" placeholder="skills/code-review" /></label>
+            </div>
+            <p class="agent-skills-note">UI preview only: no files are uploaded, repositories fetched, or skills persisted.</p>
+            <div class="agent-skills-actions"><button type="button" class="ui-button" data-skill-back>Back</button><button type="submit" class="ui-button agent-skills-primary">Add to preview</button></div>
+        </form>
+    </dialog>
+    <dialog class="agent-skills-dialog agent-skills-editor" data-skill-editor aria-labelledby="skillEditorTitle">
+        <div class="agent-skills-dialog-heading"><h2 id="skillEditorTitle" data-skill-editor-title>Skill editor</h2><button type="button" class="agent-skills-close" data-skill-editor-close aria-label="Close">×</button></div>
+        <p class="ui-subtitle">Edit this agent's sample skill instructions (session-only).</p>
+        <div class="agent-skills-editor-layout"><aside><strong>Files</strong><span>▤ SKILL.md</span><span>▸ references/</span><span>▸ scripts/</span><span>▸ assets/</span></aside><div><label for="agentSkillMarkdown">SKILL.md</label><textarea id="agentSkillMarkdown" data-skill-markdown spellcheck="false" rows="18"></textarea></div></div>
+        <div class="agent-skills-actions"><button type="button" class="ui-button" data-skill-editor-close>Cancel</button><button type="button" class="ui-button agent-skills-primary" data-skill-editor-save>Save preview</button></div>
+    </dialog>
+</section>
+<script src="~/js/agents/agents-skills.js" asp-append-version="true"></script>
