@@ -19,10 +19,10 @@
         </select>
         <svg class="ui-select-chevron pointer-events-none absolute right-3 size-4 text-muted" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
     </div>
-    <a href="/agents/create"
+    <button type="button" id="openAgentDialog" aria-haspopup="dialog" aria-controls="createAgentDialog"
             class="ui-button box-border inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-line-strong bg-raised px-4 py-0 text-sm font-semibold leading-none text-content ">
         <span aria-hidden="true" class="text-lg leading-none">+</span> Add Agent
-    </a>
+    </button>
 </div>
 
 <div id="agentGrid" class="ui-grid grid grid-cols-1 gap-3 lg:grid-cols-2">
@@ -47,4 +47,6 @@
     }
 </div>
 <p id="agentEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No agents match your filters.</p>
+<partial name="_CreateAgentDialog" />
+<script src="~/js/agents/agent-create.js" asp-append-version="true"></script>
 <script src="~/js/agents/agents-gallery.js" asp-append-version="true"></script>
