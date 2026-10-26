@@ -1,0 +1,87 @@
+@{
+    Layout = "_AppLayout";
+    ViewData["Title"] = "Create Agent";
+    ViewData["Section"] = "agents";
+}
+<div class="agent-create">
+    <div class="agent-create-header">
+        <div>
+            <a href="/agents" class="agent-create-back">← Back to agents</a>
+            <h1>Create Agent</h1>
+            <p>Define your agent's identity and instructions. Tools, skills, and knowledge can be configured later.</p>
+        </div>
+        <span class="ui-badge">UI preview</span>
+    </div>
+    <form id="agentCreateForm" class="agent-create-layout">
+        <div class="ui-stack">
+            <section class="ui-panel">
+                <h2>Basic information</h2>
+                <p class="ui-subtitle">Help people recognize what this agent does.</p>
+                <div class="agent-form-grid">
+                    <div class="agent-field agent-field-wide">
+                        <label for="agentName">Agent name <span aria-hidden="true">*</span></label>
+                        <input id="agentName" name="name" class="ui-input" maxlength="80" required placeholder="e.g. Code Review Agent" autocomplete="off" />
+                        <small>Use a clear, descriptive name.</small>
+                    </div>
+                    <div class="agent-field">
+                        <label for="agentCategory">Category <span aria-hidden="true">*</span></label>
+                        <select id="agentCategory" name="category" class="ui-select" required>
+                            <option value="">Select category</option>
+                            <option>Development</option><option>Planning</option><option>Quality</option><option>Testing</option>
+                            <option>Operations</option><option>Documentation</option><option>Research</option><option>Data</option><option>Other</option>
+                        </select>
+                    </div>
+                    <div class="agent-field">
+                        <label for="agentIcon">Icon</label>
+                        <select id="agentIcon" name="icon" class="ui-select">
+                            <option value="◈">Default</option><option value="◇">Review</option><option value="⚙">Operations</option><option value="▤">Documentation</option>
+                        </select>
+                    </div>
+                    <div class="agent-field agent-field-wide">
+                        <label for="agentDescription">Description <span aria-hidden="true">*</span></label>
+                        <textarea id="agentDescription" name="description" rows="3" maxlength="500" required placeholder="Describe what the agent helps with..."></textarea>
+                    </div>
+                    <div class="agent-field agent-field-wide">
+                        <label for="agentTags">Tags</label>
+                        <input id="agentTags" name="tags" class="ui-input" maxlength="200" placeholder="e.g. Code Review, Security, C#" />
+                        <small>Separate tags with commas.</small>
+                    </div>
+                </div>
+            </section>
+            <section class="ui-panel">
+                <h2>Instructions</h2>
+                <p class="ui-subtitle">Describe the agent's role, boundaries, and expected output.</p>
+                <div class="agent-field">
+                    <label for="agentInstructions">System instructions <span aria-hidden="true">*</span></label>
+                    <textarea id="agentInstructions" name="instructions" rows="10" maxlength="12000" required placeholder="You are an assistant that..."></textarea>
+                    <small>Don't include secrets or credentials in prompts.</small>
+                </div>
+            </section>
+            <section class="ui-panel">
+                <h2>Additional configuration</h2>
+                <p>Model selection, tools, skills, and knowledge will be connected in the backend phase. No runtime is provisioned by this form.</p>
+            </section>
+            <div class="agent-form-actions">
+                <a href="/agents" class="ui-button">Cancel</a>
+                <button class="ui-button" type="reset">Reset</button>
+                <button class="ui-button agent-form-primary" type="submit">Preview Agent</button>
+            </div>
+            <p class="agent-form-disclaimer" role="note">Preview only: this form does not save an agent yet. Persistence and creation API are the next implementation phase.</p>
+        </div>
+        <aside class="ui-stack">
+            <section class="ui-panel agent-preview-panel" aria-live="polite">
+                <h2>Live preview</h2>
+                <div class="agent-preview-icon" id="agentPreviewIcon" aria-hidden="true">◈</div>
+                <h3 id="agentPreviewName">New Agent</h3>
+                <p id="agentPreviewDescription">Your agent description will appear here.</p>
+                <div class="ui-tags" id="agentPreviewTags"></div>
+                <p class="agent-preview-category" id="agentPreviewCategory">Uncategorized</p>
+            </section>
+            <section class="ui-panel" id="agentPreviewSummary" hidden>
+                <h2>Ready for backend integration</h2>
+                <p>Your form passed browser validation. This is only a local preview; no data has been saved.</p>
+            </section>
+        </aside>
+    </form>
+</div>
+<script src="~/js/agents/agent-create.js" asp-append-version="true"></script>
