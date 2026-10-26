@@ -374,7 +374,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .agent-tools-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
 .agent-tools-heading h2{margin:0}
 .agent-tools-controls{display:flex;gap:10px;flex-wrap:wrap}
-.agent-tools-search input,.agent-tools-controls select{height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-raised);color:var(--content);font-size:13px}
+.agent-tools-search input,.agent-tools-controls select{height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--content);font-size:13px}
 .agent-tools-search input{min-width:200px}
 .agent-tools>.ui-subtitle{margin:12px 0 16px}
 .agent-tools-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
