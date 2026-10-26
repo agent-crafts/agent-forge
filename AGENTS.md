@@ -16,5 +16,8 @@ Read `MASTERY_PROGRESS.md` before starting work. Verify current repository, bran
 
 For all engineering work: keep PRs small and reviewable, verify when tools permit, disclose what remains untested, and update `MASTERY_PROGRESS.md` after meaningful milestones. Backend persistence and UI design-system changes should be reviewed separately.
 
-## Razor component location (mandatory)
-Reusable UI markup belongs in `AgentForge.Web/Views/Shared/Components/`. Use the existing `_Button`, `_Input`, `_Select`, `_Textarea`, `_Field`, `_Modal`, `_Badge`, and `_Card` partials instead of duplicating markup. Invoke with `<partial name="~/Views/Shared/Components/_Button.cshtml" view-data="..." />` and supply component properties through `ViewDataDictionary`. Shared CSS in `wwwroot/css/ui-components.css` owns states. Do not create per-feature copies. Some components are foundational and require further adoption/verification before claiming migration complete.
+## Vertical-slice UI components (mandatory)
+
+Shared reusable controls use ASP.NET Core **ViewComponents with strongly typed models**. Co-locate C# implementation and model per slice at `AgentForge.Web/Features/Shared/Components/{ComponentName}/` (e.g., `ButtonViewComponent.cs`, `ButtonViewModel.cs`). Put Razor views at the framework-conventional `AgentForge.Web/Views/Shared/Components/{ComponentName}/Default.cshtml`.
+
+Feature-specific UI logic stays in its feature slice (e.g., `Features/Agents/CreateAgent/`), not in Shared. Do not add a global `ViewComponents/` or `Models/Components/` dumping ground. Use typed models, not `ViewDataDictionary`, for component contracts. Central CSS in `wwwroot/css/ui-components.css` owns visual states. Migrate existing flat `_Button.cshtml` etc. partials incrementally; do not treat them as the target architecture. Follow `docs/design-system.md` and verify builds/browser behavior before claiming migration complete.
