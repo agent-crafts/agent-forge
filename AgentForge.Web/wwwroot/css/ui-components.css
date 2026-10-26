@@ -385,11 +385,11 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .agent-tool-row[hidden],.agent-tools-empty[hidden]{display:none!important}
 .agent-tool-symbol{display:grid;place-items:center;flex:none}
 .agent-tool-symbol svg{width:24px;height:24px}
-.agent-tool-description{flex:1;min-width:0}
+.agent-tool-description{flex:1;min-width:0;align-self:stretch;padding-right:4px}
 .agent-tool-description h3{margin:0 0 4px;font-size:14px;font-weight:700;color:var(--heading)}
 .agent-tool-description p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
-.agent-tool-category{align-self:flex-start;flex:none;padding:5px 9px;border:1px solid var(--line);border-radius:8px;color:var(--muted);font-size:11px}
-.agent-tool-toggle{display:inline-flex;align-items:center;flex:none;position:relative;cursor:pointer}
+.agent-tool-description .ui-tool-card-badges{margin-top:8px}
+.agent-tool-toggle{display:inline-flex;align-items:center;flex:none;position:relative;cursor:pointer;margin-left:auto}
 .agent-tool-toggle input{position:absolute;opacity:0;width:42px;height:24px;cursor:pointer}
 .agent-tool-toggle span{width:42px;height:24px;border-radius:20px;background:var(--line);transition:background .15s}
 .agent-tool-toggle span:after{content:"";display:block;width:18px;height:18px;margin:3px;border-radius:50%;background:white;box-shadow:0 1px 3px #0003;transition:transform .15s}
@@ -397,4 +397,4 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .agent-tool-toggle input:checked+span:after{transform:translateX(18px)}
 .agent-tool-toggle input:focus-visible+span{outline:2px solid var(--accent);outline-offset:3px}
 .agent-tools-empty{padding:30px;text-align:center;color:var(--muted);font-size:13px}
-@media(max-width:900px){.agent-tools-list{grid-template-columns:1fr}}@media(max-width:640px){.agent-tools-controls,.agent-tools-search,.agent-tools-search input{width:100%}.agent-tools-controls select{flex:1}.agent-tool-row{flex-wrap:wrap}.agent-tool-description{flex-basis:calc(100% - 110px)}.agent-tool-category{order:3;margin-left:60px}}
+@media(max-width:900px){.agent-tools-list{grid-template-columns:1fr}}@media(max-width:640px){.agent-tools-controls,.agent-tools-search,.agent-tools-search input{width:100%}.agent-tools-controls select{flex:1}.agent-tool-row{flex-wrap:nowrap}.agent-tool-description{flex-basis:auto}}
