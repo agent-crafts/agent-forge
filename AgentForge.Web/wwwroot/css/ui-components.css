@@ -558,3 +558,14 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 
 /* Outline variants remain unfilled in every interaction state. */
 .ui-button--outline:not(:disabled):hover,.ui-button--outline:not(:disabled):active,.ui-button--outline:focus-visible,.ui-button--outlined:not(:disabled):hover,.ui-button--outlined:not(:disabled):active,.ui-button--outlined:focus-visible{background:transparent}
+
+/* Canonical neutral button treatments: secondary is light grey; outline stays clear. */
+.ui-button--secondary{background:#f1f3f5;border-color:#d4d8de;color:#28323e}
+.ui-button--secondary:not(:disabled):hover{background:#e9ecef;border-color:#8b949e;color:#28323e}
+.ui-button--outline{background:transparent;border-color:#c3c9d1;color:var(--content)}
+.ui-button--outline:not(:disabled):hover{background:transparent;border-color:#8b949e;color:var(--content)}
+.ui-button--outline:not(:disabled):active,.ui-button--outline:focus-visible{background:transparent}
+:root[data-theme="dark"] .ui-button--secondary{background:#343b46;border-color:#596270;color:#f1f5f9}
+:root[data-theme="dark"] .ui-button--secondary:not(:disabled):hover{background:#414a56;border-color:#a1aab6;color:#fff}
+:root[data-theme="dark"] .ui-button--outline{background:transparent;border-color:#697381}
+:root[data-theme="dark"] .ui-button--outline:not(:disabled):hover{background:transparent;border-color:#a1aab6}
