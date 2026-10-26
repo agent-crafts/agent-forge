@@ -58,7 +58,7 @@
         <div class="ds-preview">
             <button type="button" class="ui-button ui-button--primary" id="dsOpenModal">Open example modal</button>
         </div>
-        <partial name="~/Components/Modal/Default.cshtml" view-data='new ViewDataDictionary(ViewData) { ["Id"] = "dsExampleModal", ["Title"] = "Example dialog", ["Description"] = "A shared dialog shell from the design system." }' />
+        @await Component.InvokeAsync("Modal", new { model = new AgentForge.Web.Components.Modal.ModalViewModel { Id = "dsExampleModal", Title = "Example dialog", Description = "A shared dialog shell from the design system.", BodyText = "Reusable modal content and actions.", PrimaryText = "Continue" } })
     </section>
 
     <section class="ds-section" id="badges">
