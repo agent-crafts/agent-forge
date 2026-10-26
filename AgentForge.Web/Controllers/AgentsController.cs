@@ -20,14 +20,6 @@ public sealed class AgentsController : Controller
         new("data", "Data Agent", "Analyze data and prepare actionable reports.", "Data", "▥", ["Analytics", "Reporting"])
     ];
 
-    [HttpGet("create")]
-    public IActionResult Create()
-    {
-        ViewData["Title"] = "Create Agent";
-        ViewData["Section"] = "agents";
-        return View();
-    }
-
     [HttpGet("{id}")]
     public IActionResult Details(string id)
     {
