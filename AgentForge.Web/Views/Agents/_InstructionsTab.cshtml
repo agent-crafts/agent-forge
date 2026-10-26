@@ -1,0 +1,42 @@
+@model AgentForge.Web.Controllers.AgentsController.AgentCard
+<div class="agent-overview-layout">
+    <div class="ui-stack">
+        <section class="ui-panel">
+            <h2><span class="ui-panel-icon" aria-hidden="true">≡</span> System instructions</h2>
+            <p class="ui-subtitle">Illustrative draft based on the sample agent description. Not a saved or active system prompt.</p>
+            <div class="ui-note">
+                <strong>Draft instruction preview</strong>
+                <p>You are @Model.Name. Your purpose is to: @Model.Description</p>
+                <p>Explain your reasoning at a useful level, identify assumptions, and ask for clarification when requirements are ambiguous. Do not claim actions were completed without evidence.</p>
+            </div>
+        </section>
+        <section class="ui-panel">
+            <h2><span class="ui-panel-icon" aria-hidden="true">✓</span> Responsibilities</h2>
+            <p class="ui-subtitle">Sample capabilities that can inform future instructions.</p>
+            <ul class="agent-feature-list">
+                @foreach (var capability in Model.Tags)
+                {
+                    <li>@capability</li>
+                }
+            </ul>
+        </section>
+    </div>
+    <div class="ui-stack">
+        <section class="ui-panel">
+            <h2><span class="ui-panel-icon" aria-hidden="true">☷</span> Behavior guidelines</h2>
+            <ul class="agent-feature-list">
+                <li>Follow the task and clarify missing requirements.</li>
+                <li>Describe assumptions and limitations.</li>
+                <li>Report outcomes accurately.</li>
+            </ul>
+        </section>
+        <section class="ui-panel">
+            <h2><span class="ui-panel-icon" aria-hidden="true">!</span> Boundaries</h2>
+            <p>Tool permissions, approval requirements, and runtime guardrails have not been configured for this sample agent.</p>
+        </section>
+        <section class="ui-panel">
+            <h2><span class="ui-panel-icon" aria-hidden="true">ⓘ</span> Preview only</h2>
+            <p>These instructions are examples for UI design. Editing, persistence, and runtime enforcement are not implemented.</p>
+        </section>
+    </div>
+</div>
