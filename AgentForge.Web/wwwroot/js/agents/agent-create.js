@@ -2,7 +2,9 @@
   const dialog = document.getElementById('createAgentDialog');
   const form = document.getElementById('agentCreateForm');
   const open = document.getElementById('openAgentDialog');
-  if (!dialog || !form || !open) return;
+  const editOpen = document.getElementById('editAgentButton');
+  if (!dialog || !form || (!open && !editOpen)) return;
+  let editingAgent = null;
 
   const sections = [...form.querySelectorAll('[data-agent-step]')];
   const indicators = [...form.querySelectorAll('[data-step-indicator]')];
@@ -24,6 +26,7 @@
   form.noValidate = true;
   let step = 0;
   let saving = false;
+  const categoryNames = ['Development', 'Planning', 'Quality', 'Testing', 'Operations', 'Documentation', 'Research', 'Data', 'Other'];
 
   function showStep(index) {
     step = index;
@@ -80,7 +83,25 @@
 
   form.addEventListener('input', updateField);
   form.addEventListener('change', updateField);
-  open.addEventListener('click', () => { showStep(0); dialog.showModal(); });
+  open?.addEventListener('click', () => { editingAgent = null; form.reset(); showStep(0); dialog.showModal(); });
+  editOpen?.addEventListener('click', async () => {
+    editOpen.disabled = true;
+    try {
+      const id = document.getElementById('agentInstructionsForm')?.dataset.agentId;
+      const response = await fetch('/api/agents/' + encodeURIComponent(id), { credentials: 'same-origin' });
+      if (!response.ok) throw new Error('Unable to load agent (HTTP ' + response.status + ').');
+      editingAgent = await response.json();
+      form.reset();
+      form.elements.namedItem('name').value = editingAgent.name;
+      form.elements.namedItem('description').value = editingAgent.description;
+      form.elements.namedItem('category').value = categoryNames[editingAgent.category] || '';
+      form.elements.namedItem('tags').value = (editingAgent.tags || []).join(', ');
+      showStep(0);
+      dialog.showModal();
+    } catch (error) {
+      window.AgentForgeToast?.show({ type: 'error', title: 'Unable to edit agent', message: error.message });
+    } finally { editOpen.disabled = false; }
+  });
   document.getElementById('closeAgentDialog').addEventListener('click', () => { if (!saving) dialog.close(); });
   document.getElementById('cancelAgentDialog').addEventListener('click', () => { if (!saving) dialog.close(); });
   next.addEventListener('click', () => { if (!saving && validateStep(step)) showStep(step + 1); });
@@ -101,7 +122,6 @@
 
     const value = name => String(form.elements.namedItem(name)?.value ?? '').trim();
     const tags = value('tags').split(',').map(tag => tag.trim()).filter(Boolean);
-    const categoryNames = ['Development', 'Planning', 'Quality', 'Testing', 'Operations', 'Documentation', 'Research', 'Data', 'Other'];
     const category = categoryNames.indexOf(value('category'));
     if (category < 0) {
       showStep(0);
@@ -114,16 +134,16 @@
       name: value('name'),
       description: value('description'),
       category,
-      icon: null,
+      icon: editingAgent?.icon ?? null,
       tags,
-      systemInstructions: ''
+      systemInstructions: editingAgent?.systemInstructions ?? ''
     };
     const token = form.querySelector('input[name="__RequestVerificationToken"]')?.value;
     saving = true;
     submit.disabled = true;
     back.disabled = true;
     next.disabled = true;
-    feedback.textContent = 'Creating agent…';
+    feedback.textContent = editingAgent ? 'Saving agent…' : 'Creating agent…';
     feedback.hidden = false;
 
     try {
@@ -141,14 +161,14 @@
         if (!uploadResponse.ok) throw new Error(uploaded?.error || `Icon upload failed (HTTP ${uploadResponse.status}).`);
         payload.icon = uploaded.filename;
       }
-      const response = await fetch('/api/agents', {
-        method: 'POST',
+      const response = await fetch(editingAgent ? '/api/agents/' + encodeURIComponent(editingAgent.id) : '/api/agents', {
+        method: editingAgent ? 'PUT' : 'POST',
         credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json',
           'RequestVerificationToken': token
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(editingAgent ? { ...payload, id: editingAgent.id } : payload)
       });
       if (!response.ok) {
         const error = await response.json().catch(() => null);
@@ -156,8 +176,8 @@
       }
       window.AgentForgeToast?.afterNavigation({
         type: 'success',
-        title: 'Agent created',
-        message: 'Agent created successfully.'
+        title: editingAgent ? 'Agent updated' : 'Agent created',
+        message: editingAgent ? 'Agent details saved successfully.' : 'Agent created successfully.'
       });
       // Reload the server-rendered gallery to show the newly persisted agent.
       form.reset();
