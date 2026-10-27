@@ -1,3 +1,8 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+  var categories = new[] { "Select category", "Development", "Planning", "Quality", "Testing", "Operations", "Documentation", "Research", "Data", "Other" }.Select((value, i) => new SelectListItem { Text = value, Value = i == 0 ? "" : value }).ToList();
+  var icons = new[] { ("◈ Default", "◈"), ("◇ Review", "◇"), ("⚙ Operations", "⚙"), ("▤ Documentation", "▤") }.Select(value => new SelectListItem { Text = value.Item1, Value = value.Item2 }).ToList();
+}
 <dialog id="createAgentDialog" class="agent-dialog" aria-labelledby="createAgentTitle" aria-describedby="createAgentDescription">
   <div class="agent-dialog-header">
     <div><h2 id="createAgentTitle">Create New Agent</h2><p id="createAgentDescription">Define your agent's identity and core behavior. Configure tools, skills, and other settings later.</p></div>
@@ -12,15 +17,15 @@
     <div class="agent-dialog-body">
       <section data-agent-step="0" aria-label="Basic Information">
         <div class="agent-form-grid">
-          <div class="agent-field"><label for="agentName">Agent Name <span aria-hidden="true">*</span></label><input id="agentName" name="name" class="ui-input" maxlength="80" required placeholder="e.g. Code Review Agent" /><small>A clear and descriptive name for your agent.</small></div>
-          <div class="agent-field"><label for="agentCategoryInput">Category <span aria-hidden="true">*</span></label><select id="agentCategoryInput" name="category" class="ui-select" required><option value="">Select category</option><option>Development</option><option>Planning</option><option>Quality</option><option>Testing</option><option>Operations</option><option>Documentation</option><option>Research</option><option>Data</option><option>Other</option></select><small>Choose the primary category.</small></div>
-          <div class="agent-field agent-field-wide"><label for="agentDescription">Description <span aria-hidden="true">*</span></label><textarea id="agentDescription" name="description" rows="4" maxlength="300" required placeholder="What does this agent do?"></textarea><small>Briefly describe what this agent does and when to use it.</small></div>
-          <div class="agent-field"><label for="agentIcon">Icon</label><select id="agentIcon" name="icon" class="ui-select"><option value="◈">◈ Default</option><option value="◇">◇ Review</option><option value="⚙">⚙ Operations</option><option value="▤">▤ Documentation</option></select><small>Choose an icon to represent your agent.</small></div>
-          <div class="agent-field"><label for="agentTags">Tags</label><input id="agentTags" name="tags" class="ui-input" maxlength="200" placeholder="e.g. code, review, quality" /><small>Separate tags with commas.</small></div>
+          <div class="agent-field"><ui-field id="agentName" name="name" label="Agent Name" required="true" max-length="80" placeholder="e.g. Code Review Agent" hint="A clear and descriptive name for your agent." /></div>
+          <div class="agent-field"><ui-field id="agentCategoryInput" name="category" label="Category" control="select" required="true" options="categories" hint="Choose the primary category." /></div>
+          <div class="agent-field agent-field-wide"><ui-field id="agentDescription" name="description" label="Description" control="textarea" rows="4" max-length="300" required="true" placeholder="What does this agent do?" hint="Briefly describe what this agent does and when to use it." /></div>
+          <div class="agent-field"><ui-field id="agentIcon" name="icon" label="Icon" control="select" options="icons" hint="Choose an icon to represent your agent." /></div>
+          <div class="agent-field"><ui-field id="agentTags" name="tags" label="Tags" max-length="200" placeholder="e.g. code, review, quality" hint="Separate tags with commas." /></div>
         </div>
       </section>
       <section data-agent-step="1" aria-label="Instructions" hidden>
-        <div class="agent-field"><label for="agentInstructions">System Instructions <span aria-hidden="true">*</span></label><textarea id="agentInstructions" name="instructions" rows="11" maxlength="12000" required placeholder="You are an AI agent responsible for..."></textarea><small>Describe the role, responsibilities, rules, and expected output. Do not include credentials.</small></div>
+        <div class="agent-field"><ui-field id="agentInstructions" name="instructions" label="System Instructions" control="textarea" rows="11" max-length="12000" required="true" placeholder="You are an AI agent responsible for..." hint="Describe the role, responsibilities, rules, and expected output. Do not include credentials." /></div>
       </section>
       <section data-agent-step="2" aria-label="Review" hidden>
         <div class="agent-dialog-review"><h3>Review your agent</h3><dl><div><dt>Name</dt><dd id="agentReviewName"></dd></div><div><dt>Category</dt><dd id="agentReviewCategory"></dd></div><div><dt>Description</dt><dd id="agentReviewDescription"></dd></div><div><dt>Icon</dt><dd id="agentReviewIcon"></dd></div><div><dt>Tags</dt><dd id="agentReviewTags"></dd></div><div><dt>Instructions</dt><dd id="agentReviewInstructions"></dd></div></dl><p class="agent-form-disclaimer">UI preview only. Creating an agent will require backend persistence, which is not connected yet.</p></div>
