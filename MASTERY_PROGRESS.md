@@ -21,6 +21,8 @@
 
 **Agent Overview UI (2026-10-26):** Implemented responsive read-only Overview dashboard with About, capabilities, sample use cases, agent metadata, tags, and explicit preview limitations on PR #19. Uses existing sample-agent data; model, tools, author, version, and execution metrics are intentionally not fabricated. Build/browser verification pending; mastery not assessed.
 
+**Agent create modal integration (2026-10-27):** Removed Review step; Basic Information → Instructions now submits to POST /api/agents with CreateAgentCommand JSON and antiforgery token. Shows API errors, prevents duplicate submissions, and reloads on success. Gallery/details still use sample data; .NET/browser/database verification pending; no tests added by request. Mastery not assessed.
+
 **Agent HTTP controller slice (2026-10-27):** Added separate `AgentsApiController` under `/api/agents` for create/update/deactivate/get-by-ID/paged list using Mediator application handlers. Active-only reads, input errors mapped to 400, antiforgery on mutations, and explicit response projection. Existing sample-data MVC pages remain unchanged. Build/HTTP/database verification pending; no tests added. Next: wire UI to persisted data and validate API security/authentication before deployment. Mastery not assessed.
 
 **Agent application slice (2026-10-27):** Added Mediator CQRS commands for create, update, and deactivate and queries for by-ID and paginated Agent retrieval. Handlers use existing generic repository and unit of work; no UI/API integration. Commits are unverified by build or database execution; no tests added by request. Mastery not assessed.
@@ -57,7 +59,7 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Tests and evaluations:** No AgentForge.Tests files in this PR; verification pending: .NET build, migration application, schema constraints and model drift.
 - **Practice / debugging challenges:** TBD
 - **Mastery criteria and evidence:** TBD
-- **Open questions / blockers:** .NET SDK and PostgreSQL runtime not available in this execution environment; no verified migration execution. Next: build and verify Mediator handler registration, then integrate Agent UI/API endpoints.
+- **Open questions / blockers:** .NET SDK and PostgreSQL runtime not available in this execution environment; no verified migration execution. Next: build and verify Mediator handler registration, test create modal against PostgreSQL, then replace sample gallery/details with persisted Agents.
 
 ### Parallel lab — Tool Engineering (Module 03 preparation)
 
