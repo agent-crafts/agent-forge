@@ -25,6 +25,9 @@
       minHeight: '350px'
     });
     container.markdownEditor = editor;
+    const actions = container.closest("form")?.querySelector(".agent-instructions-actions");
+    const statusbar = container.querySelector(".editor-statusbar");
+    if (actions && statusbar) statusbar.appendChild(actions);
     editor.codemirror.on('change', () => {
       textarea.value = editor.value();
       textarea.dispatchEvent(new Event('input', { bubbles: true }));
