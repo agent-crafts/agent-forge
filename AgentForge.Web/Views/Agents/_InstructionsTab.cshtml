@@ -1,10 +1,15 @@
 @model AgentForge.Web.Controllers.AgentsController.AgentCard
 <section class="ui-panel agent-instructions">
-    <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M8 3h7l6 6h-6V3M8 13h8M8 17h8"/></svg></span> System Prompt</h2>
-    <div class="agent-instructions-body">
-        <p class="ui-subtitle">Instructions describing the agent's role, responsibilities, guidelines, and constraints.</p>
-        <div class="agent-prompt-preview" role="region" aria-label="Saved system instructions" tabindex="0">
-            <pre style="white-space:pre-wrap;overflow-wrap:anywhere">@Model.SystemInstructions</pre>
+    <h2>System Instructions</h2>
+    <p class="ui-subtitle">Define the agent's role, responsibilities, guidelines, and constraints. Configure these after creating the agent.</p>
+    <form id="agentInstructionsForm" data-agent-id="@Model.Id">
+        @Html.AntiForgeryToken()
+        <label for="agentSystemInstructions" class="ui-field-label">System Instructions</label>
+        <textarea id="agentSystemInstructions" class="ui-input w-full" rows="16" maxlength="12000" placeholder="You are an AI agent responsible for...">@Model.SystemInstructions</textarea>
+        <div class="mt-4 flex items-center gap-3">
+            <button id="saveAgentInstructions" type="submit" class="ui-button ui-button--primary">Save Changes</button>
+            <span id="agentInstructionsFeedback" role="status" aria-live="polite"></span>
         </div>
-    </div>
+    </form>
 </section>
+<script src="~/js/agents/agent-instructions.js" asp-append-version="true"></script>
