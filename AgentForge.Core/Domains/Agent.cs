@@ -87,8 +87,8 @@ public sealed class Agent : Base
             throw new ArgumentException("Icon must be at most 32 characters.", nameof(icon));
 
         var normalizedInstructions = systemInstructions?.Trim();
-        if (string.IsNullOrWhiteSpace(normalizedInstructions) || normalizedInstructions.Length > 12000)
-            throw new ArgumentException("System instructions must contain 1–12000 characters.", nameof(systemInstructions));
+        if (normalizedInstructions is null || normalizedInstructions.Length > 12000)
+            throw new ArgumentException("System instructions must contain at most 12000 characters.", nameof(systemInstructions));
 
         var normalizedTags = (tags ?? [])
             .Select(tag => tag?.Trim() ?? string.Empty)
