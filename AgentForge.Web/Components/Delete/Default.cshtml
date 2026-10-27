@@ -1,4 +1,5 @@
 @model AgentForge.Web.Components.Delete.DeleteViewModel
+@using AgentForge.Web.Components.Button
 <dialog id="@Model.Id" class="ui-dialog ui-dialog--confirm ui-delete-dialog" aria-labelledby="@(Model.Id)-title" aria-describedby="@(Model.Id)-description">
     <div class="ui-dialog-layout">
         <header class="ui-dialog-header">
@@ -6,15 +7,15 @@
                 <h2 id="@(Model.Id)-title">@Model.Title</h2>
                 <p id="@(Model.Id)-description">@Model.Description</p>
             </div>
-            <form method="dialog"><button type="submit" class="ui-dialog-close" aria-label="Close dialog">×</button></form>
+            <form method="dialog">@await Component.InvokeAsync("Button", new { model = new ButtonViewModel { Text = "×", Type = "submit", Variant = "ghost", CssClass = "ui-dialog-close", AriaLabel = "Close dialog" } })</form>
         </header>
         @if (!string.IsNullOrWhiteSpace(Model.ItemName))
         {
             <div class="ui-dialog-body"><p>You're about to delete <strong>@Model.ItemName</strong>.</p></div>
         }
         <footer class="ui-dialog-footer">
-            <form method="dialog"><button type="submit" class="ui-button ui-button--secondary">@Model.CancelText</button></form>
-            <button type="button" id="@Model.ConfirmButtonId" class="ui-button ui-button--danger">@Model.ConfirmText</button>
+            <form method="dialog">@await Component.InvokeAsync("Button", new { model = new ButtonViewModel { Text = Model.CancelText, Type = "submit", Variant = "secondary" } })</form>
+            @await Component.InvokeAsync("Button", new { model = new ButtonViewModel { Text = Model.ConfirmText, Id = Model.ConfirmButtonId, Variant = "danger" } })
         </footer>
     </div>
 </dialog>
