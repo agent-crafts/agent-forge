@@ -9,7 +9,7 @@
     textarea.dataset.initialized = 'true';
     const editor = new EasyMDE({
       element: textarea,
-      autoDownloadFontAwesome: false,
+      autoDownloadFontAwesome: true,
       spellChecker: false,
       status: ['lines', 'words', 'cursor'],
       toolbar: [
