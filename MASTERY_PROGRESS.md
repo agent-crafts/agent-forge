@@ -26,7 +26,7 @@
 
 **Agent information persistence wiring (2026-10-27):** Exposed persisted CreatedAt, UpdatedAt, IsActive in AgentCard and displayed timestamps, status, ID, category in Overview. Removed unsupported Version, Author, Model, Temperature placeholders pending real features. Committed to PR #22; build/browser verification pending; mastery not assessed.
 
-## 1. Current snapshot
+**Reusable Markdown editor (2026-10-27):** Replaced bespoke Instructions toolbar with shared `_MarkdownEditor` partial and EasyMDE integration; supports standard formatting, Markdown preview, side-by-side, fullscreen, and sanitized preview via DOMPurify. Preserves Markdown persistence and 12k length check. External pinned CDN assets required; dependency availability, build, browser and preview verification pending. No tests added; mastery not assessed.\n\n## 1. Current snapshot
 
 | Field | Value |
 | --- | --- |
