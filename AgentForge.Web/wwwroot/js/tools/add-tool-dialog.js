@@ -120,7 +120,7 @@
   }
   if(name&&!/^[a-z][a-z0-9_]*$/.test(name)&&!errors.some(([f])=>f===get("newToolName")))errors.push([get("newToolName"),"Use lowercase snake_case."]);
   if(!category&&!errors.some(([f])=>f===get("newToolCategory")))errors.push([get("newToolCategory"),"Select a valid category."]);
-  if(imageUrl&&(!get("newToolImage").checkValidity()||!imageUrl.startsWith("https://")))errors.push([get("newToolImage"),"Enter a valid HTTPS URL."]);
+  if(imageUrl&&!imageUrl.startsWith("/uploads/tool-icons/")&&(!get("newToolImage").checkValidity()||!imageUrl.startsWith("https://")))errors.push([get("newToolImage"),"Enter a valid HTTPS URL."]);
   const parameterNames=new Set();
   for(const row of rows.querySelectorAll(".ui-modal-parameter")){
    const field=row.querySelector(".param-name");
