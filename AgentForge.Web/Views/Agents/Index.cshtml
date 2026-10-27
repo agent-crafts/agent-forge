@@ -1,7 +1,9 @@
 @model IReadOnlyList<AgentForge.Web.Controllers.AgentsController.AgentCard>
 @{
     Layout = "_AppLayout";
-    var categories = Model.Select(agent => agent.Category).Distinct().OrderBy(category => category);
+    var categories = Enum.GetNames<AgentForge.Core.Enums.AgentCategory>();
+    var pageNumber = (int)(ViewData["PageNumber"] ?? 1);
+    var totalPages = (int)(ViewData["TotalPages"] ?? 0);
     var categoryOptions = new[] { new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = "All Categories", Value = "all" } }.Concat(categories.Select(category => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = category, Value = category.ToLowerInvariant() })).ToList();
 }
 <div class="ui-toolbar mb-6 flex flex-wrap items-center gap-3">
@@ -36,7 +38,17 @@
         </a>
     }
 </div>
-<p id="agentEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No agents match your filters.</p>
+@if (totalPages > 1)
+{
+    <nav class="mt-5 flex items-center justify-between gap-3" aria-label="Agents pages">
+        <span class="text-sm text-muted">Page @pageNumber of @totalPages</span>
+        <div class="flex gap-2">
+            @if (pageNumber > 1) { <a class="ui-button" href="/agents?pageNumber=@(pageNumber - 1)">Previous</a> }
+            @if (pageNumber < totalPages) { <a class="ui-button" href="/agents?pageNumber=@(pageNumber + 1)">Next</a> }
+        </div>
+    </nav>
+}
+<p id="agentEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No agents found on this page.</p>
 <partial name="_CreateAgentDialog" />
 <script src="~/js/agents/agent-create.js" asp-append-version="true"></script>
 <script src="~/js/agents/agents-gallery.js" asp-append-version="true"></script>
