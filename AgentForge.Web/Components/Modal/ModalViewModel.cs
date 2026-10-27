@@ -2,6 +2,12 @@ namespace AgentForge.Web.Components.Modal;
 
 public sealed class ModalViewModel
 {
+    public Microsoft.AspNetCore.Html.IHtmlContent? Content { get; init; }
+    public bool CustomContent { get; init; }
+    public string? CssClass { get; init; }
+    public string? TitleId { get; init; }
+    public string? DescriptionId { get; init; }
+    public string? CloseButtonId { get; init; }
     public string Id { get; init; } = "";
     public string Title { get; init; } = "";
     public string Description { get; init; } = "";
