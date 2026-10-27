@@ -38,6 +38,7 @@ public sealed class UiComponentTagHelper : TagHelper
     public string? Text { get; set; }
     public string? Variant { get; set; }
     public string? Type { get; set; }
+    public string? AutoComplete { get; set; }
     public string? CssClass { get; set; }
     public string? AriaLabel { get; set; }
     public string? Label { get; set; }
@@ -122,6 +123,7 @@ public sealed class UiComponentTagHelper : TagHelper
         var data = new ViewDataDictionary(ViewContext.ViewData)
         {
             ["Id"] = Id, ["Name"] = Name, ["Text"] = Text,
+            ["Type"] = Type, ["AutoComplete"] = AutoComplete,
             ["Variant"] = Variant, ["Label"] = Label, ["Hint"] = Hint,
             ["Placeholder"] = Placeholder, ["Title"] = Title,
             ["Description"] = Description, ["Control"] = Control,
