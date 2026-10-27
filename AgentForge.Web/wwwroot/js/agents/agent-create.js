@@ -85,12 +85,17 @@
   back.addEventListener('click', () => { if (!saving) showStep(step - 1); });
   submit.addEventListener('click', event => {
     event.preventDefault();
-    if (!saving) form.requestSubmit();
+    void createAgent();
   });
 
-  form.addEventListener('submit', async event => {
+  form.addEventListener('submit', event => {
     event.preventDefault();
-    if (saving || !validateStep(0) || !validateStep(1)) return;
+    void createAgent();
+  });
+
+  async function createAgent() {
+    if (saving) return;
+    if (!validateStep(0) || !validateStep(1)) return;
 
     const value = name => String(form.elements.namedItem(name)?.value ?? '').trim();
     const tags = value('tags').split(',').map(tag => tag.trim()).filter(Boolean);
@@ -160,6 +165,6 @@
       back.disabled = false;
       next.disabled = false;
     }
-  });
+  }
   showStep(0);
 })();
