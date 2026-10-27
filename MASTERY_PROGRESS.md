@@ -6,6 +6,8 @@
 >
 > **Update policy:** Update this file at the end of each meaningful learning module, implementation milestone, or mastery assessment. Do not mark a skill mastered based only on discussion or a merged PR.
 
+**Agent Overview simplification (2026-10-27):** Removed redundant Capabilities panel from `_OverviewTab.cshtml`; tags and dedicated Tools/Skills tabs retained. UI change committed; browser verification pending. No mastery assessment.
+
 ## 1. Current snapshot
 
 | Field | Value |
