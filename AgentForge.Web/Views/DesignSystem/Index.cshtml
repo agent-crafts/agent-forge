@@ -1,0 +1,107 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    Layout = "_AppLayout";
+    ViewData["Title"] = "Design System";
+    var categories = new List<SelectListItem>
+    {
+        new("Select a category", "", false, true),
+        new("Development", "development"),
+        new("Quality", "quality"),
+        new("Operations", "operations")
+    };
+}
+<div class="ds-showcase">
+    <header class="ds-header">
+        <p class="ds-eyebrow">AgentForge / UI foundation</p>
+        <h1>Design System</h1>
+        <p>Live component examples and interaction states. Shared component sources live in <code>AgentForge.Web/Components/</code>.</p>
+    </header>
+
+    <nav class="ds-nav" aria-label="Component sections">
+        <a href="#buttons">Buttons</a><a href="#inputs">Inputs</a><a href="#fields">Form fields</a><a href="#modal">Modal</a><a href="#delete">Delete</a><a href="#badges">Badges</a><a href="#cards">Cards</a>
+    </nav>
+
+    <section class="ds-section" id="buttons">
+        <div class="ds-section-heading"><h2>Buttons</h2><p>Hover, focus, active, disabled, and semantic variants.</p></div>
+        <div class="ds-preview">
+            @foreach (var variant in new[] { "primary", "secondary", "outline", "ghost", "danger" })
+            {
+                <ui-button text="@(char.ToUpperInvariant(variant[0]) + variant[1..])" variant="@variant" />
+            }
+            <ui-button text="Disabled" variant="primary" disabled="true" />
+        </div>
+        <p class="ds-note">Tab through the buttons to inspect keyboard focus; hover and press to compare states.</p>
+    </section>
+
+    <section class="ds-section" id="inputs">
+        <div class="ds-section-heading"><h2>Inputs, select &amp; textarea</h2><p>Shared primitives with labels and placeholders.</p></div>
+        <div class="ds-form-grid">
+            <div><label class="ui-field-label" for="dsName">Text input</label><ui-input id="dsName" name="name" placeholder="Enter a name" /></div>
+            <div><label class="ui-field-label" for="dsCategory">Select</label><ui-select id="dsCategory" name="category" options="categories" /></div>
+            <div class="ds-wide"><label class="ui-field-label" for="dsDescription">Textarea</label><ui-textarea id="dsDescription" name="description" rows="3" placeholder="Describe your agent..." /></div>
+            <div><label class="ui-field-label" for="dsDisabled">Disabled input</label><input class="ui-input" id="dsDisabled" value="Not editable" disabled /></div>
+            <div><label class="ui-field-label" for="dsReadonly">Read-only input</label><input class="ui-input" id="dsReadonly" value="Read-only value" readonly /></div>
+        </div>
+    </section>
+
+    <section class="ds-section" id="fields">
+        <div class="ds-section-heading"><h2>Form fields &amp; validation</h2><p>Required fields, hint text, and accessible errors.</p></div>
+        <div class="ds-form-grid">
+            <ui-field id="dsRequired" label="Agent name" name="agentName" hint="Give the agent a recognizable name." required="true" placeholder="e.g. Review Agent" />
+            <div class="ui-field"><label class="ui-field-label" for="dsInvalid">Invalid state <span aria-hidden="true">*</span></label><input class="ui-input" id="dsInvalid" aria-invalid="true" aria-describedby="dsInvalidError" value="!" /><small class="ui-field-error" id="dsInvalidError">Enter a valid name.</small></div>
+        </div>
+    </section>
+
+    <section class="ds-section" id="modal">
+        <div class="ds-section-heading"><h2>Modal</h2><p>Native dialog, backdrop, Escape key, and focus behavior.</p></div>
+        <div class="ds-preview">
+            <ui-button id="dsOpenModal" variant="primary">Open example modal</ui-button>
+        </div>
+        <ui-modal id="dsExampleModal" title="Example dialog" description="A shared dialog shell from the design system." body-text="Reusable modal content and actions." primary-text="Continue" />
+    </section>
+
+    <section class="ds-section" id="delete">
+        <div class="ds-section-heading"><h2>Delete confirmation</h2><p>Destructive actions require an explicit confirmation.</p></div>
+        <div class="ds-preview"><ui-button id="dsOpenDelete" variant="danger">Delete example</ui-button></div>
+        <ui-delete id="dsDeleteDialog" title="Delete agent?" description="This action cannot be undone." item-name="Example Agent" confirm-button-id="dsConfirmDelete" />
+    </section>
+
+    <section class="ds-section" id="badges">
+        <div class="ds-section-heading"><h2>Badges</h2><p>Semantic statuses.</p></div>
+        <div class="ds-preview">
+            @foreach (var variant in new[] { "neutral", "success", "warning", "danger" })
+            {
+                <ui-badge text="@variant" variant="@variant" />
+            }
+        </div>
+    </section>
+
+    <section class="ds-section" id="cards">
+        <div class="ds-section-heading"><h2>Cards</h2><p>Reusable content containers.</p></div>
+        <div class="ds-cards">
+            <ui-card title="Planning Agent" description="Break down requirements and define a plan." />
+            <ui-card title="Review Agent" description="Check implementation quality and security." />
+        </div>
+    </section>
+    <p class="ds-note">This page previews existing shared primitives. Most controls still use ViewData-based partials; Button uses a typed ViewComponent. Component behavior and appearance should be maintained centrally.</p>
+</div>
+
+@section Scripts {
+<script>
+(() => {
+    const trigger = document.getElementById('dsOpenModal');
+    const dialog = document.getElementById('dsExampleModal');
+    if (!trigger || !dialog) return;
+    trigger.addEventListener('click', () => dialog.showModal());
+    const deleteTrigger = document.getElementById('dsOpenDelete');
+    const deleteDialog = document.getElementById('dsDeleteDialog');
+    const deleteConfirm = document.getElementById('dsConfirmDelete');
+    deleteTrigger?.addEventListener('click', () => deleteDialog?.showModal());
+    deleteConfirm?.addEventListener('click', () => deleteDialog?.close()); // Gallery demo only; does not delete data.
+    deleteDialog?.addEventListener('click', event => { if (event.target === deleteDialog) deleteDialog.close(); });
+    dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close();
+    });
+})();
+</script>
+}

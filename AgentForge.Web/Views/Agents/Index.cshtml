@@ -2,27 +2,17 @@
 @{
     Layout = "_AppLayout";
     var categories = Model.Select(agent => agent.Category).Distinct().OrderBy(category => category);
+    var categoryOptions = new[] { new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = "All Categories", Value = "all" } }.Concat(categories.Select(category => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = category, Value = category.ToLowerInvariant() })).ToList();
 }
 <div class="ui-toolbar mb-6 flex flex-wrap items-center gap-3">
     <label class="ui-visually-hidden" for="agentSearch">Search agents</label>
-    <input id="agentSearch" type="search" placeholder="Search agents..." autocomplete="off"
-           class="ui-input box-border h-11 min-w-0 flex-1 rounded-xl border border-line bg-surface px-4 py-0 text-sm text-content placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" />
+    <div class="min-w-0 flex-1"><ui-input id="agentSearch" type="search" auto-complete="off" placeholder="Search agents..." /></div>
     <label class="ui-visually-hidden" for="agentCategory">Filter agents by category</label>
     <div class="ui-select-wrap relative h-11 shrink-0">
-        <select id="agentCategory" aria-label="Filter agents by category"
-                class="ui-select box-border h-11 w-full appearance-none cursor-pointer rounded-xl border border-line bg-surface py-0 pl-4 pr-10 text-sm text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
-            <option value="all">All Categories</option>
-            @foreach (var category in categories)
-            {
-                <option value="@category.ToLowerInvariant()">@category</option>
-            }
-        </select>
+        <ui-select id="agentCategory" options="categoryOptions" />
         <svg class="ui-select-chevron pointer-events-none absolute right-3 size-4 text-muted" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
     </div>
-    <button type="button" disabled title="Agent creation is coming soon"
-            class="ui-button box-border inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-line-strong bg-raised px-4 py-0 text-sm font-semibold leading-none text-content opacity-60 cursor-not-allowed">
-        <span aria-hidden="true" class="text-lg leading-none">+</span> Add Agent
-    </button>
+    <ui-button id="openAgentDialog" variant="secondary" text="+ Add Agent" aria-label="Add Agent" aria-has-popup="dialog" aria-controls="createAgentDialog" />
 </div>
 
 <div id="agentGrid" class="ui-grid grid grid-cols-1 gap-3 lg:grid-cols-2">
@@ -47,4 +37,6 @@
     }
 </div>
 <p id="agentEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No agents match your filters.</p>
+<partial name="_CreateAgentDialog" />
+<script src="~/js/agents/agent-create.js" asp-append-version="true"></script>
 <script src="~/js/agents/agents-gallery.js" asp-append-version="true"></script>

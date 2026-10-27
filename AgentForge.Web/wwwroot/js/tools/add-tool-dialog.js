@@ -41,7 +41,7 @@
   schema();
   dialog.showModal();
  });
- dialog.querySelectorAll("[data-modal-close], [data-tool-close]").forEach(b=>b.addEventListener("click",()=>dialog.close()));
+ dialog.querySelectorAll("[data-modal-close], [data-tool-close], #closeAddToolDialog, #cancelAddToolDialog").forEach(b=>b.addEventListener("click",()=>dialog.close()));
  dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>r.addEventListener("change",update));
  get("externalToolSource").addEventListener("change",()=>{const integration=get("externalToolSource").value==="integration";get("externalEndpointField").hidden=integration;get("externalIntegrationField").hidden=!integration;});
  const rows=get("toolParameterRows");
@@ -87,7 +87,7 @@
  };
  dialog.addEventListener("input",e=>{if(e.target.matches("input,textarea,select"))clearFieldError(e.target);});
  dialog.addEventListener("cancel",e=>{if(saving)e.preventDefault();});
- dialog.querySelectorAll("[data-modal-close], [data-tool-close]").forEach(button=>button.addEventListener("click",e=>{if(saving){e.preventDefault();e.stopImmediatePropagation();}},true));
+ dialog.querySelectorAll("[data-modal-close], [data-tool-close], #closeAddToolDialog, #cancelAddToolDialog").forEach(button=>button.addEventListener("click",e=>{if(saving){e.preventDefault();e.stopImmediatePropagation();}},true));
  saveButton.type="button";
  saveButton.addEventListener("click",async event=>{
   event.preventDefault();

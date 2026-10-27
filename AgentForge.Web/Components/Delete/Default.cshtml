@@ -1,0 +1,22 @@
+@model AgentForge.Web.Components.Delete.DeleteViewModel
+<dialog id="@Model.Id" class="ui-dialog ui-dialog--confirm ui-delete-dialog" aria-labelledby="@(Model.Id)-title" aria-describedby="@(Model.Id)-description">
+    <div class="ui-dialog-layout">
+        <header class="ui-dialog-header">
+            <div>
+                <h2 id="@(Model.Id)-title">@Model.Title</h2>
+                @if (!string.IsNullOrWhiteSpace(Model.ItemName))
+                {
+                    <p>Confirm deletion of <strong>@Model.ItemName</strong>.</p>
+                }
+            </div>
+            <form method="dialog"><ui-button type="submit" variant="ghost" css-class="ui-dialog-close" aria-label="Close dialog">×</ui-button></form>
+        </header>
+        <div class="ui-dialog-body">
+            <p id="@(Model.Id)-description">@Model.Description</p>
+        </div>
+        <footer class="ui-dialog-footer">
+            <form method="dialog"><ui-button type="submit" variant="secondary" text="@Model.CancelText" /></form>
+            <ui-button text="@Model.ConfirmText" id="@Model.ConfirmButtonId" variant="danger" />
+        </footer>
+    </div>
+</dialog>
