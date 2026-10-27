@@ -21,11 +21,10 @@
                 <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span> Agent information</h2>
                 <dl class="agent-info-list">
                     <div><dt>Category</dt><dd>@Model.Category</dd></div>
-                    <div><dt>Version</dt><dd>Not available</dd></div>
-                    <div><dt>Last updated</dt><dd>Not available</dd></div>
-                    <div><dt>Author</dt><dd>Not available</dd></div>
-                    <div><dt>Model</dt><dd>Not configured</dd></div>
-                    <div><dt>Temperature</dt><dd>Not configured</dd></div>
+                    <div><dt>Created</dt><dd><time datetime="@Model.CreatedAt.ToString("O")" title="@Model.CreatedAt.ToString("u")">@Model.CreatedAt.ToString("dd MMM yyyy, HH:mm") UTC</time></dd></div>
+                    <div><dt>Last updated</dt><dd><time datetime="@Model.UpdatedAt.ToString("O")" title="@Model.UpdatedAt.ToString("u")">@Model.UpdatedAt.ToString("dd MMM yyyy, HH:mm") UTC</time></dd></div>
+                    <div><dt>Status</dt><dd>@(Model.IsActive ? "Active" : "Inactive")</dd></div>
+                    <div><dt>Agent ID</dt><dd class="break-all">@Model.Id</dd></div>
                 </dl>
             </section>
         </div>
