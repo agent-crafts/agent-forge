@@ -21,6 +21,8 @@
 
 **Agent Overview UI (2026-10-26):** Implemented responsive read-only Overview dashboard with About, capabilities, sample use cases, agent metadata, tags, and explicit preview limitations on PR #19. Uses existing sample-agent data; model, tools, author, version, and execution metrics are intentionally not fabricated. Build/browser verification pending; mastery not assessed.
 
+**Agent create submit wiring fix (2026-10-27):** Modal footer Create Agent button now calls async createAgent directly instead of relying on requestSubmit for an external form button; form submit reuses same handler. Code committed, browser/API verification pending; no tests added. Mastery not assessed.
+
 **Agent default icon alignment (2026-10-27):** Gallery/details now render the same robot SVG path as the Agents sidebar when no uploaded image is present; new Agent.Icon defaults to empty. Existing legacy glyph values also render the robot fallback; no migration required. Build/browser verification pending.
 
 **Agent icon upload (2026-10-27):** Added optional raster icon upload (PNG/JPEG/WebP/GIF, 2 MB limit, signature checks, antiforgery) to app-local wwwroot/uploads/agent-icons, storing generated filename in existing Agent.Icon string column. Gallery/details resolve filenames to local URLs; default glyph retained. No schema migration. Upload occurs before Agent create, so failed create can leave an orphan file; local filesystem requires persistent shared storage for multi-instance deployment. Build/browser/upload/database verification pending; no tests added. Mastery not assessed.
