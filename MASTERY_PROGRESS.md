@@ -21,6 +21,8 @@
 
 **Agent Overview UI (2026-10-26):** Implemented responsive read-only Overview dashboard with About, capabilities, sample use cases, agent metadata, tags, and explicit preview limitations on PR #19. Uses existing sample-agent data; model, tools, author, version, and execution metrics are intentionally not fabricated. Build/browser verification pending; mastery not assessed.
 
+**Agent category filter source (2026-10-27):** Gallery filter options now come from AgentCategory enum supplied by AgentsController (not hardcoded in the view or inferred from current records). Client-side filtering remains current-page only; build/browser unverified. Mastery not assessed.
+
 **Agent persisted gallery/details (2026-10-27):** Replaced hardcoded MVC sample agents with Mediator GetAgentsPageQuery and GetAgentByIdQuery. Active-only 20-item paged gallery, enum category choices, page links, persisted details and actual system instructions; existing client-side search/category filter applies to current page only. Build/browser/database checks pending; no tests added. Next: verify EF migration and end-to-end create/list/details; consider server-side search and category filtering. Mastery not assessed.
 
 **Agent create modal integration (2026-10-27):** Removed Review step; Basic Information → Instructions now submits to POST /api/agents with CreateAgentCommand JSON and antiforgery token. Shows API errors, prevents duplicate submissions, and reloads on success. Gallery/details still use sample data; .NET/browser/database verification pending; no tests added by request. Mastery not assessed.
