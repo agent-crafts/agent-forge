@@ -22,9 +22,20 @@
             @if (Model.CustomContent) { @Model.Content }
             else if (!string.IsNullOrWhiteSpace(Model.BodyText)) { <p>@Model.BodyText</p> }
         </div>
-        <footer class="ui-dialog-footer">
+        <footer class="ui-dialog-footer @(Model.Variant == "wizard" ? "agent-dialog-footer" : "")">
             <form method="dialog"><ui-button id="@Model.CancelButtonId" type="submit" variant="secondary" text="@Model.CancelText" /></form>
-            <ui-button text="@Model.PrimaryText" id="@Model.PrimaryButtonId" variant="@(confirm ? "danger" : "primary")" />
+            @if (Model.Variant == "wizard")
+            {
+                <div class="agent-dialog-footer-right">
+                    <ui-button id="@Model.PreviousButtonId" variant="secondary" text="Back" hidden="true" />
+                    <ui-button id="@Model.NextButtonId" variant="primary" text="Next →" />
+                    <ui-button id="@Model.SubmitButtonId" variant="primary" text="Review Complete" hidden="true" />
+                </div>
+            }
+            else
+            {
+                <ui-button text="@Model.PrimaryText" id="@Model.PrimaryButtonId" variant="@(confirm ? "danger" : "primary")" />
+            }
         </footer>
     </div>
     }
