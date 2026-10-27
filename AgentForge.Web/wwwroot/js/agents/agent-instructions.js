@@ -3,7 +3,6 @@
   if (!form) return;
   const editor = document.getElementById('agentSystemInstructions');
   const button = document.getElementById('saveAgentInstructions');
-  const feedback = document.getElementById('agentInstructionsFeedback');
   const id = form.dataset.agentId;
   const token = form.querySelector('input[name="__RequestVerificationToken"]')?.value;
 
@@ -12,11 +11,10 @@
     if (button.disabled) return;
     const instructions = form.querySelector('[data-markdown-editor]')?.markdownEditor?.value() ?? editor.value;
     if (instructions.length > 12000) {
-      feedback.textContent = 'Instructions cannot exceed 12,000 characters.';
+      window.AgentForgeToast?.show({ type: 'error', title: 'Invalid instructions', message: 'Instructions cannot exceed 12,000 characters.' });
       return;
     }
     button.disabled = true;
-    feedback.textContent = '';
     try {
       // Read the latest persisted definition so editing instructions does not
       // accidentally overwrite name, category, icon, or tags.
@@ -46,10 +44,9 @@
         const error = await response.json().catch(() => null);
         throw new Error(error?.error || error?.title || 'Save failed (HTTP ' + response.status + ').');
       }
-      feedback.textContent = '';
-      window.AgentForgeToast?.show({ type: 'success', title: 'Instructions saved', message: 'Agent instructions updated successfully.' });
+        window.AgentForgeToast?.show({ type: 'success', title: 'Instructions saved', message: 'Agent instructions updated successfully.' });
     } catch (error) {
-      feedback.textContent = error.message || 'Unable to save instructions.';
+      window.AgentForgeToast?.show({ type: 'error', title: 'Unable to save instructions', message: error.message || 'Unable to save instructions.' });
     } finally {
       button.disabled = false;
     }
