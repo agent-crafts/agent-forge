@@ -1,17 +1,13 @@
 (() => {
   const button = document.getElementById("deleteToolButton");
   const context = document.getElementById("toolEditContext");
-  if (!button || !context) return;
+  const dialog = document.getElementById("deleteToolDialog");
+  const confirm = document.getElementById("confirmDeleteTool");
+  if (!button || !context || !dialog || !confirm) return;
 
-  button.addEventListener("click", async () => {
-    if (!window.ConfirmDialog) return;
-    const confirmed = await window.ConfirmDialog.show({
-      title: "Delete tool?",
-      message: "Delete " + context.dataset.toolDisplayName + "? It will be removed from the tool catalog but its data will be retained.",
-      confirmText: "Delete tool",
-      variant: "danger"
-    });
-    if (!confirmed) return;
+  button.addEventListener("click", () => dialog.showModal());
+  confirm.addEventListener("click", async () => {
+    confirm.disabled = true;
 
     button.disabled = true;
     try {
@@ -23,6 +19,8 @@
       window.location.assign("/tools");
     } catch (error) {
       button.disabled = false;
+      confirm.disabled = false;
+      dialog.close();
       window.AgentForgeToast?.show({type:"error",title:"Could not delete tool",message:error.message || "Please try again."});
     }
   });
