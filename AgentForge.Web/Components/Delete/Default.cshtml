@@ -4,14 +4,16 @@
         <header class="ui-dialog-header">
             <div>
                 <h2 id="@(Model.Id)-title">@Model.Title</h2>
-                <p id="@(Model.Id)-description">@Model.Description</p>
             </div>
             <form method="dialog"><ui-button type="submit" variant="ghost" css-class="ui-dialog-close" aria-label="Close dialog">×</ui-button></form>
         </header>
-        @if (!string.IsNullOrWhiteSpace(Model.ItemName))
-        {
-            <div class="ui-dialog-body"><p>You're about to delete <strong>@Model.ItemName</strong>.</p></div>
-        }
+        <div class="ui-dialog-body">
+            <p id="@(Model.Id)-description">@Model.Description</p>
+            @if (!string.IsNullOrWhiteSpace(Model.ItemName))
+            {
+                <p>You're about to delete <strong>@Model.ItemName</strong>.</p>
+            }
+        </div>
         <footer class="ui-dialog-footer">
             <form method="dialog"><ui-button type="submit" variant="secondary" text="@Model.CancelText" /></form>
             <ui-button text="@Model.ConfirmText" id="@Model.ConfirmButtonId" variant="danger" />
