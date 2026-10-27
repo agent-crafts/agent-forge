@@ -23,7 +23,7 @@
         <a href="/agents/@Uri.EscapeDataString(agent.Id)" aria-label="View details for @agent.Name" class="agent-card ui-item-card group flex min-w-0 items-start cursor-default gap-3 rounded-xl border border-line bg-surface px-3 py-3 text-content transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm"
                  data-search="@($"{agent.Name} {agent.Description} {string.Join(" ", agent.Tags)}".ToLowerInvariant())"
                  data-category="@agent.Category.ToLowerInvariant()">
-            <span aria-hidden="true" class="ui-icon-tile self-start text-xl font-semibold">@if (agent.Icon.StartsWith("/uploads/agent-icons/", StringComparison.Ordinal)) { <img src="@agent.Icon" alt="" width="40" height="40" class="h-10 w-10 rounded-lg object-cover" /> } else { @agent.Icon }</span>
+            <span aria-hidden="true" class="ui-icon-tile self-start text-xl font-semibold">@if (agent.Icon.StartsWith("/uploads/agent-icons/", StringComparison.Ordinal)) { <img src="@agent.Icon" alt="" width="40" height="40" class="h-10 w-10 rounded-lg object-cover" /> } else { <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="40" height="40"><path d="M12 3v3M4 12H2m20 0h-2M6 20h12a3 3 0 0 0 3-3v-6a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v6a3 3 0 0 0 3 3ZM8 13h.01M16 13h.01" /></svg> }</span>
             <div class="ui-item-content flex min-w-0 flex-1 flex-col gap-0.5">
                 <span class="ui-item-title break-words text-sm font-semibold text-heading">@agent.Name</span>
                 <span class="ui-item-description break-words text-xs leading-5 text-muted">@agent.Description</span>
