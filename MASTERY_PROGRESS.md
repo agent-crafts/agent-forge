@@ -14,6 +14,8 @@
 
 **Agent creation/profile instructions split (2026-10-27):** Creation modal now has only identity fields; empty system instructions allowed in domain; profile Instructions tab has editable textarea and Save Changes wired to GET/PUT Agent API, preserving other fields. Code committed on PR #22; build, browser and DB behavior unverified; no tests added per user preference. Mastery not assessed.
 
+**Agent create HTTP 500 investigation (2026-10-27):** Found PostgreSQL instructions check constraint still required nonblank values after creation modal began sending empty instructions. Updated EF configuration and snapshot; added `AllowEmptyAgentInstructions` migration. Likely cause identified from code, not confirmed by server exception. Migration execution, build, and browser verification pending; no tests added. Next: apply migration and retry creation.
+
 ## 1. Current snapshot
 
 | Field | Value |
