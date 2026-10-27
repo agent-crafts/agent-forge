@@ -4,9 +4,8 @@
     <p class="ui-subtitle">Write instructions in Markdown. Use the editor toolbar, side-by-side preview, or full-screen mode.</p>
     <form id="agentInstructionsForm" data-agent-id="@Model.Id">
         @Html.AntiForgeryToken()
-        <label for="agentSystemInstructions" class="ui-field-label">System Instructions</label>
         <partial name="_MarkdownEditor" model='"agentSystemInstructions"' view-data='new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData) { ["MarkdownContent"] = Model.SystemInstructions }' />
-        <div class="mt-4 flex items-center gap-3">
+        <div class="agent-instructions-actions">
             <button id="saveAgentInstructions" type="submit" class="ui-button ui-button--primary">Save Changes</button>
             <span id="agentInstructionsFeedback" role="status" aria-live="polite"></span>
         </div>
@@ -25,7 +24,11 @@
 .agent-markdown-component .editor-preview,
 .agent-markdown-component .editor-preview-side { background: #fff; color: #172033; }
 .agent-markdown-component .CodeMirror-cursor { border-left-color: #172033; }
-.agent-markdown-component .editor-statusbar { color: #64748b; }
+.agent-markdown-component .editor-statusbar { color: #64748b; display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: .75rem; padding: .5rem 0; }
+.agent-markdown-component .editor-statusbar .agent-instructions-actions { display: flex; align-items: center; gap: .75rem; margin-left: auto; }
+.agent-instructions-actions { display: flex; align-items: center; gap: .75rem; margin-top: .75rem; }
+.agent-markdown-component .editor-statusbar .agent-instructions-actions { margin-top: 0; }
+.agent-markdown-component .editor-statusbar .ui-button { font-size: .875rem; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.js"></script>
