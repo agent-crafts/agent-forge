@@ -5,10 +5,15 @@
  const editContext=document.getElementById("toolEditContext");
  if(!dialog||(!open&&!editOpen))return;
  let editMode=false, originalSchema=null;
+ let previewUrl=null;
+ const iconInput=document.getElementById("newToolIconUpload");
+ const iconPreview=document.getElementById("newToolIconPreview");
+ const showIcon=url=>{iconPreview.hidden=!url;if(url)iconPreview.src=url;else iconPreview.removeAttribute("src");};
+ iconInput.addEventListener("change",()=>{if(previewUrl)URL.revokeObjectURL(previewUrl);const file=iconInput.files?.[0];previewUrl=file?URL.createObjectURL(file):null;showIcon(previewUrl);});
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
  const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);status.textContent="";};
- if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription","newToolImage"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();status.textContent="";update();schema();dialog.showModal();});
+ if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription","newToolImage"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();status.textContent="";update();schema();dialog.showModal();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
   get("toolKindSelector").hidden=true;
@@ -22,7 +27,8 @@
   get("newToolDisplayName").value=d.toolDisplayName;
   get("newToolDescription").value=d.toolDescription;
   get("newToolCategory").value=d.toolCategory;
-  get("newToolImage").value=d.toolImageUrl||"";
+  get("newToolImage").value=(d.toolImageUrl||"").startsWith("https://")?d.toolImageUrl:"";
+  iconInput.value="";showIcon(d.toolImageUrl||null);
   dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.checked=r.value==="custom";r.disabled=true;});
   update();
   rows.replaceChildren();
@@ -98,7 +104,7 @@
   const name=get("newToolName").value.trim();
   const displayName=get("newToolDisplayName").value.trim();
   const description=get("newToolDescription").value.trim();
-  const imageUrl=get("newToolImage").value.trim()||null;
+  let imageUrl=get("newToolImage").value.trim()||(editMode?editContext.dataset.toolImageUrl:null)||null;
   const category=categoryValues[get("newToolCategory").value];
   const errors=[];
   const requiredFields=[
@@ -148,6 +154,16 @@
   saveButton.innerHTML='<span class="inline-flex items-center gap-2"><span class="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden="true"></span>Saving…</span>';
   status.textContent="Saving tool...";
   try{
+   const iconFile=iconInput.files?.[0];
+   if(iconFile){
+    if(iconFile.size>2*1024*1024||!["image/png","image/jpeg","image/webp","image/gif"].includes(iconFile.type))throw new Error("Choose PNG, JPG, WebP or GIF under 2 MB.");
+    const form=new FormData();form.append("file",iconFile);
+    const token=document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+    const upload=await fetch("/api/tools/icons",{method:"POST",credentials:"same-origin",headers:token?{"RequestVerificationToken":token}:{},body:form});
+    const result=await upload.json().catch(()=>null);
+    if(!upload.ok)throw new Error(result?.error||"Icon upload failed.");
+    imageUrl=result.url;
+   }
    const response=await fetch(editMode?"/api/tools/"+editContext.dataset.toolId:"/api/tools",{
     method:editMode?"PUT":"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify({...(editMode?{id:editContext.dataset.toolId}:{}),name,displayName,description,kind:kindValues[kind],category,jsonSchema,imageUrl})
