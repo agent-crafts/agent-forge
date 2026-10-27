@@ -5,12 +5,6 @@
     var descriptionId = Model.DescriptionId ?? $"{Model.Id}-description";
 }
 <dialog id="@Model.Id" class="ui-dialog ui-dialog--@(confirm ? "confirm" : "standard") @Model.CssClass" aria-labelledby="@titleId" aria-describedby="@(string.IsNullOrWhiteSpace(Model.Description) ? null : descriptionId)">
-    @if (Model.CustomContent)
-    {
-        @Model.Content
-    }
-    else
-    {
     <div class="ui-dialog-layout">
         <header class="ui-dialog-header">
             <div>
@@ -20,16 +14,15 @@
                     <p id="@descriptionId">@Model.Description</p>
                 }
             </div>
-            <form method="dialog"><ui-button type="submit" variant="ghost" css-class="ui-dialog-close" aria-label="Close dialog">×</ui-button></form>
+            <form method="dialog"><ui-button id="@Model.CloseButtonId" type="submit" variant="ghost" css-class="ui-dialog-close" aria-label="Close dialog">×</ui-button></form>
         </header>
-        @if (!string.IsNullOrWhiteSpace(Model.BodyText))
-        {
-            <div class="ui-dialog-body"><p>@Model.BodyText</p></div>
-        }
+        <div class="ui-dialog-body">
+            @if (Model.CustomContent) { @Model.Content }
+            else if (!string.IsNullOrWhiteSpace(Model.BodyText)) { <p>@Model.BodyText</p> }
+        </div>
         <footer class="ui-dialog-footer">
-            <form method="dialog"><ui-button type="submit" variant="secondary" text="@Model.CancelText" /></form>
+            <form method="dialog"><ui-button id="@Model.CancelButtonId" type="submit" variant="secondary" text="@Model.CancelText" /></form>
             <ui-button text="@Model.PrimaryText" id="@Model.PrimaryButtonId" variant="@(confirm ? "danger" : "primary")" />
         </footer>
     </div>
-    }
 </dialog>
