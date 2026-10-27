@@ -55,14 +55,14 @@
     <section class="ds-section" id="modal">
         <div class="ds-section-heading"><h2>Modal</h2><p>Native dialog, backdrop, Escape key, and focus behavior.</p></div>
         <div class="ds-preview">
-            <button type="button" class="ui-button ui-button--primary" id="dsOpenModal">Open example modal</button>
+            <ui-button id="dsOpenModal" variant="primary">Open example modal</ui-button>
         </div>
         <ui-modal id="dsExampleModal" title="Example dialog" description="A shared dialog shell from the design system." body-text="Reusable modal content and actions." primary-text="Continue" />
     </section>
 
     <section class="ds-section" id="delete">
         <div class="ds-section-heading"><h2>Delete confirmation</h2><p>Destructive actions require an explicit confirmation.</p></div>
-        <div class="ds-preview"><button type="button" class="ui-button ui-button--danger" id="dsOpenDelete">Delete example</button></div>
+        <div class="ds-preview"><ui-button id="dsOpenDelete" variant="danger">Delete example</ui-button></div>
         <ui-delete id="dsDeleteDialog" title="Delete agent?" description="This action cannot be undone." item-name="Example Agent" confirm-button-id="dsConfirmDelete" />
     </section>
 
