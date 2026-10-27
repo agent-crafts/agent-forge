@@ -1,4 +1,4 @@
-@{ var id = ViewData["Id"] as string ?? ""; var label = ViewData["Label"] as string ?? ""; var hint = ViewData["Hint"] as string ?? ""; var required = ViewData["Required"] is true; var control = ViewData["Control"] as string ?? "input"; }
+@{ var id = ViewData["Id"] as string ?? ""; var label = ViewData["Label"] as string ?? ""; var hint = ViewData["Hint"] as string ?? ""; var required = ViewData["Required"] is true; var control = ViewData["Control"] as string ?? "input"; var hintId = $"{id}-hint"; }
 <div class="ui-field">
   <label class="ui-field-label" for="@id">@label @if (required) { <span aria-hidden="true">*</span> }</label>
   @if (control == "textarea") {
@@ -8,6 +8,6 @@
   } else {
     <ui-input id="@id" name="@(ViewData["Name"] as string ?? id)" placeholder="@(ViewData["Placeholder"] as string ?? "")" required="@required" max-length="@(ViewData["MaxLength"] as int?)" />
   }
-  @if (!string.IsNullOrEmpty(hint)) { <small class="ui-field-hint">@hint</small> }
+  @if (!string.IsNullOrEmpty(hint)) { <small id="@hintId" class="ui-field-hint">@hint</small> }
   <span class="ui-field-error" id="@(id)-error" role="alert" hidden></span>
 </div>
