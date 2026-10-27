@@ -15,11 +15,13 @@
 | Current engineering milestone | UI foundation merged; static Agents Gallery added on draft PR #19 (build/browser unverified); GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation, generic/specialized repositories, unit of work, and initial Tool create/get/page application handlers added on feature branch (unverified); Tool update/deactivate and Project use cases pending |
 | Current mastery assessment | Not assessed |
 | Next recommended action | Confirm latest PR #16 Chromium CI passes; expand Tools Add/Edit/Delete and Try Now browser coverage with test data; review accessibility/visual QA. Separately verify persistence migrations and integration tests |
-| Last progress review | 2026-10-25 (UI PR #16: component and Tools polish committed; Chromium smoke checks added; initial browser CI exposed launch-profile port mismatch, fixed in workflow; retest pending) |
+| Last progress review | 2026-10-27 — Agent domain/persistence implementation committed to feature branch; build, tests and PostgreSQL migration execution pending; mastery not assessed. Previously: 2026-10-25 (UI PR #16: component and Tools polish committed; Chromium smoke checks added; initial browser CI exposed launch-profile port mismatch, fixed in workflow; retest pending) |
 
 **Agents Gallery design update (2026-10-25):** Cards now reuse the Tools gallery's shared `ui-item-card`, `ui-icon-tile`, `ui-item-content`, and badge styles in a two-column grid on draft PR #19. Static preview only; build and browser verification pending. No mastery assessment evidence.\n\n**Agent Details milestone (2026-10-25):** Read-only sample detail route (`/agents/{id}`), shared-style profile/overview/capabilities, gallery navigation, and unknown-ID 404 added on draft PR #19. Build and browser checks pending; configuration and runtime not implemented; mastery not assessed.
 
 **Agent Overview UI (2026-10-26):** Implemented responsive read-only Overview dashboard with About, capabilities, sample use cases, agent metadata, tags, and explicit preview limitations on PR #19. Uses existing sample-agent data; model, tools, author, version, and execution metrics are intentionally not fabricated. Build/browser verification pending; mastery not assessed.
+
+**Agent domain/persistence slice (2026-10-27):** On `feature/agent-domain-persistence`, added global reusable Agent aggregate, string-persisted AgentCategory enum, EF Core mapping, additive PostgreSQL migration/snapshot and domain/integration test sources. This is committed Engineering progress, not runtime verification: .NET SDK/PostgreSQL unavailable here; tests and migration have not been executed. No Agent UI/API/runtime wiring. Mastery not assessed.
 
 ## 2. Learning & engineering roadmap
 
@@ -27,7 +29,7 @@ These phases are **provisional** until reconciled with the project's training ma
 
 | Phase | Focus | Knowledge | Engineering | Mastery |
 | --- | --- | --- | --- | --- |
-| 00 | Baseline, curriculum alignment, repository architecture | In progress | UI foundation exists; persistence and initial Tool application handlers committed on feature branch, unverified | Not assessed |
+| 00 | Baseline, curriculum alignment, repository architecture | In progress | UI and persistence foundations exist; Agent domain and PostgreSQL migration committed on feature branch, unverified | Not assessed |
 | 01 | LLM foundations: tokens, attention, transformers, inference | Not started | Not started | Not assessed |
 | 02 | LLM application engineering: messages, context, persistence, streaming | Not started | Not started | Not assessed |
 | 03 | Agent runtime: tool calling, state, execution loops, guardrails | Not started | Not started | Not assessed |
@@ -40,15 +42,15 @@ These phases are **provisional** until reconciled with the project's training ma
 
 ## 3. Active module
 
-- **Module ID / title:** Module 00 — PostgreSQL persistence foundation
-- **Problem and why it matters:** Project metadata needs durable, versioned relational persistence.
+- **Module ID / title:** Module 00 — Agent domain and PostgreSQL persistence extension
+- **Problem and why it matters:** Global reusable Agent definitions need validated domain state and durable, versioned PostgreSQL persistence.
 - **Prerequisites:** TBD
 - **Learning objectives:** TBD
 - **Theory and internals covered:** TBD
 - **Minimal implementation / experiment:** TBD
 - **Production design and trade-offs:** TBD
-- **AgentForge files / architecture touched:** Core Project entity; Infrastructure DbContext, mappings, migrations, DI; Web configuration; Docker Compose.
-- **Tests and evaluations:** Pending: .NET build, migration application, schema constraints, model drift and integration tests.
+- **AgentForge files / architecture touched:** Core Agent/AgentCategory; Infrastructure AgentConfiguration, AddAgents migration and snapshot; AgentForge.Tests.
+- **Tests and evaluations:** Agent unit and PostgreSQL round-trip test sources committed; execution pending: .NET build/test, migration application, schema constraints, model drift.
 - **Practice / debugging challenges:** TBD
 - **Mastery criteria and evidence:** TBD
 - **Open questions / blockers:** .NET SDK and PostgreSQL runtime not available in this execution environment; no verified migration execution.
@@ -93,9 +95,11 @@ These phases are **provisional** until reconciled with the project's training ma
 | 2026-10-21 | Align training resources before finalizing the phase order | Prevent prerequisite gaps and disconnected feature work | Module 00 |
 | 2026-10-21 | Project-centric Agent Studio is proposed; database and identity model remain open | Establish a project boundary before agents and orchestration | docs/architecture-foundation-assessment.md |
 
+| 2026-10-27 | Agent definitions are global and reusable; category is an enum stored as string | Keep Project linkage, permissions and runtime outside MVP | Agent domain/persistence feature branch; build/migration/tests unverified |
+
 ## 5. Next-session handoff
 
-**Read this section first in a new chat.**
+**Read this section first in a new chat.** Agent persistence next: review feature branch PR, run .NET build/tests, run PostgreSQL migration and pending-model-change check, then address review findings. Do not claim mastery.
 
 1. Read this file from the latest repository branch (prefer `main` for merged progress).
 2. Verify current branches, PRs, and relevant code through GitHub; do not rely solely on this summary.
