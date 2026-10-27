@@ -123,3 +123,7 @@ Invoke via `@await Component.InvokeAsync("Button", new { model = new ButtonViewM
 
 ## Live component gallery
 Visit `/design-system` to inspect shared Button variants (including disabled), Input, Select, Textarea, Field and invalid state, Modal, Badge, and Card. The gallery is rendered from shared component files in `AgentForge.Web/Components/`; its layout CSS is in `ui-components.css`. It is an initial visual showcase, not automated accessibility or browser verification. Keep examples current as components evolve.
+
+## Delete confirmation component
+
+`AgentForge.Web/Components/Delete/` contains a typed `DeleteViewModel`, `DeleteViewComponent`, and `Default.cshtml`. Invoke `Component.InvokeAsync("Delete", new { model = new DeleteViewModel { Id = "deleteAgentDialog", Title = "Delete agent?", Description = "This action cannot be undone.", ItemName = agentName, ConfirmButtonId = "confirmDeleteAgent" } })`. The component presents Cancel (secondary) before Delete (danger), uses the shared modal shell and native dialog dismissal, and deliberately does **not** perform deletion. Consumers must attach an authorized delete handler to `ConfirmButtonId`, handle server failures, and only dismiss after success. The `/design-system` example is non-destructive.
