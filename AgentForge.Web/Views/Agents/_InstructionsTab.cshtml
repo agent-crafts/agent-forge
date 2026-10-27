@@ -5,7 +5,16 @@
     <form id="agentInstructionsForm" data-agent-id="@Model.Id">
         @Html.AntiForgeryToken()
         <label for="agentSystemInstructions" class="ui-field-label">System Instructions</label>
-        <textarea id="agentSystemInstructions" class="ui-input w-full" rows="16" maxlength="12000" placeholder="You are an AI agent responsible for...">@Model.SystemInstructions</textarea>
+        <div class="agent-editor-toolbar" role="toolbar" aria-label="Instruction formatting">
+            <button type="button" data-markdown="heading" title="Heading">H</button>
+            <button type="button" data-markdown="bold" title="Bold"><strong>B</strong></button>
+            <button type="button" data-markdown="italic" title="Italic"><em>I</em></button>
+            <button type="button" data-markdown="bullet" title="Bulleted list">• List</button>
+            <button type="button" data-markdown="number" title="Numbered list">1. List</button>
+            <button type="button" data-markdown="code" title="Code">Code</button>
+            <button type="button" data-markdown="link" title="Link">Link</button>
+        </div>
+        <textarea id="agentSystemInstructions" class="ui-input w-full agent-markdown-editor" rows="16" maxlength="12000" placeholder="You are an AI agent responsible for...">@Model.SystemInstructions</textarea>
         <div class="mt-4 flex items-center gap-3">
             <button id="saveAgentInstructions" type="submit" class="ui-button ui-button--primary">Save Changes</button>
             <span id="agentInstructionsFeedback" role="status" aria-live="polite"></span>
