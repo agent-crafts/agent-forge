@@ -3,7 +3,7 @@
   var categories = new[] { "Select category", "Development", "Planning", "Quality", "Testing", "Operations", "Documentation", "Research", "Data", "Other" }.Select((value, i) => new SelectListItem { Text = value, Value = i == 0 ? "" : value }).ToList();
   var icons = new[] { ("◈ Default", "◈"), ("◇ Review", "◇"), ("⚙ Operations", "⚙"), ("▤ Documentation", "▤") }.Select(value => new SelectListItem { Text = value.Item1, Value = value.Item2 }).ToList();
 }
-<dialog id="createAgentDialog" class="agent-dialog" aria-labelledby="createAgentTitle" aria-describedby="createAgentDescription">
+<ui-modal id="createAgentDialog" css-class="agent-dialog" title="Create New Agent" description="Define your agent identity and core behavior." title-id="createAgentTitle" description-id="createAgentDescription">
   <div class="agent-dialog-header">
     <div><h2 id="createAgentTitle">Create New Agent</h2><p id="createAgentDescription">Define your agent's identity and core behavior. Configure tools, skills, and other settings later.</p></div>
     <ui-button id="closeAgentDialog" variant="ghost" css-class="agent-dialog-close" aria-label="Close dialog">×</ui-button>
@@ -34,4 +34,4 @@
     <div class="agent-dialog-footer"><ui-button id="cancelAgentDialog" variant="secondary">Cancel</ui-button><div class="agent-dialog-footer-right"><ui-button id="previousAgentStep" variant="secondary" hidden="true">Back</ui-button><ui-button id="nextAgentStep" variant="primary">Next →</ui-button><ui-button id="submitAgentForm" variant="primary" type="submit" hidden="true">Review Complete</ui-button></div></div>
     <p class="agent-dialog-feedback" id="agentFormFeedback" role="status" hidden></p>
   </form>
-</dialog>
+</ui-modal>
