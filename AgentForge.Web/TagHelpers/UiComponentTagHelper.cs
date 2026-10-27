@@ -65,6 +65,7 @@ public sealed class UiComponentTagHelper : TagHelper
     public bool Required { get; set; }
     public bool Disabled { get; set; }
     public bool Hidden { get; set; }
+    public bool CustomLayout { get; set; }
     public IEnumerable<SelectListItem>? Options { get; set; }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -104,7 +105,7 @@ public sealed class UiComponentTagHelper : TagHelper
                         Id = Id ?? "", Title = Title ?? "", Description = Description ?? "",
                         TitleId = TitleId, DescriptionId = DescriptionId,
                         CloseButtonId = CloseButtonId, CancelButtonId = CancelButtonId,
-                        CssClass = CssClass, CustomContent = customContent is not null && !customContent.IsEmptyOrWhiteSpace,
+                        CssClass = CssClass, CustomLayout = CustomLayout, CustomContent = customContent is not null && !customContent.IsEmptyOrWhiteSpace,
                         Content = customContent,
                         BodyText = BodyText ?? "", Variant = Variant ?? "standard",
                         PrimaryText = PrimaryText ?? "Confirm", CancelText = CancelText ?? "Cancel",
