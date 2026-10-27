@@ -9,6 +9,7 @@
 }
 <ui-modal id="addToolDialog" title="Add Tool" description="Configure a custom tool or connect an external source." title-id="addToolTitle" description-id="addToolIntro" css-class="tool-config-dialog" primary-text="Save" primary-button-id="previewToolConfiguration" cancel-text="Cancel" cancel-button-id="cancelAddToolDialog" close-button-id="closeAddToolDialog">
 
+            @Html.AntiForgeryToken()
             <fieldset id="toolKindSelector" class="mb-5 grid grid-cols-1 gap-2 border-0 p-0 sm:grid-cols-2">
                 <legend class="sr-only">Tool type</legend>
                 <label class="group flex cursor-pointer items-center gap-2.5 rounded-xl border-0 bg-raised px-3.5 py-3 text-left transition-colors duration-150 hover:bg-hover has-[:checked]:bg-[var(--active)] has-[:checked]:ring-1 has-[:checked]:ring-inset has-[:checked]:ring-accent has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent"><input class="sr-only" type="radio" name="toolKind" value="@ToolKind.Custom.ToString().ToLowerInvariant()" checked /><svg class="size-[26px] shrink-0 text-muted group-has-[:checked]:text-accent" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4l-5.1 5.1a2 2 0 0 0 2.8 2.8l5.1-5.1a5 5 0 0 0 6.4-6.4L14 12l-2-2 2.7-3.7Z"/></svg><span><strong class="block text-[13px] leading-snug text-heading">@enumLabel(ToolKind.Custom)</strong><small class="mt-0.5 block text-[11px] leading-snug text-muted">Define a tool built for AgentForge.</small></span></label>
@@ -42,7 +43,7 @@
                 <p id="newToolImageError" class="ui-field-error hidden" role="alert"></p>
                 
                 
-                <p id="toolImageHelp" class="text-[13px] text-muted">Optional HTTPS image URL for the tool icon. Image upload is not implemented yet.</p>
+                <p id="toolImageHelp" class="text-[13px] text-muted">Optional HTTPS image URL for the tool icon. Or upload a PNG, JPG, WebP or GIF (up to 2 MB).</p>
                 <label for="newToolIconUpload">Tool icon (optional)</label>
                 <input id="newToolIconUpload" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
                 <img id="newToolIconPreview" alt="Tool icon preview" width="64" height="64" hidden />
