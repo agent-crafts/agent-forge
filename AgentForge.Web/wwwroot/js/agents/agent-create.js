@@ -66,6 +66,8 @@
     if (first) {
       if (step !== index) showStep(index);
       first.focus();
+      feedback.textContent = 'Please complete the required fields.';
+      feedback.hidden = false;
       return false;
     }
     return true;
@@ -95,7 +97,8 @@
 
   async function createAgent() {
     if (saving) return;
-    if (!validateStep(0) || !validateStep(1)) return;
+    if (!validateStep(0)) return;
+    if (!validateStep(1)) return;
 
     const value = name => String(form.elements.namedItem(name)?.value ?? '').trim();
     const tags = value('tags').split(',').map(tag => tag.trim()).filter(Boolean);
