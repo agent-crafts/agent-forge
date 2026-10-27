@@ -9,11 +9,11 @@
   const categories = ['Development', 'Planning', 'Quality', 'Testing', 'Operations', 'Documentation', 'Research', 'Data', 'Other'];
 
   const editDialog = document.createElement('dialog');
-  editDialog.className = 'rounded-xl border border-line bg-surface p-6 text-content shadow-xl w-full max-w-lg';
+  editDialog.className = 'agent-dialog rounded-xl border border-line bg-surface p-6 text-content shadow-xl w-full max-w-lg backdrop:bg-black/50';
   editDialog.innerHTML = `<form class="flex flex-col gap-4">
     <h2 class="text-xl font-semibold">Edit agent</h2>
     <label class="flex flex-col gap-1">Name<input name="name" class="ui-input" required maxlength="80"></label>
-    <label class="flex flex-col gap-1">Category<select name="category" class="ui-input" required>${categories.map((category, index) => `<option value="${index}">${category}</option>`).join('')}</select></label>
+    <label class="flex flex-col gap-1">Category<span class="ui-select-wrap relative block"><select name="category" class="ui-input w-full appearance-none pr-10" required>${categories.map((category, index) => `<option value="${index}">${category}</option>`).join('')}</select><svg class="ui-select-chevron pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></label>
     <label class="flex flex-col gap-1">Description<textarea name="description" class="ui-input" required maxlength="300" rows="4"></textarea></label>
     <label class="flex flex-col gap-1">Tags (comma-separated)<input name="tags" class="ui-input" maxlength="200"></label>
     <p class="text-sm text-red-600" role="alert" hidden></p>
@@ -86,7 +86,7 @@
   });
 
   const deleteDialog = document.createElement('dialog');
-  deleteDialog.className = 'rounded-xl border border-line bg-surface p-6 text-content shadow-xl w-full max-w-md';
+  deleteDialog.className = 'rounded-xl border border-line bg-surface p-6 text-content shadow-xl w-full max-w-md backdrop:bg-black/50';
   deleteDialog.innerHTML = `<h2 class="text-xl font-semibold">Delete agent?</h2>
     <p class="my-4">This deactivates the agent and removes it from the active agents list.</p>
     <p role="alert" class="text-sm text-red-600" hidden></p>
