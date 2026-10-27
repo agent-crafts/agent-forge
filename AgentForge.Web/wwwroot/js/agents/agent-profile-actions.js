@@ -15,28 +15,27 @@
     element.textContent = error.message || 'Something went wrong.';
     element.hidden = false;
   }
-  const deleteDialog = document.createElement('dialog');
-  deleteDialog.className = 'rounded-xl border border-line bg-surface p-6 text-content shadow-xl w-full max-w-md';
-  deleteDialog.innerHTML = `<h2 class="text-xl font-semibold">Delete agent?</h2>
-    <p class="my-4">This deactivates the agent and removes it from the active agents list.</p>
-    <p role="alert" class="text-sm text-red-600" hidden></p>
-    <div class="flex justify-end gap-2"><button type="button" data-cancel class="ui-button">Cancel</button><button type="button" data-confirm class="ui-button ui-button--danger">Delete agent</button></div>`;
-  document.body.appendChild(deleteDialog);
-  const deleteError = deleteDialog.querySelector('[role="alert"]');
-  const confirmDelete = deleteDialog.querySelector('[data-confirm]');
-  deleteButton.addEventListener('click', () => { deleteError.hidden = true; deleteDialog.showModal(); });
-  deleteDialog.querySelector('[data-cancel]').addEventListener('click', () => { if (!busy) deleteDialog.close(); });
+  const deleteDialog = document.getElementById('deleteAgentDialog');
+  const confirmDelete = document.getElementById('confirmDeleteAgent');
+  if (!deleteDialog || !confirmDelete) return;
+  deleteButton.addEventListener('click', () => { deleteDialog.showModal(); });
+  deleteDialog.querySelectorAll('form[method="dialog"]').forEach(form => form.addEventListener('submit', event => { if (busy) event.preventDefault(); }));
   deleteDialog.addEventListener('cancel', event => { if (busy) event.preventDefault(); });
   confirmDelete.addEventListener('click', async () => {
     if (busy) return;
     busy = true;
     confirmDelete.disabled = true;
-    deleteError.hidden = true;
+    deleteDialog.setAttribute('aria-busy', 'true');
+    deleteButton.disabled = true;
     try {
       await apiRequest('DELETE');
       window.AgentForgeToast?.afterNavigation({ type: 'success', title: 'Agent deleted', message: 'Agent removed from the active list.' });
       window.location.assign('/agents');
-    } catch (error) { showError(deleteError, error); }
-    finally { busy = false; confirmDelete.disabled = false; }
+    } catch (error) {
+      deleteDialog.removeAttribute('aria-busy');
+      deleteButton.disabled = false;
+      deleteDialog.close();
+      window.AgentForgeToast?.show({ type: 'error', title: 'Could not delete agent', message: error.message || 'Please try again.' });
+    } finally { busy = false; confirmDelete.disabled = false; }
   });
 })();
