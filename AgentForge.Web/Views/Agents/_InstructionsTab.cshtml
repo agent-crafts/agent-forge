@@ -13,6 +13,20 @@
     </form>
 </section>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.css" />
+<style>
+.agent-markdown-component .editor-toolbar { background: #f8fafc; color: #1e293b; border-color: #cbd5e1; opacity: 1; }
+.agent-markdown-component .editor-toolbar button,
+.agent-markdown-component .editor-toolbar a { color: #1e293b !important; opacity: 1; }
+.agent-markdown-component .editor-toolbar button:hover,
+.agent-markdown-component .editor-toolbar button.active,
+.agent-markdown-component .editor-toolbar a:hover,
+.agent-markdown-component .editor-toolbar a.active { background: #e2e8f0; color: #0f172a !important; border-color: #94a3b8; }
+.agent-markdown-component .CodeMirror,
+.agent-markdown-component .editor-preview,
+.agent-markdown-component .editor-preview-side { background: #fff; color: #172033; }
+.agent-markdown-component .CodeMirror-cursor { border-left-color: #172033; }
+.agent-markdown-component .editor-statusbar { color: #64748b; }
+</style>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.js"></script>
 <script src="~/js/shared/markdown-editor.js" asp-append-version="true"></script>
