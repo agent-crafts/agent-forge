@@ -24,6 +24,8 @@
 
 **Agent Instructions Markdown editor (2026-10-27):** Added formatting toolbar for heading, bold, italic, lists, code, and links using textarea selection and Markdown insertion; existing Save API preserved. Committed on PR #22; build and browser verification pending; no tests added; mastery not assessed.
 
+**Agent information persistence wiring (2026-10-27):** Exposed persisted CreatedAt, UpdatedAt, IsActive in AgentCard and displayed timestamps, status, ID, category in Overview. Removed unsupported Version, Author, Model, Temperature placeholders pending real features. Committed to PR #22; build/browser verification pending; mastery not assessed.
+
 ## 1. Current snapshot
 
 | Field | Value |
