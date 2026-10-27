@@ -5,6 +5,12 @@
   const editOpen = document.getElementById('editAgentButton');
   if (!dialog || !form || (!open && !editOpen)) return;
   let editingAgent = null;
+  const dialogTitle = document.getElementById('createAgentTitle');
+  const dialogDescription = document.getElementById('createAgentDescription');
+  function setDialogMode(editing) {
+    if (dialogTitle) dialogTitle.textContent = editing ? 'Edit Agent' : 'Create New Agent';
+    if (dialogDescription) dialogDescription.textContent = editing ? 'Update the agent identity.' : 'Create the agent identity. Configure instructions and other settings from its profile.';
+  }
 
   const sections = [...form.querySelectorAll('[data-agent-step]')];
   const indicators = [...form.querySelectorAll('[data-step-indicator]')];
@@ -83,7 +89,7 @@
 
   form.addEventListener('input', updateField);
   form.addEventListener('change', updateField);
-  open?.addEventListener('click', () => { editingAgent = null; form.reset(); showStep(0); dialog.showModal(); });
+  open?.addEventListener('click', () => { editingAgent = null; setDialogMode(false); form.reset(); showStep(0); dialog.showModal(); });
   editOpen?.addEventListener('click', async () => {
     editOpen.disabled = true;
     try {
@@ -91,6 +97,7 @@
       const response = await fetch('/api/agents/' + encodeURIComponent(id), { credentials: 'same-origin' });
       if (!response.ok) throw new Error('Unable to load agent (HTTP ' + response.status + ').');
       editingAgent = await response.json();
+      setDialogMode(true);
       form.reset();
       form.elements.namedItem('name').value = editingAgent.name;
       form.elements.namedItem('description').value = editingAgent.description;
