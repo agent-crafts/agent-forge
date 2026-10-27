@@ -2,11 +2,11 @@
 <div class="ui-field">
   <label class="ui-field-label" for="@id">@label @if (required) { <span aria-hidden="true">*</span> }</label>
   @if (control == "textarea") {
-    <partial name="~/Components/Textarea/Default.cshtml" view-data="ViewData" />
+    <ui-textarea id="@id" name="@(ViewData["Name"] as string ?? id)" placeholder="@(ViewData["Placeholder"] as string ?? "")" required="@required" rows="@(ViewData["Rows"] as int? ?? 4)" max-length="@(ViewData["MaxLength"] as int?)" />
   } else if (control == "select") {
-    <partial name="~/Components/Select/Default.cshtml" view-data="ViewData" />
+    <ui-select id="@id" name="@(ViewData["Name"] as string ?? id)" required="@required" options="@(ViewData["Options"] as IEnumerable<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)" />
   } else {
-    <partial name="~/Components/Input/Default.cshtml" view-data="ViewData" />
+    <ui-input id="@id" name="@(ViewData["Name"] as string ?? id)" placeholder="@(ViewData["Placeholder"] as string ?? "")" required="@required" max-length="@(ViewData["MaxLength"] as int?)" />
   }
   @if (!string.IsNullOrEmpty(hint)) { <small class="ui-field-hint">@hint</small> }
   <span class="ui-field-error" id="@(id)-error" role="alert" hidden></span>
