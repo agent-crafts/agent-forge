@@ -13,10 +13,6 @@
         </header>
         <div class="ui-dialog-body">
             <p id="@(Model.Id)-description">@Model.Description</p>
-            @if (!string.IsNullOrWhiteSpace(Model.ItemName))
-            {
-                <p>You're about to delete <strong>@Model.ItemName</strong>.</p>
-            }
         </div>
         <footer class="ui-dialog-footer">
             <form method="dialog"><ui-button type="submit" variant="secondary" text="@Model.CancelText" /></form>
