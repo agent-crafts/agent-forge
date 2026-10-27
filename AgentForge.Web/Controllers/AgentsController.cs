@@ -1,5 +1,6 @@
 using AgentForge.Application.Agents.Queries;
 using AgentForge.Core.Domains;
+using AgentForge.Core.Enums;
 using AgentForge.Core.Utilities;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,7 @@ public sealed class AgentsController(ISender sender) : Controller
             new PagedQuery<Agent>(pageNumber, pageSize, agent => agent.IsActive,
                 agents => agents.OrderBy(agent => agent.Name))), cancellationToken);
 
+        ViewData["Categories"] = Enum.GetNames<AgentCategory>();
         ViewData["Title"] = "Agents";
         ViewData["Section"] = "agents";
         ViewData["PageNumber"] = result.PageNumber;
