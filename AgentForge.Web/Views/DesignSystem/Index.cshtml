@@ -19,7 +19,7 @@
     </header>
 
     <nav class="ds-nav" aria-label="Component sections">
-        <a href="#buttons">Buttons</a><a href="#inputs">Inputs</a><a href="#fields">Form fields</a><a href="#modal">Modal</a><a href="#badges">Badges</a><a href="#cards">Cards</a>
+        <a href="#buttons">Buttons</a><a href="#inputs">Inputs</a><a href="#fields">Form fields</a><a href="#modal">Modal</a><a href="#delete">Delete</a><a href="#badges">Badges</a><a href="#cards">Cards</a>
     </nav>
 
     <section class="ds-section" id="buttons">
@@ -61,6 +61,12 @@
         @await Component.InvokeAsync("Modal", new { model = new AgentForge.Web.Components.Modal.ModalViewModel { Id = "dsExampleModal", Title = "Example dialog", Description = "A shared dialog shell from the design system.", BodyText = "Reusable modal content and actions.", PrimaryText = "Continue" } })
     </section>
 
+    <section class="ds-section" id="delete">
+        <div class="ds-section-heading"><h2>Delete confirmation</h2><p>Destructive actions require an explicit confirmation.</p></div>
+        <div class="ds-preview"><button type="button" class="ui-button ui-button--danger" id="dsOpenDelete">Delete example</button></div>
+        @await Component.InvokeAsync("Delete", new { model = new AgentForge.Web.Components.Delete.DeleteViewModel { Id = "dsDeleteDialog", Title = "Delete agent?", Description = "This action cannot be undone.", ItemName = "Example Agent", ConfirmButtonId = "dsConfirmDelete" } })
+    </section>
+
     <section class="ds-section" id="badges">
         <div class="ds-section-heading"><h2>Badges</h2><p>Semantic statuses.</p></div>
         <div class="ds-preview">
@@ -88,6 +94,12 @@
     const dialog = document.getElementById('dsExampleModal');
     if (!trigger || !dialog) return;
     trigger.addEventListener('click', () => dialog.showModal());
+    const deleteTrigger = document.getElementById('dsOpenDelete');
+    const deleteDialog = document.getElementById('dsDeleteDialog');
+    const deleteConfirm = document.getElementById('dsConfirmDelete');
+    deleteTrigger?.addEventListener('click', () => deleteDialog?.showModal());
+    deleteConfirm?.addEventListener('click', () => deleteDialog?.close()); // Gallery demo only; does not delete data.
+    deleteDialog?.addEventListener('click', event => { if (event.target === deleteDialog) deleteDialog.close(); });
     dialog.addEventListener('click', (event) => {
         if (event.target === dialog) dialog.close();
     });
