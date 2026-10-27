@@ -12,6 +12,8 @@
 
 **Agent Overview Key features cleanup (2026-10-27):** Removed duplicate Key features list from About this agent; retained description, Tags, and Typical use cases. UI committed; browser verification pending.
 
+**Agent creation/profile instructions split (2026-10-27):** Creation modal now has only identity fields; empty system instructions allowed in domain; profile Instructions tab has editable textarea and Save Changes wired to GET/PUT Agent API, preserving other fields. Code committed on PR #22; build, browser and DB behavior unverified; no tests added per user preference. Mastery not assessed.
+
 ## 1. Current snapshot
 
 | Field | Value |
