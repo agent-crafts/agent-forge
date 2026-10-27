@@ -4,7 +4,7 @@
     var titleId = $"{Model.Id}-title";
     var descriptionId = $"{Model.Id}-description";
 }
-<dialog id="@Model.Id" class="ui-dialog ui-dialog--@(confirm ? "confirm" : "standard")" aria-labelledby="@titleId" aria-describedby="@descriptionId">
+<dialog id="@Model.Id" class="ui-dialog ui-dialog--@(confirm ? "confirm" : "standard")" aria-labelledby="@titleId" aria-describedby="@(string.IsNullOrWhiteSpace(Model.Description) ? null : descriptionId)">
     <div class="ui-dialog-layout">
         <header class="ui-dialog-header">
             <div>
