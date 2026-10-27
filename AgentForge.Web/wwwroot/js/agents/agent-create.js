@@ -36,19 +36,15 @@
     const empty = input.required && !input.value.trim();
     const message = empty ? 'This field is required.' : (input.validity.valid ? '' : input.validationMessage);
     const wrapper = input.closest('.agent-field');
-    let error = wrapper.querySelector('.agent-field-error');
-    if (!error) {
-      error = document.createElement('span');
-      error.className = 'agent-field-error';
-      error.id = input.id + '-error';
-      error.setAttribute('role', 'alert');
-      wrapper.appendChild(error);
-    }
+    const error = wrapper.querySelector('.ui-field-error') || wrapper.querySelector('.agent-field-error');
+    if (!error) return !message;
     error.textContent = message;
     error.hidden = !message;
     input.classList.toggle('is-invalid', Boolean(message));
     input.setAttribute('aria-invalid', message ? 'true' : 'false');
-    if (message) input.setAttribute('aria-describedby', error.id);
+    const hint = document.getElementById(input.id + '-hint');
+    const describedBy = [hint?.id, message ? error.id : null].filter(Boolean).join(' ');
+    if (describedBy) input.setAttribute('aria-describedby', describedBy);
     else input.removeAttribute('aria-describedby');
     return !message;
   }
