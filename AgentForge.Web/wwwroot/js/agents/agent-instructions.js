@@ -47,6 +47,7 @@
         throw new Error(error?.error || error?.title || 'Save failed (HTTP ' + response.status + ').');
       }
       feedback.textContent = 'Instructions saved.';
+      window.AgentForgeToast?.show({ type: 'success', title: 'Instructions saved', message: 'Agent instructions updated successfully.' });
     } catch (error) {
       feedback.textContent = error.message || 'Unable to save instructions.';
     } finally {
