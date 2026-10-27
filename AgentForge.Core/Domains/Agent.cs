@@ -10,7 +10,7 @@ public sealed class Agent : Base
     public string Name { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
     public AgentCategory Category { get; private set; }
-    public string Icon { get; private set; } = "◈";
+    public string Icon { get; private set; } = "";
     public string[] Tags { get; private set; } = [];
     public string SystemInstructions { get; private set; } = string.Empty;
     public DateTimeOffset CreatedAt { get; private set; }
@@ -82,7 +82,7 @@ public sealed class Agent : Base
         if (!Enum.IsDefined(category))
             throw new ArgumentOutOfRangeException(nameof(category));
 
-        var normalizedIcon = string.IsNullOrWhiteSpace(icon) ? "◈" : icon.Trim();
+        var normalizedIcon = string.IsNullOrWhiteSpace(icon) ? string.Empty : icon.Trim();
         if (normalizedIcon.Length > 32)
             throw new ArgumentException("Icon must be at most 32 characters.", nameof(icon));
 
