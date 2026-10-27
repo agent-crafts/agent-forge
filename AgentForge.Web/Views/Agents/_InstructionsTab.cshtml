@@ -1,11 +1,12 @@
 @model AgentForge.Web.Controllers.AgentsController.AgentCard
 <section class="ui-panel agent-instructions">
     <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l4 4v14H4V3h4Z"/><path d="M8 11h8M8 15h8M8 19h5"/></svg></span> System Instructions</h2>
-    <p class="ui-subtitle">Write instructions in Markdown. Use the editor toolbar, side-by-side preview, or full-screen mode.</p>
+    <p class="ui-subtitle">Write instructions in Markdown. Use the editor toolbar, Preview button, or full-screen mode.</p>
     <form id="agentInstructionsForm" data-agent-id="@Model.Id">
         @Html.AntiForgeryToken()
         <partial name="_MarkdownEditor" model='"agentSystemInstructions"' view-data='new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData) { ["MarkdownContent"] = Model.SystemInstructions }' />
         <div class="agent-instructions-actions">
+            <button id="previewAgentInstructions" type="button" class="ui-button ui-button--secondary" aria-pressed="false">Preview</button>
             <button id="saveAgentInstructions" type="submit" class="ui-button ui-button--primary">Save Changes</button>
         </div>
     </form>
