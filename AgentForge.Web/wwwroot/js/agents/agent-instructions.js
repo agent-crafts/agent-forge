@@ -16,7 +16,7 @@
       return;
     }
     button.disabled = true;
-    feedback.textContent = 'Saving…';
+    feedback.textContent = '';
     try {
       // Read the latest persisted definition so editing instructions does not
       // accidentally overwrite name, category, icon, or tags.
