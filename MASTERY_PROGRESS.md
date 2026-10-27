@@ -16,6 +16,8 @@
 
 **Agent create HTTP 500 investigation (2026-10-27):** Found PostgreSQL instructions check constraint still required nonblank values after creation modal began sending empty instructions. Updated EF configuration and snapshot; added `AllowEmptyAgentInstructions` migration. Likely cause identified from code, not confirmed by server exception. Migration execution, build, and browser verification pending; no tests added. Next: apply migration and retry creation.
 
+**Agent Overview Typical use cases cleanup (2026-10-27):** Removed tag-generated Typical use cases panel; retained About, Agent information, and Tags. Change committed on PR #22; browser verification pending. No mastery assessment.
+
 ## 1. Current snapshot
 
 | Field | Value |
