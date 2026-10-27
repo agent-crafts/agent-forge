@@ -10,6 +10,17 @@
   const next = document.getElementById('nextAgentStep');
   const submit = document.getElementById('submitAgentForm');
   const feedback = document.getElementById('agentFormFeedback');
+  const iconInput = document.getElementById('agentIconUpload');
+  const iconPreview = document.getElementById('agentIconPreview');
+  let previewUrl = null;
+  iconInput.addEventListener('change', () => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    const file = iconInput.files?.[0];
+    previewUrl = file ? URL.createObjectURL(file) : null;
+    iconPreview.hidden = !previewUrl;
+    if (previewUrl) iconPreview.src = previewUrl;
+    else iconPreview.removeAttribute('src');
+  });
   form.noValidate = true;
   let step = 0;
   let saving = false;
@@ -96,7 +107,7 @@
       name: value('name'),
       description: value('description'),
       category,
-      icon: value('icon') || null,
+      icon: null,
       tags,
       systemInstructions: value('instructions')
     };
@@ -109,6 +120,20 @@
     feedback.hidden = false;
 
     try {
+      const iconFile = iconInput.files?.[0];
+      if (iconFile) {
+        if (iconFile.size > 2 * 1024 * 1024 || !['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(iconFile.type))
+          throw new Error('Choose a PNG, JPG, WebP or GIF image smaller than 2 MB.');
+        const upload = new FormData();
+        upload.append('file', iconFile);
+        const uploadResponse = await fetch('/api/agents/icons', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'RequestVerificationToken': token }, body: upload
+        });
+        const uploaded = await uploadResponse.json().catch(() => null);
+        if (!uploadResponse.ok) throw new Error(uploaded?.error || `Icon upload failed (HTTP ${uploadResponse.status}).`);
+        payload.icon = uploaded.filename;
+      }
       const response = await fetch('/api/agents', {
         method: 'POST',
         credentials: 'same-origin',
@@ -122,7 +147,7 @@
         const error = await response.json().catch(() => null);
         throw new Error(error?.error || error?.title || `Could not create agent (HTTP ${response.status}).`);
       }
-      // The gallery currently contains sample cards; reload without inventing a persisted card.
+      // Reload the server-rendered gallery to show the newly persisted agent.
       form.reset();
       dialog.close();
       window.location.reload();
