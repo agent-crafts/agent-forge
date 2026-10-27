@@ -5,6 +5,8 @@
     var descriptionId = Model.DescriptionId ?? $"{Model.Id}-description";
 }
 <dialog id="@Model.Id" class="ui-dialog ui-dialog--@(confirm ? "confirm" : "standard") @Model.CssClass" aria-labelledby="@titleId" aria-describedby="@(string.IsNullOrWhiteSpace(Model.Description) ? null : descriptionId)">
+    @if (Model.CustomLayout) { @Model.Content }
+    else {
     <div class="ui-dialog-layout">
         <header class="ui-dialog-header">
             <div>
@@ -25,4 +27,5 @@
             <ui-button text="@Model.PrimaryText" id="@Model.PrimaryButtonId" variant="@(confirm ? "danger" : "primary")" />
         </footer>
     </div>
+    }
 </dialog>
