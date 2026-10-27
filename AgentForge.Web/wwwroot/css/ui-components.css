@@ -589,3 +589,18 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .ui-dialog-footer{display:flex;justify-content:flex-end;align-items:center;gap:10px;padding:10px 20px;border-top:1px solid var(--line)}
 .ui-dialog-footer form{margin:0}
 .ui-dialog--confirm{width:min(440px,calc(100vw - 32px))}
+
+
+/* Agent creation wizard needs more room than standard confirmation dialogs.
+   Override the shared modal's 900px max-width without affecting other modals. */
+.ui-dialog.agent-dialog{
+  box-sizing:border-box;
+  width:min(1080px,calc(100vw - 32px));
+  max-width:calc(100vw - 32px);
+}
+@media(max-width:600px){
+  .ui-dialog.agent-dialog{
+    width:calc(100vw - 20px);
+    max-width:calc(100vw - 20px);
+  }
+}
