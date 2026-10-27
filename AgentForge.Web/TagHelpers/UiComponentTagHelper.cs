@@ -53,6 +53,8 @@ public sealed class UiComponentTagHelper : TagHelper
     public string? BodyText { get; set; }
     public string? PrimaryText { get; set; }
     public string? PrimaryButtonId { get; set; }
+    public string? CloseButtonId { get; set; }
+    public string? CancelButtonId { get; set; }
     public string? CancelText { get; set; }
     public string? ConfirmText { get; set; }
     public string? ConfirmButtonId { get; set; }
@@ -101,6 +103,7 @@ public sealed class UiComponentTagHelper : TagHelper
                     {
                         Id = Id ?? "", Title = Title ?? "", Description = Description ?? "",
                         TitleId = TitleId, DescriptionId = DescriptionId,
+                        CloseButtonId = CloseButtonId, CancelButtonId = CancelButtonId,
                         CssClass = CssClass, CustomContent = customContent is not null && !customContent.IsEmptyOrWhiteSpace,
                         Content = customContent,
                         BodyText = BodyText ?? "", Variant = Variant ?? "standard",
