@@ -10,6 +10,8 @@
 
 **Agent Overview preview cleanup (2026-10-27):** Removed static Preview status panel; UI-only change committed, browser verification pending. Mastery not assessed.
 
+**Agent Overview Key features cleanup (2026-10-27):** Removed duplicate Key features list from About this agent; retained description, Tags, and Typical use cases. UI committed; browser verification pending.
+
 ## 1. Current snapshot
 
 | Field | Value |
