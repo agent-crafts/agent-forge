@@ -76,6 +76,10 @@
   document.getElementById('cancelAgentDialog').addEventListener('click', close);
   next.addEventListener('click', () => { if (validateStep(step)) showStep(step + 1); });
   back.addEventListener('click', () => showStep(step - 1));
+  submit.addEventListener('click', event => {
+    event.preventDefault();
+    form.requestSubmit();
+  });
   form.addEventListener('submit', event => {
     event.preventDefault();
     if (!validateStep(0)) return;
