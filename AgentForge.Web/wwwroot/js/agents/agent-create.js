@@ -154,6 +154,11 @@
         const error = await response.json().catch(() => null);
         throw new Error(error?.error || error?.title || `Could not create agent (HTTP ${response.status}).`);
       }
+      window.AgentForgeToast?.afterNavigation({
+        type: 'success',
+        title: 'Agent created',
+        message: 'Agent created successfully.'
+      });
       // Reload the server-rendered gallery to show the newly persisted agent.
       form.reset();
       dialog.close();
