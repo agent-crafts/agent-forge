@@ -14,7 +14,16 @@ public sealed class AgentsController(ISender sender) : Controller
     {
         public static AgentCard From(Agent agent) => new(
             agent.Id.ToString(), agent.Name, agent.Description, agent.Category.ToString(),
-            agent.Icon, agent.Tags.ToArray(), agent.SystemInstructions);
+            IconUrlOrDefault(agent.Icon), agent.Tags.ToArray(), agent.SystemInstructions);
+
+        private static string IconUrlOrDefault(string icon)
+        {
+            var ext = Path.GetExtension(icon).ToLowerInvariant();
+            var stem = Path.GetFileNameWithoutExtension(icon);
+            return stem.Length == 24 && stem.All(Uri.IsHexDigit) && ext is ".png" or ".jpg" or ".webp" or ".gif"
+                ? "/uploads/agent-icons/" + icon
+                : icon;
+        }
     }
 
     [HttpGet("{id:guid}")]
