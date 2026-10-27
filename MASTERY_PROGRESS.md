@@ -21,6 +21,8 @@
 
 **Agent Overview UI (2026-10-26):** Implemented responsive read-only Overview dashboard with About, capabilities, sample use cases, agent metadata, tags, and explicit preview limitations on PR #19. Uses existing sample-agent data; model, tools, author, version, and execution metrics are intentionally not fabricated. Build/browser verification pending; mastery not assessed.
 
+**Agent persisted gallery/details (2026-10-27):** Replaced hardcoded MVC sample agents with Mediator GetAgentsPageQuery and GetAgentByIdQuery. Active-only 20-item paged gallery, enum category choices, page links, persisted details and actual system instructions; existing client-side search/category filter applies to current page only. Build/browser/database checks pending; no tests added. Next: verify EF migration and end-to-end create/list/details; consider server-side search and category filtering. Mastery not assessed.
+
 **Agent create modal integration (2026-10-27):** Removed Review step; Basic Information → Instructions now submits to POST /api/agents with CreateAgentCommand JSON and antiforgery token. Shows API errors, prevents duplicate submissions, and reloads on success. Gallery/details still use sample data; .NET/browser/database verification pending; no tests added by request. Mastery not assessed.
 
 **Agent HTTP controller slice (2026-10-27):** Added separate `AgentsApiController` under `/api/agents` for create/update/deactivate/get-by-ID/paged list using Mediator application handlers. Active-only reads, input errors mapped to 400, antiforgery on mutations, and explicit response projection. Existing sample-data MVC pages remain unchanged. Build/HTTP/database verification pending; no tests added. Next: wire UI to persisted data and validate API security/authentication before deployment. Mastery not assessed.
@@ -55,11 +57,11 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Theory and internals covered:** TBD
 - **Minimal implementation / experiment:** TBD
 - **Production design and trade-offs:** TBD
-- **AgentForge files / architecture touched:** Core Agent/AgentCategory; Infrastructure AgentConfiguration, AddAgents migration and snapshot; Application Agent CQRS handlers; Web AgentsApiController.
+- **AgentForge files / architecture touched:** Core Agent/AgentCategory; Infrastructure AgentConfiguration, AddAgents migration and snapshot; Application Agent CQRS handlers; Web AgentsApiController, persisted Agents MVC gallery/details.
 - **Tests and evaluations:** No AgentForge.Tests files in this PR; verification pending: .NET build, migration application, schema constraints and model drift.
 - **Practice / debugging challenges:** TBD
 - **Mastery criteria and evidence:** TBD
-- **Open questions / blockers:** .NET SDK and PostgreSQL runtime not available in this execution environment; no verified migration execution. Next: build and verify Mediator handler registration, test create modal against PostgreSQL, then replace sample gallery/details with persisted Agents.
+- **Open questions / blockers:** .NET SDK and PostgreSQL runtime not available in this execution environment; no verified migration execution. Next: build and verify Mediator handler registration and end-to-end create/list/details against PostgreSQL; implement server-side filtering if needed.
 
 ### Parallel lab — Tool Engineering (Module 03 preparation)
 
