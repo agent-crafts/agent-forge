@@ -1,4 +1,5 @@
 @model AgentForge.Web.Components.Modal.ModalViewModel
+@using AgentForge.Web.Components.Button
 @{
     var confirm = Model.Variant == "confirm";
     var titleId = $"{Model.Id}-title";
@@ -14,15 +15,15 @@
                     <p id="@descriptionId">@Model.Description</p>
                 }
             </div>
-            <form method="dialog"><button type="submit" class="ui-dialog-close" aria-label="Close dialog">×</button></form>
+            <form method="dialog">@await Component.InvokeAsync("Button", new { model = new ButtonViewModel { Text = "×", Type = "submit", Variant = "ghost", CssClass = "ui-dialog-close", AriaLabel = "Close dialog" } })</form>
         </header>
         @if (!string.IsNullOrWhiteSpace(Model.BodyText))
         {
             <div class="ui-dialog-body"><p>@Model.BodyText</p></div>
         }
         <footer class="ui-dialog-footer">
-            <form method="dialog"><button type="submit" class="ui-button ui-button--secondary">@Model.CancelText</button></form>
-            <button type="button" id="@Model.PrimaryButtonId" class="ui-button ui-button--@(confirm ? "danger" : "primary")">@Model.PrimaryText</button>
+            <form method="dialog">@await Component.InvokeAsync("Button", new { model = new ButtonViewModel { Text = Model.CancelText, Type = "submit", Variant = "secondary" } })</form>
+            @await Component.InvokeAsync("Button", new { model = new ButtonViewModel { Text = Model.PrimaryText, Id = Model.PrimaryButtonId, Variant = confirm ? "danger" : "primary" } })
         </footer>
     </div>
 </dialog>
