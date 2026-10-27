@@ -36,6 +36,7 @@
     <div id="agentRunsPanel" role="tabpanel" aria-labelledby="agentRunsTab" hidden><partial name="_RunsTab" model="Model" /></div>
     <div id="agentSettingsPanel" role="tabpanel" aria-labelledby="agentSettingsTab" hidden><partial name="_SettingsTab" model="Model" /></div>
 </div>
+<script src="~/js/agents/agent-profile-actions.js" asp-append-version="true"></script>
 <script>
 (() => {
     const tabs = [document.getElementById('agentOverviewTab'), document.getElementById('agentInstructionsTab'), document.getElementById('agentToolsTab'), document.getElementById('agentSkillsTab'), document.getElementById('agentKnowledgeTab'), document.getElementById('agentPlaygroundTab'), document.getElementById('agentRunsTab'), document.getElementById('agentSettingsTab')];
