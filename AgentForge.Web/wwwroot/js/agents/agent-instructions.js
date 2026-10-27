@@ -7,6 +7,36 @@
   const id = form.dataset.agentId;
   const token = form.querySelector('input[name="__RequestVerificationToken"]')?.value;
 
+  const toolbar = form.querySelector('.agent-editor-toolbar');
+  toolbar?.addEventListener('click', event => {
+    const action = event.target.closest('button[data-markdown]')?.dataset.markdown;
+    if (!action) return;
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const selected = editor.value.slice(start, end);
+    const templates = {
+      heading: ['## ', selected || 'Heading', ''],
+      bold: ['**', selected || 'bold text', '**'],
+      italic: ['*', selected || 'italic text', '*'],
+      bullet: ['- ', selected || 'List item', ''],
+      number: ['1. ', selected || 'List item', ''],
+      code: ['`', selected || 'code', '`'],
+      link: ['[', selected || 'link text', '](https://example.com)']
+    };
+    const template = templates[action];
+    if (!template) return;
+    const [before, middle, after] = template;
+    const replacement = before + middle + after;
+    if (editor.value.length - (end - start) + replacement.length > editor.maxLength) {
+      feedback.textContent = 'Instructions cannot exceed 12,000 characters.';
+      return;
+    }
+    editor.setRangeText(replacement, start, end, 'select');
+    editor.focus();
+    editor.setSelectionRange(start + before.length, start + before.length + middle.length);
+    editor.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (button.disabled) return;
