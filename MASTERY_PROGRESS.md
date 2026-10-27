@@ -22,6 +22,8 @@
 
 **Agent creation toast (2026-10-27):** Reused shared `AgentForgeToast.afterNavigation` for success notification after persisted create and gallery reload. Committed on PR #22; browser verification pending. No tests added; mastery not assessed.
 
+**Agent Instructions Markdown editor (2026-10-27):** Added formatting toolbar for heading, bold, italic, lists, code, and links using textarea selection and Markdown insertion; existing Save API preserved. Committed on PR #22; build and browser verification pending; no tests added; mastery not assessed.
+
 ## 1. Current snapshot
 
 | Field | Value |
