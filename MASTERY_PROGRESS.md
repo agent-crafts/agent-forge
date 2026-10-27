@@ -21,6 +21,8 @@
 
 **Agent Overview UI (2026-10-26):** Implemented responsive read-only Overview dashboard with About, capabilities, sample use cases, agent metadata, tags, and explicit preview limitations on PR #19. Uses existing sample-agent data; model, tools, author, version, and execution metrics are intentionally not fabricated. Build/browser verification pending; mastery not assessed.
 
+**Agent HTTP controller slice (2026-10-27):** Added separate `AgentsApiController` under `/api/agents` for create/update/deactivate/get-by-ID/paged list using Mediator application handlers. Active-only reads, input errors mapped to 400, antiforgery on mutations, and explicit response projection. Existing sample-data MVC pages remain unchanged. Build/HTTP/database verification pending; no tests added. Next: wire UI to persisted data and validate API security/authentication before deployment. Mastery not assessed.
+
 **Agent application slice (2026-10-27):** Added Mediator CQRS commands for create, update, and deactivate and queries for by-ID and paginated Agent retrieval. Handlers use existing generic repository and unit of work; no UI/API integration. Commits are unverified by build or database execution; no tests added by request. Mastery not assessed.
 
 **Agent domain/persistence slice (2026-10-27):** On `feature/agent-domain-persistence`, added global reusable Agent aggregate, string-persisted AgentCategory enum, EF Core mapping, additive PostgreSQL migration/snapshot without test-project files (removed per scope request). This is committed Engineering progress, not runtime verification: .NET SDK/PostgreSQL unavailable here; tests and migration have not been executed. No Agent UI/API/runtime wiring. Mastery not assessed.
@@ -51,7 +53,7 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Theory and internals covered:** TBD
 - **Minimal implementation / experiment:** TBD
 - **Production design and trade-offs:** TBD
-- **AgentForge files / architecture touched:** Core Agent/AgentCategory; Infrastructure AgentConfiguration, AddAgents migration and snapshot; Application Agent CQRS handlers.
+- **AgentForge files / architecture touched:** Core Agent/AgentCategory; Infrastructure AgentConfiguration, AddAgents migration and snapshot; Application Agent CQRS handlers; Web AgentsApiController.
 - **Tests and evaluations:** No AgentForge.Tests files in this PR; verification pending: .NET build, migration application, schema constraints and model drift.
 - **Practice / debugging challenges:** TBD
 - **Mastery criteria and evidence:** TBD
