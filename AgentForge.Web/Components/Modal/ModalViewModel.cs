@@ -10,6 +10,9 @@ public sealed class ModalViewModel
     public string? DescriptionId { get; init; }
     public string? CloseButtonId { get; init; }
     public string? CancelButtonId { get; init; }
+    public string? PreviousButtonId { get; init; }
+    public string? NextButtonId { get; init; }
+    public string? SubmitButtonId { get; init; }
     public string Id { get; init; } = "";
     public string Title { get; init; } = "";
     public string Description { get; init; } = "";
