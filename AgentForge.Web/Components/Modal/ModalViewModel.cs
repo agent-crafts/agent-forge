@@ -4,6 +4,7 @@ public sealed class ModalViewModel
 {
     public Microsoft.AspNetCore.Html.IHtmlContent? Content { get; init; }
     public bool CustomContent { get; init; }
+    public bool CustomLayout { get; init; }
     public string? CssClass { get; init; }
     public string? TitleId { get; init; }
     public string? DescriptionId { get; init; }
