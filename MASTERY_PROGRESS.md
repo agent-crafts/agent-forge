@@ -21,7 +21,7 @@
 
 **Agent Overview UI (2026-10-26):** Implemented responsive read-only Overview dashboard with About, capabilities, sample use cases, agent metadata, tags, and explicit preview limitations on PR #19. Uses existing sample-agent data; model, tools, author, version, and execution metrics are intentionally not fabricated. Build/browser verification pending; mastery not assessed.
 
-**Agent domain/persistence slice (2026-10-27):** On `feature/agent-domain-persistence`, added global reusable Agent aggregate, string-persisted AgentCategory enum, EF Core mapping, additive PostgreSQL migration/snapshot and domain/integration test sources. This is committed Engineering progress, not runtime verification: .NET SDK/PostgreSQL unavailable here; tests and migration have not been executed. No Agent UI/API/runtime wiring. Mastery not assessed.
+**Agent domain/persistence slice (2026-10-27):** On `feature/agent-domain-persistence`, added global reusable Agent aggregate, string-persisted AgentCategory enum, EF Core mapping, additive PostgreSQL migration/snapshot without test-project files (removed per scope request). This is committed Engineering progress, not runtime verification: .NET SDK/PostgreSQL unavailable here; tests and migration have not been executed. No Agent UI/API/runtime wiring. Mastery not assessed.
 
 ## 2. Learning & engineering roadmap
 
@@ -49,8 +49,8 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Theory and internals covered:** TBD
 - **Minimal implementation / experiment:** TBD
 - **Production design and trade-offs:** TBD
-- **AgentForge files / architecture touched:** Core Agent/AgentCategory; Infrastructure AgentConfiguration, AddAgents migration and snapshot; AgentForge.Tests.
-- **Tests and evaluations:** Agent unit and PostgreSQL round-trip test sources committed; execution pending: .NET build/test, migration application, schema constraints, model drift.
+- **AgentForge files / architecture touched:** Core Agent/AgentCategory; Infrastructure AgentConfiguration, AddAgents migration and snapshot.
+- **Tests and evaluations:** No AgentForge.Tests files in this PR; verification pending: .NET build, migration application, schema constraints and model drift.
 - **Practice / debugging challenges:** TBD
 - **Mastery criteria and evidence:** TBD
 - **Open questions / blockers:** .NET SDK and PostgreSQL runtime not available in this execution environment; no verified migration execution.
