@@ -10,7 +10,7 @@
         </div>
         <div class="ui-profile-icon" aria-hidden="true">@if (Model.Icon.StartsWith("/uploads/agent-icons/", StringComparison.Ordinal)) { <img src="@Model.Icon" alt="" width="64" height="64" class="h-16 w-16 rounded-xl object-cover" /> } else { <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48"><path d="M12 3v3M4 12H2m20 0h-2M6 20h12a3 3 0 0 0 3-3v-6a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v6a3 3 0 0 0 3 3ZM8 13h.01M16 13h.01" /></svg> }</div>
         <div class="ui-profile-main">
-            <div class="flex w-full items-center justify-between gap-4 flex-wrap"><div class="ui-profile-title"><h1>@Model.Name</h1></div><div class="ui-tags"><span>@Model.Category</span></div></div>
+            <div class="flex w-full flex-col items-start gap-4"><div class="ui-profile-title"><h1>@Model.Name</h1></div><div class="ui-tags"><span>@Model.Category</span></div></div>
         </div>
     </section>
     <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Agent details sections">
