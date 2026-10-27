@@ -17,7 +17,7 @@
         'heading', 'heading-smaller', 'heading-bigger', '|',
         'quote', 'unordered-list', 'ordered-list', 'checklist', '|',
         'link', 'image', 'table', 'horizontal-rule', 'code', '|',
-        'preview', 'side-by-side', 'fullscreen', '|',
+        'side-by-side', 'fullscreen', '|',
         'guide'
       ],
       previewRender: markdown => DOMPurify.sanitize(editor.markdown(markdown)),
@@ -25,6 +25,16 @@
       minHeight: '350px'
     });
     container.markdownEditor = editor;
+    const previewButton = container.closest('form')?.querySelector('#previewAgentInstructions');
+    if (previewButton) {
+      previewButton.addEventListener('click', () => {
+        EasyMDE.togglePreview(editor);
+        const previewing = editor.codemirror.getWrapperElement().classList.contains('editor-preview-active');
+        previewButton.textContent = previewing ? 'Edit' : 'Preview';
+        previewButton.setAttribute('aria-pressed', String(previewing));
+        if (!previewing) editor.codemirror.refresh();
+      });
+    }
     const actions = container.closest("form")?.querySelector(".agent-instructions-actions");
     const statusbar = container.querySelector(".editor-statusbar");
     if (actions && statusbar) statusbar.appendChild(actions);
