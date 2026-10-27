@@ -10,11 +10,12 @@ namespace AgentForge.Web.Controllers;
 [Route("agents")]
 public sealed class AgentsController(ISender sender) : Controller
 {
-    public sealed record AgentCard(string Id, string Name, string Description, string Category, string Icon, string[] Tags, string SystemInstructions)
+    public sealed record AgentCard(string Id, string Name, string Description, string Category, string Icon, string[] Tags, string SystemInstructions, DateTimeOffset CreatedAt, DateTimeOffset UpdatedAt, bool IsActive)
     {
         public static AgentCard From(Agent agent) => new(
             agent.Id.ToString(), agent.Name, agent.Description, agent.Category.ToString(),
-            IconUrlOrDefault(agent.Icon), agent.Tags.ToArray(), agent.SystemInstructions);
+            IconUrlOrDefault(agent.Icon), agent.Tags.ToArray(), agent.SystemInstructions,
+            agent.CreatedAt, agent.UpdatedAt, agent.IsActive);
 
         private static string IconUrlOrDefault(string icon)
         {
