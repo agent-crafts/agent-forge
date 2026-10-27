@@ -6,7 +6,7 @@
 <dialog id="createAgentDialog" class="agent-dialog" aria-labelledby="createAgentTitle" aria-describedby="createAgentDescription">
   <div class="agent-dialog-header">
     <div><h2 id="createAgentTitle">Create New Agent</h2><p id="createAgentDescription">Define your agent's identity and core behavior. Configure tools, skills, and other settings later.</p></div>
-    <button type="button" class="agent-dialog-close" id="closeAgentDialog" aria-label="Close dialog">×</button>
+    <ui-button id="closeAgentDialog" variant="ghost" css-class="agent-dialog-close" aria-label="Close dialog">×</ui-button>
   </div>
   <form id="agentCreateForm" class="agent-dialog-form">
     <nav class="agent-dialog-steps" aria-label="Creation steps">
@@ -18,9 +18,9 @@
       <section data-agent-step="0" aria-label="Basic Information">
         <div class="agent-form-grid">
           <div class="agent-field"><ui-field id="agentName" name="name" label="Agent Name" required="true" max-length="80" placeholder="e.g. Code Review Agent" hint="A clear and descriptive name for your agent." /></div>
-          <div class="agent-field"><ui-field id="agentCategoryInput" name="category" label="Category" control="select" required="true" options="categories" hint="Choose the primary category." /></div>
+          <div class="agent-field"><ui-field id="agentCategoryInput" name="category" label="Category" control="select" required="true" options="@categories" hint="Choose the primary category." /></div>
           <div class="agent-field agent-field-wide"><ui-field id="agentDescription" name="description" label="Description" control="textarea" rows="4" max-length="300" required="true" placeholder="What does this agent do?" hint="Briefly describe what this agent does and when to use it." /></div>
-          <div class="agent-field"><ui-field id="agentIcon" name="icon" label="Icon" control="select" options="icons" hint="Choose an icon to represent your agent." /></div>
+          <div class="agent-field"><ui-field id="agentIcon" name="icon" label="Icon" control="select" options="@icons" hint="Choose an icon to represent your agent." /></div>
           <div class="agent-field"><ui-field id="agentTags" name="tags" label="Tags" max-length="200" placeholder="e.g. code, review, quality" hint="Separate tags with commas." /></div>
         </div>
       </section>
