@@ -54,6 +54,12 @@
                 item.classList.toggle('text-muted', !active);
                 panels[i].hidden = !active;
             });
+            if (index === 1) {
+                requestAnimationFrame(() => {
+                    const markdownEditor = panels[1].querySelector('[data-markdown-editor]')?.markdownEditor;
+                    markdownEditor?.codemirror?.refresh();
+                });
+            }
         });
         tab.addEventListener('keydown', event => {
             if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
