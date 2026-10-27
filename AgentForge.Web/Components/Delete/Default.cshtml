@@ -4,6 +4,10 @@
         <header class="ui-dialog-header">
             <div>
                 <h2 id="@(Model.Id)-title">@Model.Title</h2>
+                @if (!string.IsNullOrWhiteSpace(Model.ItemName))
+                {
+                    <p>Confirm deletion of <strong>@Model.ItemName</strong>.</p>
+                }
             </div>
             <form method="dialog"><ui-button type="submit" variant="ghost" css-class="ui-dialog-close" aria-label="Close dialog">×</ui-button></form>
         </header>
