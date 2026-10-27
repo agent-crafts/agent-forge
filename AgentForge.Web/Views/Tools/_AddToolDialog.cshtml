@@ -43,6 +43,9 @@
                 
                 
                 <p id="toolImageHelp" class="text-[13px] text-muted">Optional HTTPS image URL for the tool icon. Image upload is not implemented yet.</p>
+                <label for="newToolIconUpload">Tool icon (optional)</label>
+                <input id="newToolIconUpload" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+                <img id="newToolIconPreview" alt="Tool icon preview" width="64" height="64" hidden />
                 <h3 class="mt-2 text-base font-semibold text-heading">Parameters</h3>
                 <p class="text-[13px] leading-6 text-muted">Define input parameters. The JSON Schema preview is generated automatically.</p>
                 <div id="toolParameterRows" class="grid gap-4 [&_.ui-modal-parameter]:flex [&_.ui-modal-parameter]:flex-wrap [&_.ui-modal-parameter]:items-center [&_.ui-modal-parameter]:gap-3 [&_.param-name]:min-w-0 [&_.param-name]:flex-[2_1_180px] [&_.param-type]:min-w-0 [&_.param-type]:flex-[1_1_130px] [&_.param-type]:w-auto [&_.param-required]:mr-1 [&_.param-remove]:inline-flex [&_.param-remove]:size-9 [&_.param-remove]:flex-none [&_.param-remove]:items-center [&_.param-remove]:justify-center [&_.param-remove]:rounded-lg [&_.param-remove]:border-0 [&_.param-remove]:bg-transparent [&_.param-remove]:p-0 [&_.param-remove]:text-red-600 [&_.param-remove]:hover:bg-red-100 [&_.param-remove]:hover:text-red-700 [&_.param-remove]:focus-visible:outline-2 [&_.param-remove]:focus-visible:outline-offset-2 [&_.param-remove]:focus-visible:outline-accent"></div>
