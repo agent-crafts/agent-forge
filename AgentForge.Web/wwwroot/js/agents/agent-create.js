@@ -98,7 +98,6 @@
   async function createAgent() {
     if (saving) return;
     if (!validateStep(0)) return;
-    if (!validateStep(1)) return;
 
     const value = name => String(form.elements.namedItem(name)?.value ?? '').trim();
     const tags = value('tags').split(',').map(tag => tag.trim()).filter(Boolean);
@@ -117,7 +116,7 @@
       category,
       icon: null,
       tags,
-      systemInstructions: value('instructions')
+      systemInstructions: ''
     };
     const token = form.querySelector('input[name="__RequestVerificationToken"]')?.value;
     saving = true;
