@@ -36,6 +36,8 @@
     <div id="agentRunsPanel" role="tabpanel" aria-labelledby="agentRunsTab" hidden><partial name="_RunsTab" model="Model" /></div>
     <div id="agentSettingsPanel" role="tabpanel" aria-labelledby="agentSettingsTab" hidden><partial name="_SettingsTab" model="Model" /></div>
 </div>
+<partial name="_CreateAgentDialog" />
+<script src="~/js/agents/agent-create.js" asp-append-version="true"></script>
 <script src="~/js/agents/agent-profile-actions.js" asp-append-version="true"></script>
 <script>
 (() => {
