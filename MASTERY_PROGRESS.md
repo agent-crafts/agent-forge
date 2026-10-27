@@ -20,6 +20,8 @@
 
 **Agent Overview Tags placement (2026-10-27):** Moved Tags card beneath About this agent in left column; Agent information remains in right column. UI-only change committed to PR #22; browser verification pending.
 
+**Agent creation toast (2026-10-27):** Reused shared `AgentForgeToast.afterNavigation` for success notification after persisted create and gallery reload. Committed on PR #22; browser verification pending. No tests added; mastery not assessed.
+
 ## 1. Current snapshot
 
 | Field | Value |
