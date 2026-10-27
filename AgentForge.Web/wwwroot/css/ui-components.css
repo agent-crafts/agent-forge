@@ -611,3 +611,5 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
   outline:none;
   box-shadow:none;
 }
+
+.ui-delete-dialog .ui-dialog-header { align-items: center; min-height: 64px; }
