@@ -37,6 +37,7 @@
     <div id="agentSettingsPanel" role="tabpanel" aria-labelledby="agentSettingsTab" hidden><partial name="_SettingsTab" model="Model" /></div>
 </div>
 <partial name="_CreateAgentDialog" />
+<ui-delete id="deleteAgentDialog" title="Delete agent?" description="The agent will be removed from the active list, but its data will be retained." item-name="@Model.Name" confirm-button-id="confirmDeleteAgent" confirm-text="Delete agent" />
 <script src="~/js/agents/agent-create.js" asp-append-version="true"></script>
 <script src="~/js/agents/agent-profile-actions.js" asp-append-version="true"></script>
 <script>
