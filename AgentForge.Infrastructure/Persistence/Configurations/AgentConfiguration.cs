@@ -13,7 +13,7 @@ internal sealed class AgentConfiguration : IEntityTypeConfiguration<Agent>
         {
             table.HasCheckConstraint("ck_agents_name_not_blank", "length(btrim(name)) > 0");
             table.HasCheckConstraint("ck_agents_description_not_blank", "length(btrim(description)) > 0");
-            table.HasCheckConstraint("ck_agents_instructions_valid", "length(btrim(system_instructions)) BETWEEN 1 AND 12000");
+            table.HasCheckConstraint("ck_agents_instructions_valid", "length(btrim(system_instructions)) <= 12000");
             table.HasCheckConstraint("ck_agents_category_valid",
                 "category IN ('Development','Planning','Quality','Testing','Operations','Documentation','Research','Data','Other')");
             table.HasCheckConstraint("ck_agents_tags_count", "cardinality(tags) <= 10");
