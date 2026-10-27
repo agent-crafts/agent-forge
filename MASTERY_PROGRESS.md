@@ -18,6 +18,8 @@
 
 **Agent Overview Typical use cases cleanup (2026-10-27):** Removed tag-generated Typical use cases panel; retained About, Agent information, and Tags. Change committed on PR #22; browser verification pending. No mastery assessment.
 
+**Agent Overview Tags placement (2026-10-27):** Moved Tags card beneath About this agent in left column; Agent information remains in right column. UI-only change committed to PR #22; browser verification pending.
+
 ## 1. Current snapshot
 
 | Field | Value |
