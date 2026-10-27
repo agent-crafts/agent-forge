@@ -36,20 +36,6 @@
     <div id="agentRunsPanel" role="tabpanel" aria-labelledby="agentRunsTab" hidden><partial name="_RunsTab" model="Model" /></div>
     <div id="agentSettingsPanel" role="tabpanel" aria-labelledby="agentSettingsTab" hidden><partial name="_SettingsTab" model="Model" /></div>
 </div>
-<ui-modal id="editAgentDialog" css-class="agent-dialog" width="800" title="Edit Agent" description="Update agent details." title-id="editAgentTitle" description-id="editAgentDescription" close-button-id="closeEditAgentDialog" cancel-button-id="cancelEditAgentDialog" submit-button-id="submitEditAgentForm">
-    <form id="editAgentForm" class="agent-dialog-form">
-        @Html.AntiForgeryToken()
-        <div class="agent-dialog-body">
-            <div class="agent-form-grid">
-                <div class="agent-field"><ui-field id="editAgentName" name="name" label="Agent Name" required="true" max-length="80" /></div>
-                <div class="agent-field"><ui-field id="editAgentCategory" name="category" label="Category" control="select" required="true" options="@(new[] { "Development", "Planning", "Quality", "Testing", "Operations", "Documentation", "Research", "Data", "Other" }.Select((category, index) => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = category, Value = index.ToString() }).ToList())" /></div>
-                <div class="agent-field agent-field-wide"><ui-field id="editAgentDescription" name="description" label="Description" control="textarea" rows="4" max-length="300" required="true" /></div>
-                <div class="agent-field agent-field-wide"><ui-field id="editAgentTags" name="tags" label="Tags" max-length="200" hint="Separate tags with commas." /></div>
-            </div>
-        </div>
-        <p id="editAgentFeedback" class="agent-dialog-feedback" role="alert" hidden></p>
-    </form>
-</ui-modal>
 <script src="~/js/agents/agent-profile-actions.js" asp-append-version="true"></script>
 <script>
 (() => {
