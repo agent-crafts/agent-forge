@@ -8,6 +8,8 @@
 
 **Agent Overview simplification (2026-10-27):** Removed redundant Capabilities panel from `_OverviewTab.cshtml`; tags and dedicated Tools/Skills tabs retained. UI change committed; browser verification pending. No mastery assessment.
 
+**Agent Overview preview cleanup (2026-10-27):** Removed static Preview status panel; UI-only change committed, browser verification pending. Mastery not assessed.
+
 ## 1. Current snapshot
 
 | Field | Value |
