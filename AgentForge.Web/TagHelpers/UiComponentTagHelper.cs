@@ -47,6 +47,8 @@ public sealed class UiComponentTagHelper : TagHelper
     public string? Hint { get; set; }
     public string? Placeholder { get; set; }
     public string? Title { get; set; }
+    public string? TitleId { get; set; }
+    public string? DescriptionId { get; set; }
     public string? Description { get; set; }
     public string? BodyText { get; set; }
     public string? PrimaryText { get; set; }
@@ -91,12 +93,16 @@ public sealed class UiComponentTagHelper : TagHelper
 
         if (tag is "ui-modal" or "ui-delete")
         {
+            var customContent = tag == "ui-modal" ? await output.GetChildContentAsync() : null;
             var rendered = tag == "ui-modal"
                 ? await _components.InvokeAsync("Modal", new
                 {
                     model = new ModalViewModel
                     {
                         Id = Id ?? "", Title = Title ?? "", Description = Description ?? "",
+                        TitleId = TitleId, DescriptionId = DescriptionId,
+                        CssClass = CssClass, CustomContent = customContent is not null && !customContent.IsEmptyOrWhiteSpace,
+                        Content = customContent,
                         BodyText = BodyText ?? "", Variant = Variant ?? "standard",
                         PrimaryText = PrimaryText ?? "Confirm", CancelText = CancelText ?? "Cancel",
                         PrimaryButtonId = PrimaryButtonId
