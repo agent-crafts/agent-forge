@@ -1,7 +1,7 @@
 @model IReadOnlyList<AgentForge.Web.Controllers.AgentsController.AgentCard>
 @{
     Layout = "_AppLayout";
-    var categories = Enum.GetNames<AgentForge.Core.Enums.AgentCategory>();
+    var categories = (IReadOnlyList<string>)(ViewData["Categories"] ?? Array.Empty<string>());
     var pageNumber = (int)(ViewData["PageNumber"] ?? 1);
     var totalPages = (int)(ViewData["TotalPages"] ?? 0);
     var categoryOptions = new[] { new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = "All Categories", Value = "all" } }.Concat(categories.Select(category => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = category, Value = category.ToLowerInvariant() })).ToList();
