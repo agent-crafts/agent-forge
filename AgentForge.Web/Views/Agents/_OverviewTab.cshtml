@@ -15,18 +15,6 @@
                 </div>
             </section>
             <section class="ui-panel">
-                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.3 6.7L21 12l-6.7 2.3L12 21l-2.3-6.7L3 12l6.7-2.3L12 3Z"/></svg></span> Capabilities</h2>
-                <div class="agent-capability-grid">
-                    @foreach (var capability in Model.Tags)
-                    {
-                        <div class="agent-capability-card">
-                            <span class="agent-capability-symbol" aria-hidden="true">✦</span>
-                            <div><strong>@capability</strong><p>Tag associated with this agent.</p></div>
-                        </div>
-                    }
-                </div>
-            </section>
-            <section class="ui-panel">
                 <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 9 2 2 4-4M8 16h8"/></svg></span> Typical use cases</h2>
                 <ol class="agent-use-cases">
                     @foreach (var capability in Model.Tags)
