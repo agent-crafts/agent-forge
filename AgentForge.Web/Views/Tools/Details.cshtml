@@ -44,7 +44,14 @@
         <button type="button" id="deleteToolButton" class="ui-button ui-tool-action ui-tool-action--delete" aria-label="Delete tool" title="Delete tool"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>
     </div>
         <div class="ui-profile-icon" aria-hidden="true">
-            <partial name="_ToolIcon" model="Model.Icon" />
+            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="" class="h-full w-full object-contain" />
+                }
+                else
+                {
+                    <partial name="_ToolIcon" model="Model.Icon" />
+                }
         </div>
         <div class="ui-profile-main flex flex-col items-start gap-4">
             <div class="ui-profile-title"><h1>@Model.DisplayName</h1></div>
