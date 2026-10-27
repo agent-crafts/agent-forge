@@ -41,6 +41,8 @@ public sealed class UiComponentTagHelper : TagHelper
     public string? AutoComplete { get; set; }
     public string? CssClass { get; set; }
     public string? AriaLabel { get; set; }
+    public string? AriaHasPopup { get; set; }
+    public string? AriaControls { get; set; }
     public string? Label { get; set; }
     public string? Hint { get; set; }
     public string? Placeholder { get; set; }
@@ -79,7 +81,8 @@ public sealed class UiComponentTagHelper : TagHelper
                 {
                     Text = label, Id = Id, Variant = Variant ?? "secondary",
                     Type = Type ?? "button", CssClass = CssClass,
-                    AriaLabel = AriaLabel, Disabled = Disabled, Hidden = Hidden
+                    AriaLabel = AriaLabel, AriaHasPopup = AriaHasPopup,
+                    AriaControls = AriaControls, Disabled = Disabled, Hidden = Hidden
                 }
             });
             output.Content.SetHtmlContent(rendered);
