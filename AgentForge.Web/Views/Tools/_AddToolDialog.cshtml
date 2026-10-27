@@ -9,7 +9,7 @@
 }
 <ui-modal id="addToolDialog" title="Add Tool" description="Configure a custom tool or connect an external source." title-id="addToolTitle" description-id="addToolIntro" css-class="w-[min(720px,95vw)] max-h-[90vh] rounded-2xl border-0 bg-surface p-0 text-content shadow-2xl backdrop:bg-slate-950/70">
 <div class="flex max-h-[90vh] flex-col">
-<header class="flex items-center justify-between gap-4 border-b border-line px-6 py-3"><div><h2 id="addToolTitle" class="m-0 text-lg font-bold leading-snug text-heading">Add Tool</h2><p id="addToolIntro" class="mt-0.5 mb-0 text-[13px] leading-snug text-muted">Configure a custom tool or connect an external source.</p></div><ui-button variant="ghost" css-class="ui-dialog-close" aria-label="Close dialog" data-modal-close>×</ui-button></header>
+<header class="flex items-center justify-between gap-4 border-b border-line px-6 py-3"><div><h2 id="addToolTitle" class="m-0 text-lg font-bold leading-snug text-heading">Add Tool</h2><p id="addToolIntro" class="mt-0.5 mb-0 text-[13px] leading-snug text-muted">Configure a custom tool or connect an external source.</p></div><ui-button variant="ghost" css-class="ui-dialog-close" aria-label="Close dialog" id="closeAddToolDialog">×</ui-button></header>
 <div class="min-h-0 overflow-y-auto px-6 pt-3 pb-5">
 
             <fieldset id="toolKindSelector" class="mb-5 grid grid-cols-1 gap-2 border-0 p-0 sm:grid-cols-2">
@@ -75,5 +75,5 @@
             </section>
             <p id="addToolFeedback" class="mt-4 min-h-5 text-[13px] ui-field-error" role="status" aria-live="polite"></p>
 
-</div><footer class="flex items-center justify-end gap-2.5 border-t border-line px-6 py-4"><ui-button id="previewToolConfiguration" variant="primary">Save</ui-button><ui-button variant="secondary" data-modal-close>Cancel</ui-button></footer></div>
+</div><footer class="flex items-center justify-end gap-2.5 border-t border-line px-6 py-4"><ui-button id="previewToolConfiguration" variant="primary">Save</ui-button><ui-button variant="secondary" id="cancelAddToolDialog">Cancel</ui-button></footer></div>
 </ui-modal>
