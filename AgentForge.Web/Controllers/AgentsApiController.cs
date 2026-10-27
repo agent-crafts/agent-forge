@@ -13,10 +13,6 @@ namespace AgentForge.Web.Controllers;
 [Route("api/agents")]
 public sealed class AgentsApiController(ISender sender) : ControllerBase
 {
-    public sealed record SaveAgentRequest(
-        string Name, string Description, AgentCategory Category,
-        string SystemInstructions, string? Icon = null, string[]? Tags = null);
-
     public sealed record AgentResponse(
         Guid Id, string Name, string Description, AgentCategory Category,
         string Icon, string[] Tags, string SystemInstructions,
@@ -30,13 +26,12 @@ public sealed class AgentsApiController(ISender sender) : ControllerBase
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([FromBody] SaveAgentRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([FromBody] CreateAgentCommand command, CancellationToken cancellationToken)
     {
-        if (request is null) return BadRequest();
+        if (command is null) return BadRequest();
         try
         {
-            var id = await sender.Send(new CreateAgentCommand(request.Name, request.Description,
-                request.Category, request.SystemInstructions, request.Icon, request.Tags), cancellationToken);
+            var id = await sender.Send(command, cancellationToken);
             return CreatedAtAction(nameof(GetById), new { id }, new { id });
         }
         catch (ArgumentException exception)
@@ -47,13 +42,13 @@ public sealed class AgentsApiController(ISender sender) : ControllerBase
 
     [HttpPut("{id:guid}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Update(Guid id, [FromBody] SaveAgentRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateAgentCommand command, CancellationToken cancellationToken)
     {
-        if (request is null) return BadRequest();
+        if (command is null) return BadRequest();
+        if (id != command.Id) return BadRequest("Route ID must match command ID.");
         try
         {
-            var updated = await sender.Send(new UpdateAgentCommand(id, request.Name, request.Description,
-                request.Category, request.SystemInstructions, request.Icon, request.Tags), cancellationToken);
+            var updated = await sender.Send(command, cancellationToken);
             return updated ? NoContent() : NotFound();
         }
         catch (ArgumentException exception)
