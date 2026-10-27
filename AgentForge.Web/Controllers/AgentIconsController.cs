@@ -43,9 +43,9 @@ public sealed class AgentIconsController(IWebHostEnvironment environment) : Cont
         var directory = Path.Combine(environment.WebRootPath, "uploads", "agent-icons");
         Directory.CreateDirectory(directory);
         var path = Path.Combine(directory, filename);
-        stream.Position = 0;
+        await using (var input = file.OpenReadStream())
         await using (var output = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None))
-            await stream.CopyToAsync(output, cancellationToken);
+            await input.CopyToAsync(output, cancellationToken);
 
         return Ok(new { filename, url = "/uploads/agent-icons/" + filename });
     }
