@@ -577,7 +577,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 /* Ghost hover uses the primary accent on text, without a filled background or border. */
 .ui-button--ghost:not(:disabled):hover{background:color-mix(in srgb,var(--accent) 8%,transparent);border-color:transparent;color:var(--accent);filter:none}
 
-.ui-dialog{box-sizing:border-box;width:min(520px,calc(100vw - 32px));max-width:none;margin:auto;padding:0;overflow:hidden;box-shadow:0 24px 70px #0003}
+.ui-dialog{box-sizing:border-box;width:min(var(--ui-dialog-width,520px),calc(100vw - 32px));max-width:none;margin:auto;padding:0;overflow:hidden;box-shadow:0 24px 70px #0003}
 .ui-dialog-layout{display:flex;flex-direction:column;max-height:85vh}
 .ui-dialog-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:12px 20px;border-bottom:1px solid var(--line)}
 .ui-dialog-header h2{margin:0;font-size:18px;color:var(--heading)}
@@ -588,19 +588,5 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .ui-dialog-body p{margin:0}
 .ui-dialog-footer{display:flex;justify-content:flex-end;align-items:center;gap:10px;padding:10px 20px;border-top:1px solid var(--line)}
 .ui-dialog-footer form{margin:0}
-.ui-dialog--confirm{width:min(440px,calc(100vw - 32px))}
+.ui-dialog--confirm{width:min(var(--ui-dialog-width,440px),calc(100vw - 32px))}
 
-
-/* Agent creation wizard needs more room than standard confirmation dialogs.
-   Override the shared modal's 900px max-width without affecting other modals. */
-.ui-dialog.agent-dialog{
-  box-sizing:border-box;
-  width:min(1080px,calc(100vw - 32px));
-  max-width:calc(100vw - 32px);
-}
-@media(max-width:600px){
-  .ui-dialog.agent-dialog{
-    width:calc(100vw - 20px);
-    max-width:calc(100vw - 20px);
-  }
-}
