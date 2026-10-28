@@ -157,7 +157,7 @@
     if(iconFile.size>2*1024*1024||!["image/png","image/jpeg","image/webp","image/gif"].includes(iconFile.type))throw new Error("Choose PNG, JPG, WebP or GIF under 2 MB.");
     const form=new FormData();form.append("file",iconFile);
     const token=document.querySelector('input[name="__RequestVerificationToken"]')?.value;
-    const upload=await fetch("/api/tools/icons",{method:"POST",credentials:"same-origin",headers:token?{"RequestVerificationToken":token}:{},body:form});
+    const upload=await fetch("/api/files",{method:"POST",credentials:"same-origin",headers:token?{"RequestVerificationToken":token}:{},body:form});
     const result=await upload.json().catch(()=>null);
     if(!upload.ok)throw new Error(result?.error||"Icon upload failed.");
     imageUrl=result.url;
