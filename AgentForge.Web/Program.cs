@@ -1,12 +1,9 @@
 using AgentForge.Application;
 using AgentForge.Infrastructure;
-using AgentForge.Core.Services;
-using AgentForge.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddMediator(options =>
 {
