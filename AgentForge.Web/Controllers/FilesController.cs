@@ -5,7 +5,7 @@ namespace AgentForge.Web.Controllers;
 
 [ApiController]
 [Route("api/files")]
-public sealed class FilesController(IFileStorageService storage) : ControllerBase
+public sealed class FilesController(IFileService storage) : ControllerBase
 {
     [HttpPost]
     [ValidateAntiForgeryToken]
