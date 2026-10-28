@@ -6,7 +6,27 @@
 >
 > **Update policy:** Update this file at the end of each meaningful learning module, implementation milestone, or mastery assessment. Do not mark a skill mastered based only on discussion or a merged PR.
 
-## 1. Current snapshot
+**Agent Overview simplification (2026-10-27):** Removed redundant Capabilities panel from `_OverviewTab.cshtml`; tags and dedicated Tools/Skills tabs retained. UI change committed; browser verification pending. No mastery assessment.
+
+**Agent Overview preview cleanup (2026-10-27):** Removed static Preview status panel; UI-only change committed, browser verification pending. Mastery not assessed.
+
+**Agent Overview Key features cleanup (2026-10-27):** Removed duplicate Key features list from About this agent; retained description, Tags, and Typical use cases. UI committed; browser verification pending.
+
+**Agent creation/profile instructions split (2026-10-27):** Creation modal now has only identity fields; empty system instructions allowed in domain; profile Instructions tab has editable textarea and Save Changes wired to GET/PUT Agent API, preserving other fields. Code committed on PR #22; build, browser and DB behavior unverified; no tests added per user preference. Mastery not assessed.
+
+**Agent create HTTP 500 investigation (2026-10-27):** Found PostgreSQL instructions check constraint still required nonblank values after creation modal began sending empty instructions. Updated EF configuration and snapshot; added `AllowEmptyAgentInstructions` migration. Likely cause identified from code, not confirmed by server exception. Migration execution, build, and browser verification pending; no tests added. Next: apply migration and retry creation.
+
+**Agent Overview Typical use cases cleanup (2026-10-27):** Removed tag-generated Typical use cases panel; retained About, Agent information, and Tags. Change committed on PR #22; browser verification pending. No mastery assessment.
+
+**Agent Overview Tags placement (2026-10-27):** Moved Tags card beneath About this agent in left column; Agent information remains in right column. UI-only change committed to PR #22; browser verification pending.
+
+**Agent creation toast (2026-10-27):** Reused shared `AgentForgeToast.afterNavigation` for success notification after persisted create and gallery reload. Committed on PR #22; browser verification pending. No tests added; mastery not assessed.
+
+**Agent Instructions Markdown editor (2026-10-27):** Added formatting toolbar for heading, bold, italic, lists, code, and links using textarea selection and Markdown insertion; existing Save API preserved. Committed on PR #22; build and browser verification pending; no tests added; mastery not assessed.
+
+**Agent information persistence wiring (2026-10-27):** Exposed persisted CreatedAt, UpdatedAt, IsActive in AgentCard and displayed timestamps, status, ID, category in Overview. Removed unsupported Version, Author, Model, Temperature placeholders pending real features. Committed to PR #22; build/browser verification pending; mastery not assessed.
+
+**Reusable Markdown editor (2026-10-27):** Replaced bespoke Instructions toolbar with shared `_MarkdownEditor` partial and EasyMDE integration; supports standard formatting, Markdown preview, side-by-side, fullscreen, and sanitized preview via DOMPurify. Preserves Markdown persistence and 12k length check. External pinned CDN assets required; dependency availability, build, browser and preview verification pending. No tests added; mastery not assessed.\n\n**Instructions save toast (2026-10-27):** Added shared success toast after confirmed instructions PUT; existing inline error feedback retained. Committed on PR #22; browser verification pending. No mastery assessment.\n\n**Instructions feedback cleanup (2026-10-27):** Removed duplicate inline success message beside Save Changes; success uses shared toast, while validation and save errors remain inline. Committed on PR #22; browser verification pending.\n\n**Markdown toolbar contrast fix (2026-10-27):** Enabled EasyMDE icon-font loading and scoped light-toolbar/dark-icon contrast, hover, active, and editor surface colors. Committed on PR #22; actual browser verification pending; no mastery assessment.\n\n**Instructions editor action alignment (2026-10-27):** Removed redundant field label and placed Save Changes with EasyMDE status information, retaining fallback placement when editor is unavailable. Changes committed on PR #22; browser verification pending.\n\n## 1. Current snapshot
 
 | Field | Value |
 | --- | --- |
@@ -15,11 +35,29 @@
 | Current engineering milestone | UI foundation merged; static Agents Gallery added on draft PR #19 (build/browser unverified); GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation, generic/specialized repositories, unit of work, and initial Tool create/get/page application handlers added on feature branch (unverified); Tool update/deactivate and Project use cases pending |
 | Current mastery assessment | Not assessed |
 | Next recommended action | Confirm latest PR #16 Chromium CI passes; expand Tools Add/Edit/Delete and Try Now browser coverage with test data; review accessibility/visual QA. Separately verify persistence migrations and integration tests |
-| Last progress review | 2026-10-25 (UI PR #16: component and Tools polish committed; Chromium smoke checks added; initial browser CI exposed launch-profile port mismatch, fixed in workflow; retest pending) |
+| Last progress review | 2026-10-27 — Agent domain/persistence implementation committed to feature branch; build, tests and PostgreSQL migration execution pending; mastery not assessed. Previously: 2026-10-25 (UI PR #16: component and Tools polish committed; Chromium smoke checks added; initial browser CI exposed launch-profile port mismatch, fixed in workflow; retest pending) |
 
 **Agents Gallery design update (2026-10-25):** Cards now reuse the Tools gallery's shared `ui-item-card`, `ui-icon-tile`, `ui-item-content`, and badge styles in a two-column grid on draft PR #19. Static preview only; build and browser verification pending. No mastery assessment evidence.\n\n**Agent Details milestone (2026-10-25):** Read-only sample detail route (`/agents/{id}`), shared-style profile/overview/capabilities, gallery navigation, and unknown-ID 404 added on draft PR #19. Build and browser checks pending; configuration and runtime not implemented; mastery not assessed.
 
 **Agent Overview UI (2026-10-26):** Implemented responsive read-only Overview dashboard with About, capabilities, sample use cases, agent metadata, tags, and explicit preview limitations on PR #19. Uses existing sample-agent data; model, tools, author, version, and execution metrics are intentionally not fabricated. Build/browser verification pending; mastery not assessed.
+
+**Agent create submit wiring fix (2026-10-27):** Modal footer Create Agent button now calls async createAgent directly instead of relying on requestSubmit for an external form button; form submit reuses same handler. Code committed, browser/API verification pending; no tests added. Mastery not assessed.
+
+**Agent default icon alignment (2026-10-27):** Gallery/details now render the same robot SVG path as the Agents sidebar when no uploaded image is present; new Agent.Icon defaults to empty. Existing legacy glyph values also render the robot fallback; no migration required. Build/browser verification pending.
+
+**Agent icon upload (2026-10-27):** Added optional raster icon upload (PNG/JPEG/WebP/GIF, 2 MB limit, signature checks, antiforgery) to app-local wwwroot/uploads/agent-icons, storing generated filename in existing Agent.Icon string column. Gallery/details resolve filenames to local URLs; default glyph retained. No schema migration. Upload occurs before Agent create, so failed create can leave an orphan file; local filesystem requires persistent shared storage for multi-instance deployment. Build/browser/upload/database verification pending; no tests added. Mastery not assessed.
+
+**Agent category filter source (2026-10-27):** Gallery filter options now come from AgentCategory enum supplied by AgentsController (not hardcoded in the view or inferred from current records). Client-side filtering remains current-page only; build/browser unverified. Mastery not assessed.
+
+**Agent persisted gallery/details (2026-10-27):** Replaced hardcoded MVC sample agents with Mediator GetAgentsPageQuery and GetAgentByIdQuery. Active-only 20-item paged gallery, enum category choices, page links, persisted details and actual system instructions; existing client-side search/category filter applies to current page only. Build/browser/database checks pending; no tests added. Next: verify EF migration and end-to-end create/list/details; consider server-side search and category filtering. Mastery not assessed.
+
+**Agent create modal integration (2026-10-27):** Removed Review step; Basic Information → Instructions now submits to POST /api/agents with CreateAgentCommand JSON and antiforgery token. Shows API errors, prevents duplicate submissions, and reloads on success. Gallery/details still use sample data; .NET/browser/database verification pending; no tests added by request. Mastery not assessed.
+
+**Agent HTTP controller slice (2026-10-27):** Added separate `AgentsApiController` under `/api/agents` for create/update/deactivate/get-by-ID/paged list using Mediator application handlers. Active-only reads, input errors mapped to 400, antiforgery on mutations, and explicit response projection. Existing sample-data MVC pages remain unchanged. Build/HTTP/database verification pending; no tests added. Next: wire UI to persisted data and validate API security/authentication before deployment. Mastery not assessed.
+
+**Agent application slice (2026-10-27):** Added Mediator CQRS commands for create, update, and deactivate and queries for by-ID and paginated Agent retrieval. Handlers use existing generic repository and unit of work; no UI/API integration. Commits are unverified by build or database execution; no tests added by request. Mastery not assessed.
+
+**Agent domain/persistence slice (2026-10-27):** On `feature/agent-domain-persistence`, added global reusable Agent aggregate, string-persisted AgentCategory enum, EF Core mapping, additive PostgreSQL migration/snapshot without test-project files (removed per scope request). This is committed Engineering progress, not runtime verification: .NET SDK/PostgreSQL unavailable here; tests and migration have not been executed. No Agent UI/API/runtime wiring. Mastery not assessed.
 
 ## 2. Learning & engineering roadmap
 
@@ -27,7 +65,7 @@ These phases are **provisional** until reconciled with the project's training ma
 
 | Phase | Focus | Knowledge | Engineering | Mastery |
 | --- | --- | --- | --- | --- |
-| 00 | Baseline, curriculum alignment, repository architecture | In progress | UI foundation exists; persistence and initial Tool application handlers committed on feature branch, unverified | Not assessed |
+| 00 | Baseline, curriculum alignment, repository architecture | In progress | UI and persistence foundations exist; Agent domain and PostgreSQL migration committed on feature branch, unverified | Not assessed |
 | 01 | LLM foundations: tokens, attention, transformers, inference | Not started | Not started | Not assessed |
 | 02 | LLM application engineering: messages, context, persistence, streaming | Not started | Not started | Not assessed |
 | 03 | Agent runtime: tool calling, state, execution loops, guardrails | Not started | Not started | Not assessed |
@@ -40,18 +78,18 @@ These phases are **provisional** until reconciled with the project's training ma
 
 ## 3. Active module
 
-- **Module ID / title:** Module 00 — PostgreSQL persistence foundation
-- **Problem and why it matters:** Project metadata needs durable, versioned relational persistence.
+- **Module ID / title:** Module 00 — Agent domain, persistence, and application use cases
+- **Problem and why it matters:** Global reusable Agent definitions need validated domain state and durable, versioned PostgreSQL persistence.
 - **Prerequisites:** TBD
 - **Learning objectives:** TBD
 - **Theory and internals covered:** TBD
 - **Minimal implementation / experiment:** TBD
 - **Production design and trade-offs:** TBD
-- **AgentForge files / architecture touched:** Core Project entity; Infrastructure DbContext, mappings, migrations, DI; Web configuration; Docker Compose.
-- **Tests and evaluations:** Pending: .NET build, migration application, schema constraints, model drift and integration tests.
+- **AgentForge files / architecture touched:** Core Agent/AgentCategory; Infrastructure AgentConfiguration, AddAgents migration and snapshot; Application Agent CQRS handlers; Web AgentsApiController, persisted Agents MVC gallery/details.
+- **Tests and evaluations:** No AgentForge.Tests files in this PR; verification pending: .NET build, migration application, schema constraints and model drift.
 - **Practice / debugging challenges:** TBD
 - **Mastery criteria and evidence:** TBD
-- **Open questions / blockers:** .NET SDK and PostgreSQL runtime not available in this execution environment; no verified migration execution.
+- **Open questions / blockers:** .NET SDK and PostgreSQL runtime not available in this execution environment; no verified migration execution. Next: build and verify Mediator handler registration and end-to-end create/list/details against PostgreSQL; implement server-side filtering if needed.
 
 ### Parallel lab — Tool Engineering (Module 03 preparation)
 
@@ -93,9 +131,11 @@ These phases are **provisional** until reconciled with the project's training ma
 | 2026-10-21 | Align training resources before finalizing the phase order | Prevent prerequisite gaps and disconnected feature work | Module 00 |
 | 2026-10-21 | Project-centric Agent Studio is proposed; database and identity model remain open | Establish a project boundary before agents and orchestration | docs/architecture-foundation-assessment.md |
 
+| 2026-10-27 | Agent definitions are global and reusable; category is an enum stored as string | Keep Project linkage, permissions and runtime outside MVP | Agent domain/persistence feature branch; build/migration/tests unverified |
+
 ## 5. Next-session handoff
 
-**Read this section first in a new chat.**
+**Read this section first in a new chat.** Agent persistence next: review feature branch PR, run .NET build/tests, run PostgreSQL migration and pending-model-change check, then address review findings. Do not claim mastery.
 
 1. Read this file from the latest repository branch (prefer `main` for merged progress).
 2. Verify current branches, PRs, and relevant code through GitHub; do not rely solely on this summary.
@@ -154,3 +194,11 @@ These phases are **provisional** until reconciled with the project's training ma
 **Legacy delete dialog cleanup (2026-10-27):** Removed `_ConfirmDialog.cshtml`, `confirm-dialog.js`, `confirm-dialog.css`, and their `_Layout.cshtml` references; shared `Components/Delete/` remains. Engineering: committed to PR #20; build/browser verification and full reference audit pending. Mastery: not assessed.
 
 **PR #20 pre-merge review (2026-10-27):** Fixed shared Agent wizard error-node reuse and preserved hint `aria-describedby`; removed literal escaped newlines in Tools Details; prevented dismissing Tool Delete confirmation while DELETE is pending. CI build/JS syntax/Tailwind checks previously passed on earlier SHA; latest fixes require fresh CI. Browser interaction tests remain unverified. Agent creation remains UI-only with no persistence. Knowledge: reviewed component contracts; Engineering: fixes committed; Mastery: not assessed. Next: verify CI on final SHA and merge PR #20 if green, then implement backend persistence in a separate PR.
+
+**Tool icon upload (2026-10-27):** Added Tool form icon upload/preview, validated upload endpoint, local URL acceptance, and icon rendering on catalog/profile. Committed to PR #22; build and browser verification pending. No mastery assessment.
+
+**Shared file API (2026-10-28):** Consolidated Agent/Tool icon upload into FilesController and LocalFileStorageService; updated both forms, retained legacy Agent icon retrieval, and removed feature-specific icon controllers. Changes committed to PR #22. Build, deployment persistence, and browser upload/download verification pending; no mastery assessment.
+
+**Core file storage contract (2026-10-28):** Moved IFileStorageService and StoredFile to AgentForge.Core/Services, using Stream and file metadata rather than ASP.NET IFormFile; updated Web implementation, controller, and DI references. Changes committed to PR #22; build and runtime verification pending. No mastery assessment.
+
+**Application FileService placement (2026-10-28):** Moved concrete file storage implementation to AgentForge.Application/Services/FileService.cs, kept IFileStorageService in Core, and registered it via AddApplicationServices; removed Web implementation. Committed to PR #22. Build and browser verification pending; no mastery assessment.

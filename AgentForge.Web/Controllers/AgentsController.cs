@@ -1,41 +1,58 @@
+using AgentForge.Application.Agents.Queries;
+using AgentForge.Core.Domains;
+using AgentForge.Core.Enums;
+using AgentForge.Core.Utilities;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgentForge.Web.Controllers;
 
 [Route("agents")]
-public sealed class AgentsController : Controller
+public sealed class AgentsController(ISender sender) : Controller
 {
-    public sealed record AgentCard(string Id, string Name, string Description, string Category, string Icon, string[] Tags);
-
-    private static readonly IReadOnlyList<AgentCard> SampleAgents =
-    [
-        new("planning", "Planning Agent", "Analyze requirements and create implementation plans.", "Planning", "◈", ["Requirements", "Architecture"]),
-        new("coding", "Coding Agent", "Implement features, fix bugs, and refactor code.", "Development", "</>", ["Coding", "Debugging"]),
-        new("review", "Review Agent", "Review code quality, security, and best practices.", "Quality", "◇", ["Code Review", "Security"]),
-        new("qa", "QA Agent", "Design test cases and validate application behavior.", "Testing", "⚗", ["Testing", "Automation"]),
-        new("devops", "DevOps Agent", "Assist with CI/CD and deployment workflows.", "Operations", "⚙", ["CI/CD", "Infrastructure"]),
-        new("docs", "Documentation Agent", "Create and maintain technical documentation.", "Documentation", "▤", ["Writing", "Knowledge"]),
-        new("research", "Research Agent", "Research technologies and summarize findings.", "Research", "⌕", ["Research", "Analysis"]),
-        new("ui", "UI Agent", "Help design and implement user interfaces.", "Development", "▣", ["Frontend", "UX"]),
-        new("data", "Data Agent", "Analyze data and prepare actionable reports.", "Data", "▥", ["Analytics", "Reporting"])
-    ];
-
-    [HttpGet("{id}")]
-    public IActionResult Details(string id)
+    public sealed record AgentCard(string Id, string Name, string Description, string Category, string Icon, string[] Tags, string SystemInstructions, DateTimeOffset CreatedAt, DateTimeOffset UpdatedAt, bool IsActive)
     {
-        var agent = SampleAgents.FirstOrDefault(item => string.Equals(item.Id, id, StringComparison.OrdinalIgnoreCase));
-        if (agent is null) return NotFound();
+        public static AgentCard From(Agent agent) => new(
+            agent.Id.ToString(), agent.Name, agent.Description, agent.Category.ToString(),
+            IconUrlOrDefault(agent.Icon), agent.Tags.ToArray(), agent.SystemInstructions,
+            agent.CreatedAt, agent.UpdatedAt, agent.IsActive);
+
+        private static string IconUrlOrDefault(string icon)
+        {
+            var ext = Path.GetExtension(icon).ToLowerInvariant();
+            var stem = Path.GetFileNameWithoutExtension(icon);
+            return stem.Length == 24 && stem.All(Uri.IsHexDigit) && ext is ".png" or ".jpg" or ".webp" or ".gif"
+                ? "/api/files/" + icon
+                : icon;
+        }
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> Details(Guid id, CancellationToken cancellationToken)
+    {
+        var agent = await sender.Send(new GetAgentByIdQuery(id), cancellationToken);
+        if (agent is null || !agent.IsActive) return NotFound();
 
         ViewData["Title"] = agent.Name;
         ViewData["Section"] = "agents";
-        return View(agent);
+        return View(AgentCard.From(agent));
     }
 
     [HttpGet("")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index([FromQuery] int pageNumber = 1, CancellationToken cancellationToken = default)
     {
+        if (pageNumber < 1) return BadRequest("Invalid page number.");
+
+        const int pageSize = 20;
+        var result = await sender.Send(new GetAgentsPageQuery(
+            new PagedQuery<Agent>(pageNumber, pageSize, agent => agent.IsActive,
+                agents => agents.OrderBy(agent => agent.Name))), cancellationToken);
+
+        ViewData["Categories"] = Enum.GetNames<AgentCategory>();
         ViewData["Title"] = "Agents";
         ViewData["Section"] = "agents";
-        return View(SampleAgents);
+        ViewData["PageNumber"] = result.PageNumber;
+        ViewData["TotalPages"] = result.TotalPages;
+        return View(result.Items.Select(AgentCard.From).ToArray());
     }
 }

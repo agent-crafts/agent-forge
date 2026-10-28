@@ -44,12 +44,18 @@
         <button type="button" id="deleteToolButton" class="ui-button ui-tool-action ui-tool-action--delete" aria-label="Delete tool" title="Delete tool"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>
     </div>
         <div class="ui-profile-icon" aria-hidden="true">
-            <partial name="_ToolIcon" model="Model.Icon" />
+            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="" class="h-full w-full object-contain" />
+                }
+                else
+                {
+                    <partial name="_ToolIcon" model="Model.Icon" />
+                }
         </div>
-        <div class="ui-profile-main">
+        <div class="ui-profile-main flex flex-col items-start gap-4">
             <div class="ui-profile-title"><h1>@Model.DisplayName</h1></div>
-            <p>@Model.Description</p>
-            <div class="ui-tags"><span>@Model.Name</span><span>@Model.Category</span><span>@Model.Kind</span></div>
+            <div class="ui-tags"><span>@Model.Category</span></div>
         </div>
 
     </section>
@@ -215,7 +221,7 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
 
 <div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@Model.Category" data-tool-kind="@Model.Kind" data-tool-image-url="@Model.ImageUrl" data-tool-schema="@Model.JsonSchema"></div>
 <partial name="~/Views/Tools/_AddToolDialog.cshtml" />
-<ui-delete id="deleteToolDialog" title="Delete tool?" description="The tool will be removed from the catalog, but its data will be retained." item-name="@Model.DisplayName" confirm-button-id="confirmDeleteTool" confirm-text="Delete tool" />
+<ui-delete id="deleteToolDialog" title="Delete tool?" description="The tool will be removed from the catalog" item-name="@Model.DisplayName" confirm-button-id="confirmDeleteTool" confirm-text="Delete tool" />
 <script src="~/js/tools/add-tool-dialog.js" asp-append-version="true"></script>
 
 <script src="~/js/tools/delete-tool.js" asp-append-version="true"></script>

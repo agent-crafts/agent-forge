@@ -4,49 +4,6 @@
             <section class="ui-panel">
                 <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"/><path d="M12 11v5M12 8h.01"/></svg></span> About this agent</h2>
                 <p>@Model.Description</p>
-                <div class="ui-note">
-                    <strong>Key features</strong>
-                    <ul class="agent-feature-list">
-                        @foreach (var capability in Model.Tags)
-                        {
-                            <li>@capability</li>
-                        }
-                    </ul>
-                </div>
-            </section>
-            <section class="ui-panel">
-                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.3 6.7L21 12l-6.7 2.3L12 21l-2.3-6.7L3 12l6.7-2.3L12 3Z"/></svg></span> Capabilities</h2>
-                <div class="agent-capability-grid">
-                    @foreach (var capability in Model.Tags)
-                    {
-                        <div class="agent-capability-card">
-                            <span class="agent-capability-symbol" aria-hidden="true">✦</span>
-                            <div><strong>@capability</strong><p>Part of this agent's sample capabilities.</p></div>
-                        </div>
-                    }
-                </div>
-            </section>
-            <section class="ui-panel">
-                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 9 2 2 4-4M8 16h8"/></svg></span> Typical use cases</h2>
-                <ol class="agent-use-cases">
-                    @foreach (var capability in Model.Tags)
-                    {
-                        <li>Tasks involving @capability.ToLowerInvariant()</li>
-                    }
-                </ol>
-            </section>
-        </div>
-        <div class="ui-stack">
-            <section class="ui-panel">
-                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span> Agent information</h2>
-                <dl class="agent-info-list">
-                    <div><dt>Category</dt><dd>@Model.Category</dd></div>
-                    <div><dt>Version</dt><dd>Not available</dd></div>
-                    <div><dt>Last updated</dt><dd>Not available</dd></div>
-                    <div><dt>Author</dt><dd>Not available</dd></div>
-                    <div><dt>Model</dt><dd>Not configured</dd></div>
-                    <div><dt>Temperature</dt><dd>Not configured</dd></div>
-                </dl>
             </section>
             <section class="ui-panel">
                 <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V5a2 2 0 0 1 2-2h7l9 9-9 9-9-9Z"/><circle cx="8" cy="8" r="1"/></svg></span> Tags</h2>
@@ -58,9 +15,17 @@
                     }
                 </div>
             </section>
+        </div>
+        <div class="ui-stack">
             <section class="ui-panel">
-                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span> Preview status</h2>
-                <p>This is a static sample agent. Model configuration, connected tools, execution history, and runtime settings are not available yet.</p>
+                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span> Agent information</h2>
+                <dl class="agent-info-list">
+                    <div><dt>Category</dt><dd>@Model.Category</dd></div>
+                    <div><dt>Created</dt><dd><time datetime="@Model.CreatedAt.ToString("O")" title="@Model.CreatedAt.ToString("u")">@Model.CreatedAt.ToString("dd MMM yyyy, HH:mm") UTC</time></dd></div>
+                    <div><dt>Last updated</dt><dd><time datetime="@Model.UpdatedAt.ToString("O")" title="@Model.UpdatedAt.ToString("u")">@Model.UpdatedAt.ToString("dd MMM yyyy, HH:mm") UTC</time></dd></div>
+                    <div><dt>Status</dt><dd>@(Model.IsActive ? "Active" : "Inactive")</dd></div>
+                    <div><dt>Agent ID</dt><dd class="break-all">@Model.Id</dd></div>
+                </dl>
             </section>
         </div>
     </div>

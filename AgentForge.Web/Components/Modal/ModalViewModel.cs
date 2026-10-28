@@ -6,6 +6,7 @@ public sealed class ModalViewModel
     public bool CustomContent { get; init; }
     public bool CustomLayout { get; init; }
     public string? CssClass { get; init; }
+    public int? Width { get; init; }
     public string? TitleId { get; init; }
     public string? DescriptionId { get; init; }
     public string? CloseButtonId { get; init; }

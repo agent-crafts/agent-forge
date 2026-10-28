@@ -9,7 +9,7 @@
 .ui-select-chevron{position:absolute;right:12px;top:50%;width:16px;height:16px;transform:translateY(-50%);pointer-events:none;color:var(--muted)}
 .ui-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:none;padding:11px 14px;border:1px solid var(--line-strong);border-radius:11px;background:var(--surface-raised);color:var(--content);font:inherit;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer}
 .ui-button:disabled{color:var(--muted);opacity:.7;cursor:not-allowed}
-.ui-input:focus-visible,.ui-select:focus-visible,.ui-button:focus-visible,.ui-item-card:focus-visible,.ui-copy:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.ui-button:focus-visible,.ui-item-card:focus-visible,.ui-copy:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .ui-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .ui-item-card{display:flex;align-items:center;gap:16px;min-width:0;padding:17px;border:1px solid var(--line);border-radius:13px;background:var(--surface);color:var(--content);text-decoration:none;transition:border-color .15s,background .15s,transform .15s}
 .ui-item-card:hover{border-color:var(--line-strong);background:var(--hover);transform:translateY(-2px)}
@@ -150,7 +150,7 @@
 #toolTryPanel .tool-try-layout>section:nth-child(2)>div:first-child>div:last-child{margin-left:auto;justify-content:flex-end}
 
 /* Shared form focus: understated neutral cue instead of the accent outline. */
-.ui-input:focus-visible,.ui-select:focus-visible{outline:0;border-color:var(--line-strong);box-shadow:0 0 0 2px var(--surface-raised)}
+
 
 /* Explicit icon-to-label spacing for the Try Now primary action (works without Tailwind build). */
 #githubToolRun{display:inline-flex;align-items:center;justify-content:center;column-gap:12px}
@@ -199,7 +199,8 @@
 #toolParameterRows .param-type{flex:1 1 130px;min-width:0}
 #toolParameterRows .param-remove{background:transparent;border:0;box-shadow:none;color:#dc2626}
 #toolParameterRows .param-remove:hover,#toolParameterRows .param-remove:focus-visible{background:transparent;box-shadow:none}
-#addToolDialog .ui-modal-schema-preview{max-height:208px;overflow:auto}
+#addToolDialog .ui-modal-schema-preview,#addToolDialog .ui-modal-schema-preview .ui-code{max-height:none;overflow:visible}
+#addToolDialog .ui-modal-schema-preview .ui-code{white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:540px){#addToolDialog fieldset{grid-template-columns:1fr}}
 
 
@@ -219,7 +220,7 @@
 .ui-required-mark{color:#dc2626;font-weight:700}
 .ui-field-error{color:#dc2626;font-size:12px;line-height:1.4;margin-top:2px}
 .ui-field-error.hidden{display:none}
-.ui-input[aria-invalid="true"],.ui-select[aria-invalid="true"]{border:2px solid #dc2626!important;box-shadow:0 0 0 1px #dc2626!important}
+.ui-input[aria-invalid="true"],.ui-select[aria-invalid="true"]{border-color:#dc2626}
 
 /* Ensure dialog validation colors override theme and generated utility rules. */
 #addToolDialog .ui-required-mark,#addToolDialog .ui-field-error:not(.hidden),#addToolDialog #addToolFeedback[data-state="error"]{color:#dc2626!important;-webkit-text-fill-color:#dc2626}
@@ -463,7 +464,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .agent-field label{font-size:13px;font-weight:650;color:var(--heading)}
 .agent-field small{font-size:11px;color:var(--muted)}
 .agent-field textarea{box-sizing:border-box;width:100%;resize:vertical;min-height:90px;border:1px solid var(--line);border-radius:11px;padding:12px 14px;background:var(--surface);color:var(--content);font:inherit;font-size:13px;line-height:1.6}
-.agent-field textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
 .agent-form-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px}
 .agent-form-primary{background:var(--accent);color:white;border-color:var(--accent)}
 .agent-form-disclaimer{font-size:12px;color:var(--muted);line-height:1.6}
@@ -476,21 +477,21 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 @media(max-width:560px){.agent-form-grid{grid-template-columns:1fr}.agent-create-header{flex-wrap:wrap}}
 
 /* Create Agent modal wizard */
-.agent-dialog{width:min(900px,calc(100vw - 32px));max-height:min(90vh,900px);margin:auto;padding:0;border:1px solid var(--line);border-radius:17px;background:var(--surface);color:var(--content);box-shadow:0 24px 80px rgba(12,25,60,.25);overflow:auto}
+.agent-dialog{width:min(var(--ui-dialog-width,900px),calc(100vw - 32px));max-height:min(90vh,900px);margin:auto;padding:0;border:1px solid var(--line);border-radius:17px;background:var(--surface);color:var(--content);box-shadow:0 24px 80px rgba(12,25,60,.25);overflow:auto}
 .agent-dialog::backdrop{background:rgba(20,34,64,.58)}
 .agent-dialog-header{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:26px 32px 20px;border-bottom:1px solid var(--line)}
 .agent-dialog-header h2{font-size:24px;line-height:1.3;font-weight:750;color:var(--heading);margin:0 0 5px}
 .agent-dialog-header p{font-size:13px;line-height:1.6;color:var(--muted);margin:0}
 .agent-dialog-close{border:0;background:transparent;color:var(--content);font-size:27px;line-height:1;cursor:pointer}
-.agent-dialog-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;padding:24px 32px 0}
+.agent-dialog-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;padding:20px 24px 0}
 .agent-dialog-step{display:flex;align-items:center;gap:10px;padding-bottom:16px;border-bottom:3px solid var(--line);font-size:13px;font-weight:650;color:var(--muted)}
 .agent-dialog-step b{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-raised);color:var(--content)}
 .agent-dialog-step.is-active{border-color:var(--accent);color:var(--heading)}
 .agent-dialog-step.is-active b{background:var(--accent);color:white}
 .agent-dialog-step.is-complete b{background:rgba(34,167,117,.14);color:#189563}
-.agent-dialog-body{padding:30px 32px 32px;min-height:260px}
+.agent-dialog-body{padding:20px 24px;min-height:260px}
 .agent-dialog-body [hidden],.agent-dialog [hidden]{display:none!important}
-.agent-dialog-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 32px;border-top:1px solid var(--line)}
+.agent-dialog-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 24px;border-top:1px solid var(--line)}
 .agent-dialog-footer-right{display:flex;gap:10px}
 .agent-dialog-review h3{font-size:16px;font-weight:700;color:var(--heading);margin:0 0 18px}
 .agent-dialog-review dl{display:grid;gap:12px;margin:0 0 22px}
@@ -521,7 +522,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .ui-field-error{font-size:12px;color:#dc2626}
 .ui-textarea{box-sizing:border-box;width:100%;min-height:90px;padding:12px 14px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--content);font:inherit;font-size:13px;resize:vertical}
 .ui-field :is(.ui-input,.ui-select,.ui-textarea)[aria-invalid="true"]{border-color:#dc2626}
-.ui-field :is(.ui-input,.ui-select,.ui-textarea):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
 .ui-card{padding:20px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
 .ui-card h3{margin:0 0 8px;color:var(--heading)}
 .ui-card p{margin:0;color:var(--muted)}
@@ -577,7 +578,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 /* Ghost hover uses the primary accent on text, without a filled background or border. */
 .ui-button--ghost:not(:disabled):hover{background:color-mix(in srgb,var(--accent) 8%,transparent);border-color:transparent;color:var(--accent);filter:none}
 
-.ui-dialog{box-sizing:border-box;width:min(520px,calc(100vw - 32px));max-width:none;margin:auto;padding:0;overflow:hidden;box-shadow:0 24px 70px #0003}
+.ui-dialog{box-sizing:border-box;width:min(var(--ui-dialog-width,520px),calc(100vw - 32px));max-width:none;margin:auto;padding:0;overflow:hidden;box-shadow:0 24px 70px #0003}
 .ui-dialog-layout{display:flex;flex-direction:column;max-height:85vh}
 .ui-dialog-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:12px 20px;border-bottom:1px solid var(--line)}
 .ui-dialog-header h2{margin:0;font-size:18px;color:var(--heading)}
@@ -588,4 +589,28 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .ui-dialog-body p{margin:0}
 .ui-dialog-footer{display:flex;justify-content:flex-end;align-items:center;gap:10px;padding:10px 20px;border-top:1px solid var(--line)}
 .ui-dialog-footer form{margin:0}
-.ui-dialog--confirm{width:min(440px,calc(100vw - 32px))}
+.ui-dialog--confirm{width:min(var(--ui-dialog-width,440px),calc(100vw - 32px))}
+
+
+/* Wizard content owns its own spacing; avoid padding twice inside the shared modal. */
+.ui-dialog.agent-dialog > .ui-dialog-layout > .ui-dialog-body{padding:0}
+.ui-dialog.agent-dialog > .ui-dialog-layout > .ui-dialog-header{padding-left:24px;padding-right:24px}
+@media(max-width:600px){.ui-dialog.agent-dialog > .ui-dialog-layout > .ui-dialog-header{padding-left:18px;padding-right:18px}}
+
+/* Shared form validation: input, select and textarea use the same danger border. */
+.ui-field :is(.ui-input,.ui-select,.ui-textarea):is([aria-invalid="true"],.is-invalid){
+  border:1px solid #dc2626!important;
+  box-shadow:none!important;
+}
+
+
+
+
+/* Form fields keep their resting border on focus; validation danger styling remains. */
+:is(.ui-input,.ui-select,.ui-textarea):focus-visible,
+.agent-field textarea:focus-visible{
+  outline:none;
+  box-shadow:none;
+}
+
+.ui-delete-dialog .ui-dialog-header { align-items: center; min-height: 64px; }

@@ -10,6 +10,30 @@ public partial class AgentForgeDbContextModelSnapshot : ModelSnapshot
 {
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity("AgentForge.Core.Domains.Agent", b =>
+        {
+            b.Property<Guid>("Id").ValueGeneratedNever().HasColumnType("uuid").HasColumnName("id");
+            b.Property<bool>("IsActive").HasDefaultValue(true).HasColumnType("boolean").HasColumnName("is_active");
+            b.Property<string>("Name").IsRequired().HasMaxLength(80).HasColumnType("character varying(80)").HasColumnName("name");
+            b.Property<string>("Description").IsRequired().HasMaxLength(300).HasColumnType("character varying(300)").HasColumnName("description");
+            b.Property<AgentCategory>("Category").HasConversion<string>().IsRequired().HasMaxLength(32).HasColumnType("character varying(32)").HasColumnName("category");
+            b.Property<string>("Icon").IsRequired().HasMaxLength(32).HasColumnType("character varying(32)").HasColumnName("icon");
+            b.Property<string[]>("Tags").IsRequired().HasColumnType("text[]").HasColumnName("tags");
+            b.Property<string>("SystemInstructions").IsRequired().HasColumnType("text").HasColumnName("system_instructions");
+            b.Property<DateTimeOffset>("CreatedAt").HasColumnType("timestamp with time zone").HasColumnName("created_at");
+            b.Property<DateTimeOffset>("UpdatedAt").HasColumnType("timestamp with time zone").HasColumnName("updated_at");
+            b.HasKey("Id");
+            b.HasIndex("IsActive", "CreatedAt", "Id").HasDatabaseName("ix_agents_active_created_id");
+            b.ToTable("agents", t =>
+            {
+                t.HasCheckConstraint("ck_agents_name_not_blank", "length(btrim(name)) > 0");
+                t.HasCheckConstraint("ck_agents_description_not_blank", "length(btrim(description)) > 0");
+                t.HasCheckConstraint("ck_agents_instructions_valid", "length(btrim(system_instructions)) <= 12000");
+                t.HasCheckConstraint("ck_agents_category_valid", "category IN ('Development','Planning','Quality','Testing','Operations','Documentation','Research','Data','Other')");
+                t.HasCheckConstraint("ck_agents_tags_count", "cardinality(tags) <= 10");
+            });
+        });
+
         modelBuilder.Entity("AgentForge.Core.Domains.Project", b =>
         {
             b.Property<Guid>("Id").ValueGeneratedNever().HasColumnType("uuid").HasColumnName("id");

@@ -1,7 +1,9 @@
 @model IReadOnlyList<AgentForge.Web.Controllers.AgentsController.AgentCard>
 @{
     Layout = "_AppLayout";
-    var categories = Model.Select(agent => agent.Category).Distinct().OrderBy(category => category);
+    var categories = (IReadOnlyList<string>)(ViewData["Categories"] ?? Array.Empty<string>());
+    var pageNumber = (int)(ViewData["PageNumber"] ?? 1);
+    var totalPages = (int)(ViewData["TotalPages"] ?? 0);
     var categoryOptions = new[] { new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = "All Categories", Value = "all" } }.Concat(categories.Select(category => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = category, Value = category.ToLowerInvariant() })).ToList();
 }
 <div class="ui-toolbar mb-6 flex flex-wrap items-center gap-3">
@@ -21,7 +23,7 @@
         <a href="/agents/@Uri.EscapeDataString(agent.Id)" aria-label="View details for @agent.Name" class="agent-card ui-item-card group flex min-w-0 items-start cursor-default gap-3 rounded-xl border border-line bg-surface px-3 py-3 text-content transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm"
                  data-search="@($"{agent.Name} {agent.Description} {string.Join(" ", agent.Tags)}".ToLowerInvariant())"
                  data-category="@agent.Category.ToLowerInvariant()">
-            <span aria-hidden="true" class="ui-icon-tile self-start text-xl font-semibold">@agent.Icon</span>
+            <span aria-hidden="true" class="ui-icon-tile self-start text-xl font-semibold">@if (agent.Icon.StartsWith("/uploads/agent-icons/", StringComparison.Ordinal)) { <img src="@agent.Icon" alt="" width="40" height="40" class="h-10 w-10 rounded-lg object-cover" /> } else { <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="40" height="40"><path d="M12 3v3M4 12H2m20 0h-2M6 20h12a3 3 0 0 0 3-3v-6a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v6a3 3 0 0 0 3 3ZM8 13h.01M16 13h.01" /></svg> }</span>
             <div class="ui-item-content flex min-w-0 flex-1 flex-col gap-0.5">
                 <span class="ui-item-title break-words text-sm font-semibold text-heading">@agent.Name</span>
                 <span class="ui-item-description break-words text-xs leading-5 text-muted">@agent.Description</span>
@@ -36,7 +38,17 @@
         </a>
     }
 </div>
-<p id="agentEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No agents match your filters.</p>
+@if (totalPages > 1)
+{
+    <nav class="mt-5 flex items-center justify-between gap-3" aria-label="Agents pages">
+        <span class="text-sm text-muted">Page @pageNumber of @totalPages</span>
+        <div class="flex gap-2">
+            @if (pageNumber > 1) { <a class="ui-button" href="/agents?pageNumber=@(pageNumber - 1)">Previous</a> }
+            @if (pageNumber < totalPages) { <a class="ui-button" href="/agents?pageNumber=@(pageNumber + 1)">Next</a> }
+        </div>
+    </nav>
+}
+<p id="agentEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No agents found on this page.</p>
 <partial name="_CreateAgentDialog" />
 <script src="~/js/agents/agent-create.js" asp-append-version="true"></script>
 <script src="~/js/agents/agents-gallery.js" asp-append-version="true"></script>
