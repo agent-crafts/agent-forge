@@ -58,6 +58,8 @@ public sealed class LocalFileStorageService(IWebHostEnvironment environment) : I
         if (stem.Length != 24 || !stem.All(Uri.IsHexDigit) || !MimeTypes.TryGetValue(extension, out var mime))
             return null;
         var path = Path.Combine(DirectoryPath, filename);
-        return System.IO.File.Exists(path) ? new StoredFile(filename, "/api/files/" + filename, path, mime) : null;
+        if (System.IO.File.Exists(path)) return new StoredFile(filename, "/api/files/" + filename, path, mime);
+        var legacy = Path.Combine(environment.WebRootPath, "uploads", "agent-icons", filename);
+        return System.IO.File.Exists(legacy) ? new StoredFile(filename, "/api/files/" + filename, legacy, mime) : null;
     }
 }
