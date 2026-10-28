@@ -1,4 +1,4 @@
-using AgentForge.Web.Services;
+using AgentForge.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgentForge.Web.Controllers;
@@ -15,7 +15,8 @@ public sealed class FilesController(IFileStorageService storage) : ControllerBas
         if (file is null) return BadRequest(new { error = "Select an image smaller than 2 MB." });
         try
         {
-            var saved = await storage.SaveImageAsync(file, cancellationToken);
+            await using var stream = file.OpenReadStream();
+            var saved = await storage.SaveImageAsync(stream, file.Length, file.ContentType, cancellationToken);
             return Ok(new { filename = saved.Filename, url = saved.Url });
         }
         catch (ArgumentException error)
