@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace AgentForge.Application.Services;
 
-public sealed class FileService(IHostEnvironment environment) : IFileStorageService
+public sealed class FileService(IHostEnvironment environment) : IFileService
 {
     private const long MaxBytes = 2 * 1024 * 1024;
     private static readonly Dictionary<string, string> Extensions = new(StringComparer.OrdinalIgnoreCase)
