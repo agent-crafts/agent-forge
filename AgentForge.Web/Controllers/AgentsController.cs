@@ -22,7 +22,7 @@ public sealed class AgentsController(ISender sender) : Controller
             var ext = Path.GetExtension(icon).ToLowerInvariant();
             var stem = Path.GetFileNameWithoutExtension(icon);
             return stem.Length == 24 && stem.All(Uri.IsHexDigit) && ext is ".png" or ".jpg" or ".webp" or ".gif"
-                ? "/uploads/agent-icons/" + icon
+                ? "/api/files/" + icon
                 : icon;
         }
     }
