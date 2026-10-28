@@ -1,14 +1,7 @@
 using System.Security.Cryptography;
+using AgentForge.Core.Services;
 
 namespace AgentForge.Web.Services;
-
-public interface IFileStorageService
-{
-    Task<StoredFile> SaveImageAsync(IFormFile file, CancellationToken cancellationToken);
-    StoredFile? Find(string filename);
-}
-
-public sealed record StoredFile(string Filename, string Url, string Path, string ContentType);
 
 public sealed class LocalFileStorageService(IWebHostEnvironment environment) : IFileStorageService
 {
@@ -22,14 +15,14 @@ public sealed class LocalFileStorageService(IWebHostEnvironment environment) : I
 
     private string DirectoryPath => Path.Combine(environment.ContentRootPath, "file-uploads");
 
-    public async Task<StoredFile> SaveImageAsync(IFormFile file, CancellationToken cancellationToken)
+    public async Task<StoredFile> SaveImageAsync(Stream content, long length, string contentType, CancellationToken cancellationToken)
     {
-        if (file.Length is <= 0 or > MaxBytes)
+        if (length is <= 0 or > MaxBytes)
             throw new ArgumentException("Select an image smaller than 2 MB.");
-        if (!Extensions.TryGetValue(file.ContentType, out var extension))
+        if (!Extensions.TryGetValue(contentType, out var extension))
             throw new ArgumentException("Only PNG, JPEG, WebP and GIF images are allowed.");
 
-        await using var stream = file.OpenReadStream();
+        var stream = content;
         var header = new byte[12];
         var read = await stream.ReadAsync(header, cancellationToken);
         var valid = extension switch
@@ -44,8 +37,9 @@ public sealed class LocalFileStorageService(IWebHostEnvironment environment) : I
 
         Directory.CreateDirectory(DirectoryPath);
         var filename = Convert.ToHexString(RandomNumberGenerator.GetBytes(12)).ToLowerInvariant() + extension;
-        var stored = new StoredFile(filename, "/api/files/" + filename, Path.Combine(DirectoryPath, filename), file.ContentType);
-        await using var input = file.OpenReadStream();
+        var stored = new StoredFile(filename, "/api/files/" + filename, Path.Combine(DirectoryPath, filename), contentType);
+        stream.Position = 0;
+        var input = stream;
         await using var output = new FileStream(stored.Path, FileMode.CreateNew, FileAccess.Write, FileShare.None);
         await input.CopyToAsync(output, cancellationToken);
         return stored;
