@@ -198,3 +198,5 @@ These phases are **provisional** until reconciled with the project's training ma
 **Tool icon upload (2026-10-27):** Added Tool form icon upload/preview, validated upload endpoint, local URL acceptance, and icon rendering on catalog/profile. Committed to PR #22; build and browser verification pending. No mastery assessment.
 
 **Shared file API (2026-10-28):** Consolidated Agent/Tool icon upload into FilesController and LocalFileStorageService; updated both forms, retained legacy Agent icon retrieval, and removed feature-specific icon controllers. Changes committed to PR #22. Build, deployment persistence, and browser upload/download verification pending; no mastery assessment.
+
+**Core file storage contract (2026-10-28):** Moved IFileStorageService and StoredFile to AgentForge.Core/Services, using Stream and file metadata rather than ASP.NET IFormFile; updated Web implementation, controller, and DI references. Changes committed to PR #22; build and runtime verification pending. No mastery assessment.
