@@ -1,5 +1,6 @@
 using AgentForge.Application;
 using AgentForge.Infrastructure;
+using AgentForge.Core.Services;
 using AgentForge.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
