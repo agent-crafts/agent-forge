@@ -42,7 +42,7 @@ public sealed class Tool : Base
         using var schema = System.Text.Json.JsonDocument.Parse(jsonSchema);
         if (schema.RootElement.ValueKind != System.Text.Json.JsonValueKind.Object)
             throw new ArgumentException("Schema must be a JSON object.", nameof(jsonSchema));
-        if (imageUrl is not null && !imageUrl.StartsWith("/uploads/tool-icons/", StringComparison.Ordinal) &&
+        if (imageUrl is not null && !imageUrl.StartsWith("/api/files/", StringComparison.Ordinal) && !imageUrl.StartsWith("/uploads/tool-icons/", StringComparison.Ordinal) &&
             (!Uri.TryCreate(imageUrl, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps))
             throw new ArgumentException("Image URL must use HTTPS.", nameof(imageUrl));
 
