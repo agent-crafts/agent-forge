@@ -160,7 +160,7 @@
           throw new Error('Choose a PNG, JPG, WebP or GIF image smaller than 2 MB.');
         const upload = new FormData();
         upload.append('file', iconFile);
-        const uploadResponse = await fetch('/api/agents/icons', {
+        const uploadResponse = await fetch('/api/files', {
           method: 'POST', credentials: 'same-origin',
           headers: { 'RequestVerificationToken': token }, body: upload
         });
