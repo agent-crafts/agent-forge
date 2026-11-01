@@ -16,8 +16,9 @@ public sealed class FileService(IHostEnvironment environment) : IFileService
 
     private string DirectoryPath => Path.Combine(environment.ContentRootPath, "file-uploads");
 
-    public async Task<StoredFile> SaveImageAsync(Stream content, long length, string contentType, CancellationToken cancellationToken)
+    public async Task<StoredFile> SaveImageAsync(string owner, Stream content, long length, string contentType, CancellationToken cancellationToken)
     {
+        if (owner is not ("agents" or "tools")) throw new ArgumentException("Invalid file owner.");
         if (length is <= 0 or > MaxBytes)
             throw new ArgumentException("Select an image smaller than 2 MB.");
         if (!Extensions.TryGetValue(contentType, out var extension))
@@ -36,9 +37,9 @@ public sealed class FileService(IHostEnvironment environment) : IFileService
         };
         if (!valid) throw new ArgumentException("The file does not match its image format.");
 
-        Directory.CreateDirectory(DirectoryPath);
+        Directory.CreateDirectory(Path.Combine(DirectoryPath, owner));
         var filename = Convert.ToHexString(RandomNumberGenerator.GetBytes(12)).ToLowerInvariant() + extension;
-        var stored = new StoredFile(filename, "/api/files/" + filename, Path.Combine(DirectoryPath, filename), contentType);
+        var stored = new StoredFile(owner + "/" + filename, "/api/files/" + owner + "/" + filename, Path.Combine(DirectoryPath, owner, filename), contentType);
         stream.Position = 0;
         var input = stream;
         await using var output = new FileStream(stored.Path, FileMode.CreateNew, FileAccess.Write, FileShare.None);
