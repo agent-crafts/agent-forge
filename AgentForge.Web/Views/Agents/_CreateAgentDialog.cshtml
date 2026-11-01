@@ -1,21 +1,38 @@
-@using Microsoft.AspNetCore.Mvc.Rendering
-@{
-  var categories = new[] { "Select category", "Development", "Planning", "Quality", "Testing", "Operations", "Documentation", "Research", "Data", "Other" }.Select((value, i) => new SelectListItem { Text = value, Value = i == 0 ? "" : value }).ToList();
-}
-<ui-modal id="createAgentDialog" css-class="tool-config-dialog" width="1080" title="Create New Agent" description="Create the agent identity. Configure instructions and other settings from its profile." title-id="createAgentTitle" description-id="createAgentDescription" close-button-id="closeAgentDialog" cancel-button-id="cancelAgentDialog" primary-text="Save" primary-button-id="submitAgentForm" cancel-text="Cancel">
-  <form id="agentCreateForm" class="grid gap-2.5">
+@using AgentForge.Core.Enums
+<ui-modal id="createAgentDialog" title="Create New Agent" description="Create the agent identity. Configure instructions and other settings from its profile." title-id="createAgentTitle" description-id="createAgentDescription" css-class="tool-config-dialog" width="1080" primary-text="Save" primary-button-id="submitAgentForm" cancel-text="Cancel" cancel-button-id="cancelAgentDialog" close-button-id="closeAgentDialog">
     @Html.AntiForgeryToken()
-    <div class="grid gap-2.5">
-      <section data-agent-step="0" aria-label="Agent information">
-        <div class="grid gap-2.5">
-          <div class="agent-field"><ui-field id="agentName" name="name" label="Agent Name" required="true" max-length="80" placeholder="e.g. Code Review Agent" hint="A clear and descriptive name for your agent." /></div>
-          <div class="agent-field"><ui-field id="agentCategoryInput" name="category" label="Category" control="select" required="true" options="@categories" hint="Choose the primary category." /></div>
-          <div class="agent-field agent-field-wide"><ui-field id="agentDescription" name="description" label="Description" control="textarea" rows="4" max-length="300" required="true" placeholder="What does this agent do?" hint="Briefly describe what this agent does and when to use it." /></div>
-          <div class="agent-field"><label for="agentIconUpload" class="ui-field-label">Agent icon (optional)</label><input id="agentIconUpload" name="iconUpload" type="file" accept="image/png,image/jpeg,image/webp,image/gif" class="ui-input" /><p class="text-xs text-muted">PNG, JPG, WebP or GIF, up to 2 MB. Uses the default agent icon if omitted.</p><img id="agentIconPreview" alt="Selected agent icon preview" width="64" height="64" hidden /></div>
-          <div class="agent-field"><ui-field id="agentTags" name="tags" label="Tags" max-length="200" placeholder="e.g. code, review, quality" hint="Separate tags with commas." /></div>
-        </div>
-      </section>
-    </div>
-    <p class="mt-4 min-h-5 text-[13px] ui-field-error" id="agentFormFeedback" role="status" hidden></p>
-  </form>
+    <form id="agentCreateForm" novalidate>
+        <section data-agent-panel class="grid gap-2.5 [&_.ui-input]:w-full [&_.ui-select]:w-full [&_.ui-input]:min-w-0 [&_.ui-select]:min-w-0" aria-label="Agent information">
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="agentName">Agent Name <span class="ui-required-mark" aria-hidden="true">*</span></label>
+            <input class="ui-input" id="agentName" name="name" placeholder="e.g. Code Review Agent" maxlength="80" required aria-required="true" aria-describedby="agentNameError" />
+            <p id="agentNameError" class="ui-field-error hidden" role="alert"></p>
+
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="agentCategoryInput">Category <span class="ui-required-mark" aria-hidden="true">*</span></label>
+            <select class="ui-select" id="agentCategoryInput" name="category" required aria-required="true" aria-describedby="agentCategoryHelp agentCategoryInputError">
+                <option value="">Select category</option>
+                @foreach (var category in Enum.GetValues<AgentCategory>())
+                {
+                    <option value="@category">@category</option>
+                }
+            </select>
+            <p id="agentCategoryInputError" class="ui-field-error hidden" role="alert"></p>
+            <p id="agentCategoryHelp" class="text-[13px] text-muted">Choose the primary category.</p>
+
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="agentDescription">Description <span class="ui-required-mark" aria-hidden="true">*</span></label>
+            <textarea class="ui-input min-h-24" id="agentDescription" name="description" placeholder="What does this agent do?" maxlength="300" required aria-required="true" aria-describedby="agentDescriptionError"></textarea>
+            <p id="agentDescriptionError" class="ui-field-error hidden" role="alert"></p>
+            <p class="text-[13px] text-muted">Briefly describe what this agent does and when to use it.</p>
+
+            <label for="agentIconUpload" class="ui-field-label">Agent icon (optional)</label>
+            <input id="agentIconUpload" class="ui-input" name="iconUpload" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+            <p class="text-xs text-muted">PNG, JPG, WebP or GIF, up to 2 MB. Uses the default agent icon if omitted.</p>
+            <img id="agentIconPreview" alt="Selected agent icon preview" width="64" height="64" hidden />
+
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="agentTags">Tags</label>
+            <input class="ui-input" id="agentTags" name="tags" placeholder="e.g. code, review, quality" aria-describedby="agentTagsHelp agentTagsError" />
+            <p id="agentTagsError" class="ui-field-error hidden" role="alert"></p>
+            <p id="agentTagsHelp" class="text-[13px] text-muted">Separate tags with commas.</p>
+        </section>
+    </form>
+    <p id="agentFormFeedback" class="mt-4 min-h-5 text-[13px] ui-field-error" role="status" aria-live="polite"></p>
 </ui-modal>

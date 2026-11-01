@@ -24,19 +24,19 @@
         <button type="button" id="agentSettingsTab" role="tab" aria-controls="agentSettingsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Settings</button>
     </div>
     <div id="agentOverviewPanel" role="tabpanel" aria-labelledby="agentOverviewTab">
-        <partial name="_OverviewTab" model="Model" />
+        <partial name="~/Views/Agents/_OverviewTab.cshtml" model="Model" />
     </div>
     <div id="agentInstructionsPanel" role="tabpanel" aria-labelledby="agentInstructionsTab" hidden>
-        <partial name="_InstructionsTab" model="Model" />
+        <partial name="~/Views/Agents/_InstructionsTab.cshtml" model="Model" />
     </div>
-    <div id="agentToolsPanel" role="tabpanel" aria-labelledby="agentToolsTab" hidden><partial name="_ToolsTab" model="Model" /></div>
-    <div id="agentSkillsPanel" role="tabpanel" aria-labelledby="agentSkillsTab" hidden><partial name="_SkillsTab" model="Model" /></div>
-    <div id="agentKnowledgePanel" role="tabpanel" aria-labelledby="agentKnowledgeTab" hidden><partial name="_KnowledgeTab" model="Model" /></div>
-    <div id="agentPlaygroundPanel" role="tabpanel" aria-labelledby="agentPlaygroundTab" hidden><partial name="_PlaygroundTab" model="Model" /></div>
-    <div id="agentRunsPanel" role="tabpanel" aria-labelledby="agentRunsTab" hidden><partial name="_RunsTab" model="Model" /></div>
-    <div id="agentSettingsPanel" role="tabpanel" aria-labelledby="agentSettingsTab" hidden><partial name="_SettingsTab" model="Model" /></div>
+    <div id="agentToolsPanel" role="tabpanel" aria-labelledby="agentToolsTab" hidden><partial name="~/Views/Agents/_ToolsTab.cshtml" model="Model" /></div>
+    <div id="agentSkillsPanel" role="tabpanel" aria-labelledby="agentSkillsTab" hidden><partial name="~/Views/Agents/_SkillsTab.cshtml" model="Model" /></div>
+    <div id="agentKnowledgePanel" role="tabpanel" aria-labelledby="agentKnowledgeTab" hidden><partial name="~/Views/Agents/_KnowledgeTab.cshtml" model="Model" /></div>
+    <div id="agentPlaygroundPanel" role="tabpanel" aria-labelledby="agentPlaygroundTab" hidden><partial name="~/Views/Agents/_PlaygroundTab.cshtml" model="Model" /></div>
+    <div id="agentRunsPanel" role="tabpanel" aria-labelledby="agentRunsTab" hidden><partial name="~/Views/Agents/_RunsTab.cshtml" model="Model" /></div>
+    <div id="agentSettingsPanel" role="tabpanel" aria-labelledby="agentSettingsTab" hidden><partial name="~/Views/Agents/_SettingsTab.cshtml" model="Model" /></div>
 </div>
-<partial name="_CreateAgentDialog" />
+<partial name="~/Views/Agents/_CreateAgentDialog.cshtml" />
 <ui-delete id="deleteAgentDialog" title="Delete agent?" description="The agent will be removed from the active list" item-name="@Model.Name" confirm-button-id="confirmDeleteAgent" confirm-text="Delete agent" />
 <script src="~/js/agents/agent-create.js" asp-append-version="true"></script>
 <script src="~/js/agents/agent-profile-actions.js" asp-append-version="true"></script>

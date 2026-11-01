@@ -157,16 +157,16 @@
 #githubToolRun [aria-hidden="true"]{margin-right:0}
 
 /* Add Tool dialog fallback when generated Tailwind utilities are unavailable. */
-#addToolDialog{width:min(720px,95vw);max-height:90vh;padding:0;border:0;border-radius:16px;background:var(--surface);color:var(--content)}
-#addToolDialog::backdrop{background:#091323b3}
-#addToolDialog>div{display:flex;flex-direction:column;max-height:90vh}
-#addToolDialog>div>header,#addToolDialog>div>footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 20px;border-bottom:1px solid var(--line)}
-#addToolDialog>div>header h2{margin:0;font-size:18px;color:var(--heading)}
-#addToolDialog>div>header p{margin:2px 0 0;font-size:13px;color:var(--muted)}
-#addToolDialog>div>header button{border:0;background:transparent;color:var(--muted);font-size:26px;cursor:pointer}
-#addToolDialog>div>div{min-height:0;overflow:auto;padding:12px 24px 20px}
-#addToolDialog>div>footer{justify-content:flex-end;gap:10px;border-top:1px solid var(--line);border-bottom:0}
-#addToolDialog>div>footer button{flex:none;width:auto}
+#addToolDialog,#createAgentDialog{width:min(720px,95vw);max-height:90vh;padding:0;border:0;border-radius:16px;background:var(--surface);color:var(--content)}
+#addToolDialog::backdrop,#createAgentDialog::backdrop{background:#091323b3}
+#addToolDialog>div,#createAgentDialog>div{display:flex;flex-direction:column;max-height:90vh}
+#addToolDialog>div>header,#addToolDialog>div>footer,#createAgentDialog>div>header,#createAgentDialog>div>footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 20px;border-bottom:1px solid var(--line)}
+#addToolDialog>div>header h2,#createAgentDialog>div>header h2{margin:0;font-size:18px;color:var(--heading)}
+#addToolDialog>div>header p,#createAgentDialog>div>header p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+#addToolDialog>div>header button,#createAgentDialog>div>header button{border:0;background:transparent;color:var(--muted);font-size:26px;cursor:pointer}
+#addToolDialog>div>div,#createAgentDialog>div>div{min-height:0;overflow:auto;padding:12px 24px 20px}
+#addToolDialog>div>footer,#createAgentDialog>div>footer{justify-content:flex-end;gap:10px;border-top:1px solid var(--line);border-bottom:0}
+#addToolDialog>div>footer button,#createAgentDialog>div>footer button{flex:none;width:auto}
 .ui-button--primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .ui-button--primary:disabled{color:#f1f5f9;opacity:.65;cursor:not-allowed}
 .ui-button--primary:disabled:hover{background:var(--accent);border-color:var(--accent);color:#f1f5f9}
@@ -185,14 +185,13 @@
 #addToolDialog fieldset label:has(input:checked) svg{color:var(--accent)}
 #addToolDialog fieldset strong{display:block;font-size:13px}
 #addToolDialog fieldset small{display:block;margin-top:2px;font-size:11px}
-#addToolDialog [data-tool-panel]{display:grid;grid-auto-rows:max-content;align-content:start;gap:8px}
-#addToolDialog [hidden]{display:none!important}
-#addToolDialog [data-tool-panel] .ui-input,#addToolDialog [data-tool-panel] .ui-select{width:100%;min-width:0}
-#addToolDialog [data-tool-panel] textarea{min-height:96px}
-#addToolDialog [data-tool-panel] label{font-size:13px;font-weight:600}
-#addToolDialog [data-tool-panel] p{margin:0;font-size:13px;line-height:1.5;color:var(--muted)}
+#addToolDialog [data-tool-panel],#createAgentDialog [data-agent-panel]{display:grid;grid-auto-rows:max-content;align-content:start;gap:8px}
+#addToolDialog [hidden],#createAgentDialog [hidden]{display:none!important}
+#addToolDialog [data-tool-panel] .ui-input,#addToolDialog [data-tool-panel] .ui-select,#createAgentDialog [data-agent-panel] .ui-input,#createAgentDialog [data-agent-panel] .ui-select{width:100%;min-width:0}
+#addToolDialog [data-tool-panel] textarea,#createAgentDialog [data-agent-panel] textarea{min-height:96px}
+#addToolDialog [data-tool-panel] label,#createAgentDialog [data-agent-panel] label{font-size:13px;font-weight:600;margin-top:4px}
+#addToolDialog [data-tool-panel] p,#createAgentDialog [data-agent-panel] p{margin:0;font-size:13px;line-height:1.5;color:var(--muted)}
 #addToolDialog [data-tool-panel] h3{margin:8px 0 0;line-height:1.4}
-#addToolDialog [data-tool-panel] label{margin-top:4px}
 #toolParameterRows{display:grid;gap:16px}
 #toolParameterRows .ui-modal-parameter{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 #toolParameterRows .param-name{flex:2 1 180px;min-width:0}
@@ -223,10 +222,10 @@
 .ui-input[aria-invalid="true"],.ui-select[aria-invalid="true"]{border-color:#dc2626}
 
 /* Ensure dialog validation colors override theme and generated utility rules. */
-#addToolDialog .ui-required-mark,#addToolDialog .ui-field-error:not(.hidden),#addToolDialog #addToolFeedback[data-state="error"]{color:#dc2626!important;-webkit-text-fill-color:#dc2626}
-#addToolDialog .ui-input[aria-invalid="true"],#addToolDialog .ui-select[aria-invalid="true"]{border-color:#dc2626!important;outline-color:#dc2626!important}
+#addToolDialog .ui-required-mark,#createAgentDialog .ui-required-mark,#addToolDialog .ui-field-error:not(.hidden),#createAgentDialog .ui-field-error:not(.hidden),#addToolDialog #addToolFeedback[data-state="error"],#createAgentDialog #agentFormFeedback[data-state="error"]{color:#dc2626!important;-webkit-text-fill-color:#dc2626}
+#addToolDialog .ui-input[aria-invalid="true"],#addToolDialog .ui-select[aria-invalid="true"],#createAgentDialog .ui-input[aria-invalid="true"],#createAgentDialog .ui-select[aria-invalid="true"]{border-color:#dc2626!important;outline-color:#dc2626!important}
 
-#addToolDialog #addToolFeedback{color:#dc2626!important;-webkit-text-fill-color:#dc2626}
+#addToolDialog #addToolFeedback,#createAgentDialog #agentFormFeedback{color:#dc2626!important;-webkit-text-fill-color:#dc2626}
 
 .ui-tool-profile{position:relative;padding-right:128px}
 .ui-tool-actions{position:absolute;top:12px;right:12px;display:flex;gap:8px;z-index:1}

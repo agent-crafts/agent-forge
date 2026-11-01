@@ -6,6 +6,10 @@
 >
 > **Update policy:** Update this file at the end of each meaningful learning module, implementation milestone, or mastery assessment. Do not mark a skill mastered based only on discussion or a merged PR.
 
+**Agent controller merge (2026-11-01):** Removed `AgentsApiController`. `AgentsController` is now the `/api/agents` API, matching `ToolsController`. Agent gallery and details actions moved to `WorkspaceController`. Build succeeded; browser verification pending. Mastery not assessed.
+
+**Agent modal alignment (2026-11-01):** Create/edit agent dialog now uses the tool dialog shell (720px, header, footer, field labels, inline errors, save spinner). Agent fields unchanged: name, category, description, icon, tags. Browser verification pending. Mastery not assessed.
+
 **Agent Overview simplification (2026-10-27):** Removed redundant Capabilities panel from `_OverviewTab.cshtml`; tags and dedicated Tools/Skills tabs retained. UI change committed; browser verification pending. No mastery assessment.
 
 **Agent Overview preview cleanup (2026-10-27):** Removed static Preview status panel; UI-only change committed, browser verification pending. Mastery not assessed.

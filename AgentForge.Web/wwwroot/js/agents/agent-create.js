@@ -4,89 +4,105 @@
   const open = document.getElementById('openAgentDialog');
   const editOpen = document.getElementById('editAgentButton');
   if (!dialog || !form || (!open && !editOpen)) return;
-  let editingAgent = null;
-  const dialogTitle = document.getElementById('createAgentTitle');
-  const dialogDescription = document.getElementById('createAgentDescription');
-  function setDialogMode(editing) {
-    if (dialogTitle) dialogTitle.textContent = editing ? 'Edit Agent' : 'Create New Agent';
-    if (dialogDescription) dialogDescription.textContent = editing ? 'Update the agent identity.' : 'Create the agent identity. Configure instructions and other settings from its profile.';
-  }
 
-  const sections = [...form.querySelectorAll('[data-agent-step]')];
-  const indicators = [...form.querySelectorAll('[data-step-indicator]')];
-  const submit = document.getElementById('submitAgentForm');
-  const feedback = document.getElementById('agentFormFeedback');
-  const iconInput = document.getElementById('agentIconUpload');
-  const iconPreview = document.getElementById('agentIconPreview');
+  let editingAgent = null;
+  let saving = false;
   let previewUrl = null;
+  const categoryNames = ['Development', 'Planning', 'Quality', 'Testing', 'Operations', 'Documentation', 'Research', 'Data', 'Other'];
+  const get = id => document.getElementById(id);
+  const dialogTitle = get('createAgentTitle');
+  const dialogDescription = get('createAgentDescription');
+  const saveButton = get('submitAgentForm');
+  const status = get('agentFormFeedback');
+  const iconInput = get('agentIconUpload');
+  const iconPreview = get('agentIconPreview');
+
+  const showIcon = url => {
+    iconPreview.hidden = !url;
+    if (url) iconPreview.src = url;
+    else iconPreview.removeAttribute('src');
+  };
+
   iconInput.addEventListener('change', () => {
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     const file = iconInput.files?.[0];
     previewUrl = file ? URL.createObjectURL(file) : null;
-    iconPreview.hidden = !previewUrl;
-    if (previewUrl) iconPreview.src = previewUrl;
-    else iconPreview.removeAttribute('src');
+    showIcon(previewUrl);
   });
-  form.noValidate = true;
-  let step = 0;
-  let saving = false;
-  const categoryNames = ['Development', 'Planning', 'Quality', 'Testing', 'Operations', 'Documentation', 'Research', 'Data', 'Other'];
 
-  function showStep(index) {
-    step = index;
-    sections.forEach((section, i) => { section.hidden = i !== step; });
-    indicators.forEach((indicator, i) => {
-      indicator.classList.toggle('is-active', i === step);
-      indicator.classList.toggle('is-complete', i < step);
-      if (i === step) indicator.setAttribute('aria-current', 'step');
-      else indicator.removeAttribute('aria-current');
-    });
-    submit.hidden = step !== sections.length - 1;
-    feedback.hidden = true;
-  }
+  const fieldError = (field, message) => {
+    field.setAttribute('aria-invalid', 'true');
+    field.classList.add('ui-field-invalid');
+    const node = document.getElementById(field.id + 'Error');
+    if (!node) return;
+    node.className = 'ui-field-error';
+    node.textContent = message;
+    const described = field.getAttribute('aria-describedby') || '';
+    if (!described.split(' ').includes(node.id)) field.setAttribute('aria-describedby', (described + ' ' + node.id).trim());
+  };
 
-  function validateField(input) {
-    const empty = input.required && !input.value.trim();
-    const message = empty ? 'This field is required.' : (input.validity.valid ? '' : input.validationMessage);
-    const wrapper = input.closest('.agent-field');
-    const error = wrapper?.querySelector('.ui-field-error') || wrapper?.querySelector('.agent-field-error');
-    if (error) {
-      error.textContent = message;
-      error.hidden = !message;
+  const clearFieldError = field => {
+    field.removeAttribute('aria-invalid');
+    field.classList.remove('ui-field-invalid');
+    const node = document.getElementById(field.id + 'Error');
+    if (node) {
+      node.textContent = '';
+      node.classList.add('hidden');
     }
-    input.classList.toggle('is-invalid', Boolean(message));
-    input.classList.toggle('ui-field-invalid', Boolean(message));
-    input.setAttribute('aria-invalid', message ? 'true' : 'false');
-    const hint = document.getElementById(input.id + '-hint');
-    const describedBy = [hint?.id, message ? error?.id : null].filter(Boolean).join(' ');
-    if (describedBy) input.setAttribute('aria-describedby', describedBy);
-    else input.removeAttribute('aria-describedby');
-    return !message;
-  }
+  };
 
-  function validateStep(index) {
-    let first = null;
-    sections[index].querySelectorAll('input,select,textarea').forEach(input => {
-      if (!validateField(input) && !first) first = input;
-    });
-    if (first) {
-      if (step !== index) showStep(index);
-      first.focus();
-      feedback.textContent = 'Please complete the required fields.';
-      feedback.hidden = false;
-      return false;
-    }
-    return true;
-  }
+  const fields = () => ['agentName', 'agentCategoryInput', 'agentDescription', 'agentTags'].map(get);
 
-  function updateField(event) {
-    const input = event.target;
-    if (input.matches('input,select,textarea') && input.hasAttribute('aria-invalid')) validateField(input);
-  }
+  const resetForm = () => {
+    form.reset();
+    fields().forEach(clearFieldError);
+    iconInput.value = '';
+    showIcon(null);
+    status.textContent = '';
+  };
 
-  form.addEventListener('input', updateField);
-  form.addEventListener('change', updateField);
-  open?.addEventListener('click', () => { editingAgent = null; setDialogMode(false); form.reset(); showStep(0); dialog.showModal(); });
+  const setDialogMode = editing => {
+    dialogTitle.textContent = editing ? 'Edit Agent' : 'Create New Agent';
+    dialogDescription.textContent = editing
+      ? 'Update the agent identity.'
+      : 'Create the agent identity. Configure instructions and other settings from its profile.';
+    saveButton.textContent = editing ? 'Save Changes' : 'Save';
+  };
+
+  const storedIconUrl = icon => {
+    if (!icon) return null;
+    if (icon.startsWith('/')) return icon;
+    if (icon.startsWith('agents/')) return '/api/files/' + icon;
+    const file = icon.split('/').pop() || '';
+    const stem = file.replace(/\.[^.]+$/, '');
+    const ext = (file.match(/\.[^.]+$/) || [''])[0].toLowerCase();
+    return stem.length === 24 && /^[0-9a-f]+$/i.test(stem) && ['.png', '.jpg', '.webp', '.gif'].includes(ext)
+      ? '/api/files/' + icon
+      : null;
+  };
+
+  const categoryValue = agent => typeof agent.category === 'number' ? categoryNames[agent.category] || '' : agent.category || '';
+
+  dialog.addEventListener('input', event => {
+    if (event.target.matches('input,textarea,select')) clearFieldError(event.target);
+  });
+  dialog.addEventListener('cancel', event => { if (saving) event.preventDefault(); });
+  dialog.querySelectorAll('[data-modal-close], #closeAgentDialog, #cancelAgentDialog').forEach(button => {
+    button.addEventListener('click', event => {
+      if (saving) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    }, true);
+  });
+
+  open?.addEventListener('click', () => {
+    editingAgent = null;
+    setDialogMode(false);
+    resetForm();
+    dialog.showModal();
+  });
+
   editOpen?.addEventListener('click', async () => {
     editOpen.disabled = true;
     try {
@@ -95,72 +111,95 @@
       if (!response.ok) throw new Error('Unable to load agent (HTTP ' + response.status + ').');
       editingAgent = await response.json();
       setDialogMode(true);
-      form.reset();
-      form.elements.namedItem('name').value = editingAgent.name;
-      form.elements.namedItem('description').value = editingAgent.description;
-      form.elements.namedItem('category').value = categoryNames[editingAgent.category] || '';
-      form.elements.namedItem('tags').value = (editingAgent.tags || []).join(', ');
-      showStep(0);
+      resetForm();
+      get('agentName').value = editingAgent.name;
+      get('agentDescription').value = editingAgent.description;
+      get('agentCategoryInput').value = categoryValue(editingAgent);
+      get('agentTags').value = (editingAgent.tags || []).join(', ');
+      showIcon(storedIconUrl(editingAgent.icon));
       dialog.showModal();
     } catch (error) {
       window.AgentForgeToast?.show({ type: 'error', title: 'Unable to edit agent', message: error.message });
-    } finally { editOpen.disabled = false; }
+    } finally {
+      editOpen.disabled = false;
+    }
   });
-  document.getElementById('closeAgentDialog').addEventListener('click', () => { if (!saving) dialog.close(); });
-  document.getElementById('cancelAgentDialog').addEventListener('click', () => { if (!saving) dialog.close(); });
 
-
-  submit.addEventListener('click', event => {
+  saveButton.type = 'button';
+  saveButton.addEventListener('click', event => {
     event.preventDefault();
-    void createAgent();
+    event.stopPropagation();
+    void saveAgent();
   });
-
   form.addEventListener('submit', event => {
     event.preventDefault();
-    void createAgent();
+    void saveAgent();
   });
 
-  async function createAgent() {
+  async function saveAgent() {
     if (saving) return;
-    if (!validateStep(0)) return;
-
-    const value = name => String(form.elements.namedItem(name)?.value ?? '').trim();
-    const tags = value('tags').split(',').map(tag => tag.trim()).filter(Boolean);
-    const category = categoryNames.indexOf(value('category'));
-    if (category < 0) {
-      showStep(0);
-      feedback.textContent = 'Select a valid category.';
-      feedback.hidden = false;
+    const nameField = get('agentName');
+    const displayCategory = get('agentCategoryInput');
+    const descriptionField = get('agentDescription');
+    const tagsField = get('agentTags');
+    const name = nameField.value.trim();
+    const description = descriptionField.value.trim();
+    const tags = tagsField.value.split(',').map(tag => tag.trim()).filter(Boolean);
+    const category = categoryNames.indexOf(displayCategory.value);
+    const errors = [];
+    const requiredFields = [
+      [nameField, 'Agent name is required.'],
+      [displayCategory, 'Category is required.'],
+      [descriptionField, 'Description is required.']
+    ];
+    for (const [field, message] of requiredFields) {
+      clearFieldError(field);
+      if (!field.value.trim()) errors.push([field, message]);
+      else if (!field.checkValidity()) errors.push([field, 'Enter a valid value.']);
+    }
+    clearFieldError(tagsField);
+    if (displayCategory.value && category < 0 && !errors.some(([field]) => field === displayCategory))
+      errors.push([displayCategory, 'Select a valid category.']);
+    if (tags.length > 10) errors.push([tagsField, 'At most 10 tags are allowed.']);
+    else if (tags.some(tag => tag.length > 40)) errors.push([tagsField, 'Each tag must be 1–40 characters.']);
+    if (errors.length) {
+      errors.forEach(([field, message]) => fieldError(field, message));
+      status.textContent = 'Correct the highlighted fields.';
+      errors[0][0].focus();
       return;
     }
 
     const payload = {
-      name: value('name'),
-      description: value('description'),
+      name,
+      description,
       category,
       icon: editingAgent?.icon ?? null,
       tags,
       systemInstructions: editingAgent?.systemInstructions ?? ''
     };
-    const token = form.querySelector('input[name="__RequestVerificationToken"]')?.value;
+    const token = dialog.querySelector('input[name="__RequestVerificationToken"]')?.value;
     saving = true;
-    submit.disabled = true;
-    feedback.textContent = editingAgent ? 'Saving agent…' : 'Creating agent…';
-    feedback.hidden = false;
+    saveButton.disabled = true;
+    saveButton.setAttribute('aria-busy', 'true');
+    const originalContent = saveButton.innerHTML;
+    saveButton.innerHTML = '<span class="inline-flex items-center gap-2"><span class="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden="true"></span>Saving…</span>';
+    status.textContent = 'Saving agent...';
 
     try {
       const iconFile = iconInput.files?.[0];
       if (iconFile) {
         if (iconFile.size > 2 * 1024 * 1024 || !['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(iconFile.type))
-          throw new Error('Choose a PNG, JPG, WebP or GIF image smaller than 2 MB.');
+          throw new Error('Choose PNG, JPG, WebP or GIF under 2 MB.');
         const upload = new FormData();
         upload.append('file', iconFile);
         const uploadResponse = await fetch('/api/files/agents', {
-          method: 'POST', credentials: 'same-origin',
-          headers: { 'RequestVerificationToken': token }, body: upload
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: token ? { RequestVerificationToken: token } : {},
+          body: upload
         });
         const uploaded = await uploadResponse.json().catch(() => null);
-        if (!uploadResponse.ok) throw new Error(uploaded?.error || `Icon upload failed (HTTP ${uploadResponse.status}).`);
+        if (!uploadResponse.ok) throw new Error(uploaded?.error || 'Icon upload failed.');
         payload.icon = uploaded.filename;
       }
       const response = await fetch(editingAgent ? '/api/agents/' + encodeURIComponent(editingAgent.id) : '/api/agents', {
@@ -168,30 +207,35 @@
         credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json',
-          'RequestVerificationToken': token
+          ...(token ? { RequestVerificationToken: token } : {})
         },
         body: JSON.stringify(editingAgent ? { ...payload, id: editingAgent.id } : payload)
       });
       if (!response.ok) {
-        const error = await response.json().catch(() => null);
-        throw new Error(error?.error || error?.title || `Could not create agent (HTTP ${response.status}).`);
+        const contentType = response.headers.get('content-type') || '';
+        const error = contentType.includes('json') ? await response.json() : await response.text();
+        const message = typeof error === 'string' ? error : (error.detail || error.error || error.title || JSON.stringify(error.errors || error));
+        throw new Error(message || 'HTTP ' + response.status);
       }
       window.AgentForgeToast?.afterNavigation({
         type: 'success',
         title: editingAgent ? 'Agent updated' : 'Agent created',
         message: editingAgent ? 'Agent details saved successfully.' : 'Agent created successfully.'
       });
-      // Reload the server-rendered gallery to show the newly persisted agent.
-      form.reset();
       dialog.close();
       window.location.reload();
     } catch (error) {
-      feedback.textContent = error.message || 'Could not create agent. Please try again.';
-      feedback.hidden = false;
+      status.textContent = 'Could not save agent: ' + (error.message || 'Unknown error');
+      window.AgentForgeToast?.show({
+        type: 'error',
+        title: editingAgent ? 'Could not update agent' : 'Could not create agent',
+        message: error.message || 'Please try again.'
+      });
     } finally {
       saving = false;
-      submit.disabled = false;
+      saveButton.disabled = false;
+      saveButton.removeAttribute('aria-busy');
+      saveButton.innerHTML = originalContent;
     }
   }
-  showStep(0);
 })();

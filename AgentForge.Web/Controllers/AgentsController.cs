@@ -1,15 +1,78 @@
+using AgentForge.Application.Agents.Commands;
 using AgentForge.Application.Agents.Queries;
 using AgentForge.Core.Domains;
-using AgentForge.Core.Enums;
 using AgentForge.Core.Utilities;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgentForge.Web.Controllers;
 
-[Route("agents")]
-public sealed class AgentsController(ISender sender) : Controller
+[ApiController]
+[Route("api/agents")]
+public sealed class AgentsController(ISender sender) : ControllerBase
 {
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(
+        [FromBody] CreateAgentCommand command,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var id = await sender.Send(command, cancellationToken);
+            return CreatedAtAction(nameof(GetById), new { id }, new { id });
+        }
+        catch (ArgumentException exception)
+        {
+            return BadRequest(new { error = exception.Message });
+        }
+    }
+
+    [HttpPut("{id:guid}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateAgentCommand command, CancellationToken cancellationToken)
+    {
+        if (id != command.Id) return BadRequest();
+        try
+        {
+            var updated = await sender.Send(command, cancellationToken);
+            return updated ? NoContent() : NotFound();
+        }
+        catch (ArgumentException exception)
+        {
+            return BadRequest(new { error = exception.Message });
+        }
+    }
+
+    [HttpDelete("{id:guid}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+        => await sender.Send(new DeactivateAgentCommand(id), cancellationToken) ? NoContent() : NotFound();
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+    {
+        var agent = await sender.Send(new GetAgentByIdQuery(id), cancellationToken);
+        return agent is null || !agent.IsActive ? NotFound() : Ok(agent);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetPaged(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default)
+    {
+        if (pageNumber < 1 || pageSize is < 1 or > 100)
+            return BadRequest("Invalid pagination parameters.");
+
+        var result = await sender.Send(
+            new GetAgentsPageQuery(new PagedQuery<Agent>(pageNumber, pageSize, agent => agent.IsActive,
+                agents => agents.OrderBy(agent => agent.Name))),
+            cancellationToken);
+        return Ok(result);
+    }
+
+    // Compatibility model for Razor views; not used by API actions.
     public sealed record AgentCard(string Id, string Name, string Description, string Category, string Icon, string[] Tags, string SystemInstructions, DateTimeOffset CreatedAt, DateTimeOffset UpdatedAt, bool IsActive)
     {
         public static AgentCard From(Agent agent) => new(
@@ -26,34 +89,5 @@ public sealed class AgentsController(ISender sender) : Controller
                 ? "/api/files/" + icon
                 : icon;
         }
-    }
-
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> Details(Guid id, CancellationToken cancellationToken)
-    {
-        var agent = await sender.Send(new GetAgentByIdQuery(id), cancellationToken);
-        if (agent is null || !agent.IsActive) return NotFound();
-
-        ViewData["Title"] = agent.Name;
-        ViewData["Section"] = "agents";
-        return View(AgentCard.From(agent));
-    }
-
-    [HttpGet("")]
-    public async Task<IActionResult> Index([FromQuery] int pageNumber = 1, CancellationToken cancellationToken = default)
-    {
-        if (pageNumber < 1) return BadRequest("Invalid page number.");
-
-        const int pageSize = 20;
-        var result = await sender.Send(new GetAgentsPageQuery(
-            new PagedQuery<Agent>(pageNumber, pageSize, agent => agent.IsActive,
-                agents => agents.OrderBy(agent => agent.Name))), cancellationToken);
-
-        ViewData["Categories"] = Enum.GetNames<AgentCategory>();
-        ViewData["Title"] = "Agents";
-        ViewData["Section"] = "agents";
-        ViewData["PageNumber"] = result.PageNumber;
-        ViewData["TotalPages"] = result.TotalPages;
-        return View(result.Items.Select(AgentCard.From).ToArray());
     }
 }
