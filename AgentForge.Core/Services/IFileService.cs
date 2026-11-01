@@ -4,6 +4,6 @@ public sealed record StoredFile(string Filename, string Url, string Path, string
 
 public interface IFileService
 {
-    Task<StoredFile> SaveImageAsync(Stream content, long length, string contentType, CancellationToken cancellationToken);
+    Task<StoredFile> SaveImageAsync(string owner, Stream content, long length, string contentType, CancellationToken cancellationToken);
     StoredFile? Find(string filename);
 }
