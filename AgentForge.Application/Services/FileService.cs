@@ -49,11 +49,14 @@ public sealed class FileService(IHostEnvironment environment) : IFileService
 
     public StoredFile? Find(string filename)
     {
-        var extension = Path.GetExtension(filename);
-        var stem = Path.GetFileNameWithoutExtension(filename);
+        var owner = filename.Split('/')[0];
+        var name = filename.Split('/').Last();
+        if (owner is not ("agents" or "tools") || filename != owner + "/" + name) return null;
+        var extension = Path.GetExtension(name);
+        var stem = Path.GetFileNameWithoutExtension(name);
         if (stem.Length != 24 || !stem.All(Uri.IsHexDigit) || !MimeTypes.TryGetValue(extension, out var mime))
             return null;
-        var path = Path.Combine(DirectoryPath, filename);
+        var path = Path.Combine(DirectoryPath, owner, name);
         if (System.IO.File.Exists(path)) return new StoredFile(filename, "/api/files/" + filename, path, mime);
         var legacy = Path.Combine(environment.ContentRootPath, "wwwroot", "uploads", "agent-icons", filename);
         return System.IO.File.Exists(legacy) ? new StoredFile(filename, "/api/files/" + filename, legacy, mime) : null;
