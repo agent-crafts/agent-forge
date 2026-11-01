@@ -83,8 +83,8 @@ public sealed class Agent : Base
             throw new ArgumentOutOfRangeException(nameof(category));
 
         var normalizedIcon = string.IsNullOrWhiteSpace(icon) ? string.Empty : icon.Trim();
-        if (normalizedIcon.Length > 32)
-            throw new ArgumentException("Icon must be at most 32 characters.", nameof(icon));
+        if (normalizedIcon.Length > 2048)
+            throw new ArgumentException("Icon must be at most 2048 characters.", nameof(icon));
 
         var normalizedInstructions = systemInstructions?.Trim();
         if (normalizedInstructions is null || normalizedInstructions.Length > 12000)
