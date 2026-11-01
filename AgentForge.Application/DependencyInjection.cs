@@ -22,6 +22,8 @@ public static class DependencyInjection
         services.AddScoped<IToolRegistry, ToolRegistry>();
         services.AddScoped<IToolExecutor, GitHubIssueExecutor>();
         services.AddScoped<IToolExecutorRegistry, ToolExecutorRegistry>();
+        services.AddScoped<IToolExecutionAdapter, CustomToolExecutionAdapter>();
+        services.AddScoped<IToolExecutionGateway, ToolExecutionGateway>();
 
         return services;
     }
