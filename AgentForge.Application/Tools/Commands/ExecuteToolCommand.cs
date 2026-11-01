@@ -7,7 +7,7 @@ namespace AgentForge.Application.Tools.Commands;
 
 public sealed record ExecuteToolCommand(Guid Id, JsonElement Input) : ICommand<ToolExecutionResult>;
 
-public sealed class ExecuteToolCommandHandler(IToolRepository tools, IToolExecutorRegistry registry)
+public sealed class ExecuteToolCommandHandler(IToolRepository tools, IToolExecutionGateway gateway)
     : ICommandHandler<ExecuteToolCommand, ToolExecutionResult>
 {
     public async ValueTask<ToolExecutionResult> Handle(ExecuteToolCommand command, CancellationToken cancellationToken)
@@ -15,9 +15,6 @@ public sealed class ExecuteToolCommandHandler(IToolRepository tools, IToolExecut
         var tool = await tools.GetByIdAsync(command.Id, cancellationToken);
         if (tool is null || !tool.IsActive)
             return ToolExecutionResult.Fail("tool_not_found", "Tool not found.");
-        var executor = registry.Resolve(tool.Name);
-        if (executor is null)
-            return ToolExecutionResult.Fail("executor_unavailable", "This tool has no approved execution adapter.");
         if (command.Input.ValueKind != JsonValueKind.Object)
             return ToolExecutionResult.Fail("invalid_input", "Input must be a JSON object.");
 
@@ -63,6 +60,6 @@ public sealed class ExecuteToolCommandHandler(IToolRepository tools, IToolExecut
                     return ToolExecutionResult.Fail("invalid_input", $"{property.Name} is below the minimum.");
             }
         }
-        return await executor.ExecuteAsync(command.Input, cancellationToken);
+        return await gateway.ExecuteAsync(tool, command.Input, cancellationToken);
     }
 }
