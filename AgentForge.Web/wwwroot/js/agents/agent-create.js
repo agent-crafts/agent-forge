@@ -160,13 +160,13 @@
           throw new Error('Choose a PNG, JPG, WebP or GIF image smaller than 2 MB.');
         const upload = new FormData();
         upload.append('file', iconFile);
-        const uploadResponse = await fetch('/api/files', {
+        const uploadResponse = await fetch('/api/files/agents', {
           method: 'POST', credentials: 'same-origin',
           headers: { 'RequestVerificationToken': token }, body: upload
         });
         const uploaded = await uploadResponse.json().catch(() => null);
         if (!uploadResponse.ok) throw new Error(uploaded?.error || `Icon upload failed (HTTP ${uploadResponse.status}).`);
-        payload.icon = uploaded.url;
+        payload.icon = uploaded.filename;
       }
       const response = await fetch(editingAgent ? '/api/agents/' + encodeURIComponent(editingAgent.id) : '/api/agents', {
         method: editingAgent ? 'PUT' : 'POST',
