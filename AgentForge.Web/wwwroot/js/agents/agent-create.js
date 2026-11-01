@@ -166,7 +166,7 @@
         });
         const uploaded = await uploadResponse.json().catch(() => null);
         if (!uploadResponse.ok) throw new Error(uploaded?.error || `Icon upload failed (HTTP ${uploadResponse.status}).`);
-        payload.icon = uploaded.filename;
+        payload.icon = uploaded.url;
       }
       const response = await fetch(editingAgent ? '/api/agents/' + encodeURIComponent(editingAgent.id) : '/api/agents', {
         method: editingAgent ? 'PUT' : 'POST',
