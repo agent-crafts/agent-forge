@@ -7,7 +7,7 @@
             .OfType<DescriptionAttribute>()
             .FirstOrDefault()?.Description ?? value.ToString();
 }
-<ui-modal id="addToolDialog" title="Add Tool" description="Configure a custom tool or connect an external source." title-id="addToolTitle" description-id="addToolIntro" css-class="tool-config-dialog" primary-text="Save" primary-button-id="previewToolConfiguration" cancel-text="Cancel" cancel-button-id="cancelAddToolDialog" close-button-id="closeAddToolDialog">
+<ui-modal id="addToolDialog" title="Add Tool" description="Configure a custom tool or connect an external source." title-id="addToolTitle" description-id="addToolIntro" css-class="tool-config-dialog" width="1080" primary-text="Save" primary-button-id="previewToolConfiguration" cancel-text="Cancel" cancel-button-id="cancelAddToolDialog" close-button-id="closeAddToolDialog">
 
             @Html.AntiForgeryToken()
             <fieldset id="toolKindSelector" class="mb-5 grid grid-cols-1 gap-2 border-0 p-0 sm:grid-cols-2">
@@ -38,8 +38,9 @@
                 <p id="newToolCategoryError" class="ui-field-error hidden" role="alert"></p>
                 
                 <p id="toolCategoryHelp" class="text-[13px] text-muted">Select the category that best describes this tool.</p>
-                <label for="newToolIconUpload">Tool icon (optional)</label>
-                <input id="newToolIconUpload" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+                <label for="newToolIconUpload" class="ui-field-label">Tool icon (optional)</label>
+                <input id="newToolIconUpload" class="ui-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+                <p class="text-xs text-muted">PNG, JPG, WebP or GIF, up to 2 MB.</p>
                 <img id="newToolIconPreview" alt="Tool icon preview" width="64" height="64" hidden />
                 <h3 class="mt-2 text-base font-semibold text-heading">Parameters</h3>
                 <p class="text-[13px] leading-6 text-muted">Define input parameters. The JSON Schema preview is generated automatically.</p>
