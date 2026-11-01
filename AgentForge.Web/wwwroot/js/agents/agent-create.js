@@ -59,6 +59,7 @@
       error.hidden = !message;
     }
     input.classList.toggle('is-invalid', Boolean(message));
+    input.classList.toggle('ui-field-invalid', Boolean(message));
     input.setAttribute('aria-invalid', message ? 'true' : 'false');
     const hint = document.getElementById(input.id + '-hint');
     const describedBy = [hint?.id, message ? error?.id : null].filter(Boolean).join(' ');
