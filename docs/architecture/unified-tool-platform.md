@@ -1,7 +1,7 @@
 # Unified Tool Platform — implementation plan
 
 ## Goal
-Any registered tool (custom, MCP, OpenAPI, or other supported provider) is discoverable, testable, and invokable through one contract. The agent runtime never depends on provider-specific execution code. Registration alone must never authorize execution.
+Any registered tool (custom or remote MCP for the MVP; additional providers later) is discoverable, testable, and invokable through one contract. The agent runtime never depends on provider-specific execution code. Registration alone must never authorize execution.
 
 ## Existing baseline (main, 2026-11-01)
 - Persisted `Tool` metadata, CRUD and `POST /api/tools/{id}/execute`.
@@ -18,14 +18,20 @@ Any registered tool (custom, MCP, OpenAPI, or other supported provider) is disco
 - No external source is executable yet; this increment is architectural preparation, not full feature delivery.
 
 ## Next increments — required before feature completion
-1. **ToolSource persistence:** source identity, provider type, safe endpoint configuration, secret reference, health, and lifecycle. Add an additive migration and preserve existing tool records.
+1. **ToolSource persistence (MCP MVP):** source identity, provider type, safe endpoint configuration, secret reference, health, and lifecycle. Add an additive migration and preserve existing tool records.
 2. **Canonical tool contract:** stable tool IDs, provider-specific remote name, input/output schemas, schema version/hash, read/write capability, timeouts and limits. Separate source and tool; enforce uniqueness per source.
-3. **External adapters:** remote MCP HTTP discovery/list/call; OpenAPI operation import and constrained HTTP execution. Avoid arbitrary URL execution, redirects to private networks, or user-supplied credentials in schemas.
+3. **External adapter:** remote MCP HTTP discovery/list/call through one MCP adapter. OpenAPI import is explicitly deferred. Avoid arbitrary URL execution, redirects to private networks, or user-supplied credentials in schemas.
 4. **Registration & test UI:** connect source, validate connection, discover/import, review permissions, register tools, edit mapping, Try Now with schema-generated input and structured result/error; same gateway for test and agent runs.
 5. **Runtime integration:** load enabled tool definitions dynamically, filter by agent/user permissions, normalize function calls, validate responses, and enforce approvals for mutations.
 6. **Security:** authentication/authorization, network egress allowlist, DNS rebinding/SSRF protection, scoped secret storage, rate and size limits, cancellation, timeout, output sanitization and audit logging.
-7. **Verification:** build, unit tests for routing and schema validation, fake MCP/OpenAPI integration tests, PostgreSQL migration tests, existing GitHub Try Now regression, and browser E2E for source registration/test.
+7. **Verification:** build, unit tests for routing and schema validation, fake MCP integration tests, PostgreSQL migration tests, existing GitHub Try Now regression, and browser E2E for source registration/test.
 8. **Rollout:** feature flag new adapters, keep existing custom execution path, run migration/backfill, and gradually enable external sources.
+
+## MVP scope decisions
+- Only two adapters: existing approved custom C# executors and remote HTTP MCP tools.
+- Do not build an AgentForge MCP server, OpenAPI importer, plugin marketplace, or arbitrary code execution.
+- The same backend execution endpoint powers Try Now and agent invocation; both must enforce their caller's permissions.
+- External tools must never be dispatched to the custom executor by a matching name alone.
 
 ## Architectural constraints
 - Persisted tool metadata is not proof of an executable or authorized capability.
