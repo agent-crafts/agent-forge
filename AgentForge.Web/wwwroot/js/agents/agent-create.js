@@ -14,8 +14,6 @@
 
   const sections = [...form.querySelectorAll('[data-agent-step]')];
   const indicators = [...form.querySelectorAll('[data-step-indicator]')];
-  const back = { hidden: true, disabled: false };
-  const next = { hidden: true, disabled: false };
   const submit = document.getElementById('submitAgentForm');
   const feedback = document.getElementById('agentFormFeedback');
   const iconInput = document.getElementById('agentIconUpload');
@@ -43,8 +41,6 @@
       if (i === step) indicator.setAttribute('aria-current', 'step');
       else indicator.removeAttribute('aria-current');
     });
-    back.hidden = step === 0;
-    next.hidden = step === sections.length - 1;
     submit.hidden = step !== sections.length - 1;
     feedback.hidden = true;
   }
@@ -149,8 +145,6 @@
     const token = form.querySelector('input[name="__RequestVerificationToken"]')?.value;
     saving = true;
     submit.disabled = true;
-    back.disabled = true;
-    next.disabled = true;
     feedback.textContent = editingAgent ? 'Saving agent…' : 'Creating agent…';
     feedback.hidden = false;
 
@@ -197,8 +191,6 @@
     } finally {
       saving = false;
       submit.disabled = false;
-      back.disabled = false;
-      next.disabled = false;
     }
   }
   showStep(0);
