@@ -14,8 +14,8 @@
 
   const sections = [...form.querySelectorAll('[data-agent-step]')];
   const indicators = [...form.querySelectorAll('[data-step-indicator]')];
-  const back = document.getElementById('previousAgentStep');
-  const next = document.getElementById('nextAgentStep');
+  const back = { hidden: true, disabled: false };
+  const next = { hidden: true, disabled: false };
   const submit = document.getElementById('submitAgentForm');
   const feedback = document.getElementById('agentFormFeedback');
   const iconInput = document.getElementById('agentIconUpload');
@@ -112,8 +112,8 @@
   });
   document.getElementById('closeAgentDialog').addEventListener('click', () => { if (!saving) dialog.close(); });
   document.getElementById('cancelAgentDialog').addEventListener('click', () => { if (!saving) dialog.close(); });
-  next.addEventListener('click', () => { if (!saving && validateStep(step)) showStep(step + 1); });
-  back.addEventListener('click', () => { if (!saving) showStep(step - 1); });
+
+
   submit.addEventListener('click', event => {
     event.preventDefault();
     void createAgent();
