@@ -19,6 +19,7 @@ public sealed class AgentsController(ISender sender) : Controller
 
         private static string IconUrlOrDefault(string icon)
         {
+            if (icon.StartsWith("agents/", StringComparison.Ordinal)) return "/api/files/" + icon;
             var ext = Path.GetExtension(icon).ToLowerInvariant();
             var stem = Path.GetFileNameWithoutExtension(icon);
             return stem.Length == 24 && stem.All(Uri.IsHexDigit) && ext is ".png" or ".jpg" or ".webp" or ".gif"
