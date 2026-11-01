@@ -30,7 +30,7 @@
             <span aria-hidden="true" class="ui-icon-tile self-start">
                 @if (!string.IsNullOrWhiteSpace(tool.ImageUrl))
                 {
-                    <img src="@tool.ImageUrl" alt="" class="h-full w-full object-contain" />
+                    <img src="@(tool.ImageUrl?.StartsWith("tools/") == true ? "/api/files/" + tool.ImageUrl : tool.ImageUrl)" alt="" class="h-full w-full object-contain" />
                 }
                 else
                 {
