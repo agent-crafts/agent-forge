@@ -2,12 +2,12 @@
 @{
   var categories = new[] { "Select category", "Development", "Planning", "Quality", "Testing", "Operations", "Documentation", "Research", "Data", "Other" }.Select((value, i) => new SelectListItem { Text = value, Value = i == 0 ? "" : value }).ToList();
 }
-<ui-modal id="createAgentDialog" css-class="agent-dialog" width="1080" variant="wizard" title="Create New Agent" description="Create the agent identity. Configure instructions and other settings from its profile." title-id="createAgentTitle" description-id="createAgentDescription" close-button-id="closeAgentDialog" cancel-button-id="cancelAgentDialog" previous-button-id="previousAgentStep" next-button-id="nextAgentStep" submit-button-id="submitAgentForm">
-  <form id="agentCreateForm" class="agent-dialog-form">
+<ui-modal id="createAgentDialog" css-class="tool-config-dialog" width="1080" title="Create New Agent" description="Create the agent identity. Configure instructions and other settings from its profile." title-id="createAgentTitle" description-id="createAgentDescription" close-button-id="closeAgentDialog" cancel-button-id="cancelAgentDialog" primary-text="Save" primary-button-id="submitAgentForm" cancel-text="Cancel">
+  <form id="agentCreateForm" class="grid gap-2.5">
     @Html.AntiForgeryToken()
-    <div class="agent-dialog-body">
+    <div class="grid gap-2.5">
       <section data-agent-step="0" aria-label="Agent information">
-        <div class="agent-form-grid">
+        <div class="grid gap-2.5">
           <div class="agent-field"><ui-field id="agentName" name="name" label="Agent Name" required="true" max-length="80" placeholder="e.g. Code Review Agent" hint="A clear and descriptive name for your agent." /></div>
           <div class="agent-field"><ui-field id="agentCategoryInput" name="category" label="Category" control="select" required="true" options="@categories" hint="Choose the primary category." /></div>
           <div class="agent-field agent-field-wide"><ui-field id="agentDescription" name="description" label="Description" control="textarea" rows="4" max-length="300" required="true" placeholder="What does this agent do?" hint="Briefly describe what this agent does and when to use it." /></div>
@@ -16,6 +16,6 @@
         </div>
       </section>
     </div>
-    <p class="agent-dialog-feedback" id="agentFormFeedback" role="status" hidden></p>
+    <p class="mt-4 min-h-5 text-[13px] ui-field-error" id="agentFormFeedback" role="status" hidden></p>
   </form>
 </ui-modal>
