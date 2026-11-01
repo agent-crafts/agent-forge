@@ -24,7 +24,7 @@ internal sealed class AgentConfiguration : IEntityTypeConfiguration<Agent>
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(80).IsRequired();
         builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(300).IsRequired();
         builder.Property(x => x.Category).HasColumnName("category").HasConversion<string>().HasMaxLength(32).IsRequired();
-        builder.Property(x => x.Icon).HasColumnName("icon").HasMaxLength(32).IsRequired();
+        builder.Property(x => x.Icon).HasColumnName("icon").HasMaxLength(2048).IsRequired();
         builder.Property(x => x.Tags).HasColumnName("tags").HasColumnType("text[]").IsRequired();
         builder.Property(x => x.SystemInstructions).HasColumnName("system_instructions").HasColumnType("text").IsRequired();
         builder.Property(x => x.CreatedAt).HasColumnName("created_at").HasColumnType("timestamp with time zone").IsRequired();
