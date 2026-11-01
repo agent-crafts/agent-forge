@@ -40,7 +40,7 @@
 
 **Instructions editor action alignment (2026-10-27):** Removed redundant field label and placed Save Changes with EasyMDE status information, retaining fallback placement when editor is unavailable. Changes committed on PR #22; browser verification pending.
 
-**Unified Tool Platform (2026-11-01, feature/unified-tool-platform):** Started provider-independent execution gateway and compatibility adapter for existing named C# executors; updated execution command and DI. External source registration, MCP/OpenAPI adapters, dynamic Try Now, agent assignment, build and tests are pending. See `docs/architecture/unified-tool-platform.md`. Engineering in progress; mastery not assessed.
+**Execution Gateway focus (2026-11-01, feature/unified-tool-platform):** Scoped PR #25 to gateway dispatch and compatibility with approved custom C# executors; explicitly rejected external tools in the custom adapter. MCP/OpenAPI, ToolSource, dynamic external registration and agent integration are deferred. Build, automated tests and authorization review pending. See `docs/architecture/unified-tool-platform.md`. Engineering in progress; mastery not assessed.
 
 ## 1. Current snapshot
 
