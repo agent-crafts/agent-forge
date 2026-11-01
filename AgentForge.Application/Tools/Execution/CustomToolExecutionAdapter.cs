@@ -1,6 +1,5 @@
 using System.Text.Json;
 using AgentForge.Core.Domains;
-using AgentForge.Core.Enums;
 
 namespace AgentForge.Application.Tools.Execution;
 
@@ -11,7 +10,7 @@ namespace AgentForge.Application.Tools.Execution;
 public sealed class CustomToolExecutionAdapter(IToolExecutorRegistry executors) : IToolExecutionAdapter
 {
     public bool CanHandle(Tool tool) =>
-        tool.Kind == ToolKind.Custom && executors.CanExecute(tool.Name);
+        executors.CanExecute(tool.Name);
 
     public Task<ToolExecutionResult> ExecuteAsync(
         Tool tool, JsonElement arguments, CancellationToken cancellationToken)
