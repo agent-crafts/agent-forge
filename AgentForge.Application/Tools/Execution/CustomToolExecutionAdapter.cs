@@ -16,6 +16,9 @@ public sealed class CustomToolExecutionAdapter(IToolExecutorRegistry executors) 
     public Task<ToolExecutionResult> ExecuteAsync(
         Tool tool, JsonElement arguments, CancellationToken cancellationToken)
     {
+        if (tool.Kind != ToolKind.Custom)
+            return Task.FromResult(ToolExecutionResult.Fail("executor_unavailable", "This adapter only executes custom tools."));
+
         var executor = executors.Resolve(tool.Name);
         return executor is null
             ? Task.FromResult(ToolExecutionResult.Fail("executor_unavailable", "No approved executor is registered."))
