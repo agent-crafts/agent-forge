@@ -46,7 +46,7 @@
         <div class="ui-profile-icon" aria-hidden="true">
             @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
                 {
-                    <img src="@Model.ImageUrl" alt="" class="h-full w-full object-contain" />
+                    <img src="@(Model.ImageUrl?.StartsWith("tools/") == true ? "/api/files/" + Model.ImageUrl : Model.ImageUrl)" alt="" class="h-full w-full object-contain" />
                 }
                 else
                 {
