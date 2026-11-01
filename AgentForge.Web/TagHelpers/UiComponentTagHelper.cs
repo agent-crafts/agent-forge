@@ -40,6 +40,7 @@ public sealed class UiComponentTagHelper : TagHelper
     public string? Type { get; set; }
     public string? AutoComplete { get; set; }
     public string? CssClass { get; set; }
+    public int? Width { get; set; }
     public string? AriaLabel { get; set; }
     public string? AriaHasPopup { get; set; }
     public string? AriaControls { get; set; }
@@ -109,7 +110,7 @@ public sealed class UiComponentTagHelper : TagHelper
                         TitleId = TitleId, DescriptionId = DescriptionId,
                         CloseButtonId = CloseButtonId, CancelButtonId = CancelButtonId,
                         PreviousButtonId = PreviousButtonId, NextButtonId = NextButtonId, SubmitButtonId = SubmitButtonId,
-                        CssClass = CssClass, CustomLayout = CustomLayout, CustomContent = customContent is not null && !customContent.IsEmptyOrWhiteSpace,
+                        CssClass = CssClass, Width = Width, CustomLayout = CustomLayout, CustomContent = customContent is not null && !customContent.IsEmptyOrWhiteSpace,
                         Content = customContent,
                         BodyText = BodyText ?? "", Variant = Variant ?? "standard",
                         PrimaryText = PrimaryText ?? "Confirm", CancelText = CancelText ?? "Cancel",

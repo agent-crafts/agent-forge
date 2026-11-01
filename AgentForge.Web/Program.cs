@@ -21,6 +21,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); // Serves user-uploaded agent icons saved after deployment.
 app.UseRouting();
 app.UseAuthorization();
 app.MapStaticAssets();

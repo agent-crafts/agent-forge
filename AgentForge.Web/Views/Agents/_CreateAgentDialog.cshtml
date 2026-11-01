@@ -1,32 +1,44 @@
-@using Microsoft.AspNetCore.Mvc.Rendering
-@{
-  var categories = new[] { "Select category", "Development", "Planning", "Quality", "Testing", "Operations", "Documentation", "Research", "Data", "Other" }.Select((value, i) => new SelectListItem { Text = value, Value = i == 0 ? "" : value }).ToList();
-  var icons = new[] { ("◈ Default", "◈"), ("◇ Review", "◇"), ("⚙ Operations", "⚙"), ("▤ Documentation", "▤") }.Select(value => new SelectListItem { Text = value.Item1, Value = value.Item2 }).ToList();
-}
-<ui-modal id="createAgentDialog" css-class="agent-dialog" variant="wizard" title="Create New Agent" description="Define your agent identity and core behavior. Configure tools, skills, and other settings later." title-id="createAgentTitle" description-id="createAgentDescription" close-button-id="closeAgentDialog" cancel-button-id="cancelAgentDialog" previous-button-id="previousAgentStep" next-button-id="nextAgentStep" submit-button-id="submitAgentForm">
-  <form id="agentCreateForm" class="agent-dialog-form">
-    <nav class="agent-dialog-steps" aria-label="Creation steps">
-      <span class="agent-dialog-step is-active" data-step-indicator="0"><b>1</b> Basic Information</span>
-      <span class="agent-dialog-step" data-step-indicator="1"><b>2</b> Instructions</span>
-      <span class="agent-dialog-step" data-step-indicator="2"><b>3</b> Review</span>
-    </nav>
-    <div class="agent-dialog-body">
-      <section data-agent-step="0" aria-label="Basic Information">
-        <div class="agent-form-grid">
-          <div class="agent-field"><ui-field id="agentName" name="name" label="Agent Name" required="true" max-length="80" placeholder="e.g. Code Review Agent" hint="A clear and descriptive name for your agent." /></div>
-          <div class="agent-field"><ui-field id="agentCategoryInput" name="category" label="Category" control="select" required="true" options="@categories" hint="Choose the primary category." /></div>
-          <div class="agent-field agent-field-wide"><ui-field id="agentDescription" name="description" label="Description" control="textarea" rows="4" max-length="300" required="true" placeholder="What does this agent do?" hint="Briefly describe what this agent does and when to use it." /></div>
-          <div class="agent-field"><ui-field id="agentIcon" name="icon" label="Icon" control="select" options="@icons" hint="Choose an icon to represent your agent." /></div>
-          <div class="agent-field"><ui-field id="agentTags" name="tags" label="Tags" max-length="200" placeholder="e.g. code, review, quality" hint="Separate tags with commas." /></div>
-        </div>
-      </section>
-      <section data-agent-step="1" aria-label="Instructions" hidden>
-        <div class="agent-field"><ui-field id="agentInstructions" name="instructions" label="System Instructions" control="textarea" rows="11" max-length="12000" required="true" placeholder="You are an AI agent responsible for..." hint="Describe the role, responsibilities, rules, and expected output. Do not include credentials." /></div>
-      </section>
-      <section data-agent-step="2" aria-label="Review" hidden>
-        <div class="agent-dialog-review"><h3>Review your agent</h3><dl><div><dt>Name</dt><dd id="agentReviewName"></dd></div><div><dt>Category</dt><dd id="agentReviewCategory"></dd></div><div><dt>Description</dt><dd id="agentReviewDescription"></dd></div><div><dt>Icon</dt><dd id="agentReviewIcon"></dd></div><div><dt>Tags</dt><dd id="agentReviewTags"></dd></div><div><dt>Instructions</dt><dd id="agentReviewInstructions"></dd></div></dl><p class="agent-form-disclaimer">UI preview only. Creating an agent will require backend persistence, which is not connected yet.</p></div>
-      </section>
-    </div>
-    <p class="agent-dialog-feedback" id="agentFormFeedback" role="status" hidden></p>
-  </form>
+@using AgentForge.Core.Enums
+<ui-modal id="createAgentDialog" title="Create New Agent" description="Create the agent identity. Configure instructions and other settings from its profile." title-id="createAgentTitle" description-id="createAgentDescription" css-class="tool-config-dialog" width="1080" primary-text="Save" primary-button-id="submitAgentForm" cancel-text="Cancel" cancel-button-id="cancelAgentDialog" close-button-id="closeAgentDialog">
+    @Html.AntiForgeryToken()
+    <form id="agentCreateForm" novalidate>
+        <section data-agent-panel class="grid gap-2.5 [&_.ui-input]:w-full [&_.ui-select]:w-full [&_.ui-input]:min-w-0 [&_.ui-select]:min-w-0" aria-label="Agent information">
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="agentName">Agent Name <span class="ui-required-mark" aria-hidden="true">*</span></label>
+            <input class="ui-input" id="agentName" name="name" placeholder="e.g. Code Review Agent" maxlength="80" required aria-required="true" aria-describedby="agentNameError" />
+            <p id="agentNameError" class="ui-field-error hidden" role="alert"></p>
+
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="agentCategoryInput">Category <span class="ui-required-mark" aria-hidden="true">*</span></label>
+            <select class="ui-select" id="agentCategoryInput" name="category" required aria-required="true" aria-describedby="agentCategoryHelp agentCategoryInputError">
+                <option value="">Select category</option>
+                @foreach (var category in Enum.GetValues<AgentCategory>())
+                {
+                    <option value="@category">@category</option>
+                }
+            </select>
+            <p id="agentCategoryInputError" class="ui-field-error hidden" role="alert"></p>
+            <p id="agentCategoryHelp" class="text-[13px] text-muted">Choose the primary category.</p>
+
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="agentDescription">Description <span class="ui-required-mark" aria-hidden="true">*</span></label>
+            <textarea class="ui-input min-h-24" id="agentDescription" name="description" placeholder="What does this agent do?" maxlength="300" required aria-required="true" aria-describedby="agentDescriptionError"></textarea>
+            <p id="agentDescriptionError" class="ui-field-error hidden" role="alert"></p>
+            <p class="text-[13px] text-muted">Briefly describe what this agent does and when to use it.</p>
+
+            <label for="agentIconUpload" class="ui-field-label">Agent icon (optional)</label>
+            <div class="ui-file">
+                <label class="ui-file-avatar" for="agentIconUpload">
+                    <span id="agentIconFallback" class="ui-file-fallback" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v3M4 12H2m20 0h-2M6 20h12a3 3 0 0 0 3-3v-6a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v6a3 3 0 0 0 3 3ZM8 13h.01M16 13h.01" /></svg></span>
+                    <img id="agentIconPreview" class="ui-file-preview" alt="" width="96" height="96" hidden />
+                    <span class="ui-file-change" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5 19.5 9.5 8 21H3v-5L14.5 4.5z"/></svg></span>
+                    <input id="agentIconUpload" class="ui-file-input" name="iconUpload" type="file" accept="image/png,image/jpeg,image/webp,image/gif" aria-describedby="agentIconHelp" />
+                </label>
+                <p id="agentIconHelp" class="ui-file-hint">Click the icon to upload a PNG, JPG, WebP or GIF, up to 2 MB.</p>
+            </div>
+
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="agentTags">Tags</label>
+            <input class="ui-input" id="agentTags" name="tags" placeholder="e.g. code, review, quality" aria-describedby="agentTagsHelp agentTagsError" />
+            <p id="agentTagsError" class="ui-field-error hidden" role="alert"></p>
+            <p id="agentTagsHelp" class="text-[13px] text-muted">Separate tags with commas.</p>
+        </section>
+    </form>
+    <p id="agentFormFeedback" class="mt-4 min-h-5 text-[13px] ui-field-error" role="status" aria-live="polite"></p>
 </ui-modal>

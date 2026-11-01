@@ -15,6 +15,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<IConfigService, ConfigService>();
+        services.AddScoped<IFileService, FileService>();
 
         services.AddScoped<ChatCommand>();
         services.AddScoped<GitHubTools>();

@@ -1,10 +1,11 @@
 @model AgentForge.Web.Components.Modal.ModalViewModel
 @{
     var confirm = Model.Variant == "confirm";
+    var dialogWidth = Model.Width is > 0 and <= 2000 ? $"--ui-dialog-width:{Model.Width}px" : null;
     var titleId = Model.TitleId ?? $"{Model.Id}-title";
     var descriptionId = Model.DescriptionId ?? $"{Model.Id}-description";
 }
-<dialog id="@Model.Id" class="ui-dialog ui-dialog--@(confirm ? "confirm" : "standard") @Model.CssClass" aria-labelledby="@titleId" aria-describedby="@(string.IsNullOrWhiteSpace(Model.Description) ? null : descriptionId)">
+<dialog id="@Model.Id" class="ui-dialog ui-dialog--@(confirm ? "confirm" : "standard") @Model.CssClass" style="@dialogWidth" aria-labelledby="@titleId" aria-describedby="@(string.IsNullOrWhiteSpace(Model.Description) ? null : descriptionId)">
     @if (Model.CustomLayout) { @Model.Content }
     else {
     <div class="ui-dialog-layout">
@@ -29,7 +30,7 @@
                 <div class="agent-dialog-footer-right">
                     <ui-button id="@Model.PreviousButtonId" variant="secondary" text="Back" hidden="true" />
                     <ui-button id="@Model.NextButtonId" variant="primary" text="Next →" />
-                    <ui-button id="@Model.SubmitButtonId" variant="primary" text="Review Complete" hidden="true" />
+                    <ui-button id="@Model.SubmitButtonId" variant="primary" text="Create Agent" hidden="true" />
                 </div>
             }
             else

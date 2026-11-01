@@ -1,5 +1,7 @@
+using AgentForge.Application.Agents.Queries;
 using AgentForge.Application.Tools.Queries;
 using AgentForge.Core.Domains;
+using AgentForge.Core.Enums;
 using AgentForge.Core.Utilities;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +20,6 @@ public sealed class WorkspaceController(ISender sender) : Controller
         ["tasks"] = ("Tasks", "Track work items across your development lifecycle."),
         ["reviews"] = ("Reviews & Approvals", "Review changes and manage human approval checkpoints."),
         ["pipelines"] = ("Pipelines", "Track build, test, and delivery pipelines."),
-        ["agents"] = ("Agents", "Create, configure, and test your AI agents."),
         ["knowledge"] = ("Knowledge", "Connect documents and knowledge sources to your agents."),
         ["runs"] = ("Runs", "Inspect agent executions, steps, and tool calls.")
     };
@@ -54,7 +55,36 @@ public sealed class WorkspaceController(ISender sender) : Controller
         return View("~/Views/Tools/Details.cshtml", item);
     }
 
-    [HttpGet("{section:regex(^(projects|specifications|workflows|tasks|reviews|pipelines|agents|knowledge|runs)$)}")]
+    [HttpGet("agents")]
+    public async Task<IActionResult> Agents([FromQuery] int pageNumber = 1, CancellationToken cancellationToken = default)
+    {
+        if (pageNumber < 1) return BadRequest("Invalid page number.");
+
+        const int pageSize = 20;
+        var result = await sender.Send(new GetAgentsPageQuery(
+            new PagedQuery<Agent>(pageNumber, pageSize, agent => agent.IsActive,
+                agents => agents.OrderBy(agent => agent.Name))), cancellationToken);
+
+        ViewData["Categories"] = Enum.GetNames<AgentCategory>();
+        ViewData["Title"] = "Agents";
+        ViewData["Section"] = "agents";
+        ViewData["PageNumber"] = result.PageNumber;
+        ViewData["TotalPages"] = result.TotalPages;
+        return View("~/Views/Agents/Index.cshtml", result.Items.Select(AgentsController.AgentCard.From).ToArray());
+    }
+
+    [HttpGet("agents/{id:guid}")]
+    public async Task<IActionResult> AgentDetails(Guid id, CancellationToken cancellationToken)
+    {
+        var agent = await sender.Send(new GetAgentByIdQuery(id), cancellationToken);
+        if (agent is null || !agent.IsActive) return NotFound();
+
+        ViewData["Title"] = agent.Name;
+        ViewData["Section"] = "agents";
+        return View("~/Views/Agents/Details.cshtml", AgentsController.AgentCard.From(agent));
+    }
+
+    [HttpGet("{section:regex(^(projects|specifications|workflows|tasks|reviews|pipelines|knowledge|runs)$)}")]
     public IActionResult Index(string section)
     {
         if (!Pages.TryGetValue(section, out var page)) return NotFound();

@@ -1,31 +1,36 @@
 @model AgentForge.Web.Controllers.AgentsController.AgentCard
 <section class="ui-panel agent-instructions">
-    <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M8 3h7l6 6h-6V3M8 13h8M8 17h8"/></svg></span> System Prompt</h2>
-    <div class="agent-instructions-body">
-        <p class="ui-subtitle">Instructions describing the agent's role, responsibilities, guidelines, and constraints.</p>
-        <div class="agent-prompt-preview" role="region" aria-label="Example system prompt" tabindex="0">
-            <p>You are @Model.Name.</p>
-            <p><strong>Your role:</strong></p>
-            <ul>
-                <li>@Model.Description</li>
-                @foreach (var capability in Model.Tags)
-                {
-                    <li>Support tasks involving @capability.</li>
-                }
-            </ul>
-            <p><strong>Guidelines:</strong></p>
-            <ul>
-                <li>Clarify ambiguous requirements before proceeding.</li>
-                <li>Explain relevant assumptions and limitations.</li>
-                <li>Report results accurately and distinguish suggestions from completed actions.</li>
-            </ul>
-            <p><strong>Constraints:</strong></p>
-            <ul>
-                <li>Do not claim an action was completed without evidence.</li>
-                <li>Do not expose sensitive information.</li>
-                <li>Stay within the scope of the assigned task.</li>
-            </ul>
+    <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l4 4v14H4V3h4Z"/><path d="M8 11h8M8 15h8M8 19h5"/></svg></span> System Instructions</h2>
+    <p class="ui-subtitle">Write instructions in Markdown. Use the editor toolbar, Preview button, or full-screen mode.</p>
+    <form id="agentInstructionsForm" data-agent-id="@Model.Id">
+        @Html.AntiForgeryToken()
+        <partial name="_MarkdownEditor" model='"agentSystemInstructions"' view-data='new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData) { ["MarkdownContent"] = Model.SystemInstructions }' />
+        <div class="agent-instructions-actions">
+            <button id="previewAgentInstructions" type="button" class="ui-button ui-button--secondary" aria-pressed="false">Preview</button>
+            <button id="saveAgentInstructions" type="submit" class="ui-button ui-button--primary">Save Changes</button>
         </div>
-        <p class="agent-instructions-disclaimer">Example prompt generated for this sample agent. It is not saved, editable, or used by a running agent.</p>
-    </div>
+    </form>
 </section>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.css" />
+<style>
+.agent-markdown-component .editor-toolbar { background: #f8fafc; color: #1e293b; border-color: #cbd5e1; opacity: 1; }
+.agent-markdown-component .editor-toolbar button,
+.agent-markdown-component .editor-toolbar a { color: #1e293b !important; opacity: 1; }
+.agent-markdown-component .editor-toolbar button:hover,
+.agent-markdown-component .editor-toolbar button.active,
+.agent-markdown-component .editor-toolbar a:hover,
+.agent-markdown-component .editor-toolbar a.active { background: #e2e8f0; color: #0f172a !important; border-color: #94a3b8; }
+.agent-markdown-component .CodeMirror,
+.agent-markdown-component .editor-preview,
+.agent-markdown-component .editor-preview-side { background: #fff; color: #172033; }
+.agent-markdown-component .CodeMirror-cursor { border-left-color: #172033; }
+.agent-markdown-component .editor-statusbar { color: #64748b; display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: .75rem; padding: .5rem 0; }
+.agent-markdown-component .editor-statusbar .agent-instructions-actions { display: flex; align-items: center; gap: .75rem; margin-left: auto; }
+.agent-instructions-actions { display: flex; align-items: center; gap: .75rem; margin-top: .75rem; }
+.agent-markdown-component .editor-statusbar .agent-instructions-actions { margin-top: 0; }
+.agent-markdown-component .editor-statusbar .ui-button { font-size: .875rem; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.js"></script>
+<script src="~/js/shared/markdown-editor.js" asp-append-version="true"></script>
+<script src="~/js/agents/agent-instructions.js" asp-append-version="true"></script>

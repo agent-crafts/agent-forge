@@ -5,10 +5,17 @@
  const editContext=document.getElementById("toolEditContext");
  if(!dialog||(!open&&!editOpen))return;
  let editMode=false, originalSchema=null;
+ let previewUrl=null;
+ const iconInput=document.getElementById("newToolIconUpload");
+ const iconPreview=document.getElementById("newToolIconPreview");
+ const iconFallback=document.getElementById("newToolIconFallback");
+ const iconSrc=value=>{if(!value)return null;if(value.startsWith("/"))return value;if(value.startsWith("tools/")||value.startsWith("agents/"))return "/api/files/"+value;return value;};
+ const showIcon=url=>{if(!iconPreview)return;if(url){iconPreview.hidden=false;iconPreview.removeAttribute("hidden");iconPreview.src=url;iconFallback?.setAttribute("hidden","");}else{iconPreview.hidden=true;iconPreview.removeAttribute("src");iconFallback?.removeAttribute("hidden");}};
+ iconInput.addEventListener("change",()=>{if(previewUrl)URL.revokeObjectURL(previewUrl);const file=iconInput.files?.[0];previewUrl=file?URL.createObjectURL(file):null;showIcon(previewUrl);});
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
  const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);status.textContent="";};
- if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription","newToolImage"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();status.textContent="";update();schema();dialog.showModal();});
+ if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();status.textContent="";update();schema();dialog.showModal();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
   get("toolKindSelector").hidden=true;
@@ -22,7 +29,7 @@
   get("newToolDisplayName").value=d.toolDisplayName;
   get("newToolDescription").value=d.toolDescription;
   get("newToolCategory").value=d.toolCategory;
-  get("newToolImage").value=d.toolImageUrl||"";
+  iconInput.value="";showIcon(iconSrc(d.toolImageUrl));
   dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.checked=r.value==="custom";r.disabled=true;});
   update();
   rows.replaceChildren();
@@ -64,7 +71,7 @@
   return next;
  };
  const schema=()=>{const properties={},required=[];rows.querySelectorAll(".ui-modal-parameter").forEach(r=>{const n=r.querySelector(".param-name").value.trim();if(!n)return;properties[n]={type:r.querySelector(".param-type").value};if(r.querySelector(".param-required").checked)required.push(n);});const value=editMode&&originalSchema?buildEditedSchema():{type:"object",properties,required,additionalProperties:false};if(window.AgentForgeJsonViewer){window.AgentForgeJsonViewer.render(get("newToolSchema"),value);}else{get("newToolSchema").textContent=JSON.stringify(value,null,2);}};
- get("addToolParameter").addEventListener("click",()=>{const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required pattern="[a-z][a-z0-9_]*" maxlength="155" placeholder="parameter_name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").onclick=()=>{r.remove();schema();};r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
+ get("addToolParameter").addEventListener("click",()=>{const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required pattern="[a-z][a-z0-9_]*" maxlength="155" placeholder="parameter_name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").onclick=()=>{r.remove();schema();};r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
  const kindValues={custom:1,external:2};
  const categoryValues={general:1,development:2,integration:3,data:4,automation:5};
  const saveButton=get("previewToolConfiguration");
@@ -98,7 +105,7 @@
   const name=get("newToolName").value.trim();
   const displayName=get("newToolDisplayName").value.trim();
   const description=get("newToolDescription").value.trim();
-  const imageUrl=get("newToolImage").value.trim()||null;
+  let imageUrl=editMode?editContext.dataset.toolImageUrl||null:null;
   const category=categoryValues[get("newToolCategory").value];
   const errors=[];
   const requiredFields=[
@@ -114,7 +121,6 @@
   }
   if(name&&!/^[a-z][a-z0-9_]*$/.test(name)&&!errors.some(([f])=>f===get("newToolName")))errors.push([get("newToolName"),"Use lowercase snake_case."]);
   if(!category&&!errors.some(([f])=>f===get("newToolCategory")))errors.push([get("newToolCategory"),"Select a valid category."]);
-  if(imageUrl&&(!get("newToolImage").checkValidity()||!imageUrl.startsWith("https://")))errors.push([get("newToolImage"),"Enter a valid HTTPS URL."]);
   const parameterNames=new Set();
   for(const row of rows.querySelectorAll(".ui-modal-parameter")){
    const field=row.querySelector(".param-name");
@@ -148,6 +154,16 @@
   saveButton.innerHTML='<span class="inline-flex items-center gap-2"><span class="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden="true"></span>Saving…</span>';
   status.textContent="Saving tool...";
   try{
+   const iconFile=iconInput.files?.[0];
+   if(iconFile){
+    if(iconFile.size>2*1024*1024||!["image/png","image/jpeg","image/webp","image/gif"].includes(iconFile.type))throw new Error("Choose PNG, JPG, WebP or GIF under 2 MB.");
+    const form=new FormData();form.append("file",iconFile);
+    const token=document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+    const upload=await fetch("/api/files/tools",{method:"POST",credentials:"same-origin",headers:token?{"RequestVerificationToken":token}:{},body:form});
+    const result=await upload.json().catch(()=>null);
+    if(!upload.ok)throw new Error(result?.error||"Icon upload failed.");
+    imageUrl=result.filename;
+   }
    const response=await fetch(editMode?"/api/tools/"+editContext.dataset.toolId:"/api/tools",{
     method:editMode?"PUT":"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify({...(editMode?{id:editContext.dataset.toolId}:{}),name,displayName,description,kind:kindValues[kind],category,jsonSchema,imageUrl})

@@ -1,41 +1,93 @@
+using AgentForge.Application.Agents.Commands;
+using AgentForge.Application.Agents.Queries;
+using AgentForge.Core.Domains;
+using AgentForge.Core.Utilities;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgentForge.Web.Controllers;
 
-[Route("agents")]
-public sealed class AgentsController : Controller
+[ApiController]
+[Route("api/agents")]
+public sealed class AgentsController(ISender sender) : ControllerBase
 {
-    public sealed record AgentCard(string Id, string Name, string Description, string Category, string Icon, string[] Tags);
-
-    private static readonly IReadOnlyList<AgentCard> SampleAgents =
-    [
-        new("planning", "Planning Agent", "Analyze requirements and create implementation plans.", "Planning", "◈", ["Requirements", "Architecture"]),
-        new("coding", "Coding Agent", "Implement features, fix bugs, and refactor code.", "Development", "</>", ["Coding", "Debugging"]),
-        new("review", "Review Agent", "Review code quality, security, and best practices.", "Quality", "◇", ["Code Review", "Security"]),
-        new("qa", "QA Agent", "Design test cases and validate application behavior.", "Testing", "⚗", ["Testing", "Automation"]),
-        new("devops", "DevOps Agent", "Assist with CI/CD and deployment workflows.", "Operations", "⚙", ["CI/CD", "Infrastructure"]),
-        new("docs", "Documentation Agent", "Create and maintain technical documentation.", "Documentation", "▤", ["Writing", "Knowledge"]),
-        new("research", "Research Agent", "Research technologies and summarize findings.", "Research", "⌕", ["Research", "Analysis"]),
-        new("ui", "UI Agent", "Help design and implement user interfaces.", "Development", "▣", ["Frontend", "UX"]),
-        new("data", "Data Agent", "Analyze data and prepare actionable reports.", "Data", "▥", ["Analytics", "Reporting"])
-    ];
-
-    [HttpGet("{id}")]
-    public IActionResult Details(string id)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(
+        [FromBody] CreateAgentCommand command,
+        CancellationToken cancellationToken)
     {
-        var agent = SampleAgents.FirstOrDefault(item => string.Equals(item.Id, id, StringComparison.OrdinalIgnoreCase));
-        if (agent is null) return NotFound();
-
-        ViewData["Title"] = agent.Name;
-        ViewData["Section"] = "agents";
-        return View(agent);
+        try
+        {
+            var id = await sender.Send(command, cancellationToken);
+            return CreatedAtAction(nameof(GetById), new { id }, new { id });
+        }
+        catch (ArgumentException exception)
+        {
+            return BadRequest(new { error = exception.Message });
+        }
     }
 
-    [HttpGet("")]
-    public IActionResult Index()
+    [HttpPut("{id:guid}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateAgentCommand command, CancellationToken cancellationToken)
     {
-        ViewData["Title"] = "Agents";
-        ViewData["Section"] = "agents";
-        return View(SampleAgents);
+        if (id != command.Id) return BadRequest();
+        try
+        {
+            var updated = await sender.Send(command, cancellationToken);
+            return updated ? NoContent() : NotFound();
+        }
+        catch (ArgumentException exception)
+        {
+            return BadRequest(new { error = exception.Message });
+        }
+    }
+
+    [HttpDelete("{id:guid}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+        => await sender.Send(new DeactivateAgentCommand(id), cancellationToken) ? NoContent() : NotFound();
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+    {
+        var agent = await sender.Send(new GetAgentByIdQuery(id), cancellationToken);
+        return agent is null || !agent.IsActive ? NotFound() : Ok(agent);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetPaged(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default)
+    {
+        if (pageNumber < 1 || pageSize is < 1 or > 100)
+            return BadRequest("Invalid pagination parameters.");
+
+        var result = await sender.Send(
+            new GetAgentsPageQuery(new PagedQuery<Agent>(pageNumber, pageSize, agent => agent.IsActive,
+                agents => agents.OrderBy(agent => agent.Name))),
+            cancellationToken);
+        return Ok(result);
+    }
+
+    // Compatibility model for Razor views; not used by API actions.
+    public sealed record AgentCard(string Id, string Name, string Description, string Category, string Icon, string[] Tags, string SystemInstructions, DateTimeOffset CreatedAt, DateTimeOffset UpdatedAt, bool IsActive)
+    {
+        public static AgentCard From(Agent agent) => new(
+            agent.Id.ToString(), agent.Name, agent.Description, agent.Category.ToString(),
+            IconUrlOrDefault(agent.Icon), agent.Tags.ToArray(), agent.SystemInstructions,
+            agent.CreatedAt, agent.UpdatedAt, agent.IsActive);
+
+        private static string IconUrlOrDefault(string icon)
+        {
+            if (icon.StartsWith("agents/", StringComparison.Ordinal)) return "/api/files/" + icon;
+            var ext = Path.GetExtension(icon).ToLowerInvariant();
+            var stem = Path.GetFileNameWithoutExtension(icon);
+            return stem.Length == 24 && stem.All(Uri.IsHexDigit) && ext is ".png" or ".jpg" or ".webp" or ".gif"
+                ? "/api/files/" + icon
+                : icon;
+        }
     }
 }
