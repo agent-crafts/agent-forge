@@ -16,11 +16,19 @@
   const status = get('agentFormFeedback');
   const iconInput = get('agentIconUpload');
   const iconPreview = get('agentIconPreview');
-
+  const iconFallback = get('agentIconFallback');
   const showIcon = url => {
-    iconPreview.hidden = !url;
-    if (url) iconPreview.src = url;
-    else iconPreview.removeAttribute('src');
+    if (!iconPreview) return;
+    if (url) {
+      iconPreview.hidden = false;
+      iconPreview.removeAttribute('hidden');
+      iconPreview.src = url;
+      iconFallback?.setAttribute('hidden', '');
+    } else {
+      iconPreview.hidden = true;
+      iconPreview.removeAttribute('src');
+      iconFallback?.removeAttribute('hidden');
+    }
   };
 
   iconInput.addEventListener('change', () => {
@@ -116,7 +124,8 @@
       get('agentDescription').value = editingAgent.description;
       get('agentCategoryInput').value = categoryValue(editingAgent);
       get('agentTags').value = (editingAgent.tags || []).join(', ');
-      showIcon(storedIconUrl(editingAgent.icon));
+      const storedIcon = editingAgent.icon ?? editingAgent.Icon ?? '';
+      showIcon(storedIconUrl(storedIcon));
       dialog.showModal();
     } catch (error) {
       window.AgentForgeToast?.show({ type: 'error', title: 'Unable to edit agent', message: error.message });

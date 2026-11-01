@@ -8,7 +8,9 @@
  let previewUrl=null;
  const iconInput=document.getElementById("newToolIconUpload");
  const iconPreview=document.getElementById("newToolIconPreview");
- const showIcon=url=>{iconPreview.hidden=!url;if(url)iconPreview.src=url;else iconPreview.removeAttribute("src");};
+ const iconFallback=document.getElementById("newToolIconFallback");
+ const iconSrc=value=>{if(!value)return null;if(value.startsWith("/"))return value;if(value.startsWith("tools/")||value.startsWith("agents/"))return "/api/files/"+value;return value;};
+ const showIcon=url=>{if(!iconPreview)return;if(url){iconPreview.hidden=false;iconPreview.removeAttribute("hidden");iconPreview.src=url;iconFallback?.setAttribute("hidden","");}else{iconPreview.hidden=true;iconPreview.removeAttribute("src");iconFallback?.removeAttribute("hidden");}};
  iconInput.addEventListener("change",()=>{if(previewUrl)URL.revokeObjectURL(previewUrl);const file=iconInput.files?.[0];previewUrl=file?URL.createObjectURL(file):null;showIcon(previewUrl);});
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
@@ -27,7 +29,7 @@
   get("newToolDisplayName").value=d.toolDisplayName;
   get("newToolDescription").value=d.toolDescription;
   get("newToolCategory").value=d.toolCategory;
-  iconInput.value="";showIcon(d.toolImageUrl||null);
+  iconInput.value="";showIcon(iconSrc(d.toolImageUrl));
   dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.checked=r.value==="custom";r.disabled=true;});
   update();
   rows.replaceChildren();
@@ -69,7 +71,7 @@
   return next;
  };
  const schema=()=>{const properties={},required=[];rows.querySelectorAll(".ui-modal-parameter").forEach(r=>{const n=r.querySelector(".param-name").value.trim();if(!n)return;properties[n]={type:r.querySelector(".param-type").value};if(r.querySelector(".param-required").checked)required.push(n);});const value=editMode&&originalSchema?buildEditedSchema():{type:"object",properties,required,additionalProperties:false};if(window.AgentForgeJsonViewer){window.AgentForgeJsonViewer.render(get("newToolSchema"),value);}else{get("newToolSchema").textContent=JSON.stringify(value,null,2);}};
- get("addToolParameter").addEventListener("click",()=>{const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required pattern="[a-z][a-z0-9_]*" maxlength="155" placeholder="parameter_name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").onclick=()=>{r.remove();schema();};r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
+ get("addToolParameter").addEventListener("click",()=>{const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required pattern="[a-z][a-z0-9_]*" maxlength="155" placeholder="parameter_name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").onclick=()=>{r.remove();schema();};r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
  const kindValues={custom:1,external:2};
  const categoryValues={general:1,development:2,integration:3,data:4,automation:5};
  const saveButton=get("previewToolConfiguration");

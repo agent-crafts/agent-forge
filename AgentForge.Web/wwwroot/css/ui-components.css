@@ -196,8 +196,25 @@
 #toolParameterRows .ui-modal-parameter{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 #toolParameterRows .param-name{flex:2 1 180px;min-width:0}
 #toolParameterRows .param-type{flex:1 1 130px;min-width:0}
-#toolParameterRows .param-remove{background:transparent;border:0;box-shadow:none;color:#dc2626}
-#toolParameterRows .param-remove:hover,#toolParameterRows .param-remove:focus-visible{background:transparent;box-shadow:none}
+#toolParameterRows .param-remove{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:10px;background:transparent;box-shadow:none;color:#dc2626}
+#toolParameterRows .param-remove svg{display:block;width:22px;height:22px;flex:none}
+#toolParameterRows .param-remove:hover,#toolParameterRows .param-remove:focus-visible{background:rgba(220,38,38,.12);box-shadow:none;color:#b91c1c}
+
+.ui-file{display:flex;flex-direction:column;align-items:flex-start;gap:10px;width:fit-content;max-width:100%}
+.ui-file-avatar{position:relative;display:grid;width:96px;height:96px;margin:0;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--surface-raised);color:var(--heading);cursor:pointer}
+.ui-file-avatar>*{grid-area:1/1}
+.ui-file-input{position:absolute;inset:0;z-index:2;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.ui-file-input:focus{outline:none}
+.ui-file-fallback{display:grid;place-items:center}
+.ui-file-fallback[hidden]{display:none!important}
+.ui-file-fallback svg{width:48px;height:48px}
+.ui-file-preview{display:block;width:100%;height:100%;object-fit:cover}
+.ui-file-preview[hidden]{display:none!important}
+.ui-file-change{position:absolute;right:6px;bottom:6px;z-index:1;display:grid;place-items:center;width:28px;height:28px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--heading);box-shadow:0 1px 2px #0000001f;pointer-events:none}
+.ui-file-change svg{width:14px;height:14px}
+.ui-file-avatar:hover .ui-file-change{background:var(--hover);border-color:var(--line-strong)}
+.ui-file-avatar:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.ui-file-hint{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
 #addToolDialog .ui-modal-schema-preview,#addToolDialog .ui-modal-schema-preview .ui-code{max-height:none;overflow:visible}
 #addToolDialog .ui-modal-schema-preview .ui-code{white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:540px){#addToolDialog fieldset{grid-template-columns:1fr}}
