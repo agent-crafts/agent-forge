@@ -22,7 +22,8 @@ public static class DependencyInjection
         services.AddScoped<GitHubTools>();
         services.AddScoped<IToolRegistry, ToolRegistry>();
         services.AddScoped<IToolExecutor, GitHubIssueExecutor>();
-        services.AddHttpClient<HttpGetJsonExecutor>(client => client.Timeout = TimeSpan.FromSeconds(10));
+        services.AddHttpClient<HttpGetJsonExecutor>(client => client.Timeout = TimeSpan.FromSeconds(10))
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false, UseCookies = false });
         services.AddScoped<IToolExecutor>(provider => provider.GetRequiredService<HttpGetJsonExecutor>());
         services.AddScoped<IToolExecutorRegistry, ToolExecutorRegistry>();
         services.AddScoped<IToolExecutionAdapter, CustomToolExecutionAdapter>();
