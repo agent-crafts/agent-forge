@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.AI;
 
-namespace AgentForge.Application.Tools.GitHub;
+namespace AgentForge.Application.Tools.Registers.GitHub;
 
 /// <summary>Defines the LLM-facing GitHub issue function and its public argument contract.</summary>
 public static class GitHubToolSchemaFactory

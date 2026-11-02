@@ -1,6 +1,6 @@
 using Microsoft.Extensions.AI;
 
-namespace AgentForge.Application.Tools;
+namespace AgentForge.Application.Tools.Registers;
 
 /// <summary>Lists application-approved AI functions; catalog membership does not grant execution permission.</summary>
 public interface IToolRegistry

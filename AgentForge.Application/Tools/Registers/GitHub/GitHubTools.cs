@@ -1,7 +1,7 @@
 using System.Net;
 using AgentForge.Core.Clients.GitHub;
 
-namespace AgentForge.Application.Tools.GitHub;
+namespace AgentForge.Application.Tools.Registers.GitHub;
 
 /// <summary>Agent-facing GitHub operations; delegates API access to the client contract.</summary>
 public sealed class GitHubTools(IGitHubIssueClient githubIssueClient)

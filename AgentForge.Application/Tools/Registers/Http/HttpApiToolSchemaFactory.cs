@@ -1,6 +1,6 @@
 using Microsoft.Extensions.AI;
 
-namespace AgentForge.Application.Tools.Http;
+namespace AgentForge.Application.Tools.Registers.Http;
 
 /// <summary>Creates an LLM-facing function for an explicitly configured, approved API endpoint.</summary>
 public static class HttpApiToolSchemaFactory
