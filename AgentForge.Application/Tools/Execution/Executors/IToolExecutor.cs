@@ -7,4 +7,6 @@ public interface IToolExecutor
 {
     string ToolName { get; }
     Task<ToolExecutionResult> ExecuteAsync(JsonElement input, CancellationToken cancellationToken);
+    Task<ToolExecutionResult> ExecuteAsync(JsonElement input, JsonElement configuration, CancellationToken cancellationToken)
+        => ExecuteAsync(input, cancellationToken);
 }

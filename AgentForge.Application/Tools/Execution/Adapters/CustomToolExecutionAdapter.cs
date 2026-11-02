@@ -11,7 +11,7 @@ namespace AgentForge.Application.Tools.Execution;
 public sealed class CustomToolExecutionAdapter(IToolExecutorRegistry executors) : IToolExecutionAdapter
 {
     public bool CanHandle(Tool tool) =>
-        tool.Kind == ToolKind.Custom && executors.CanExecute(tool.Name);
+        tool.Kind == ToolKind.Custom && executors.CanExecute(tool.ExecutorKey ?? tool.Name);
 
     public Task<ToolExecutionResult> ExecuteAsync(
         Tool tool, JsonElement arguments, CancellationToken cancellationToken)
@@ -19,9 +19,9 @@ public sealed class CustomToolExecutionAdapter(IToolExecutorRegistry executors) 
         if (tool.Kind != ToolKind.Custom)
             return Task.FromResult(ToolExecutionResult.Fail("executor_unavailable", "This adapter only executes custom tools."));
 
-        var executor = executors.Resolve(tool.Name);
+        var executor = executors.Resolve(tool.ExecutorKey ?? tool.Name);
         return executor is null
             ? Task.FromResult(ToolExecutionResult.Fail("executor_unavailable", "No approved executor is registered."))
-            : executor.ExecuteAsync(arguments, cancellationToken);
+            : executor.ExecuteAsync(arguments, System.Text.Json.JsonDocument.Parse(tool.ConfigurationJson).RootElement.Clone(), cancellationToken);
     }
 }

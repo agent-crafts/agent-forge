@@ -14,10 +14,14 @@ public sealed class Tool : Base
     public ToolCategory Category { get; private set; }
     public string? ImageUrl { get; private set; }
     public string JsonSchema { get; private set; } = "{}";
+    public string? ExecutorKey { get; private set; }
+    public string ConfigurationJson { get; private set; } = "{}";
 
-    public void UpdateDetails(string displayName, string description, ToolCategory category, string jsonSchema, string? imageUrl)
+    public void UpdateDetails(string displayName, string description, ToolCategory category, string jsonSchema, string? imageUrl, string? executorKey = null, string configurationJson = "{}")
     {
-        var validated = Create(Name, displayName, description, Kind, category, jsonSchema, imageUrl);
+        var validated = Create(Name, displayName, description, Kind, category, jsonSchema, imageUrl, executorKey ?? ExecutorKey, configurationJson);
+        ExecutorKey = validated.ExecutorKey;
+        ConfigurationJson = validated.ConfigurationJson;
         DisplayName = validated.DisplayName;
         Description = validated.Description;
         Category = validated.Category;
@@ -26,7 +30,8 @@ public sealed class Tool : Base
     }
 
     public static Tool Create(string name, string displayName, string description, ToolKind kind,
-        ToolCategory category, string jsonSchema, string? imageUrl = null)
+        ToolCategory category, string jsonSchema, string? imageUrl = null,
+        string? executorKey = null, string configurationJson = "{}")
     {
         if (string.IsNullOrWhiteSpace(name) || name.Length > 155 ||
             !System.Text.RegularExpressions.Regex.IsMatch(name, @"^[a-z][a-z0-9_]*$"))
@@ -42,6 +47,13 @@ public sealed class Tool : Base
         using var schema = System.Text.Json.JsonDocument.Parse(jsonSchema);
         if (schema.RootElement.ValueKind != System.Text.Json.JsonValueKind.Object)
             throw new ArgumentException("Schema must be a JSON object.", nameof(jsonSchema));
+        if (executorKey is not null && !System.Text.RegularExpressions.Regex.IsMatch(executorKey, @"^[a-z][a-z0-9_.]*$"))
+            throw new ArgumentException("Invalid executor key.", nameof(executorKey));
+        if (string.IsNullOrWhiteSpace(configurationJson) || configurationJson.Length > 65536)
+            throw new ArgumentException("Invalid configuration size.", nameof(configurationJson));
+        using var config = System.Text.Json.JsonDocument.Parse(configurationJson);
+        if (config.RootElement.ValueKind != System.Text.Json.JsonValueKind.Object)
+            throw new ArgumentException("Configuration must be a JSON object.", nameof(configurationJson));
         if (imageUrl is not null && !imageUrl.StartsWith("tools/", StringComparison.Ordinal) && !imageUrl.StartsWith("/api/files/", StringComparison.Ordinal) && !imageUrl.StartsWith("/uploads/tool-icons/", StringComparison.Ordinal) &&
             (!Uri.TryCreate(imageUrl, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps))
             throw new ArgumentException("Image URL must use HTTPS.", nameof(imageUrl));
@@ -49,7 +61,7 @@ public sealed class Tool : Base
         return new Tool
         {
             Name = name, DisplayName = displayName.Trim(), Description = description,
-            Kind = kind, Category = category, JsonSchema = jsonSchema, ImageUrl = imageUrl
+            Kind = kind, Category = category, JsonSchema = jsonSchema, ImageUrl = imageUrl, ExecutorKey = executorKey, ConfigurationJson = configurationJson
         };
     }
 }
