@@ -26,6 +26,10 @@ public sealed class HttpApiTools(IHttpApiClient client)
         {
             return ToolResult<JsonElement>.Fail("invalid_response", "API returned invalid JSON.");
         }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            return ToolResult<JsonElement>.Fail("upstream_timeout", "The configured API did not respond in time.");
+        }
         catch (HttpRequestException)
         {
             return ToolResult<JsonElement>.Fail("upstream_error", "Could not retrieve JSON from the configured API.");
