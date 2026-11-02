@@ -165,6 +165,24 @@
                 </section>
             </div>
         }
+        else if (Model.ExecutorKey == "http.get_json")
+        {
+            <div class="grid gap-4 xl:grid-cols-2">
+                <section class="rounded-2xl border border-line bg-surface p-6">
+                    <h2 class="text-lg font-bold text-heading">Try HTTP GET JSON</h2>
+                    <p class="mt-2 text-sm text-muted">Runs the saved API URL. No runtime parameters are required.</p>
+                    <form id="httpJsonTryForm" action="/api/tools/@Model.Id/execute" class="mt-5 grid gap-3">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="ui-button ui-button-primary">Run Tool</button>
+                    </form>
+                </section>
+                <section class="rounded-2xl border border-line bg-surface p-6">
+                    <h2 class="text-lg font-bold text-heading">Response</h2>
+                    <p id="httpJsonTryStatus" role="status" class="mt-2 text-sm text-muted">Not run</p>
+                    <pre class="mt-4 max-h-[560px] overflow-auto rounded-xl bg-[#151d2b] p-4 text-xs text-white"><code id="httpJsonTryResult">Run the tool to see its response.</code></pre>
+                </section>
+            </div>
+        }
         else
         {
             <div class="rounded-2xl border border-line bg-surface p-6"><h2 class="text-lg font-bold text-heading">Try Now</h2><p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></div>
@@ -218,8 +236,9 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
 
 <script src="~/js/shared/json-viewer.js" asp-append-version="true"></script>
 <script src="~/js/tools/github-tool-try.js" asp-append-version="true"></script>
+<script src="~/js/tools/http-json-tool-try.js" asp-append-version="true"></script>
 
-<div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@Model.Category" data-tool-kind="@Model.Kind" data-tool-image-url="@Model.ImageUrl" data-tool-schema="@Model.JsonSchema"></div>
+<div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@Model.Category" data-tool-kind="@Model.Kind" data-tool-image-url="@Model.ImageUrl" data-tool-schema="@Model.JsonSchema" data-tool-executor-key="@Model.ExecutorKey" data-tool-configuration="@Model.ConfigurationJson"></div>
 <partial name="~/Views/Tools/_AddToolDialog.cshtml" />
 <ui-delete id="deleteToolDialog" title="Delete tool?" description="The tool will be removed from the catalog" item-name="@Model.DisplayName" confirm-button-id="confirmDeleteTool" confirm-text="Delete tool" />
 <script src="~/js/tools/add-tool-dialog.js" asp-append-version="true"></script>

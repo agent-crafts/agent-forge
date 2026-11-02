@@ -5,6 +5,11 @@
  const editContext=document.getElementById("toolEditContext");
  if(!dialog||(!open&&!editOpen))return;
  let editMode=false, originalSchema=null;
+ const executorSelect=document.getElementById("newToolExecutorKey");
+ const apiUrl=document.getElementById("newToolApiUrl");
+ const apiUrlField=document.getElementById("newToolApiUrlField");
+ const updateExecutor=()=>{apiUrlField.hidden=executorSelect.value!=="http.get_json";};
+ executorSelect.addEventListener("change",updateExecutor);
  let previewUrl=null;
  const iconInput=document.getElementById("newToolIconUpload");
  const iconPreview=document.getElementById("newToolIconPreview");
@@ -15,12 +20,15 @@
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
  const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);status.textContent="";};
- if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();status.textContent="";update();schema();dialog.showModal();});
+ if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";updateExecutor();status.textContent="";update();schema();dialog.showModal();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
   get("toolKindSelector").hidden=true;
   const d=editContext.dataset;
   originalSchema=JSON.parse(d.toolSchema);
+  executorSelect.value=d.toolExecutorKey||"";
+  let savedConfig={};try{savedConfig=JSON.parse(d.toolConfiguration||"{}");}catch{}
+  apiUrl.value=savedConfig.url||"";updateExecutor();
   get("addToolTitle").textContent="Edit Tool";
   get("addToolIntro").textContent="Update saved tool configuration.";
   saveButton.textContent="Save Changes";
@@ -121,6 +129,10 @@
   }
   if(name&&!/^[a-z][a-z0-9_]*$/.test(name)&&!errors.some(([f])=>f===get("newToolName")))errors.push([get("newToolName"),"Use lowercase snake_case."]);
   if(!category&&!errors.some(([f])=>f===get("newToolCategory")))errors.push([get("newToolCategory"),"Select a valid category."]);
+  if(executorSelect.value==="http.get_json"){
+   try{const url=new URL(apiUrl.value);if(url.protocol!=="https:"||url.hostname!=="fakestoreapi.com"||url.port||url.username||url.password)throw new Error();}
+   catch{errors.push([apiUrl,"Enter an approved HTTPS URL on fakestoreapi.com."]);}
+  }
   const parameterNames=new Set();
   for(const row of rows.querySelectorAll(".ui-modal-parameter")){
    const field=row.querySelector(".param-name");
@@ -145,6 +157,8 @@
    properties[key]={type:row.querySelector(".param-type").value};
    if(row.querySelector(".param-required").checked)required.push(key);
   });
+  const executorKey=executorSelect.value||null;
+  const configurationJson=JSON.stringify(executorKey==="http.get_json"?{url:apiUrl.value.trim()}:{});
   const jsonSchema=editMode?JSON.stringify(buildEditedSchema()):JSON.stringify({type:"object",properties,required,additionalProperties:false});
   status.textContent="";
   saving=true;
@@ -166,7 +180,7 @@
    }
    const response=await fetch(editMode?"/api/tools/"+editContext.dataset.toolId:"/api/tools",{
     method:editMode?"PUT":"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({...(editMode?{id:editContext.dataset.toolId}:{}),name,displayName,description,kind:kindValues[kind],category,jsonSchema,imageUrl})
+    body:JSON.stringify({...(editMode?{id:editContext.dataset.toolId}:{}),name,displayName,description,kind:kindValues[kind],category,jsonSchema,imageUrl,executorKey,configurationJson})
    });
    if(!response.ok){
     const contentType=response.headers.get("content-type")||"";
