@@ -49,7 +49,7 @@
                     <p id="newToolIconHelp" class="ui-file-hint">Click the icon to upload a PNG, JPG, WebP or GIF, up to 2 MB.</p>
                 </div>
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolExecutorKey">Execution type</label>
-                <select class="ui-select" id="newToolExecutorKey"><option value="">Legacy registered executor (tool name)</option><option value="http.get_json">HTTP GET JSON</option><option value="get_github_issue">GitHub issue</option></select>
+                <select class="ui-select" id="newToolExecutorKey"><option value="" disabled selected>Select execution type...</option><option value="http.get_json">HTTP GET JSON</option><option value="get_github_issue">GitHub issue</option></select>
                 <div id="newToolGitHubFields" hidden class="grid gap-2">
                     <label for="newToolGitHubOwner" class="text-sm font-semibold">Repository owner</label>
                     <input class="ui-input" id="newToolGitHubOwner" placeholder="octocat" />
