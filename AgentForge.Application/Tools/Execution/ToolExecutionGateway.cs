@@ -3,23 +3,6 @@ using AgentForge.Core.Domains;
 
 namespace AgentForge.Application.Tools.Execution;
 
-/// <summary>
-/// Provider-independent execution entry point. Registration is not authorization.
-/// </summary>
-public interface IToolExecutionGateway
-{
-    Task<ToolExecutionResult> ExecuteAsync(Tool tool, JsonElement arguments, CancellationToken cancellationToken);
-}
-
-/// <summary>
-/// An adapter handles a class of tool sources, not a hard-coded tool name.
-/// </summary>
-public interface IToolExecutionAdapter
-{
-    bool CanHandle(Tool tool);
-    Task<ToolExecutionResult> ExecuteAsync(Tool tool, JsonElement arguments, CancellationToken cancellationToken);
-}
-
 public sealed class ToolExecutionGateway(IEnumerable<IToolExecutionAdapter> adapters) : IToolExecutionGateway
 {
     private readonly IReadOnlyList<IToolExecutionAdapter> _adapters = adapters.ToArray();
