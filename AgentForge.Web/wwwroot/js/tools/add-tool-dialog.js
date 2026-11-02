@@ -130,8 +130,8 @@
   if(name&&!/^[a-z][a-z0-9_]*$/.test(name)&&!errors.some(([f])=>f===get("newToolName")))errors.push([get("newToolName"),"Use lowercase snake_case."]);
   if(!category&&!errors.some(([f])=>f===get("newToolCategory")))errors.push([get("newToolCategory"),"Select a valid category."]);
   if(executorSelect.value==="http.get_json"){
-   try{const url=new URL(apiUrl.value);if(url.protocol!=="https:"||url.hostname!=="fakestoreapi.com"||url.port||url.username||url.password)throw new Error();}
-   catch{errors.push([apiUrl,"Enter an approved HTTPS URL on fakestoreapi.com."]);}
+   try{const url=new URL(apiUrl.value);if(url.protocol!=="https:"||(url.port&&url.port!=="443")||url.username||url.password||!url.hostname.includes(".")||url.hostname==="localhost"||url.hostname.endsWith(".localhost"))throw new Error();}
+   catch{errors.push([apiUrl,"Enter a public HTTPS API URL (no credentials or custom ports)."]);}
   }
   const parameterNames=new Set();
   for(const row of rows.querySelectorAll(".ui-modal-parameter")){
