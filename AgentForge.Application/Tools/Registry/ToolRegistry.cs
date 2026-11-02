@@ -1,4 +1,5 @@
 using System.Text.Json;
+using AgentForge.Core.Clients.Http;
 using AgentForge.Application.Tools.Registry.GitHub;
 using AgentForge.Application.Tools.Registry.Http;
 using AgentForge.Core.Enums;
@@ -33,8 +34,7 @@ public sealed class ToolRegistry(GitHubTools githubTools, HttpApiTools httpTools
                 if (config.RootElement.ValueKind != JsonValueKind.Object ||
                     !config.RootElement.TryGetProperty("url", out var value) || value.ValueKind != JsonValueKind.String ||
                     !Uri.TryCreate(value.GetString(), UriKind.Absolute, out var url) ||
-                    url.Scheme != Uri.UriSchemeHttps || url.UserInfo.Length != 0 || url.Port != 443 ||
-                    !string.Equals(url.Host, "fakestoreapi.com", StringComparison.OrdinalIgnoreCase))
+                    !PublicHttpUrlPolicy.IsAllowed(url))
                     continue;
 
                 functions.Add(HttpApiToolSchemaFactory.CreateGetJson(httpTools, tool.Name, tool.Description, url));

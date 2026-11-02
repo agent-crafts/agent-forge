@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Sockets;
 using AgentForge.Core.Clients;
 using AgentForge.Core.Clients.GitHub;
 using AgentForge.Core.Clients.Http;
@@ -41,7 +43,31 @@ public static class DependencyInjection
             client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
         });
         services.AddHttpClient<IHttpApiClient, HttpApiClient>(client => client.Timeout = TimeSpan.FromSeconds(10))
-            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false, UseCookies = false });
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+            {
+                AllowAutoRedirect = false,
+                UseCookies = false,
+                UseProxy = false,
+                PooledConnectionLifetime = TimeSpan.FromMinutes(2),
+                ConnectCallback = async (context, cancellationToken) =>
+                {
+                    var endpoint = context.DnsEndPoint;
+                    var addresses = await Dns.GetHostAddressesAsync(endpoint.Host, cancellationToken);
+                    var address = addresses.FirstOrDefault(PublicHttpUrlPolicy.IsPublicAddress)
+                        ?? throw new HttpRequestException("The destination does not resolve to a public IP address.");
+                    var socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                    try
+                    {
+                        await socket.ConnectAsync(new IPEndPoint(address, endpoint.Port), cancellationToken);
+                        return new NetworkStream(socket, ownsSocket: true);
+                    }
+                    catch
+                    {
+                        socket.Dispose();
+                        throw;
+                    }
+                }
+            });
         return services;
     }
 }

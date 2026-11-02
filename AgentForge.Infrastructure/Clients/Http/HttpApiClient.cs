@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using System.Text.Json;
 using AgentForge.Core.Clients.Http;
 
@@ -10,9 +9,8 @@ public sealed class HttpApiClient(HttpClient client) : IHttpApiClient
 
     public async Task<JsonElement> GetJsonAsync(Uri url, CancellationToken cancellationToken = default)
     {
-        if (url.Scheme != Uri.UriSchemeHttps || url.UserInfo.Length != 0 || url.Port != 443 ||
-            !string.Equals(url.Host, "fakestoreapi.com", StringComparison.OrdinalIgnoreCase))
-            throw new ArgumentException("Only HTTPS URLs on fakestoreapi.com are approved.", nameof(url));
+        if (!PublicHttpUrlPolicy.IsAllowed(url))
+            throw new ArgumentException("Only public HTTPS API URLs are allowed.", nameof(url));
 
         using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
         response.EnsureSuccessStatusCode();
