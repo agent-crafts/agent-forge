@@ -170,9 +170,23 @@
             <div class="grid gap-4 xl:grid-cols-2">
                 <section class="rounded-2xl border border-line bg-surface p-6">
                     <h2 class="text-lg font-bold text-heading">Try HTTP GET JSON</h2>
-                    <p class="mt-2 text-sm text-muted">Runs the saved API URL. No runtime parameters are required.</p>
+                    <p class="mt-2 text-sm text-muted">Runs the saved API URL using the input parameters below.</p>
                     <form id="httpJsonTryForm" action="/api/tools/@Model.Id/execute" class="mt-5 grid gap-3">
                         @Html.AntiForgeryToken()
+                        @if (hasProperties)
+                        {
+                            @foreach (var property in properties.EnumerateObject())
+                            {
+                                var parameterType = property.Value.TryGetProperty("type", out var t) ? t.GetString() : "string";
+                                <label class="grid gap-1 text-sm font-semibold text-heading">
+                                    @property.Name
+                                    <input class="ui-input" name="@property.Name" data-parameter-type="@parameterType"
+                                           type="@(parameterType is "integer" or "number" ? "number" : "text")"
+                                           step="@(parameterType == "integer" ? "1" : "any")"
+                                           required="@required.Contains(property.Name)" />
+                                </label>
+                            }
+                        }
                         <button type="submit" class="ui-button ui-button-primary">Run Tool</button>
                     </form>
                 </section>

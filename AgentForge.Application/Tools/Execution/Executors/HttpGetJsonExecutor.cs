@@ -1,5 +1,4 @@
 using System.Text.Json;
-using AgentForge.Core.Clients.Http;
 using AgentForge.Application.Tools.Registry.Http;
 
 namespace AgentForge.Application.Tools.Execution.Http;
@@ -15,15 +14,13 @@ public sealed class HttpGetJsonExecutor(HttpApiTools tools) : IToolExecutor
     public async Task<ToolExecutionResult> ExecuteAsync(JsonElement input, JsonElement configuration, CancellationToken cancellationToken)
     {
         if (configuration.ValueKind != JsonValueKind.Object ||
-            !configuration.TryGetProperty("url", out var value) || value.ValueKind != JsonValueKind.String ||
-            !Uri.TryCreate(value.GetString(), UriKind.Absolute, out var url) ||
-            !PublicHttpUrlPolicy.IsAllowed(url))
-            return ToolExecutionResult.Fail("invalid_configuration", "Only public HTTPS API URLs are allowed.");
+            !configuration.TryGetProperty("url", out var value) || value.ValueKind != JsonValueKind.String)
+            return ToolExecutionResult.Fail("invalid_configuration", "Configure a public HTTPS API URL.");
 
-        if (input.ValueKind != JsonValueKind.Object || input.EnumerateObject().Any())
-            return ToolExecutionResult.Fail("invalid_input", "This configured GET tool takes no runtime arguments.");
+        if (!HttpUrlTemplate.TryResolve(value.GetString(), input, out var url))
+            return ToolExecutionResult.Fail("invalid_input", "Provide scalar values for every URL placeholder (for example {id}).");
 
-        var result = await tools.GetJsonAsync(url, cancellationToken);
+        var result = await tools.GetJsonAsync(url!, cancellationToken);
         return result.Success
             ? ToolExecutionResult.Ok(result.Data)
             : ToolExecutionResult.Fail(result.Error?.Code ?? "execution_failed", result.Error?.Message ?? "Execution failed.");

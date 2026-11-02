@@ -33,11 +33,11 @@ public sealed class ToolRegistry(GitHubTools githubTools, HttpApiTools httpTools
                 using var config = JsonDocument.Parse(tool.ConfigurationJson);
                 if (config.RootElement.ValueKind != JsonValueKind.Object ||
                     !config.RootElement.TryGetProperty("url", out var value) || value.ValueKind != JsonValueKind.String ||
-                    !Uri.TryCreate(value.GetString(), UriKind.Absolute, out var url) ||
-                    !PublicHttpUrlPolicy.IsAllowed(url))
+                    !HttpUrlTemplate.TryResolve(value.GetString(), JsonSerializer.SerializeToElement(new Dictionary<string, object>()), out var url) &&
+                    !HttpUrlTemplate.TryResolve(value.GetString(), JsonSerializer.SerializeToElement(ExtractTemplateSample(value.GetString()!)), out url))
                     continue;
 
-                functions.Add(HttpApiToolSchemaFactory.CreateGetJson(httpTools, tool.Name, tool.Description, url));
+                // Parameterized templates are executed through the validated ToolExecutionGateway.\n                // Do not advertise them as zero-argument LLM functions.\n                if (!value.GetString()!.Contains('{'))\n                    functions.Add(HttpApiToolSchemaFactory.CreateGetJson(httpTools, tool.Name, tool.Description, url!));
             }
             catch (JsonException)
             {
@@ -45,5 +45,14 @@ public sealed class ToolRegistry(GitHubTools githubTools, HttpApiTools httpTools
             }
         }
         return functions;
+    }
+
+    private static Dictionary<string, object> ExtractTemplateSample(string template)
+    {
+        var result = new Dictionary<string, object>();
+        foreach (System.Text.RegularExpressions.Match match in
+                 System.Text.RegularExpressions.Regex.Matches(template, @"\\{([a-z][a-z0-9_]*)\\}"))
+            result[match.Groups[1].Value] = 1;
+        return result;
     }
 }
