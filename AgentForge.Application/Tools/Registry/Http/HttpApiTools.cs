@@ -2,7 +2,7 @@ using System.Net;
 using System.Text.Json;
 using AgentForge.Core.Clients.Http;
 
-namespace AgentForge.Application.Tools.Registers.Http;
+namespace AgentForge.Application.Tools.Registry.Http;
 
 /// <summary>Application-owned read-only API operation; delegates HTTP access to the client.</summary>
 public sealed class HttpApiTools(IHttpApiClient client)

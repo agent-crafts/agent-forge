@@ -1,11 +1,11 @@
 using System.Text.Json;
-using AgentForge.Application.Tools.Registers.GitHub;
-using AgentForge.Application.Tools.Registers.Http;
+using AgentForge.Application.Tools.Registry.GitHub;
+using AgentForge.Application.Tools.Registry.Http;
 using AgentForge.Core.Enums;
 using AgentForge.Core.Repositories;
 using Microsoft.Extensions.AI;
 
-namespace AgentForge.Application.Tools.Registers;
+namespace AgentForge.Application.Tools.Registry;
 
 /// <summary>Application-approved LLM functions, including configured HTTP JSON tools from persistence.</summary>
 public sealed class ToolRegistry(GitHubTools githubTools, HttpApiTools httpTools, IToolRepository repository) : IToolRegistry

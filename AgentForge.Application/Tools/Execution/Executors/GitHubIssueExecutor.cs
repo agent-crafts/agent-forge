@@ -1,5 +1,5 @@
 using System.Text.Json;
-using AgentForge.Application.Tools.Registers.GitHub;
+using AgentForge.Application.Tools.Registry.GitHub;
 using AgentForge.Application.Tools.Execution;
 
 namespace AgentForge.Application.Tools.Execution.GitHub;

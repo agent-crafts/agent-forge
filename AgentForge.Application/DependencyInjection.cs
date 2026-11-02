@@ -1,9 +1,9 @@
 using AgentForge.Application.Chat.Commands;
 using AgentForge.Application.Services;
 using AgentForge.Application.Tools;
-using AgentForge.Application.Tools.Registers;
-using AgentForge.Application.Tools.Registers.GitHub;
-using AgentForge.Application.Tools.Registers.Http;
+using AgentForge.Application.Tools.Registry;
+using AgentForge.Application.Tools.Registry.GitHub;
+using AgentForge.Application.Tools.Registry.Http;
 using AgentForge.Application.Tools.Execution;
 using AgentForge.Application.Tools.Execution.GitHub;
 using AgentForge.Application.Tools.Execution.Http;

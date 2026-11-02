@@ -1,5 +1,5 @@
 using System.Text.Json;
-using AgentForge.Application.Tools.Registers.Http;
+using AgentForge.Application.Tools.Registry.Http;
 
 namespace AgentForge.Application.Tools.Execution.Http;
 
