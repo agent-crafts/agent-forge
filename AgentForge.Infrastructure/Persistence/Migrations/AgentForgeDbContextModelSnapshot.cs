@@ -38,18 +38,6 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<string>("ConfigurationJson")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("jsonb")
-                        .HasDefaultValue("{}")
-                        .HasColumnName("configuration_json");
-
-                    b.Property<string>("ExecutorKey")
-                        .HasMaxLength(155)
-                        .HasColumnType("character varying(155)")
-                        .HasColumnName("executor_key");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -166,6 +154,18 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)")
                         .HasColumnName("category");
+
+                    b.Property<string>("ConfigurationJson")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("jsonb")
+                        .HasDefaultValue("{}")
+                        .HasColumnName("configuration_json");
+
+                    b.Property<string>("ExecutorKey")
+                        .HasMaxLength(155)
+                        .HasColumnType("character varying(155)")
+                        .HasColumnName("executor_key");
 
                     b.Property<string>("Description")
                         .IsRequired()
