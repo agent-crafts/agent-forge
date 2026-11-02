@@ -3,7 +3,7 @@ using AgentForge.Application.Tools.Registry.GitHub;
 
 namespace AgentForge.Application.Tools.Execution.GitHub;
 
-/// <summary>Read-only GitHub issue executor; repository is supplied by persisted configuration or input.</summary>
+/// <summary>Read-only GitHub issue executor; repository is supplied by persisted configuration.</summary>
 public sealed class GitHubIssueExecutor(GitHubTools github) : IToolExecutor
 {
     public string ToolName => "get_github_issue";
@@ -20,8 +20,7 @@ public sealed class GitHubIssueExecutor(GitHubTools github) : IToolExecutor
             !number.TryGetInt32(out var issueNumber) || issueNumber <= 0)
             return ToolExecutionResult.Fail("invalid_issue_number", "issue_number must be a positive integer.");
 
-        var source = configuration.ValueKind == JsonValueKind.Object &&
-                     configuration.TryGetProperty("owner", out _) ? configuration : input;
+        var source = configuration;
         if (!source.TryGetProperty("owner", out var ownerValue) ||
             ownerValue.ValueKind != JsonValueKind.String ||
             !source.TryGetProperty("repo", out var repoValue) ||

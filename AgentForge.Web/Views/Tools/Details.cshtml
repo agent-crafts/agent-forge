@@ -119,12 +119,12 @@
                         @Html.AntiForgeryToken()
                         <div class="grid gap-2">
                             <label for="githubRepoOwner" class="text-sm font-semibold text-heading">Repository Owner</label>
-                            <input id="githubRepoOwner" type="text" value="@(githubOwner ?? "")" @(githubOwner is not null ? "readonly" : "") aria-describedby="githubRepoOwnerHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
+                            <input id="githubRepoOwner" type="text" value="@(githubOwner ?? "")" readonly aria-describedby="githubRepoOwnerHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
                             <p id="githubRepoOwnerHelp" class="text-xs text-muted">The GitHub organization or user.</p>
                         </div>
                         <div class="grid gap-2">
                             <label for="githubRepoName" class="text-sm font-semibold text-heading">Repository Name</label>
-                            <input id="githubRepoName" type="text" value="@(githubRepo ?? "")" @(githubRepo is not null ? "readonly" : "") aria-describedby="githubRepoNameHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
+                            <input id="githubRepoName" type="text" value="@(githubRepo ?? "")" readonly aria-describedby="githubRepoNameHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
                             <p id="githubRepoNameHelp" class="text-xs text-muted">The repository name.</p>
                         </div>
                         <div class="grid gap-2">
