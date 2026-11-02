@@ -7,14 +7,14 @@ namespace AgentForge.Application.Tools.Registry.GitHub;
 public sealed class GitHubTools(IGitHubIssueClient githubIssueClient)
 {
     public async Task<ToolResult<GitHubIssue>> GetGitHubIssueAsync(
-        int issueNumber,
+        string owner, string repository, int issueNumber,
         CancellationToken cancellationToken = default)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(issueNumber);
 
         try
         {
-            var issue = await githubIssueClient.GetIssueAsync(issueNumber, cancellationToken);
+            var issue = await githubIssueClient.GetIssueAsync(owner, repository, issueNumber, cancellationToken);
             return ToolResult<GitHubIssue>.Ok(issue);
         }
         catch (HttpRequestException exception) when (exception.StatusCode is HttpStatusCode.UnprocessableEntity or HttpStatusCode.NotFound)

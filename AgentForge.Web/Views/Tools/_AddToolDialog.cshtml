@@ -50,6 +50,13 @@
                 </div>
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolExecutorKey">Execution type</label>
                 <select class="ui-select" id="newToolExecutorKey"><option value="">Legacy registered executor (tool name)</option><option value="http.get_json">HTTP GET JSON</option><option value="get_github_issue">GitHub issue</option></select>
+                <div id="newToolGitHubFields" hidden class="grid gap-2">
+                    <label for="newToolGitHubOwner" class="text-sm font-semibold">Repository owner</label>
+                    <input class="ui-input" id="newToolGitHubOwner" placeholder="octocat" />
+                    <label for="newToolGitHubRepo" class="text-sm font-semibold">Repository name</label>
+                    <input class="ui-input" id="newToolGitHubRepo" placeholder="hello-world" />
+                    <p class="text-xs text-muted">The issue number is supplied at execution time.</p>
+                </div>
                 <div id="newToolApiUrlField" hidden><label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolApiUrl">API URL</label><input class="ui-input" id="newToolApiUrl" type="url" placeholder="https://dummyjson.com/products/{id}" /><p class="text-xs text-muted">Public HTTPS URL. Use {id} in the path and define a matching required parameter named id. GET JSON only.</p></div>
                 <h3 class="mt-2 text-base font-semibold text-heading">Parameters</h3>
                 <p class="text-[13px] leading-6 text-muted">Define input parameters. The JSON Schema preview is generated automatically.</p>

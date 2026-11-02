@@ -14,6 +14,9 @@
         }
     }
     var isGitHub = Model.Icon == "github";
+    using var githubConfiguration = JsonDocument.Parse(Model.ConfigurationJson);
+    var githubOwner = githubConfiguration.RootElement.TryGetProperty("owner", out var githubOwnerValue) ? githubOwnerValue.GetString() : null;
+    var githubRepo = githubConfiguration.RootElement.TryGetProperty("repo", out var githubRepoValue) ? githubRepoValue.GetString() : null;
     var example = new Dictionary<string, object?>();
     if (hasProperties)
     {
@@ -106,7 +109,7 @@
     </div>
     </div>
     <section id="toolTryPanel" role="tabpanel" aria-labelledby="toolTryTab" hidden class="mt-6">
-        @if (Model.Name == "get_github_issue")
+        @if (Model.ExecutorKey == "get_github_issue" || Model.Name == "get_github_issue")
         {
             <div class="tool-try-layout grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.35fr)]">
                 <section class="min-w-0 rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
@@ -115,14 +118,14 @@
                     <form id="githubToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-6 grid gap-5">
                         @Html.AntiForgeryToken()
                         <div class="grid gap-2">
-                            <label for="githubRepoOwner" class="text-sm font-semibold text-heading">Repository Owner <span class="text-muted" title="Fixed by the GitHub client configuration">ⓘ</span></label>
-                            <input id="githubRepoOwner" type="text" value="agent-crafts" readonly aria-describedby="githubRepoOwnerHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
-                            <p id="githubRepoOwnerHelp" class="text-xs text-muted">The GitHub organization or user. Fixed for this tool.</p>
+                            <label for="githubRepoOwner" class="text-sm font-semibold text-heading">Repository Owner</label>
+                            <input id="githubRepoOwner" type="text" value="@(githubOwner ?? "")" @(githubOwner is not null ? "readonly" : "") aria-describedby="githubRepoOwnerHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
+                            <p id="githubRepoOwnerHelp" class="text-xs text-muted">The GitHub organization or user.</p>
                         </div>
                         <div class="grid gap-2">
-                            <label for="githubRepoName" class="text-sm font-semibold text-heading">Repository Name <span class="text-muted" title="Fixed by the GitHub client configuration">ⓘ</span></label>
-                            <input id="githubRepoName" type="text" value="agent-forge" readonly aria-describedby="githubRepoNameHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
-                            <p id="githubRepoNameHelp" class="text-xs text-muted">The repository name. Fixed for this tool.</p>
+                            <label for="githubRepoName" class="text-sm font-semibold text-heading">Repository Name</label>
+                            <input id="githubRepoName" type="text" value="@(githubRepo ?? "")" @(githubRepo is not null ? "readonly" : "") aria-describedby="githubRepoNameHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
+                            <p id="githubRepoNameHelp" class="text-xs text-muted">The repository name.</p>
                         </div>
                         <div class="grid gap-2">
                             <label for="githubIssueNumber" class="text-sm font-semibold text-heading">Issue Number <span class="text-red-500">*</span> <span class="text-muted" title="Required positive integer">ⓘ</span></label>

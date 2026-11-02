@@ -1,31 +1,41 @@
 using System.Text.Json;
 using AgentForge.Application.Tools.Registry.GitHub;
-using AgentForge.Application.Tools.Execution;
 
 namespace AgentForge.Application.Tools.Execution.GitHub;
 
-/// <summary>Trusted, read-only GitHub issue capability; repository is fixed in the GitHub client.</summary>
+/// <summary>Read-only GitHub issue executor; repository is supplied by persisted configuration or input.</summary>
 public sealed class GitHubIssueExecutor(GitHubTools github) : IToolExecutor
 {
     public string ToolName => "get_github_issue";
 
-    public async Task<ToolExecutionResult> ExecuteAsync(JsonElement input, CancellationToken cancellationToken)
-    {
-        // The HTTP client is intentionally restricted to this repository.
-        // Never silently ignore a different repository requested by the caller.
-        if (!input.TryGetProperty("owner", out var owner) ||
-            owner.ValueKind != JsonValueKind.String ||
-            owner.GetString() != "agent-crafts" ||
-            !input.TryGetProperty("repo", out var repo) ||
-            repo.ValueKind != JsonValueKind.String ||
-            repo.GetString() != "agent-forge")
-            return ToolExecutionResult.Fail("unsupported_repository", "Only agent-crafts/agent-forge is supported.");
+    public Task<ToolExecutionResult> ExecuteAsync(JsonElement input, CancellationToken cancellationToken)
+        => ExecuteAsync(input, default, cancellationToken);
 
-        if (!input.TryGetProperty("issue_number", out var number) ||
-            number.ValueKind != JsonValueKind.Number || !number.TryGetInt32(out var issueNumber) || issueNumber <= 0)
+    public async Task<ToolExecutionResult> ExecuteAsync(
+        JsonElement input, JsonElement configuration, CancellationToken cancellationToken)
+    {
+        if (input.ValueKind != JsonValueKind.Object ||
+            !input.TryGetProperty("issue_number", out var number) ||
+            number.ValueKind != JsonValueKind.Number ||
+            !number.TryGetInt32(out var issueNumber) || issueNumber <= 0)
             return ToolExecutionResult.Fail("invalid_issue_number", "issue_number must be a positive integer.");
 
-        var result = await github.GetGitHubIssueAsync(issueNumber, cancellationToken);
+        var source = configuration.ValueKind == JsonValueKind.Object &&
+                     configuration.TryGetProperty("owner", out _) ? configuration : input;
+        if (!source.TryGetProperty("owner", out var ownerValue) ||
+            ownerValue.ValueKind != JsonValueKind.String ||
+            !source.TryGetProperty("repo", out var repoValue) ||
+            repoValue.ValueKind != JsonValueKind.String)
+            return ToolExecutionResult.Fail("invalid_configuration", "GitHub owner and repository are required.");
+
+        var owner = ownerValue.GetString()!;
+        var repo = repoValue.GetString()!;
+        if (!System.Text.RegularExpressions.Regex.IsMatch(owner, @"^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$") ||
+            !System.Text.RegularExpressions.Regex.IsMatch(repo, @"^[a-zA-Z0-9_.-]{1,100}$") ||
+            repo is "." or "..")
+            return ToolExecutionResult.Fail("invalid_configuration", "Invalid GitHub owner or repository.");
+
+        var result = await github.GetGitHubIssueAsync(owner, repo, issueNumber, cancellationToken);
         return result.Success
             ? ToolExecutionResult.Ok(result.Data)
             : ToolExecutionResult.Fail(result.Error?.Code ?? "execution_failed", result.Error?.Message ?? "Execution failed.");

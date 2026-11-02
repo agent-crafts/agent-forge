@@ -8,7 +8,23 @@
  const executorSelect=document.getElementById("newToolExecutorKey");
  const apiUrl=document.getElementById("newToolApiUrl");
  const apiUrlField=document.getElementById("newToolApiUrlField");
- const updateExecutor=()=>{apiUrlField.hidden=executorSelect.value!=="http.get_json";};
+ const githubFields=document.getElementById("newToolGitHubFields");
+ const githubOwner=document.getElementById("newToolGitHubOwner");
+ const githubRepo=document.getElementById("newToolGitHubRepo");
+ const updateExecutor=()=>{
+  apiUrlField.hidden=executorSelect.value!=="http.get_json";
+  githubFields.hidden=executorSelect.value!=="get_github_issue";
+  if(executorSelect.value==="get_github_issue"&&!rows.querySelector('.param-name[value="issue_number"]')&&
+     ![...rows.querySelectorAll(".param-name")].some(input=>input.value==="issue_number")){
+    rows.replaceChildren();
+    get("addToolParameter").click();
+    const row=rows.lastElementChild;
+    row.querySelector(".param-name").value="issue_number";
+    row.querySelector(".param-type").value="integer";
+    row.querySelector(".param-required").checked=true;
+    schema();
+  }
+ };
  executorSelect.addEventListener("change",updateExecutor);
  let previewUrl=null;
  const iconInput=document.getElementById("newToolIconUpload");
@@ -20,7 +36,7 @@
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
  const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);status.textContent="";};
- if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";updateExecutor();status.textContent="";update();schema();dialog.showModal();});
+ if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";githubOwner.value="";githubRepo.value="";updateExecutor();status.textContent="";update();schema();dialog.showModal();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
   get("toolKindSelector").hidden=true;
@@ -28,7 +44,7 @@
   originalSchema=JSON.parse(d.toolSchema);
   executorSelect.value=d.toolExecutorKey||"";
   let savedConfig={};try{savedConfig=JSON.parse(d.toolConfiguration||"{}");}catch{}
-  apiUrl.value=savedConfig.url||"";updateExecutor();
+  apiUrl.value=savedConfig.url||"";githubOwner.value=savedConfig.owner||"";githubRepo.value=savedConfig.repo||"";updateExecutor();
   get("addToolTitle").textContent="Edit Tool";
   get("addToolIntro").textContent="Update saved tool configuration.";
   saveButton.textContent="Save Changes";
@@ -133,6 +149,11 @@
    try{const url=new URL(apiUrl.value);if(url.protocol!=="https:"||(url.port&&url.port!=="443")||url.username||url.password||!url.hostname.includes(".")||url.hostname==="localhost"||url.hostname.endsWith(".localhost"))throw new Error();}
    catch{errors.push([apiUrl,"Enter a public HTTPS API URL (no credentials or custom ports)."]);}
   }
+  if(executorSelect.value==="get_github_issue"){
+   const owner=githubOwner.value.trim(),repo=githubRepo.value.trim();
+   if(!/^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$/.test(owner))errors.push([githubOwner,"Enter a valid GitHub owner."]);
+   if(!/^[a-zA-Z0-9_.-]{1,100}$/.test(repo)||repo==="."||repo==="..")errors.push([githubRepo,"Enter a valid GitHub repository."]);
+  }
   const parameterNames=new Set();
   for(const row of rows.querySelectorAll(".ui-modal-parameter")){
    const field=row.querySelector(".param-name");
@@ -158,7 +179,7 @@
    if(row.querySelector(".param-required").checked)required.push(key);
   });
   const executorKey=executorSelect.value||null;
-  const configurationJson=JSON.stringify(executorKey==="http.get_json"?{url:apiUrl.value.trim()}:{});
+  const configurationJson=JSON.stringify(executorKey==="http.get_json"?{url:apiUrl.value.trim()}:executorKey==="get_github_issue"?{owner:githubOwner.value.trim(),repo:githubRepo.value.trim()}:{});
   const jsonSchema=editMode?JSON.stringify(buildEditedSchema()):JSON.stringify({type:"object",properties,required,additionalProperties:false});
   status.textContent="";
   saving=true;

@@ -14,9 +14,9 @@ public static class GitHubToolSchemaFactory
         // The adapter deliberately owns the external snake_case name.
         // The implementation remains GitHubTools.GetGitHubIssueAsync(int issueNumber, ...).
         return AIFunctionFactory.Create(
-            ([Description("The positive GitHub issue number.")] int issue_number,
+            ([Description("GitHub repository owner.")] string owner,\n             [Description("GitHub repository name.")] string repo,\n             [Description("The positive GitHub issue number.")] int issue_number,
              CancellationToken cancellationToken) =>
-                tools.GetGitHubIssueAsync(issue_number, cancellationToken),
+                tools.GetGitHubIssueAsync(owner, repo, issue_number, cancellationToken),
             new AIFunctionFactoryOptions
             {
                 Name = "get_github_issue",
