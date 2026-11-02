@@ -27,7 +27,8 @@ public static partial class HttpUrlTemplate
         if (queryStart < 0) queryStart = template.Length;
         if (PlaceholderPattern().IsMatch(template[..authorityEnd]) ||
             PlaceholderPattern().IsMatch(template[queryStart..]) ||
-            template[..queryStart].Contains('{') && !PlaceholderPattern().Replace(template[..queryStart], "").Equals(template[..queryStart].Replace("{", "").Replace("}", ""), StringComparison.Ordinal))
+            PlaceholderPattern().Replace(template, "").Contains('{') ||
+            PlaceholderPattern().Replace(template, "").Contains('}'))
             return false;
 
         var names = PlaceholderPattern().Matches(template).Select(m => m.Groups[1].Value).ToHashSet(StringComparer.Ordinal);
