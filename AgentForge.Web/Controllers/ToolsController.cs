@@ -90,5 +90,5 @@ public sealed class ToolsController(ISender sender) : ControllerBase
     }
 
     // Compatibility model for legacy Razor views; not used by API actions.
-    public sealed record ToolCatalogItem(string Name, string Description, string JsonSchema, string DisplayName, string Icon, string Category, Guid Id = default, string? ImageUrl = null, string Kind = "custom");
+    public sealed record ToolCatalogItem(string Name, string Description, string JsonSchema, string DisplayName, string Icon, string Category, Guid Id = default, string? ImageUrl = null, string Kind = "custom", string? ExecutorKey = null, string ConfigurationJson = "{}");
 }
