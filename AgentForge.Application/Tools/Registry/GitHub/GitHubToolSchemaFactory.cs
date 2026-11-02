@@ -12,9 +12,11 @@ public static class GitHubToolSchemaFactory
         ArgumentNullException.ThrowIfNull(tools);
 
         // The adapter deliberately owns the external snake_case name.
-        // The implementation remains GitHubTools.GetGitHubIssueAsync(int issueNumber, ...).
+        // The implementation remains GitHubTools.GetGitHubIssueAsync(owner, repository, issueNumber, ...).
         return AIFunctionFactory.Create(
-            ([Description("GitHub repository owner.")] string owner,\n             [Description("GitHub repository name.")] string repo,\n             [Description("The positive GitHub issue number.")] int issue_number,
+            ([Description("GitHub repository owner.")] string owner,
+             [Description("GitHub repository name.")] string repo,
+             [Description("The positive GitHub issue number.")] int issue_number,
              CancellationToken cancellationToken) =>
                 tools.GetGitHubIssueAsync(owner, repo, issue_number, cancellationToken),
             new AIFunctionFactoryOptions
