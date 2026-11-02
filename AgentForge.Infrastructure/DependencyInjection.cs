@@ -1,9 +1,11 @@
 using AgentForge.Core.Clients;
 using AgentForge.Core.Clients.GitHub;
+using AgentForge.Core.Clients.Http;
 using AgentForge.Core.Services;
 using AgentForge.Core.Repositories;
 using AgentForge.Infrastructure.Clients;
 using AgentForge.Infrastructure.Clients.GitHub;
+using AgentForge.Infrastructure.Clients.Http;
 using AgentForge.Infrastructure.Persistence;
 using AgentForge.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +40,8 @@ public static class DependencyInjection
             client.DefaultRequestHeaders.UserAgent.ParseAdd("AgentForge-ToolEngineeringLab/1.0");
             client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
         });
+        services.AddHttpClient<IHttpApiClient, HttpApiClient>(client => client.Timeout = TimeSpan.FromSeconds(10))
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false, UseCookies = false });
         return services;
     }
 }

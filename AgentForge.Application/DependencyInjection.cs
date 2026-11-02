@@ -2,6 +2,7 @@ using AgentForge.Application.Chat.Commands;
 using AgentForge.Application.Services;
 using AgentForge.Application.Tools;
 using AgentForge.Application.Tools.GitHub;
+using AgentForge.Application.Tools.Http;
 using AgentForge.Application.Tools.Execution;
 using AgentForge.Application.Tools.Execution.GitHub;
 using AgentForge.Application.Tools.Execution.Http;
@@ -20,11 +21,10 @@ public static class DependencyInjection
 
         services.AddScoped<ChatCommand>();
         services.AddScoped<GitHubTools>();
+        services.AddScoped<HttpApiTools>();
         services.AddScoped<IToolRegistry, ToolRegistry>();
         services.AddScoped<IToolExecutor, GitHubIssueExecutor>();
-        services.AddHttpClient<HttpGetJsonExecutor>(client => client.Timeout = TimeSpan.FromSeconds(10))
-            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false, UseCookies = false });
-        services.AddScoped<IToolExecutor>(provider => provider.GetRequiredService<HttpGetJsonExecutor>());
+        services.AddScoped<IToolExecutor, HttpGetJsonExecutor>();
         services.AddScoped<IToolExecutorRegistry, ToolExecutorRegistry>();
         services.AddScoped<IToolExecutionAdapter, CustomToolExecutionAdapter>();
         services.AddScoped<IToolExecutionGateway, ToolExecutionGateway>();
