@@ -1,3 +1,4 @@
+using AgentForge.Application.Tools.Registers;
 namespace AgentForge.Application.Tools.Execution;
 
 public sealed record ToolExecutionResult(bool Success, object? Data, ToolError? Error)

@@ -1,4 +1,4 @@
-namespace AgentForge.Application.Tools;
+namespace AgentForge.Application.Tools.Registers;
 
 /// <summary>Provider-independent result of executing an agent tool.</summary>
 public sealed record ToolResult<T>(
