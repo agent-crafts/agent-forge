@@ -127,7 +127,7 @@
  const selectedCount=()=>externalList.querySelectorAll('input[type="checkbox"]:checked').length;
  const updateSelection=()=>{
   get("externalSelectedCount").textContent=selectedCount()+" of "+externalList.querySelectorAll("[data-mcp-tool-row]").length+" tools selected";
-  const visible=[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>!row.hidden);
+  const visible=[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>row.style.display!=="none");
   get("externalSelectAll").checked=visible.length>0&&visible.every(row=>row.querySelector("input").checked);
  };
  const resetExternalDiscovery=()=>{
@@ -142,12 +142,12 @@
  get("externalToolEndpoint").addEventListener("input",resetExternalDiscovery);
  search.addEventListener("input",()=>{
   const query=search.value.trim().toLowerCase();
-  externalList.querySelectorAll("[data-mcp-tool-row]").forEach(row=>{row.hidden=!row.textContent.toLowerCase().includes(query);});
+  externalList.querySelectorAll("[data-mcp-tool-row]").forEach(row=>{row.style.display=row.textContent.toLowerCase().includes(query)?"flex":"none";});
   updateSelection();
  });
  externalList.addEventListener("change",updateSelection);
  get("externalSelectAll").addEventListener("change",event=>{
-  externalList.querySelectorAll("[data-mcp-tool-row]").forEach(row=>{if(!row.hidden)row.querySelector("input").checked=event.target.checked;});
+  externalList.querySelectorAll("[data-mcp-tool-row]").forEach(row=>{if(row.style.display!=="none")row.querySelector("input").checked=event.target.checked;});
   updateSelection();
  });
  get("discoverExternalTools").addEventListener("click",async event=>{
