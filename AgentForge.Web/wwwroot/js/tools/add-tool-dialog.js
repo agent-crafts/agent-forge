@@ -292,8 +292,11 @@
      headers:{"Content-Type":"application/json",...(token?{"RequestVerificationToken":token}:{})},
      body:JSON.stringify({endpoint:get("externalToolEndpoint").value.trim(),toolNames})
     });
-    const result=await response.json();
-    if(!response.ok)throw new Error(result.error||"Import failed.");
+    const body=await response.text();
+    let result={};
+    try{result=body?JSON.parse(body):{};}catch{}
+    if(!response.ok)throw new Error(result.error||result.title||"Import failed (HTTP "+response.status+").");
+    if(typeof result.imported!=="number")throw new Error("Unexpected import response (HTTP "+response.status+").");
     window.AgentForgeToast?.afterNavigation({type:"success",title:"MCP tools imported",message:result.imported+" tool definitions saved. Execution is not available yet."});
     dialog.close();
     window.location.reload();
