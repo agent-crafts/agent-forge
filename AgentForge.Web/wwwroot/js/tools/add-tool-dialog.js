@@ -93,7 +93,7 @@
  iconInput.addEventListener("change",()=>{if(previewUrl)URL.revokeObjectURL(previewUrl);const file=iconInput.files?.[0];previewUrl=file?URL.createObjectURL(file):null;showIcon(previewUrl);});
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
- const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);status.textContent="";};
+ const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);saveButton.disabled=kind==="external"&&!editMode;saveButton.title=saveButton.disabled?"MCP tool registration is not available yet.":"";status.textContent="";};
  if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";githubOwner.value="";githubRepo.value="";updateExecutor();status.textContent="";resetExternalDiscovery();update();schema();dialog.showModal();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
@@ -126,8 +126,8 @@
  const search=get("externalToolSearch");
  const selectedCount=()=>externalList.querySelectorAll('input[type="checkbox"]:checked').length;
  const updateSelection=()=>{
-  get("externalSelectedCount").textContent=selectedCount()+" of "+externalList.querySelectorAll("label").length+" tools selected";
-  const visible=[...externalList.querySelectorAll("label")].filter(row=>!row.hidden);
+  get("externalSelectedCount").textContent=selectedCount()+" of "+externalList.querySelectorAll("[data-mcp-tool-row]").length+" tools selected";
+  const visible=[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>!row.hidden);
   get("externalSelectAll").checked=visible.length>0&&visible.every(row=>row.querySelector("input").checked);
  };
  const resetExternalDiscovery=()=>{
@@ -142,12 +142,12 @@
  get("externalToolEndpoint").addEventListener("input",resetExternalDiscovery);
  search.addEventListener("input",()=>{
   const query=search.value.trim().toLowerCase();
-  externalList.querySelectorAll("label").forEach(row=>{row.hidden=!row.textContent.toLowerCase().includes(query);});
+  externalList.querySelectorAll("[data-mcp-tool-row]").forEach(row=>{row.hidden=!row.textContent.toLowerCase().includes(query);});
   updateSelection();
  });
  externalList.addEventListener("change",updateSelection);
  get("externalSelectAll").addEventListener("change",event=>{
-  externalList.querySelectorAll("label").forEach(row=>{if(!row.hidden)row.querySelector("input").checked=event.target.checked;});
+  externalList.querySelectorAll("[data-mcp-tool-row]").forEach(row=>{if(!row.hidden)row.querySelector("input").checked=event.target.checked;});
   updateSelection();
  });
  get("discoverExternalTools").addEventListener("click",async event=>{
@@ -174,8 +174,8 @@
    const tools=Array.isArray(result.tools)?result.tools:[];
    for(const tool of tools){
     const row=document.createElement("label");
-    row.className="flex cursor-pointer items-center gap-3 px-3 py-2 hover:bg-hover";
-    row.style.fontWeight="400";
+    row.dataset.mcpToolRow="";
+    row.className="flex cursor-pointer items-center gap-3 px-3 py-2.5 transition-colors hover:bg-hover";
     const checkbox=document.createElement("input");
     checkbox.type="checkbox";
     checkbox.className="shrink-0";
@@ -183,7 +183,7 @@
     const icon=document.createElement("span");
     icon.className="flex size-8 shrink-0 items-center justify-center rounded-md bg-raised text-muted";
     icon.setAttribute("aria-hidden","true");
-    icon.textContent="⌕";
+    icon.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>';
     const content=document.createElement("span");
     content.className="flex min-w-0 flex-1 flex-col gap-0.5";
     const name=document.createElement("span");
@@ -191,24 +191,18 @@
     name.textContent=tool.name;
     name.title=tool.name;
     const description=document.createElement("span");
-    description.className="block overflow-hidden text-xs font-normal leading-4 text-muted";
-    description.style.fontWeight="400";
-    description.style.display="-webkit-box";
-    description.style.webkitBoxOrient="vertical";
-    description.style.webkitLineClamp="2";
+    description.className="block min-w-0 overflow-hidden text-xs font-normal leading-4 text-muted";
+    description.style.cssText="display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;font-weight:400";
     description.textContent=tool.description||"No description provided.";
     description.title=tool.description||"No description provided.";
-    const badge=document.createElement("span");
-    badge.className="shrink-0 rounded-md bg-raised px-2 py-1 text-[10px] font-medium text-muted";
-    badge.textContent="MCP";
     content.append(name,description);
-    row.append(checkbox,icon,content,badge);
+    row.append(checkbox,icon,content);
     externalList.append(row);
    }
    get("externalFoundCount").textContent="("+tools.length+")";
    externalDiscoveredPanel.hidden=tools.length===0;
    updateSelection();
-   externalDiscoveryStatus.textContent=tools.length?"Choose the tools you want to add. Registration is not implemented yet.":"No tools returned by this server.";
+   externalDiscoveryStatus.textContent=tools.length?"Tools discovered. Select the definitions you need.":"No tools returned by this server.";
    button.textContent="Discover again";
   }catch(error){
     externalDiscoveryStatus.textContent=error.message||"Discovery failed.";
