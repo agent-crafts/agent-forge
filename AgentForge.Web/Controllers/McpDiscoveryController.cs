@@ -2,6 +2,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
+using AgentForge.Application.Tools.Commands;
+using Mediator;
 using AgentForge.Core.Clients.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +12,62 @@ namespace AgentForge.Web.Controllers;
 
 [ApiController]
 [Route("api/tools/mcp")]
-public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logger) : ControllerBase
+public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logger, ISender sender) : ControllerBase
 {
     public sealed record DiscoverRequest(string Endpoint);
+
+    public sealed record ImportRequest(string Endpoint, string[] ToolNames);
+
+    [HttpPost("import")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Import([FromBody] ImportRequest request, CancellationToken cancellationToken)
+    {
+        if (request.ToolNames is null || request.ToolNames.Length is < 1 or > 200 ||
+            request.ToolNames.Any(string.IsNullOrWhiteSpace) ||
+            request.ToolNames.Distinct(StringComparer.Ordinal).Count() != request.ToolNames.Length)
+            return BadRequest(new { error = "Select between 1 and 200 distinct tools." });
+
+        // Re-discover on the server; never trust client-supplied descriptions or schemas.
+        var discovery = await Discover(new DiscoverRequest(request.Endpoint), cancellationToken);
+        if (discovery is not OkObjectResult ok)
+            return discovery;
+
+        using var payload = JsonDocument.Parse(JsonSerializer.Serialize(ok.Value));
+        var available = payload.RootElement.GetProperty("tools").EnumerateArray()
+            .Where(item => item.TryGetProperty("name", out var name) && name.ValueKind == JsonValueKind.String)
+            .GroupBy(item => item.GetProperty("name").GetString()!, StringComparer.Ordinal)
+            .ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
+        if (request.ToolNames.Any(name => !available.ContainsKey(name)))
+            return BadRequest(new { error = "Some selected tools are no longer available. Discover again." });
+
+        var items = new List<ImportMcpToolItem>();
+        foreach (var name in request.ToolNames)
+        {
+            var tool = available[name];
+            var normalized = Regex.Replace(name.ToLowerInvariant(), "[^a-z0-9]+", "_").Trim('_');
+            var persistedName = "mcp_" + normalized;
+            if (normalized.Length == 0 || persistedName.Length > 155)
+                return BadRequest(new { error = "An MCP tool name cannot be imported: " + name });
+            var description = tool.GetProperty("description").GetString() ?? "";
+            var schema = tool.GetProperty("inputSchema").GetRawText();
+            var configuration = JsonSerializer.Serialize(new { endpoint = request.Endpoint, toolName = name });
+            items.Add(new ImportMcpToolItem(persistedName, name, description, schema, configuration));
+        }
+
+        try
+        {
+            var count = await sender.Send(new ImportMcpToolsCommand(items), cancellationToken);
+            return Ok(new { imported = count });
+        }
+        catch (InvalidOperationException)
+        {
+            return Conflict(new { error = "One or more tools already exist. Remove duplicates before importing." });
+        }
+        catch (ArgumentException)
+        {
+            return BadRequest(new { error = "One or more selected tools have invalid metadata." });
+        }
+    }
 
     [HttpPost("discover")]
     [ValidateAntiForgeryToken]
