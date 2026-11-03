@@ -6,6 +6,8 @@
 >
 > **Update policy:** Update this file at the end of each meaningful learning module, implementation milestone, or mastery assessment. Do not mark a skill mastered based only on discussion or a merged PR.
 
+**MCP grid card parity (2026-11-03):** Updated MCP discovery card markup to reuse Tools gallery shared card/icon/content/badge CSS classes, preserving selection and one-line description. Committed to PR #26; build and browser verification pending, mastery not assessed.
+
 **MCP tool cards (2026-11-03):** Render discovered tools as compact selectable cards with title, single-line description and optional Read/Write keyword badge inferred only from tool names. Feature branch PR #26; no build/browser verification, no registration or mastery assessment.
 
 **MCP discovery unstyled reset (2026-11-03):** Removed custom classes and generated row styles from MCP-only modal section while preserving discovery/search/selection logic. Changes committed on PR #26; build/browser verification pending.
