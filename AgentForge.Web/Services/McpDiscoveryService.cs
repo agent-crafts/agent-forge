@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using AgentForge.Core.Clients.Http;
+using static AgentForge.Web.Services.McpDiscoveryOutcome;
 
 namespace AgentForge.Web.Services;
 
