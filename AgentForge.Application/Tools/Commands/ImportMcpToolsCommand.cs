@@ -25,7 +25,7 @@ public sealed class ImportMcpToolsCommandHandler(IToolRepository repository, IUn
 
         foreach (var tool in tools)
         {
-            if (await repository.ExistsByNameAsync(tool.Name, cancellationToken))
+            if (await repository.IsNameReservedAsync(tool.Name, cancellationToken))
                 throw new InvalidOperationException("Tool already exists: " + tool.Name);
         }
 
