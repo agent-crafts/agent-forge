@@ -124,30 +124,47 @@
  const externalDiscoveredPanel=get("externalDiscoveredPanel");
  const externalList=get("externalDiscoveredList");
  const search=get("externalToolSearch");
+ const rowsVisible=()=>[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>row.style.display!=="none");
  const selectedCount=()=>externalList.querySelectorAll('input[type="checkbox"]:checked').length;
  const updateSelection=()=>{
-  get("externalSelectedCount").textContent=selectedCount()+" of "+externalList.querySelectorAll("[data-mcp-tool-row]").length+" tools selected";
-  const visible=[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>row.style.display!=="none");
-  get("externalSelectAll").checked=visible.length>0&&visible.every(row=>row.querySelector("input").checked);
+  const all=[...externalList.querySelectorAll("[data-mcp-tool-row]")];
+  const visible=rowsVisible();
+  const checked=visible.filter(row=>row.querySelector("input").checked).length;
+  const selectAll=get("externalSelectAll");
+  selectAll.checked=visible.length>0&&checked===visible.length;
+  selectAll.indeterminate=checked>0&&checked<visible.length;
+  selectAll.disabled=visible.length===0;
+  get("externalSearchEmpty").hidden=visible.length!==0||all.length===0;
+  get("externalSelectedCount").textContent=selectedCount()+" of "+all.length+" tools selected";
+  for(const row of all){
+   const selected=row.querySelector("input").checked;
+   row.classList.toggle("bg-raised",selected);
+   row.setAttribute("aria-selected",String(selected));
+  }
  };
  const resetExternalDiscovery=()=>{
   externalDiscoveredPanel.hidden=true;
   get("externalDiscoveryProgress").hidden=true;
+  get("externalSearchEmpty").hidden=true;
   externalList.replaceChildren();
   search.value="";
   get("externalSelectAll").checked=false;
+  get("externalSelectAll").indeterminate=false;
+  get("externalSelectAll").disabled=true;
   get("externalSelectedCount").textContent="0 selected";
   externalDiscoveryStatus.textContent="Enter a public HTTPS MCP endpoint to discover tools.";
  };
  get("externalToolEndpoint").addEventListener("input",resetExternalDiscovery);
  search.addEventListener("input",()=>{
   const query=search.value.trim().toLowerCase();
-  externalList.querySelectorAll("[data-mcp-tool-row]").forEach(row=>{row.style.display=row.textContent.toLowerCase().includes(query)?"flex":"none";});
+  externalList.querySelectorAll("[data-mcp-tool-row]").forEach(row=>{
+   row.style.display=row.textContent.toLowerCase().includes(query)?"flex":"none";
+  });
   updateSelection();
  });
  externalList.addEventListener("change",updateSelection);
  get("externalSelectAll").addEventListener("change",event=>{
-  externalList.querySelectorAll("[data-mcp-tool-row]").forEach(row=>{if(row.style.display!=="none")row.querySelector("input").checked=event.target.checked;});
+  for(const row of rowsVisible())row.querySelector("input").checked=event.target.checked;
   updateSelection();
  });
  get("discoverExternalTools").addEventListener("click",async event=>{
