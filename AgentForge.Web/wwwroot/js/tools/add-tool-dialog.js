@@ -179,7 +179,7 @@
     const checkbox=document.createElement("input");
     checkbox.type="checkbox";
     checkbox.setAttribute("aria-label","Select "+tool.name);
-    checkbox.checked=true;
+    checkbox.checked=false;
     const icon=document.createElement("span");
     icon.className="ui-icon-tile self-start";
     icon.setAttribute("aria-hidden","true");
