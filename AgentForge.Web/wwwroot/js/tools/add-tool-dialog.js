@@ -124,16 +124,10 @@
  const externalDiscoveredPanel=get("externalDiscoveredPanel");
  const externalList=get("externalDiscoveredList");
  const search=get("externalToolSearch");
- const rowsVisible=()=>[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>!row.hidden);
  const selectedCount=()=>externalList.querySelectorAll('input[type="checkbox"]:checked').length;
  const updateSelection=()=>{
   const all=[...externalList.querySelectorAll("[data-mcp-tool-row]")];
-  const visible=rowsVisible();
-  const checked=visible.filter(row=>row.querySelector("input").checked).length;
-  const selectAll=get("externalSelectAll");
-  selectAll.checked=visible.length>0&&checked===visible.length;
-  selectAll.indeterminate=checked>0&&checked<visible.length;
-  selectAll.disabled=visible.length===0;
+  const visible=all.filter(row=>!row.hidden);
   get("externalSearchEmpty").hidden=visible.length!==0||all.length===0;
   get("externalSelectedCount").textContent=selectedCount()+" of "+all.length+" tools selected";
   for(const row of all)row.setAttribute("aria-selected",String(row.querySelector("input").checked));
@@ -144,9 +138,6 @@
   get("externalSearchEmpty").hidden=true;
   externalList.replaceChildren();
   search.value="";
-  get("externalSelectAll").checked=false;
-  get("externalSelectAll").indeterminate=false;
-  get("externalSelectAll").disabled=true;
   get("externalSelectedCount").textContent="0 selected";
   externalDiscoveryStatus.textContent="Enter a public HTTPS MCP endpoint to discover tools.";
  };
@@ -159,10 +150,6 @@
   updateSelection();
  });
  externalList.addEventListener("change",updateSelection);
- get("externalSelectAll").addEventListener("change",event=>{
-  for(const row of rowsVisible())row.querySelector("input").checked=event.target.checked;
-  updateSelection();
- });
  get("discoverExternalTools").addEventListener("click",async event=>{
   event.preventDefault();
   resetExternalDiscovery();
@@ -191,7 +178,7 @@
     row.className="ui-item-card group flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border border-line bg-surface px-2 py-2 text-content transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm";
     const checkbox=document.createElement("input");
     checkbox.type="checkbox";
-    checkbox.className="mt-2 shrink-0";
+    checkbox.setAttribute("aria-label","Select "+tool.name);
     checkbox.checked=true;
     const icon=document.createElement("span");
     icon.className="ui-icon-tile self-start";
@@ -220,7 +207,12 @@
      badges.append(badge);
      content.append(badges);
     }
-    row.append(checkbox,content);
+    const toggle=document.createElement("span");
+    toggle.className="agent-tool-toggle shrink-0";
+    const track=document.createElement("span");
+    track.setAttribute("aria-hidden","true");
+    toggle.append(checkbox,track);
+    row.append(content,toggle);
     externalList.append(row);
    }
    get("externalFoundCount").textContent="("+tools.length+")";
