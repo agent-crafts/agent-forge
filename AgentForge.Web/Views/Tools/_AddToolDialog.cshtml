@@ -65,22 +65,35 @@
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolSchema">Generated JSON Schema</label>
                 <div class="ui-modal-schema-preview"><partial name="_JsonViewer" model='("newToolSchema", (string?)null)' /></div>
             </section>
-            <section data-tool-panel="external" class="grid gap-2.5 [&_.ui-input]:w-full [&_.ui-select]:w-full [&_.ui-input]:min-w-0 [&_.ui-select]:min-w-0" aria-label="External tool configuration" hidden>
-                
-                <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolSource">Source type</label>
-                <select class="ui-select" id="externalToolSource"><option value="mcpserver">MCP Server</option></select>
-                <div id="externalEndpointField">
-                    <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolEndpoint">MCP server endpoint</label>
-                    <input class="ui-input" id="externalToolEndpoint" type="url" placeholder="https://example.com/mcp" />
-                </div>
-                <div class="rounded-lg bg-raised p-3 text-[13px] text-muted">Discover and select reusable tool definitions. Runtime configuration and credentials are supplied later per agent or Try Now.</div>
-                <div class="flex items-center gap-3"><ui-button id="discoverExternalTools" variant="secondary">Discover tools</ui-button><span id="externalDiscoveryStatus" role="status" aria-live="polite" class="text-[13px] text-muted">Not discovered</span></div>
-                <div id="externalDiscoveredPanel" class="grid gap-3" hidden>
-                    <div class="flex items-center justify-between"><h3 class="text-base font-semibold text-heading">Discovered tools</h3><span id="externalSelectedCount" class="text-xs text-muted"></span></div>
-                    <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="externalSelectAll" /> Select all</label>
+            <section data-tool-panel="external" aria-label="MCP tool discovery" hidden>
+              <div class="grid gap-5 md:grid-cols-[190px_minmax(0,1fr)]">
+                <nav class="rounded-xl bg-raised p-4" aria-label="Discovery steps">
+                  <ol class="grid gap-5 text-sm">
+                    <li data-mcp-step="connect"><strong>01 · Connect</strong><p class="text-xs text-muted">Server endpoint</p></li>
+                    <li data-mcp-step="discover"><strong>02 · Discover</strong><p class="text-xs text-muted">Fetch tools</p></li>
+                    <li data-mcp-step="select"><strong>03 · Select</strong><p class="text-xs text-muted">Choose definitions</p></li>
+                    <li data-mcp-step="register"><strong>04 · Register</strong><p class="text-xs text-muted">Coming next</p></li>
+                  </ol>
+                </nav>
+                <div class="min-w-0 rounded-xl border p-5">
+                  <h3 class="text-lg font-semibold text-heading">Discover Tools from MCP Server</h3>
+                  <p class="mt-1 text-sm text-muted">Explore tools and choose the definitions you need.</p>
+                  <input type="hidden" id="externalToolSource" value="mcpserver" />
+                  <label class="mt-5 mb-2 block text-sm font-semibold" for="externalToolEndpoint">MCP Server Endpoint</label>
+                  <input class="ui-input w-full" id="externalToolEndpoint" type="url" placeholder="https://docs.mcp.cloudflare.com/mcp" />
+                  <p class="mt-2 text-xs text-muted">Public HTTPS endpoint. No credentials stored.</p>
+                  <div id="externalDiscoveryIntro" class="mt-5 rounded-xl bg-raised p-4 text-sm text-muted">Connect → Discover → Select → Register</div>
+                  <div id="externalDiscoveryProgress" class="mt-5 rounded-xl bg-raised p-4 text-sm" hidden>Discovering tools… Initializing session and fetching tools/list.</div>
+                  <p id="externalDiscoveryStatus" class="mt-3 text-sm text-muted" role="status" aria-live="polite">Ready to connect.</p>
+                  <div id="externalDiscoveredPanel" class="mt-5 grid gap-3" hidden>
+                    <div class="flex flex-wrap items-center justify-between gap-2"><h4 class="font-semibold">Available tools <span id="externalFoundCount"></span></h4><input class="ui-input" id="externalToolSearch" type="search" placeholder="Search tools…" aria-label="Search tools" /></div>
+                    <label class="flex items-center gap-2 text-sm"><input id="externalSelectAll" type="checkbox" /> Select all visible</label>
                     <div id="externalDiscoveredList" class="grid max-h-72 gap-2 overflow-y-auto" role="group" aria-label="Discovered tools"></div>
-                    <p class="text-xs text-muted">Only selected tool definitions are registered. No runtime credentials are stored.</p>
+                    <div class="flex flex-wrap justify-between gap-2 border-t pt-3 text-sm"><span id="externalSelectedCount">0 selected</span><span class="text-xs text-muted">Registration coming next</span></div>
+                  </div>
+                  <div class="mt-5 flex justify-end"><ui-button id="discoverExternalTools" variant="primary">Discover Tools</ui-button></div>
                 </div>
+              </div>
             </section>
             <p id="addToolFeedback" class="mt-4 min-h-5 text-[13px] ui-field-error" role="status" aria-live="polite"></p>
 
