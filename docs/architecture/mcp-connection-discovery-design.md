@@ -1,87 +1,103 @@
-# MCP Connection & Discovery — Architecture Proposal (Draft)
+# External Tool Catalog & Runtime Bindings — Architecture Proposal (Draft)
 
-Status: **Design for review — not implemented**  
-Branch: `feature/mcp-connection-discovery-design`  
-Milestone: External Tools / MCP Connection & Discovery (no tool execution yet)
+Status: **Revised design for review; no implementation**  
+Branch: `feature/mcp-connection-discovery-design`
 
-## Context and existing boundaries
-- AgentForge persists `Tool` records and distinguishes `ToolKind.Custom` from `ToolKind.External`.
-- `ToolExecutionGateway` dispatches through `IToolExecutionAdapter`; the existing `CustomToolExecutionAdapter` explicitly rejects external tools.
-- Add Tool currently offers OpenAPI, MCP Server and Integration source choices, but the external flow is not wired.
-- Preserve the existing Custom Tool behavior. Do not change the execution gateway or register external tools as executable in this milestone.
+## Product behavior / user intent
+1. From **Add Tool → External**, choose a provider/source (GitHub, Azure, MCP, OpenAPI, etc.).
+2. Discover available operations; display a selectable list; import **only chosen tool definitions** into a reusable, generic Tool Registry.
+3. Later, from **Try Now** or **Add to Agent**, select a registered tool and supply **usage-specific configuration and credentials**.
+4. Different agents can reuse the same registered tool with different configurations. Importing a definition must not create a global provider account, credential, or execution binding.
 
-## Decisions proposed for review
-1. **Connections shared at application scope; tool availability scoped per agent.** A connection is not a grant to an agent. Existing agent-tool relationship and authorization must be inspected before implementation.
-2. **MCP Streamable HTTP only for v1.** No server-side arbitrary process launch/stdio.
-3. **Discover → review → explicitly approve → persist.** Discovery does not grant execution permission.
-4. **Snapshot definitions with controlled refresh.** Store approved input schema and a fingerprint; detect changes, show a diff, and require review for changed contracts.
-5. **Credentials are references, not plain text in Tool.ConfigurationJson.** Authentication/storage solution to be selected after inspecting existing security infrastructure.
+**Core invariant: Tool definition ≠ configured tool instance ≠ execution invocation.**
 
-## Conceptual architecture
+## Existing code evidence
+- `AgentForge.Core/Domains/Tool.cs` persists name, description, kind, category, `JsonSchema`, `ExecutorKey` and `ConfigurationJson`; the last property currently conflates metadata with executable configuration for custom tools.
+- `CreateToolCommand` creates a persisted Tool with configuration JSON.
+- `ExecuteToolCommand` takes `(Guid Id, JsonElement Input)` and forwards to the execution gateway. It does **not** yet model a separate runtime binding or credential context.
+- `ToolExecutionGateway` dispatches adapters, and `CustomToolExecutionAdapter` accepts only custom tools. Do not break these existing paths.
+- External source choices exist in the Add Tool UI; actual external discovery is not implemented.
+
+## Conceptual flow
 ```text
-External Tools UI
-  → MCP Connection API (validate configuration, test connection)
-  → IMcpConnectionService / IMcpDiscoveryService
-  → MCP SDK client (Streamable HTTP; initialize; tools/list pagination)
-  → DiscoveredTool DTOs (untrusted, not persisted)
-  → Review/Approval API
-  → ToolSource/Connection + approved ImportedTool snapshot (persisted)
-  → Agent-tool assignment (separate permission boundary)
-
-Future milestone only:
-  ExecuteToolCommandHandler → ToolExecutionGateway → McpToolExecutionAdapter → MCP tools/call
+Catalog author / administrator
+  Add External Tool → choose provider/discovery source
+  → discover operations (MCP tools/list, OpenAPI operations, provider adapter)
+  → review & select → import generic ToolDefinition snapshots
+                             |
+                             v
+                     Shared Tool Catalog
+                             |
+             +---------------+----------------+
+             |                                |
+         Try Now                         Agent Builder
+         pick tool                       attach catalog tool
+         supply test config              supply agent-specific config
+         + arguments                     + credential references
+             |                                |
+             +---------- Runtime Resolver ----+
+                             |
+                      Execution Gateway
+                             |
+                   Source-specific adapter
 ```
 
-## Domain concepts (proposal, not schema migration)
-| Concept | Responsibility | Candidate fields |
+## Distinct domain concepts
+| Concept | Purpose | Example |
 | --- | --- | --- |
-| `ToolConnection` / `ToolSource` | One trusted MCP endpoint and its lifecycle | id, name, protocol, endpoint, credential reference, status, last checked |
-| `DiscoveredTool` | Temporary server-supplied description | remote name, description, input schema, optional annotations |
-| `ImportedTool` | Approved local snapshot linked to a source | local tool id, source id, remote name, schema fingerprint, approved schema, status |
-| `AgentToolAssignment` | Agent-specific allowlist | agent id, imported tool id, enabled flag |
+| `DiscoverySource` (transient or persisted only if useful) | Find operations; credentials may be needed **temporarily for discovery** but must not become global runtime config | GitHub MCP URL, Azure OpenAPI spec |
+| `ToolDefinition` (catalog; likely existing `Tool`) | Reusable capability metadata, input schema, provider/protocol descriptor, source identity and version | `github_create_issue` |
+| `ToolBinding` / `AgentToolConfiguration` | One agent's configured use of a catalog definition; credential refs, endpoint/account/repo, enabled status | Agent A: repo X, credential A |
+| `TryNowExecutionContext` | Ephemeral config and arguments for one manual test; do not persist secrets by default | repo Y, credential B, issue title |
+| `ExecutionRequest` | Definition + binding or test context + validated arguments + caller authorization | Tool call with resolved credential |
 
-Use existing `Tool` and assignment entities where appropriate; **do not introduce new tables until existing models and migrations are reviewed**.
+Tool catalog identity should distinguish provider/source + remote operation identity. Local naming must respect current snake_case and uniqueness validation; do not assume provider-native names are valid.
 
-## Proposed API workflow (illustrative, not committed contract)
-1. Create connection with HTTPS endpoint and credential reference.
-2. Test connection: initialize and negotiate supported capabilities; no tool import.
-3. Discover all tool pages with bounded pagination, timeout, response size and count limits.
-4. Review: show tool name, description, schema, source and risk indicators. No auto-approval.
-5. Import selected definitions with provenance and stable local identifiers; default disabled for agents.
-6. Refresh: compare schema fingerprints and mark changed/missing tools for review; never silently widen permissions.
+## Configuration boundary
+- **Definition-level metadata:** operation name, description, input schema, provider/protocol, remote operation identity, configuration **schema** (required fields, types, defaults), and source metadata needed to route execution.
+- **Usage-level configuration:** tenant/account, repository, endpoint selection where applicable, secret references, scopes, environment, and other instance-specific settings.
+- **Invocation arguments:** inputs generated by an agent or entered in Try Now, validated separately from configuration.
+- Not all fields are universally the same: each provider/operation may define its own configuration schema. A generic platform **stores and validates the contract**, not one universal provider configuration.
+- Source-specific execution requirements still exist. A generic catalog entry alone is not executable.
 
-## Trust and security boundaries
-- Validate and allowlist endpoint destinations; defend against SSRF, redirects to private IPs, DNS rebinding and metadata endpoints. Enforce TLS, network egress policy, timeouts and bounded responses.
-- Treat descriptions and schemas from remote MCP servers as untrusted input, including prompt-injection content; validate schema shape/size and sanitize rendering.
-- Store secrets in approved secret storage, never in tool JSON, logs or client payloads.
-- Separate **connection permission**, **import approval**, **agent assignment**, and **execution authorization**.
-- Tool annotations are hints, not an authoritative risk classification.
-- Tool list changes or server notifications trigger **review**, not automatic enabling.
-- Audit connection tests, discoveries, approvals and later execution; redact secrets.
+## Discovery and import
+- Support source-specific discovery behind a common interface, starting with MCP Streamable HTTP. OpenAPI and provider adapters can follow without imposing MCP concepts on them.
+- MCP initialization, capability negotiation and paginated `tools/list` produce untrusted candidate definitions.
+- Present discovered candidates and allow selective import; no automatic import or execution.
+- Snapshot approved metadata/schema and provenance; refresh shows schema drift for review.
+- **Discovery auth is separate from usage auth.** A private catalog may need credentials to discover tools, but those credentials do not automatically belong to agents.
+- Decide whether discovery source records need persistence after checking refresh requirements; **do not make a shared executable connection mandatory**.
 
-## Failure behavior
-- Connection failure: preserve previously approved snapshots, mark source unavailable.
-- Partial pagination / malformed tool: report discovery failure, do not silently import a partial catalog.
-- Name collisions: use source-scoped remote names and stable local IDs.
-- Changed or removed tool: mark stale/unavailable pending review; do not auto-delete or auto-execute.
-- Cancellation and timeout: propagate and surface bounded, sanitized errors.
+## Runtime paths (later milestone)
+- Try Now: choose catalog definition → enter operation-specific config and arguments → validate and authorize → execute → redact/audit → discard ephemeral secrets.
+- Agent: attach existing catalog definition → configure agent-specific binding with secret references → allowlist and authorize → resolve binding at invocation → execute.
+- One definition may have many agent bindings; optional multiple bindings per agent require explicit identity/selection semantics.
+- Agent selection is not a permission bypass; credentials, policy and caller permissions are checked at execution time.
 
-## Incremental engineering plan
-1. **Design review (this PR):** verify boundaries, domain models, existing agent assignment, authorization and secret storage. Agree on source identity and status model.
-2. **Connection foundation:** persisted connection configuration, validation and test-connection endpoint; no import.
-3. **Discovery:** MCP SDK initialization, capability negotiation, `tools/list` pagination, normalized DTO and bounded errors.
-4. **Approval/import:** review UI, selected-tool persistence, schema snapshots and refresh comparison.
-5. **Execution (separate milestone/PR):** approved-only MCP adapter, `tools/call`, runtime auth, auditing, and agent integration.
+## Security and reliability
+- SSRF protection, TLS/redirect/DNS policy and egress restrictions for user-supplied MCP/OpenAPI URLs.
+- Treat remote tool descriptions and schemas as untrusted; bound sizes, validate schemas, sanitize UI and protect prompts from injected instructions.
+- Never store raw credentials in `Tool.ConfigurationJson` or logs. Use approved secret references and redaction.
+- Explicit import/agent attachment permissions and separate execution authorization.
+- Bound pagination, network timeouts, retries, cancellation and output sizes; failures must not silently activate tools.
+- Refresh can detect breaking changes without silently overwriting catalog definitions or agent bindings.
 
-## Verification and learning evidence
-- This is a documentation-only design; **no build, integration test, browser test, network connection or mastery assessment performed**.
-- Before implementation: inspect current Core/Infrastructure models, migrations, service registration, auth, and existing agent-tool linking.
-- Knowledge checkpoint: explain connection vs discovered vs approved vs agent-enabled vs executable; trace `tools/list` and identify each trust boundary.
-- Engineering checkpoint: later prove discovery pagination, invalid endpoints, duplicate names, changed schemas, cancellation, and denied tool execution through tests.
+## Design decisions requiring review before implementation
+1. Reuse existing `Tool` as the catalog definition, or introduce a distinct catalog entity? Current `ConfigurationJson` behavior must be migrated or isolated without breaking custom tools.
+2. How are agent-tool associations currently modeled? Inspect models/migrations before proposing `AgentToolConfiguration` storage.
+3. What configuration-schema representation supports different providers without forcing common fields?
+4. What credential/secret storage and access-control primitives exist?
+5. For MCP, how do we retain enough server identity to execute later **without binding a global credential or account**? Endpoint templates/source descriptors may be definition metadata; the agent supplies runtime connection settings.
+6. How should Try Now distinguish ephemeral config from saved agent config?
+7. What exact API and UI contract supports selective import, duplicate handling and schema refresh?
 
-## Open questions for review
-1. Is application-wide sharing sufficient, or should connection ownership be workspace/tenant-scoped?
-2. What secret store and credential lifecycle already exist?
-3. Should import create `ToolKind.External` records directly, or use separate approved snapshot records linked to `Tool`?
-4. What approval role and per-agent selection contract are already available?
-5. How should disconnected servers and breaking schema changes appear in the UI?
+## Suggested incremental PRs
+1. **This draft PR:** review catalog/binding separation and inspect existing agent-tool, auth and persistence architecture.
+2. Discovery adapters and selective catalog import (MCP first); no runtime secrets or execution.
+3. Try Now runtime configuration and approved external adapter.
+4. Agent-specific bindings, secure credential references, agent tool calling and tests.
+
+## Verification / Mastery
+- Documentation-only design; **no build, browser tests, execution or mastery assessment performed**.
+- Knowledge checkpoint: explain why catalog definition, discovery credentials, agent binding, and invocation arguments must be separate.
+- Engineering evidence will require automated tests for selective import, config isolation between agents, denied execution without binding, schema drift, malformed discovery, and credential redaction.
