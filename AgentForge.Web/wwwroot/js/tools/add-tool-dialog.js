@@ -188,7 +188,7 @@
    for(const tool of tools){
     const row=document.createElement("label");
     row.dataset.mcpToolRow="";
-    row.className="ui-item-card group flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border border-line bg-surface px-3 py-3 text-content transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm";
+    row.className="ui-item-card group flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border border-line bg-surface px-2 py-2 text-content transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm";
     const checkbox=document.createElement("input");
     checkbox.type="checkbox";
     checkbox.className="mt-2 shrink-0";
