@@ -174,7 +174,7 @@
   const button=get("discoverExternalTools");
   button.disabled=true;
   get("externalDiscoveryProgress").hidden=false;
-  externalDiscoveryStatus.textContent="Connecting to MCP server…";
+  externalDiscoveryStatus.textContent="";
   try{
    const token=dialog.querySelector('input[name="__RequestVerificationToken"]')?.value;
    const response=await fetch("/api/tools/mcp/discover",{
