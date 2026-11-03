@@ -7,6 +7,7 @@ using AgentForge.Application.Tools.Commands;
 using Mediator;
 using AgentForge.Core.Clients.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AgentForge.Web.Controllers;
 
@@ -55,6 +56,9 @@ public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logge
             items.Add(new ImportMcpToolItem(persistedName, displayName, description, schema, configuration));
         }
 
+        if (items.Select(item => item.Name).Distinct(StringComparer.Ordinal).Count() != items.Count)
+            return BadRequest(new { error = "Selected MCP tool names conflict after normalization. Import the conflicting tools separately." });
+
         try
         {
             var count = await sender.Send(new ImportMcpToolsCommand(items), cancellationToken);
@@ -68,9 +72,14 @@ public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logge
         {
             return BadRequest(new { error = "One or more selected tools have invalid metadata." });
         }
+        catch (DbUpdateException ex)
+        {
+            logger.LogError(ex, "MCP batch persistence failed for {ToolCount} tools", items.Count);
+            return Conflict(new { error = "Database rejected the import. A tool name may already exist, including an inactive tool. Check server logs." });
+        }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            logger.LogError(ex, "MCP metadata import failed");
+            logger.LogError(ex, "MCP metadata import failed for {ToolCount} tools", items.Count);
             return StatusCode(500, new { error = "Could not persist MCP tools. Check server logs." });
         }
     }
