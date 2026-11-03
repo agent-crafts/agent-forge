@@ -6,6 +6,8 @@
 >
 > **Update policy:** Update this file at the end of each meaningful learning module, implementation milestone, or mastery assessment. Do not mark a skill mastered based only on discussion or a merged PR.
 
+**MCP execution Phase 1 (2026-11-03, feature/mcp-tool-execution):** Implemented initial guarded Streamable HTTP MCP client (`initialize`, initialized notification, `tools/call`), external MCP execution adapter, and DI gateway registration. User manually confirmed earlier discovery/import flow works. Execution build, automated tests, real MCP calls, auth review and browser verification remain pending; mastery not assessed. Next: verify against a real MCP endpoint, add protocol/error tests, review security and refine SSE handling before merge.
+
 **MCP discovery controller cleanup (2026-11-03, PR #26):** Extracted MCP transport/discovery into scoped typed `McpDiscoveryService`; both discover and import reuse the same service, removing controller-action invocation and JSON round-trip. Preserved API routes and MCP execution deferral. Committed; build, protocol, database, and browser verification pending; mastery not assessed.
 
 **MCP import/persistence (2026-11-03, PR #26):** Added server-revalidated selected-tool import API and atomic batch metadata persistence command; wired external Save to import selected switches. Persists kind External, integration category, schema, endpoint/tool name and non-executable mcp executor key. Duplicate-name imports return conflict; MCP execution deferred. Code committed; build, DB and browser verification pending; mastery not assessed.
