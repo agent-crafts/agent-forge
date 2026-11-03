@@ -33,7 +33,7 @@ public sealed class McpToolExecutionAdapter(McpToolClient client) : IToolExecuti
 
             var result = await client.CallAsync(endpoint, nameValue.GetString()!, arguments, cancellationToken);
             if (result.TryGetProperty("isError", out var isError) && isError.ValueKind == JsonValueKind.True)
-                return ToolExecutionResult.Fail("mcp_tool_error", "MCP tool returned an error: " + result.GetRawText());
+                return ToolExecutionResult.Fail("mcp_tool_error", "MCP tool reported an execution error.");
             return ToolExecutionResult.Ok(result);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -46,7 +46,7 @@ public sealed class McpToolExecutionAdapter(McpToolClient client) : IToolExecuti
         }
         catch (Exception ex) when (ex is JsonException or InvalidDataException or HttpRequestException or InvalidOperationException)
         {
-            return ToolExecutionResult.Fail("mcp_execution_failed", "MCP tool execution failed: " + ex.Message);
+            return ToolExecutionResult.Fail("mcp_execution_failed", "MCP tool execution failed. Check endpoint and server connectivity.");
         }
     }
 }
