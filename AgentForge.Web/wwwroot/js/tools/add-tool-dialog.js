@@ -120,6 +120,29 @@
  dialog.querySelectorAll("[data-modal-close], [data-tool-close], #closeAddToolDialog, #cancelAddToolDialog").forEach(b=>b.addEventListener("click",()=>dialog.close()));
  dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>r.addEventListener("change",update));
  get("externalToolSource").addEventListener("change",()=>{const integration=get("externalToolSource").value==="integration";get("externalEndpointField").hidden=integration;get("externalIntegrationField").hidden=!integration;});
+ const externalDiscoveryStatus=get("externalDiscoveryStatus");
+ const externalDiscoveredPanel=get("externalDiscoveredPanel");
+ const externalList=get("externalDiscoveredList");
+ const resetExternalDiscovery=()=>{
+  externalDiscoveredPanel.hidden=true;
+  externalList.replaceChildren();
+  get("externalSelectAll").checked=false;
+  get("externalSelectedCount").textContent="";
+  externalDiscoveryStatus.textContent="Not discovered";
+ };
+ get("externalToolSource").addEventListener("change",resetExternalDiscovery);
+ get("externalToolEndpoint").addEventListener("input",resetExternalDiscovery);
+ get("externalToolIntegration").addEventListener("change",resetExternalDiscovery);
+ get("discoverExternalTools").addEventListener("click",event=>{
+  event.preventDefault();
+  resetExternalDiscovery();
+  externalDiscoveryStatus.textContent="Discovery requires a validated server-side connector. No external endpoint was contacted.";
+ });
+ get("externalSelectAll").addEventListener("change",event=>{
+  externalList.querySelectorAll('input[type="checkbox"]').forEach(input=>{input.checked=event.target.checked;});
+  get("externalSelectedCount").textContent=externalList.querySelectorAll('input[type="checkbox"]:checked').length+" selected";
+ });
+
  const rows=get("toolParameterRows");
  const buildEditedSchema=()=>{
   const next=structuredClone(originalSchema);
@@ -170,7 +193,7 @@
   event.stopPropagation();
   if(saving)return;
   const kind=dialog.querySelector('input[name="toolKind"]:checked').value;
-  if(kind!=="custom"&&!editMode){status.textContent="External tool discovery is not implemented yet.";return;}
+  if(kind!=="custom"&&!editMode){status.textContent="No tools imported. Server-side discovery and registration are not implemented yet.";return;}
   const name=get("newToolName").value.trim();
   const displayName=get("newToolDisplayName").value.trim();
   const description=get("newToolDescription").value.trim();
