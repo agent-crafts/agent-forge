@@ -15,9 +15,15 @@ public sealed class ToolRepository(AgentForgeDbContext context)
         return Entities.FirstOrDefaultAsync(tool => tool.Name == name, cancellationToken);
     }
 
+    public Task<bool> IsNameReservedAsync(string name, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        return Entities.IgnoreQueryFilters().AnyAsync(tool => tool.Name == name, cancellationToken);
+    }
+
     public Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        return Entities.AnyAsync(tool => tool.Name == name, cancellationToken);
+        return Entities.AnyAsync(tool => tool.Name == name && tool.IsActive, cancellationToken);
     }
 }

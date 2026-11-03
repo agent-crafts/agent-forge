@@ -7,4 +7,5 @@ public interface IToolRepository : IRepository<Tool>
 {
     Task<Tool?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
     Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken = default);
+    Task<bool> IsNameReservedAsync(string name, CancellationToken cancellationToken = default);
 }

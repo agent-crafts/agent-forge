@@ -4,6 +4,7 @@ using AgentForge.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<AgentForge.Web.Services.McpDiscoveryService>();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddMediator(options =>
 {

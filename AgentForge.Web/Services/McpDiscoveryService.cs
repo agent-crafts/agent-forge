@@ -1,0 +1,139 @@
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Text.Json;
+using AgentForge.Core.Clients.Http;
+using static AgentForge.Web.Services.McpDiscoveryOutcome;
+
+namespace AgentForge.Web.Services;
+
+public sealed record McpDiscoveredTool(string name, string description, JsonElement inputSchema);
+public sealed record McpDiscoveryOutcome(int StatusCode, object? Error, IReadOnlyList<McpDiscoveredTool>? Tools)
+{
+    public static McpDiscoveryOutcome Success(IReadOnlyList<McpDiscoveredTool> tools) => new(200, null, tools);
+    public static McpDiscoveryOutcome Fail(int statusCode, object error) => new(statusCode, error, null);
+}
+
+public sealed class McpDiscoveryService(ILogger<McpDiscoveryService> logger)
+{
+    public async Task<McpDiscoveryOutcome> DiscoverAsync(string endpointUrl, CancellationToken cancellationToken)
+    {
+        if (!Uri.TryCreate(endpointUrl, UriKind.Absolute, out var endpoint) || !PublicHttpUrlPolicy.IsAllowed(endpoint))
+            return Fail(400, new { error = "Enter a public HTTPS MCP endpoint." });
+
+        using var handler = new SocketsHttpHandler
+        {
+            AllowAutoRedirect = false, UseCookies = false, UseProxy = false,
+            ConnectCallback = async (context, ct) =>
+            {
+                var addresses = await Dns.GetHostAddressesAsync(context.DnsEndPoint.Host, ct);
+                var address = addresses.FirstOrDefault(PublicHttpUrlPolicy.IsPublicAddress)
+                    ?? throw new HttpRequestException("No public destination IP.");
+                var socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                try
+                {
+                    await socket.ConnectAsync(new IPEndPoint(address, context.DnsEndPoint.Port), ct);
+                    return new NetworkStream(socket, ownsSocket: true);
+                }
+                catch { socket.Dispose(); throw; }
+            }
+        };
+        using var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(12) };
+        try
+        {
+            string negotiatedVersion = "2025-03-26";
+            using var init = await SendAsync("initialize", new
+            {
+                protocolVersion = "2025-03-26", capabilities = new { },
+                clientInfo = new { name = "AgentForge", version = "0.1" }
+            }, 1);
+            if (init.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
+                return Fail(401, new { error = "Authentication-required MCP discovery is not supported yet." });
+            if (!init.IsSuccessStatusCode) return Fail(400, new { error = "MCP initialize failed.", status = (int)init.StatusCode });
+            using (var document = await ParseAsync(init, cancellationToken))
+            {
+                if (!document.RootElement.TryGetProperty("result", out var result) ||
+                    !result.TryGetProperty("protocolVersion", out var version) || version.ValueKind != JsonValueKind.String ||
+                    string.IsNullOrWhiteSpace(version.GetString()))
+                    return Fail(400, new { error = "Invalid MCP initialize response." });
+                negotiatedVersion = version.GetString()!;
+            }
+
+            var session = init.Headers.TryGetValues("Mcp-Session-Id", out var values) ? values.FirstOrDefault() : null;
+            using (var message = new HttpRequestMessage(HttpMethod.Post, endpoint))
+            {
+                message.Headers.TryAddWithoutValidation("Accept", "application/json, text/event-stream");
+                message.Headers.TryAddWithoutValidation("MCP-Protocol-Version", negotiatedVersion);
+                if (session is not null) message.Headers.TryAddWithoutValidation("Mcp-Session-Id", session);
+                message.Content = new StringContent("{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}", Encoding.UTF8, "application/json");
+                using var notification = await client.SendAsync(message, cancellationToken);
+                if (!notification.IsSuccessStatusCode)
+                {
+                    logger.LogWarning("MCP initialized notification rejected by {Host} with HTTP {Status}", endpoint.Host, (int)notification.StatusCode);
+                    return Fail(400, new { error = "MCP initialization notification failed.", status = (int)notification.StatusCode });
+                }
+            }
+
+            var discovered = new List<McpDiscoveredTool>();
+            string? cursor = null;
+            for (var page = 0; page < 10; page++)
+            {
+                using var response = await SendAsync("tools/list", cursor is null ? new { } : (object)new { cursor }, page + 2, session);
+                if (!response.IsSuccessStatusCode) return Fail(400, new { error = "MCP tools/list failed.", status = (int)response.StatusCode });
+                using var document = await ParseAsync(response, cancellationToken);
+                if (!document.RootElement.TryGetProperty("result", out var result) ||
+                    !result.TryGetProperty("tools", out var tools) || tools.ValueKind != JsonValueKind.Array)
+                    return Fail(400, new { error = "Invalid MCP tools/list response." });
+                foreach (var tool in tools.EnumerateArray())
+                {
+                    if (discovered.Count >= 200) return Fail(400, new { error = "Tool discovery exceeded 200 tools." });
+                    if (!tool.TryGetProperty("name", out var name) || name.ValueKind != JsonValueKind.String) continue;
+                    var description = tool.TryGetProperty("description", out var desc) && desc.ValueKind == JsonValueKind.String ? desc.GetString() : "";
+                    var schema = tool.TryGetProperty("inputSchema", out var input) && input.ValueKind == JsonValueKind.Object
+                        ? input.Clone() : JsonSerializer.SerializeToElement(new { type = "object" });
+                    discovered.Add(new McpDiscoveredTool(name.GetString()!, description ?? "", schema));
+                }
+                cursor = result.TryGetProperty("nextCursor", out var next) && next.ValueKind == JsonValueKind.String ? next.GetString() : null;
+                if (string.IsNullOrEmpty(cursor)) return Success(discovered);
+            }
+            return Fail(400, new { error = "Tool discovery exceeded 10 pages." });
+
+            async Task<HttpResponseMessage> SendAsync(string method, object parameters, int id, string? sessionId = null)
+            {
+                using var message = new HttpRequestMessage(HttpMethod.Post, endpoint);
+                message.Headers.TryAddWithoutValidation("Accept", "application/json, text/event-stream");
+                message.Headers.TryAddWithoutValidation("MCP-Protocol-Version", negotiatedVersion);
+                if (sessionId is not null) message.Headers.TryAddWithoutValidation("Mcp-Session-Id", sessionId);
+                message.Content = new StringContent(JsonSerializer.Serialize(new { jsonrpc = "2.0", id, method, @params = parameters }), Encoding.UTF8, "application/json");
+                return await client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            }
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException or InvalidDataException)
+        {
+            logger.LogWarning("MCP discovery failed for host {Host}: {ErrorType}", endpoint.Host, ex.GetType().Name);
+            return Fail(502, new { error = "MCP discovery failed. Check endpoint and server connectivity." });
+        }
+    }
+
+
+    private static async Task<JsonDocument> ParseAsync(HttpResponseMessage response, CancellationToken ct)
+    {
+        await using var stream = await response.Content.ReadAsStreamAsync(ct);
+        using var buffer = new MemoryStream();
+        var chunk = new byte[8192];
+        int count;
+        while ((count = await stream.ReadAsync(chunk, ct)) > 0)
+        {
+            if (buffer.Length + count > 1_048_576) throw new InvalidDataException("Response exceeds 1 MiB.");
+            buffer.Write(chunk, 0, count);
+        }
+        var content = Encoding.UTF8.GetString(buffer.ToArray());
+        if (response.Content.Headers.ContentType?.MediaType == "text/event-stream")
+        {
+            content = content.Split('\n').Where(line => line.StartsWith("data:", StringComparison.Ordinal))
+                .Select(line => line[5..].Trim()).FirstOrDefault(line => line.StartsWith('{'))
+                ?? throw new InvalidDataException("Missing JSON-RPC SSE event.");
+        }
+        return JsonDocument.Parse(content);
+    }
+}

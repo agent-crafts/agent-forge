@@ -9,6 +9,7 @@ internal sealed class ToolConfiguration : IEntityTypeConfiguration<Tool>
     public void Configure(EntityTypeBuilder<Tool> builder)
     {
         builder.ToTable("tools");
+        builder.HasQueryFilter(x => x.IsActive);
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
         builder.Property(x => x.IsActive).HasColumnName("is_active").HasDefaultValue(true);

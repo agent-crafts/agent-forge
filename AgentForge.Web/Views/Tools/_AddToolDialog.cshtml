@@ -65,24 +65,22 @@
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolSchema">Generated JSON Schema</label>
                 <div class="ui-modal-schema-preview"><partial name="_JsonViewer" model='("newToolSchema", (string?)null)' /></div>
             </section>
-            <section data-tool-panel="external" class="grid gap-2.5 [&_.ui-input]:w-full [&_.ui-select]:w-full [&_.ui-input]:min-w-0 [&_.ui-select]:min-w-0" aria-label="External tool configuration" hidden>
-                
-                <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolSource">Source type</label>
-                <select class="ui-select" id="externalToolSource">
-                    @foreach (var sourceType in Enum.GetValues<ExternalToolSourceType>())
-                    {
-                        <option value="@sourceType.ToString().ToLowerInvariant()">@enumLabel(sourceType)</option>
-                    }
-                </select>
-                <div id="externalEndpointField">
-                    <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolEndpoint">Specification URL / server endpoint</label>
-                    <input class="ui-input" id="externalToolEndpoint" type="url" placeholder="https://example.com/openapi.json" />
+            <section data-tool-panel="external" class="grid gap-2.5" aria-label="MCP tool discovery" hidden>
+                <input type="hidden" id="externalToolSource" value="mcpserver" />
+                <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolEndpoint">MCP Server Endpoint</label>
+                <div class="flex items-center gap-2">
+                    <input class="ui-input min-w-0 flex-1" id="externalToolEndpoint" type="url" placeholder="https://docs.mcp.cloudflare.com/mcp" />
+                    <button type="button" id="discoverExternalTools" class="ui-button shrink-0">Discover tools</button>
                 </div>
-                <div id="externalIntegrationField" hidden>
-                    <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolIntegration">Integration</label>
-                    <select class="ui-select" id="externalToolIntegration"><option value="">Choose an integration</option><option value="github">GitHub</option><option value="jira">Jira</option></select>
+                <p class="text-[13px] leading-6 text-muted" id="externalDiscoveryStatus" role="status" aria-live="polite">Enter a public HTTPS MCP endpoint to find available tools.</p>
+                <div class="text-[13px] text-muted" id="externalDiscoveryProgress" hidden>Connecting to MCP server…</div>
+                <div class="grid gap-2.5" id="externalDiscoveredPanel" hidden>
+                    <h3 class="mt-2 text-base font-semibold text-heading">Tools <span id="externalFoundCount"></span></h3>
+                    <input class="ui-input" id="externalToolSearch" type="search" placeholder="Search tools…" aria-label="Search tools" />
+                    <div class="grid gap-2.5" id="externalDiscoveredList" role="group" aria-label="Discovered tools"></div>
+                    <p class="text-[13px] text-muted" id="externalSearchEmpty" hidden>No tools match your search.</p>
+                    <p class="text-[13px] text-muted" id="externalSelectedCount">0 selected</p>
                 </div>
-                <p class="text-[13px] leading-6 text-muted">Discovery requires a trusted connection, validation, and explicit review of imported tools. No external endpoint is contacted by this form.</p>
             </section>
             <p id="addToolFeedback" class="mt-4 min-h-5 text-[13px] ui-field-error" role="status" aria-live="polite"></p>
 
