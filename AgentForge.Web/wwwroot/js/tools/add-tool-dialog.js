@@ -93,7 +93,7 @@
  iconInput.addEventListener("change",()=>{if(previewUrl)URL.revokeObjectURL(previewUrl);const file=iconInput.files?.[0];previewUrl=file?URL.createObjectURL(file):null;showIcon(previewUrl);});
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
- const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);saveButton.disabled=kind==="external"&&!editMode;saveButton.title=saveButton.disabled?"MCP tool registration is not available yet.":"";status.textContent="";};
+ const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);saveButton.disabled=kind==="external"&&!editMode&&selectedCount()===0;saveButton.title="";status.textContent="";};
  if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";githubOwner.value="";githubRepo.value="";updateExecutor();status.textContent="";resetExternalDiscovery();update();schema();dialog.showModal();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
@@ -131,6 +131,7 @@
   get("externalSearchEmpty").hidden=visible.length!==0||all.length===0;
   get("externalSelectedCount").textContent=selectedCount()+" of "+all.length+" tools selected";
   for(const row of all)row.setAttribute("aria-selected",String(row.querySelector("input").checked));
+  if(!editMode&&dialog.querySelector('input[name="toolKind"]:checked')?.value==="external")saveButton.disabled=selectedCount()===0;
  };
  const resetExternalDiscovery=()=>{
   externalDiscoveredPanel.hidden=true;
@@ -139,6 +140,7 @@
   externalList.replaceChildren();
   search.value="";
   get("externalSelectedCount").textContent="0 selected";
+  if(!editMode&&dialog.querySelector('input[name="toolKind"]:checked')?.value==="external")saveButton.disabled=true;
   externalDiscoveryStatus.textContent="Enter a public HTTPS MCP endpoint to discover tools.";
  };
  get("externalToolEndpoint").addEventListener("input",resetExternalDiscovery);
@@ -175,6 +177,7 @@
    for(const tool of tools){
     const row=document.createElement("label");
     row.dataset.mcpToolRow="";
+    row.dataset.mcpToolName=tool.name;
     row.className="ui-item-card group flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border border-line bg-surface px-2 py-2 text-content transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm";
     const checkbox=document.createElement("input");
     checkbox.type="checkbox";
@@ -276,7 +279,28 @@
   event.stopPropagation();
   if(saving)return;
   const kind=dialog.querySelector('input[name="toolKind"]:checked').value;
-  if(kind!=="custom"&&!editMode){status.textContent="No tools imported. Server-side discovery and registration are not implemented yet.";return;}
+  if(kind==="external"&&!editMode){
+   const toolNames=[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>row.querySelector("input").checked).map(row=>row.dataset.mcpToolName);
+   if(!toolNames.length){status.textContent="Select at least one MCP tool.";return;}
+   saving=true;
+   saveButton.disabled=true;
+   status.textContent="Importing selected tools…";
+   try{
+    const token=dialog.querySelector('input[name="__RequestVerificationToken"]')?.value;
+    const response=await fetch("/api/tools/mcp/import",{
+     method:"POST",credentials:"same-origin",
+     headers:{"Content-Type":"application/json",...(token?{"RequestVerificationToken":token}:{})},
+     body:JSON.stringify({endpoint:get("externalToolEndpoint").value.trim(),toolNames})
+    });
+    const result=await response.json();
+    if(!response.ok)throw new Error(result.error||"Import failed.");
+    window.AgentForgeToast?.afterNavigation({type:"success",title:"MCP tools imported",message:result.imported+" tool definitions saved. Execution is not available yet."});
+    dialog.close();
+    window.location.reload();
+   }catch(error){status.textContent="Could not import MCP tools: "+(error.message||"Unknown error");}
+   finally{saving=false;updateSelection();}
+   return;
+  }
   const name=get("newToolName").value.trim();
   const displayName=get("newToolDisplayName").value.trim();
   const description=get("newToolDescription").value.trim();
