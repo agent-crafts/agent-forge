@@ -174,13 +174,32 @@
    const tools=Array.isArray(result.tools)?result.tools:[];
    for(const tool of tools){
     const label=document.createElement("label");
-    label.className="flex cursor-pointer items-start gap-2.5 px-3 py-2.5 hover:bg-hover";
+    label.className="flex cursor-pointer items-center gap-3 px-3 py-2 hover:bg-hover";
     const checkbox=document.createElement("input");
-    checkbox.type="checkbox";checkbox.className="mt-0.5 shrink-0";checkbox.checked=true;
-    const info=document.createElement("span");info.className="grid min-w-0 gap-0.5";
-    const name=document.createElement("span");name.className="text-[13px] font-medium leading-5 text-heading break-words";name.textContent=tool.name;
-    const description=document.createElement("span");description.className="text-xs font-normal leading-5 text-muted break-words";description.textContent=tool.description||"No description provided.";
-    info.append(name,description);label.append(checkbox,info);externalList.append(label);
+    checkbox.type="checkbox";checkbox.className="shrink-0";checkbox.checked=true;
+    const icon=document.createElement("span");
+    icon.className="flex size-8 shrink-0 items-center justify-center rounded-md bg-raised text-muted";
+    icon.setAttribute("aria-hidden","true");
+    icon.textContent="◇";
+    const info=document.createElement("span");
+    info.className="grid min-w-0 flex-1 gap-0.5";
+    const name=document.createElement("span");
+    name.className="truncate text-xs font-semibold leading-4 text-heading";
+    name.textContent=tool.name;
+    name.title=tool.name;
+    const description=document.createElement("span");
+    description.className="overflow-hidden text-[11px] font-normal leading-4 text-muted";
+    description.style.display="-webkit-box";
+    description.style.webkitBoxOrient="vertical";
+    description.style.webkitLineClamp="2";
+    description.textContent=tool.description||"No description provided.";
+    description.title=tool.description||"No description provided.";
+    const badge=document.createElement("span");
+    badge.className="ml-auto shrink-0 rounded-md bg-raised px-2 py-1 text-[10px] font-medium text-muted";
+    badge.textContent="MCP";
+    info.append(name,description);
+    label.append(checkbox,icon,info,badge);
+    externalList.append(label);
    }
    get("externalFoundCount").textContent="("+tools.length+")";
    externalDiscoveredPanel.hidden=tools.length===0;
