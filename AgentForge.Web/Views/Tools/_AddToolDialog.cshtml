@@ -65,20 +65,20 @@
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolSchema">Generated JSON Schema</label>
                 <div class="ui-modal-schema-preview"><partial name="_JsonViewer" model='("newToolSchema", (string?)null)' /></div>
             </section>
-            <section data-tool-panel="external" aria-label="MCP tool discovery" hidden>
+            <section data-tool-panel="external" class="grid gap-2.5" aria-label="MCP tool discovery" hidden>
                 <input type="hidden" id="externalToolSource" value="mcpserver" />
-                <label for="externalToolEndpoint">MCP Server Endpoint</label>
-                <input id="externalToolEndpoint" type="url" placeholder="https://docs.mcp.cloudflare.com/mcp" />
-                <button type="button" id="discoverExternalTools">Discover tools</button>
-                <p id="externalDiscoveryStatus" role="status" aria-live="polite">Enter a public HTTPS MCP endpoint to find available tools.</p>
-                <div id="externalDiscoveryProgress" hidden>Connecting to MCP server…</div>
-                <div id="externalDiscoveredPanel" hidden>
-                    <h3>Tools <span id="externalFoundCount"></span></h3>
-                    <input id="externalToolSearch" type="search" placeholder="Search tools…" aria-label="Search tools" />
+                <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolEndpoint">MCP Server Endpoint</label>
+                <input class="ui-input" id="externalToolEndpoint" type="url" placeholder="https://docs.mcp.cloudflare.com/mcp" />
+                <button type="button" id="discoverExternalTools" class="ui-button" >Discover tools</button>
+                <p class="text-[13px] leading-6 text-muted" id="externalDiscoveryStatus" role="status" aria-live="polite">Enter a public HTTPS MCP endpoint to find available tools.</p>
+                <div class="text-[13px] text-muted" id="externalDiscoveryProgress" hidden>Connecting to MCP server…</div>
+                <div class="grid gap-2.5" id="externalDiscoveredPanel" hidden>
+                    <h3 class="mt-2 text-base font-semibold text-heading">Tools <span id="externalFoundCount"></span></h3>
+                    <input class="ui-input" id="externalToolSearch" type="search" placeholder="Search tools…" aria-label="Search tools" />
                     <label><input id="externalSelectAll" type="checkbox" /> Select all</label>
-                    <div id="externalDiscoveredList" role="group" aria-label="Discovered tools"></div>
-                    <p id="externalSearchEmpty" hidden>No tools match your search.</p>
-                    <p id="externalSelectedCount">0 selected</p>
+                    <div class="grid gap-2.5" id="externalDiscoveredList" role="group" aria-label="Discovered tools"></div>
+                    <p class="text-[13px] text-muted" id="externalSearchEmpty" hidden>No tools match your search.</p>
+                    <p class="text-[13px] text-muted" id="externalSelectedCount">0 selected</p>
                 </div>
             </section>
             <p id="addToolFeedback" class="mt-4 min-h-5 text-[13px] ui-field-error" role="status" aria-live="polite"></p>
