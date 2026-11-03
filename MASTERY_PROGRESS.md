@@ -6,6 +6,8 @@
 >
 > **Update policy:** Update this file at the end of each meaningful learning module, implementation milestone, or mastery assessment. Do not mark a skill mastered based only on discussion or a merged PR.
 
+**MCP discovery UI refinement (2026-11-03):** Added partial Select All state, selected-row highlighting, and no-search-results feedback in PR #26. Changes committed to feature branch; build and browser checks pending. No tool registration or mastery assessment.
+
 **MCP discovery UI rewrite (2026-11-03):** Rebuilt existing external-tool modal as a compact endpoint + searchable results layout matching the supplied reference; removed decorative badges and redundant headings, improved row hierarchy and filtering, and disabled unsupported external Save. Committed on PR #26; build/browser verification pending, registration not implemented, mastery not assessed.
 
 **MCP discovery modal simplification (2026-11-03):** Removed stepper and replaced external-tool UI with endpoint/discover controls and searchable selectable results. UI committed on PR #26; registration remains unimplemented. Build and browser verification pending; mastery not assessed.
