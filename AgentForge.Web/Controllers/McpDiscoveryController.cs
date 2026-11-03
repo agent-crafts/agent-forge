@@ -67,6 +67,11 @@ public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logge
         {
             return BadRequest(new { error = "One or more selected tools have invalid metadata." });
         }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            logger.LogError(ex, "MCP metadata import failed");
+            return StatusCode(500, new { error = "Could not persist MCP tools. Check server logs." });
+        }
     }
 
     [HttpPost("discover")]
