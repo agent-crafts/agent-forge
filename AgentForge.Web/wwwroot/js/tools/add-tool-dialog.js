@@ -137,7 +137,7 @@
   search.value="";
   get("externalSelectAll").checked=false;
   get("externalSelectedCount").textContent="0 selected";
-  externalDiscoveryStatus.textContent="Ready to connect.";
+  externalDiscoveryStatus.textContent="Enter a public HTTPS MCP endpoint to discover tools.";
  };
  get("externalToolEndpoint").addEventListener("input",resetExternalDiscovery);
  search.addEventListener("input",()=>{
@@ -174,22 +174,22 @@
    const tools=Array.isArray(result.tools)?result.tools:[];
    for(const tool of tools){
     const label=document.createElement("label");
-    label.className="flex cursor-pointer items-start gap-3 p-4 hover:bg-hover";
+    label.className="flex cursor-pointer items-start gap-2.5 px-3 py-2.5 hover:bg-hover";
     const checkbox=document.createElement("input");
-    checkbox.type="checkbox";checkbox.className="mt-1";checkbox.checked=true;
-    const info=document.createElement("span");info.className="grid gap-1";
-    const name=document.createElement("strong");name.className="text-sm text-heading";name.textContent=tool.name;
-    const description=document.createElement("span");description.className="text-xs text-muted";description.textContent=tool.description||"No description provided.";
+    checkbox.type="checkbox";checkbox.className="mt-0.5 shrink-0";checkbox.checked=true;
+    const info=document.createElement("span");info.className="grid min-w-0 gap-0.5";
+    const name=document.createElement("span");name.className="text-[13px] font-medium leading-5 text-heading break-words";name.textContent=tool.name;
+    const description=document.createElement("span");description.className="text-xs font-normal leading-5 text-muted break-words";description.textContent=tool.description||"No description provided.";
     info.append(name,description);label.append(checkbox,info);externalList.append(label);
    }
    get("externalFoundCount").textContent="("+tools.length+")";
    externalDiscoveredPanel.hidden=tools.length===0;
    updateSelection();
    externalDiscoveryStatus.textContent=tools.length?"Choose the tools you want to add. Registration is not implemented yet.":"No tools returned by this server.";
-   button.textContent="Discover Again";
+   button.textContent="Discover again";
   }catch(error){
     externalDiscoveryStatus.textContent=error.message||"Discovery failed.";
-   button.textContent="Retry Discovery";
+   button.textContent="Retry";
   }finally{get("externalDiscoveryProgress").hidden=true;button.disabled=false;}
  });
 
