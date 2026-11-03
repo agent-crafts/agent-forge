@@ -188,19 +188,23 @@
    for(const tool of tools){
     const row=document.createElement("label");
     row.dataset.mcpToolRow="";
-    row.className="flex cursor-pointer items-center gap-3 rounded-lg border border-[var(--border)] bg-raised px-3 py-3";
+    row.className="ui-item-card group flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border border-line bg-surface px-3 py-3 text-content transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm";
     const checkbox=document.createElement("input");
     checkbox.type="checkbox";
-    checkbox.className="shrink-0";
+    checkbox.className="mt-2 shrink-0";
     checkbox.checked=true;
+    const icon=document.createElement("span");
+    icon.className="ui-icon-tile self-start";
+    icon.setAttribute("aria-hidden","true");
+    icon.textContent="⚙";
     const content=document.createElement("span");
-    content.className="flex min-w-0 flex-1 flex-col gap-1";
+    content.className="ui-item-content flex min-w-0 flex-1 flex-col gap-0.5";
     const name=document.createElement("span");
-    name.className="block truncate text-[13px] font-semibold text-heading";
+    name.className="ui-item-title block truncate text-sm font-semibold text-heading";
     name.textContent=tool.name;
     name.title=tool.name;
     const description=document.createElement("span");
-    description.className="block truncate text-[13px] leading-5 text-muted";
+    description.className="ui-item-description block truncate text-xs leading-5 text-muted";
     description.textContent=tool.description||"No description provided.";
     description.title=tool.description||"No description provided.";
     content.append(name,description);
@@ -208,13 +212,15 @@
     const tag=keywords.find(word=>word==="read"||word==="write");
     if(tag){
      const badge=document.createElement("span");
-     badge.className="shrink-0 rounded-md bg-[var(--active)] px-2 py-1 text-[11px] font-medium text-muted";
+     badge.className="ui-tool-card-badge";
      badge.textContent=tag==="read"?"Read":"Write";
      badge.title="Keyword from tool name";
-     row.append(checkbox,content,badge);
-    }else{
-     row.append(checkbox,content);
+     const badges=document.createElement("span");
+     badges.className="ui-tool-card-badges";
+     badges.append(badge);
+     content.append(badges);
     }
+    row.append(checkbox,icon,content);
     externalList.append(row);
    }
    get("externalFoundCount").textContent="("+tools.length+")";
