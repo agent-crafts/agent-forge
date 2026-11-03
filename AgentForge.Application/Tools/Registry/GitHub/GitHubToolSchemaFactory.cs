@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.AI;
 
-namespace AgentForge.Application.Tools.GitHub;
+namespace AgentForge.Application.Tools.Registry.GitHub;
 
 /// <summary>Defines the LLM-facing GitHub issue function and its public argument contract.</summary>
 public static class GitHubToolSchemaFactory
@@ -12,11 +12,13 @@ public static class GitHubToolSchemaFactory
         ArgumentNullException.ThrowIfNull(tools);
 
         // The adapter deliberately owns the external snake_case name.
-        // The implementation remains GitHubTools.GetGitHubIssueAsync(int issueNumber, ...).
+        // The implementation remains GitHubTools.GetGitHubIssueAsync(owner, repository, issueNumber, ...).
         return AIFunctionFactory.Create(
-            ([Description("The positive GitHub issue number.")] int issue_number,
+            ([Description("GitHub repository owner.")] string owner,
+             [Description("GitHub repository name.")] string repo,
+             [Description("The positive GitHub issue number.")] int issue_number,
              CancellationToken cancellationToken) =>
-                tools.GetGitHubIssueAsync(issue_number, cancellationToken),
+                tools.GetGitHubIssueAsync(owner, repo, issue_number, cancellationToken),
             new AIFunctionFactoryOptions
             {
                 Name = "get_github_issue",

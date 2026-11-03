@@ -155,6 +155,18 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(32)")
                         .HasColumnName("category");
 
+                    b.Property<string>("ConfigurationJson")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("jsonb")
+                        .HasDefaultValue("{}")
+                        .HasColumnName("configuration_json");
+
+                    b.Property<string>("ExecutorKey")
+                        .HasMaxLength(155)
+                        .HasColumnType("character varying(155)")
+                        .HasColumnName("executor_key");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(4000)

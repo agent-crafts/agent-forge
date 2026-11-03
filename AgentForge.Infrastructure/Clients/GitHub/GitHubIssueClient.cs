@@ -8,13 +8,17 @@ namespace AgentForge.Infrastructure.Clients.GitHub;
 public sealed class GitHubIssueClient(HttpClient client) : IGitHubIssueClient
 {
     public async Task<GitHubIssue> GetIssueAsync(
-        int issueNumber,
+        string owner, string repository, int issueNumber,
         CancellationToken cancellationToken = default)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(issueNumber);
+        if (!System.Text.RegularExpressions.Regex.IsMatch(owner, @"^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$") ||
+            !System.Text.RegularExpressions.Regex.IsMatch(repository, @"^[a-zA-Z0-9_.-]{1,100}$") ||
+            repository is "." or "..")
+            throw new ArgumentException("Invalid GitHub owner or repository.");
 
         using var response = await client.GetAsync(
-            $"repos/agent-crafts/agent-forge/issues/{issueNumber}",
+            $"repos/{Uri.EscapeDataString(owner)}/{Uri.EscapeDataString(repository)}/issues/{issueNumber}",
             cancellationToken);
 
         response.EnsureSuccessStatusCode();

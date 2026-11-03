@@ -7,7 +7,7 @@ namespace AgentForge.Application.Tools.Commands;
 
 public sealed record CreateToolCommand(
     string Name, string DisplayName, string Description,
-    ToolKind Kind, ToolCategory Category, string JsonSchema, string? ImageUrl = null) : ICommand<Guid>;
+    ToolKind Kind, ToolCategory Category, string JsonSchema, string? ImageUrl = null, string? ExecutorKey = null, string ConfigurationJson = "{}") : ICommand<Guid>;
 
 public sealed class CreateToolCommandHandler(IToolRepository tools, IUnitOfWork unitOfWork) : ICommandHandler<CreateToolCommand, Guid>
 {
@@ -15,7 +15,7 @@ public sealed class CreateToolCommandHandler(IToolRepository tools, IUnitOfWork 
     {
         ArgumentNullException.ThrowIfNull(command);
         var tool = Tool.Create(command.Name, command.DisplayName, command.Description,
-            command.Kind, command.Category, command.JsonSchema, command.ImageUrl);
+            command.Kind, command.Category, command.JsonSchema, command.ImageUrl, command.ExecutorKey, command.ConfigurationJson);
 
         if (await tools.ExistsByNameAsync(tool.Name, cancellationToken))
             throw new InvalidOperationException("A tool with this name already exists.");

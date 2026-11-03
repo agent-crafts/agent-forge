@@ -33,7 +33,7 @@ public sealed class WorkspaceController(ISender sender) : Controller
         var items = page.Items.Select(tool => new ToolsController.ToolCatalogItem(
             tool.Name, tool.Description, tool.JsonSchema, tool.DisplayName,
             tool.Name == "get_github_issue" ? "github" : "wrench",
-            tool.Category.ToString().ToLowerInvariant(), tool.Id, tool.ImageUrl, tool.Kind.ToString().ToLowerInvariant())).ToList();
+            tool.Category.ToString().ToLowerInvariant(), tool.Id, tool.ImageUrl, tool.Kind.ToString().ToLowerInvariant(), tool.ExecutorKey, tool.ConfigurationJson)).ToList();
         return View("~/Views/Tools/Index.cshtml", items);
     }
 
@@ -51,7 +51,7 @@ public sealed class WorkspaceController(ISender sender) : Controller
         var item = new ToolsController.ToolCatalogItem(
             tool.Name, tool.Description, tool.JsonSchema, tool.DisplayName,
             tool.Name == "get_github_issue" ? "github" : "wrench",
-            tool.Category.ToString().ToLowerInvariant(), tool.Id, tool.ImageUrl, tool.Kind.ToString().ToLowerInvariant());
+            tool.Category.ToString().ToLowerInvariant(), tool.Id, tool.ImageUrl, tool.Kind.ToString().ToLowerInvariant(), tool.ExecutorKey, tool.ConfigurationJson);
         return View("~/Views/Tools/Details.cshtml", item);
     }
 

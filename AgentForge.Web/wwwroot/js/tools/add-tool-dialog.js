@@ -5,6 +5,85 @@
  const editContext=document.getElementById("toolEditContext");
  if(!dialog||(!open&&!editOpen))return;
  let editMode=false, originalSchema=null;
+ const executorSelect=document.getElementById("newToolExecutorKey");
+ const apiUrl=document.getElementById("newToolApiUrl");
+ const apiUrlField=document.getElementById("newToolApiUrlField");
+ const githubFields=document.getElementById("newToolGitHubFields");
+ const githubOwner=document.getElementById("newToolGitHubOwner");
+ const githubRepo=document.getElementById("newToolGitHubRepo");
+ const githubSchema={type:"object",properties:{issue_number:{type:"integer",minimum:1,description:"Positive GitHub issue number."}},required:["issue_number"],additionalProperties:false};
+ const httpParameterNames=()=>[...new Set([...apiUrl.value.matchAll(/\\{([^{}]+)\\}/g)].map(match=>match[1]))];
+ const httpSchema=()=>{
+  const properties={};
+  const names=httpParameterNames();
+  for(const name of names){
+   const previous=editMode&&originalSchema?.properties?.[name];
+   properties[name]=previous?structuredClone(previous):{type:"string"};
+  }
+  return {type:"object",properties,required:names,additionalProperties:false};
+ };
+ const renderHttpParameters=()=>{
+  if(executorSelect.value!=="http.get_json")return;
+  rows.replaceChildren();
+  for(const name of httpParameterNames()){
+   const row=document.createElement("div");
+   row.className="ui-modal-parameter";
+   const definition=editMode&&originalSchema?.properties?.[name];
+   const type=definition?.type||"string";
+   const nameField=document.createElement("input");
+   nameField.className="ui-input param-name";
+   nameField.value=name;
+   nameField.disabled=true;
+   const typeField=document.createElement("input");
+   typeField.className="ui-input param-type";
+   typeField.value=type;
+   typeField.disabled=true;
+   const requiredLabel=document.createElement("label");
+   const requiredField=document.createElement("input");
+   requiredField.type="checkbox";
+   requiredField.className="param-required";
+   requiredField.checked=true;
+   requiredField.disabled=true;
+   requiredLabel.append(requiredField,document.createTextNode("Required"));
+   row.append(nameField,typeField,requiredLabel);
+   rows.append(row);
+  }
+  schema();
+ };
+ apiUrl.addEventListener("input",renderHttpParameters);
+ const lockGithubParameters=()=>{
+  const locked=executorSelect.value==="get_github_issue";
+  const add=get("addToolParameter");
+  add.hidden=true;
+  if(executorSelect.value==="http.get_json"){renderHttpParameters();return;}
+  if(locked){
+   rows.replaceChildren();
+   const label=document.createElement("div");
+   label.className="text-sm text-muted";
+   label.textContent="issue_number · integer · required (minimum: 1). Defined by the GitHub issue executor.";
+   rows.append(label);
+  }else{
+   rows.replaceChildren();
+   if(editMode&&originalSchema){
+    for(const [name,definition] of Object.entries(originalSchema.properties||{})){
+     add.click();
+     const row=rows.lastElementChild;
+     row.querySelector(".param-name").value=name;
+     row.dataset.originalName=name;
+     row.querySelector(".param-type").value=definition.type||"string";
+     row.querySelector(".param-required").checked=(originalSchema.required||[]).includes(name);
+    }
+   }
+  }
+  rows.querySelectorAll(".ui-modal-parameter input, .ui-modal-parameter select").forEach(field=>field.disabled=true);
+  schema();
+ };
+ const updateExecutor=()=>{
+  apiUrlField.hidden=executorSelect.value!=="http.get_json";
+  githubFields.hidden=executorSelect.value!=="get_github_issue";
+  lockGithubParameters();
+ };
+ executorSelect.addEventListener("change",updateExecutor);
  let previewUrl=null;
  const iconInput=document.getElementById("newToolIconUpload");
  const iconPreview=document.getElementById("newToolIconPreview");
@@ -15,12 +94,15 @@
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
  const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);status.textContent="";};
- if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();status.textContent="";update();schema();dialog.showModal();});
+ if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";githubOwner.value="";githubRepo.value="";updateExecutor();status.textContent="";update();schema();dialog.showModal();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
   get("toolKindSelector").hidden=true;
   const d=editContext.dataset;
   originalSchema=JSON.parse(d.toolSchema);
+  executorSelect.value=d.toolExecutorKey||"";
+  let savedConfig={};try{savedConfig=JSON.parse(d.toolConfiguration||"{}");}catch{}
+  apiUrl.value=savedConfig.url||"";githubOwner.value=savedConfig.owner||"";githubRepo.value=savedConfig.repo||"";updateExecutor();
   get("addToolTitle").textContent="Edit Tool";
   get("addToolIntro").textContent="Update saved tool configuration.";
   saveButton.textContent="Save Changes";
@@ -32,20 +114,7 @@
   iconInput.value="";showIcon(iconSrc(d.toolImageUrl));
   dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.checked=r.value==="custom";r.disabled=true;});
   update();
-  rows.replaceChildren();
-  // Keep unexposed JSON Schema constraints when editing parameter rows.
-  for(const [name,definition] of Object.entries(originalSchema.properties||{})){
-   get("addToolParameter").click();
-   const row=rows.lastElementChild;
-   row.querySelector(".param-name").value=name;
-   row.dataset.originalName=name;
-   row.querySelector(".param-type").value=definition.type||"string";
-   row.querySelector(".param-required").checked=(originalSchema.required||[]).includes(name);
-
-  }
-  get("addToolParameter").disabled=false;
-  get("addToolParameter").removeAttribute("title");
-  schema();
+  lockGithubParameters();
   dialog.showModal();
  });
  dialog.querySelectorAll("[data-modal-close], [data-tool-close], #closeAddToolDialog, #cancelAddToolDialog").forEach(b=>b.addEventListener("click",()=>dialog.close()));
@@ -70,8 +139,8 @@
   next.required=required;
   return next;
  };
- const schema=()=>{const properties={},required=[];rows.querySelectorAll(".ui-modal-parameter").forEach(r=>{const n=r.querySelector(".param-name").value.trim();if(!n)return;properties[n]={type:r.querySelector(".param-type").value};if(r.querySelector(".param-required").checked)required.push(n);});const value=editMode&&originalSchema?buildEditedSchema():{type:"object",properties,required,additionalProperties:false};if(window.AgentForgeJsonViewer){window.AgentForgeJsonViewer.render(get("newToolSchema"),value);}else{get("newToolSchema").textContent=JSON.stringify(value,null,2);}};
- get("addToolParameter").addEventListener("click",()=>{const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required pattern="[a-z][a-z0-9_]*" maxlength="155" placeholder="parameter_name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").onclick=()=>{r.remove();schema();};r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
+ const schema=()=>{if(executorSelect.value==="http.get_json"){const value=httpSchema();if(window.AgentForgeJsonViewer)window.AgentForgeJsonViewer.render(get("newToolSchema"),value);else get("newToolSchema").textContent=JSON.stringify(value,null,2);return;}if(executorSelect.value==="get_github_issue"){window.AgentForgeJsonViewer?.render(get("newToolSchema"),githubSchema);if(!window.AgentForgeJsonViewer)get("newToolSchema").textContent=JSON.stringify(githubSchema,null,2);return;}const properties={},required=[];rows.querySelectorAll(".ui-modal-parameter").forEach(r=>{const n=r.querySelector(".param-name").value.trim();if(!n)return;properties[n]={type:r.querySelector(".param-type").value};if(r.querySelector(".param-required").checked)required.push(n);});const value=editMode&&originalSchema?buildEditedSchema():{type:"object",properties,required,additionalProperties:false};if(window.AgentForgeJsonViewer){window.AgentForgeJsonViewer.render(get("newToolSchema"),value);}else{get("newToolSchema").textContent=JSON.stringify(value,null,2);}};
+ get("addToolParameter").addEventListener("click",()=>{if(executorSelect.value==="get_github_issue")return;const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required pattern="[a-z][a-z0-9_]*" maxlength="155" placeholder="parameter_name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").hidden=true;r.querySelectorAll("input, select").forEach(field=>field.disabled=true);r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
  const kindValues={custom:1,external:2};
  const categoryValues={general:1,development:2,integration:3,data:4,automation:5};
  const saveButton=get("previewToolConfiguration");
@@ -121,6 +190,16 @@
   }
   if(name&&!/^[a-z][a-z0-9_]*$/.test(name)&&!errors.some(([f])=>f===get("newToolName")))errors.push([get("newToolName"),"Use lowercase snake_case."]);
   if(!category&&!errors.some(([f])=>f===get("newToolCategory")))errors.push([get("newToolCategory"),"Select a valid category."]);
+  if(executorSelect.value==="http.get_json"){
+   if(httpParameterNames().some(name=>!/^[a-z][a-z0-9_]*$/.test(name)))errors.push([apiUrl,"URL placeholders must use lowercase snake_case names."]);
+   try{const url=new URL(apiUrl.value);if(url.protocol!=="https:"||(url.port&&url.port!=="443")||url.username||url.password||!url.hostname.includes(".")||url.hostname==="localhost"||url.hostname.endsWith(".localhost"))throw new Error();}
+   catch{errors.push([apiUrl,"Enter a public HTTPS API URL (no credentials or custom ports)."]);}
+  }
+  if(executorSelect.value==="get_github_issue"){
+   const owner=githubOwner.value.trim(),repo=githubRepo.value.trim();
+   if(!/^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$/.test(owner))errors.push([githubOwner,"Enter a valid GitHub owner."]);
+   if(!/^[a-zA-Z0-9_.-]{1,100}$/.test(repo)||repo==="."||repo==="..")errors.push([githubRepo,"Enter a valid GitHub repository."]);
+  }
   const parameterNames=new Set();
   for(const row of rows.querySelectorAll(".ui-modal-parameter")){
    const field=row.querySelector(".param-name");
@@ -145,7 +224,9 @@
    properties[key]={type:row.querySelector(".param-type").value};
    if(row.querySelector(".param-required").checked)required.push(key);
   });
-  const jsonSchema=editMode?JSON.stringify(buildEditedSchema()):JSON.stringify({type:"object",properties,required,additionalProperties:false});
+  const executorKey=executorSelect.value||null;
+  const configurationJson=JSON.stringify(executorKey==="http.get_json"?{url:apiUrl.value.trim()}:executorKey==="get_github_issue"?{owner:githubOwner.value.trim(),repo:githubRepo.value.trim()}:{});
+  const jsonSchema=executorKey==="get_github_issue"?JSON.stringify(githubSchema):executorKey==="http.get_json"?JSON.stringify(httpSchema()):editMode&&originalSchema?JSON.stringify(originalSchema):JSON.stringify({type:"object",properties,required,additionalProperties:false});
   status.textContent="";
   saving=true;
   saveButton.disabled=true;
@@ -166,7 +247,7 @@
    }
    const response=await fetch(editMode?"/api/tools/"+editContext.dataset.toolId:"/api/tools",{
     method:editMode?"PUT":"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({...(editMode?{id:editContext.dataset.toolId}:{}),name,displayName,description,kind:kindValues[kind],category,jsonSchema,imageUrl})
+    body:JSON.stringify({...(editMode?{id:editContext.dataset.toolId}:{}),name,displayName,description,kind:kindValues[kind],category,jsonSchema,imageUrl,executorKey,configurationJson})
    });
    if(!response.ok){
     const contentType=response.headers.get("content-type")||"";
