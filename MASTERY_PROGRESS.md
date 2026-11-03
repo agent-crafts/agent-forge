@@ -6,6 +6,8 @@
 >
 > **Update policy:** Update this file at the end of each meaningful learning module, implementation milestone, or mastery assessment. Do not mark a skill mastered based only on discussion or a merged PR.
 
+**MCP discovery modal simplification (2026-11-03):** Removed stepper and replaced external-tool UI with endpoint/discover controls and searchable selectable results. UI committed on PR #26; registration remains unimplemented. Build and browser verification pending; mastery not assessed.
+
 **Agent controller merge (2026-11-01):** Removed `AgentsApiController`. `AgentsController` is now the `/api/agents` API, matching `ToolsController`. Agent gallery and details actions moved to `WorkspaceController`. Build succeeded; browser verification pending. Mastery not assessed.
 
 **Agent modal alignment (2026-11-01):** Create/edit agent dialog now uses the tool dialog shell (720px, header, footer, field labels, inline errors, save spinner). Agent fields unchanged: name, category, description, icon, tags. Browser verification pending. Mastery not assessed.
