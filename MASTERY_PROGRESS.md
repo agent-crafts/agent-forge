@@ -6,6 +6,8 @@
 >
 > **Update policy:** Update this file at the end of each meaningful learning module, implementation milestone, or mastery assessment. Do not mark a skill mastered based only on discussion or a merged PR.
 
+**MCP discovery controller cleanup (2026-11-03, PR #26):** Extracted MCP transport/discovery into scoped typed `McpDiscoveryService`; both discover and import reuse the same service, removing controller-action invocation and JSON round-trip. Preserved API routes and MCP execution deferral. Committed; build, protocol, database, and browser verification pending; mastery not assessed.
+
 **MCP import/persistence (2026-11-03, PR #26):** Added server-revalidated selected-tool import API and atomic batch metadata persistence command; wired external Save to import selected switches. Persists kind External, integration category, schema, endpoint/tool name and non-executable mcp executor key. Duplicate-name imports return conflict; MCP execution deferred. Code committed; build, DB and browser verification pending; mastery not assessed.
 
 **MCP discovery switch selection (2026-11-03):** Replaced left checkboxes with right-aligned shared agent-tool-toggle switches; removed Select all UI and behavior, retained selected count and search. Commits on PR #26; static source review only, build/browser verification pending.\n\n**MCP grid card parity (2026-11-03):** Updated MCP discovery card markup to reuse Tools gallery shared card/icon/content/badge CSS classes, preserving selection and one-line description. Committed to PR #26; build and browser verification pending, mastery not assessed.
