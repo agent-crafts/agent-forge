@@ -204,7 +204,7 @@
     name.textContent=tool.name;
     name.title=tool.name;
     const description=document.createElement("span");
-    description.className="ui-item-description block truncate text-xs leading-5 text-muted";
+    description.className="ui-item-description block truncate text-xs font-normal leading-5 text-muted";
     description.textContent=tool.description||"No description provided.";
     description.title=tool.description||"No description provided.";
     content.append(name,description);
@@ -220,7 +220,7 @@
      badges.append(badge);
      content.append(badges);
     }
-    row.append(checkbox,icon,content);
+    row.append(checkbox,content);
     externalList.append(row);
    }
    get("externalFoundCount").textContent="("+tools.length+")";
