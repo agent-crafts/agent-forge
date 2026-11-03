@@ -124,7 +124,7 @@
  const externalDiscoveredPanel=get("externalDiscoveredPanel");
  const externalList=get("externalDiscoveredList");
  const search=get("externalToolSearch");
- const rowsVisible=()=>[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>row.style.display!=="none");
+ const rowsVisible=()=>[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>!row.hidden);
  const selectedCount=()=>externalList.querySelectorAll('input[type="checkbox"]:checked').length;
  const updateSelection=()=>{
   const all=[...externalList.querySelectorAll("[data-mcp-tool-row]")];
@@ -136,11 +136,7 @@
   selectAll.disabled=visible.length===0;
   get("externalSearchEmpty").hidden=visible.length!==0||all.length===0;
   get("externalSelectedCount").textContent=selectedCount()+" of "+all.length+" tools selected";
-  for(const row of all){
-   const selected=row.querySelector("input").checked;
-   row.classList.toggle("bg-raised",selected);
-   row.setAttribute("aria-selected",String(selected));
-  }
+  for(const row of all)row.setAttribute("aria-selected",String(row.querySelector("input").checked));
  };
  const resetExternalDiscovery=()=>{
   externalDiscoveredPanel.hidden=true;
@@ -158,7 +154,7 @@
  search.addEventListener("input",()=>{
   const query=search.value.trim().toLowerCase();
   externalList.querySelectorAll("[data-mcp-tool-row]").forEach(row=>{
-   row.style.display=row.textContent.toLowerCase().includes(query)?"flex":"none";
+   row.hidden=!row.textContent.toLowerCase().includes(query);
   });
   updateSelection();
  });
@@ -192,28 +188,17 @@
    for(const tool of tools){
     const row=document.createElement("label");
     row.dataset.mcpToolRow="";
-    row.className="flex cursor-pointer items-center gap-3 px-3 py-2.5 transition-colors hover:bg-hover";
     const checkbox=document.createElement("input");
     checkbox.type="checkbox";
-    checkbox.className="shrink-0";
     checkbox.checked=true;
-    const icon=document.createElement("span");
-    icon.className="flex size-8 shrink-0 items-center justify-center rounded-md bg-raised text-muted";
-    icon.setAttribute("aria-hidden","true");
-    icon.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>';
     const content=document.createElement("span");
-    content.className="flex min-w-0 flex-1 flex-col gap-0.5";
     const name=document.createElement("span");
-    name.className="block truncate text-[13px] font-semibold leading-5 text-heading";
     name.textContent=tool.name;
     name.title=tool.name;
     const description=document.createElement("span");
-    description.className="block min-w-0 overflow-hidden text-xs font-normal leading-4 text-muted";
-    description.style.cssText="display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;font-weight:400";
-    description.textContent=tool.description||"No description provided.";
-    description.title=tool.description||"No description provided.";
+    description.textContent=" — "+(tool.description||"No description provided.");
     content.append(name,description);
-    row.append(checkbox,icon,content);
+    row.append(checkbox,content);
     externalList.append(row);
    }
    get("externalFoundCount").textContent="("+tools.length+")";
