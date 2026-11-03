@@ -124,31 +124,20 @@
  const externalDiscoveredPanel=get("externalDiscoveredPanel");
  const externalList=get("externalDiscoveredList");
  const search=get("externalToolSearch");
- const setStep=step=>{
-  const order=["connect","discover","select","register"];
-  dialog.querySelectorAll("[data-mcp-step]").forEach(node=>{
-   const active=order.indexOf(node.dataset.mcpStep)===order.indexOf(step);
-   node.classList.toggle("text-accent",active);
-   node.classList.toggle("text-muted",!active);
-   node.setAttribute("aria-current",active?"step":"false");
-  });
- };
  const selectedCount=()=>externalList.querySelectorAll('input[type="checkbox"]:checked').length;
  const updateSelection=()=>{
-  get("externalSelectedCount").textContent=selectedCount()+" selected";
+  get("externalSelectedCount").textContent=selectedCount()+" of "+externalList.querySelectorAll("label").length+" tools selected";
   const visible=[...externalList.querySelectorAll("label")].filter(row=>!row.hidden);
   get("externalSelectAll").checked=visible.length>0&&visible.every(row=>row.querySelector("input").checked);
  };
  const resetExternalDiscovery=()=>{
   externalDiscoveredPanel.hidden=true;
-  get("externalDiscoveryIntro").hidden=false;
   get("externalDiscoveryProgress").hidden=true;
   externalList.replaceChildren();
   search.value="";
   get("externalSelectAll").checked=false;
   get("externalSelectedCount").textContent="0 selected";
   externalDiscoveryStatus.textContent="Ready to connect.";
-  setStep("connect");
  };
  get("externalToolEndpoint").addEventListener("input",resetExternalDiscovery);
  search.addEventListener("input",()=>{
@@ -171,9 +160,7 @@
   }catch{externalDiscoveryStatus.textContent="Enter a valid public HTTPS MCP endpoint.";return;}
   const button=get("discoverExternalTools");
   button.disabled=true;
-  get("externalDiscoveryIntro").hidden=true;
   get("externalDiscoveryProgress").hidden=false;
-  setStep("discover");
   externalDiscoveryStatus.textContent="Connecting to MCP server…";
   try{
    const token=dialog.querySelector('input[name="__RequestVerificationToken"]')?.value;
@@ -187,7 +174,7 @@
    const tools=Array.isArray(result.tools)?result.tools:[];
    for(const tool of tools){
     const label=document.createElement("label");
-    label.className="flex items-start gap-3 rounded-lg bg-raised p-3";
+    label.className="flex cursor-pointer items-start gap-3 p-4 hover:bg-hover";
     const checkbox=document.createElement("input");
     checkbox.type="checkbox";checkbox.className="mt-1";checkbox.checked=true;
     const info=document.createElement("span");info.className="grid gap-1";
@@ -197,13 +184,11 @@
    }
    get("externalFoundCount").textContent="("+tools.length+")";
    externalDiscoveredPanel.hidden=tools.length===0;
-   setStep(tools.length?"select":"discover");
    updateSelection();
-   externalDiscoveryStatus.textContent=tools.length?tools.length+" tools discovered. Select tools to prepare for registration.":"No tools returned by this server.";
+   externalDiscoveryStatus.textContent=tools.length?"Choose the tools you want to add. Registration is not implemented yet.":"No tools returned by this server.";
    button.textContent="Discover Again";
   }catch(error){
-   setStep("connect");
-   externalDiscoveryStatus.textContent=error.message||"Discovery failed.";
+    externalDiscoveryStatus.textContent=error.message||"Discovery failed.";
    button.textContent="Retry Discovery";
   }finally{get("externalDiscoveryProgress").hidden=true;button.disabled=false;}
  });
