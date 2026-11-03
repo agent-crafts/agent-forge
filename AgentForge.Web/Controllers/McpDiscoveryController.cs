@@ -40,6 +40,7 @@ public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logge
         using var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(12) };
         try
         {
+            string negotiatedVersion = "2025-03-26";
             using var init = await SendAsync("initialize", new
             {
                 protocolVersion = "2025-03-26", capabilities = new { },
@@ -48,7 +49,6 @@ public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logge
             if (init.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
                 return StatusCode(401, new { error = "Authentication-required MCP discovery is not supported yet." });
             if (!init.IsSuccessStatusCode) return BadRequest(new { error = "MCP initialize failed.", status = (int)init.StatusCode });
-            string negotiatedVersion;
             using (var document = await ParseAsync(init, cancellationToken))
             {
                 if (!document.RootElement.TryGetProperty("result", out var result) ||
