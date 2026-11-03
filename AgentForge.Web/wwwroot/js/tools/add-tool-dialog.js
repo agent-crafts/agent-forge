@@ -119,7 +119,7 @@
  });
  dialog.querySelectorAll("[data-modal-close], [data-tool-close], #closeAddToolDialog, #cancelAddToolDialog").forEach(b=>b.addEventListener("click",()=>dialog.close()));
  dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>r.addEventListener("change",update));
- get("externalToolSource").addEventListener("change",()=>{const integration=get("externalToolSource").value==="integration";get("externalEndpointField").hidden=integration;get("externalIntegrationField").hidden=!integration;});
+ 
  const externalDiscoveryStatus=get("externalDiscoveryStatus");
  const externalDiscoveredPanel=get("externalDiscoveredPanel");
  const externalList=get("externalDiscoveredList");
@@ -132,7 +132,6 @@
  };
  get("externalToolSource").addEventListener("change",resetExternalDiscovery);
  get("externalToolEndpoint").addEventListener("input",resetExternalDiscovery);
- get("externalToolIntegration").addEventListener("change",resetExternalDiscovery);
  get("discoverExternalTools").addEventListener("click",event=>{
   event.preventDefault();
   resetExternalDiscovery();
