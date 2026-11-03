@@ -132,10 +132,43 @@
  };
  get("externalToolSource").addEventListener("change",resetExternalDiscovery);
  get("externalToolEndpoint").addEventListener("input",resetExternalDiscovery);
- get("discoverExternalTools").addEventListener("click",event=>{
+ get("discoverExternalTools").addEventListener("click",async event=>{
   event.preventDefault();
   resetExternalDiscovery();
-  externalDiscoveryStatus.textContent="Discovery requires a validated server-side connector. No external endpoint was contacted.";
+  const endpoint=get("externalToolEndpoint").value.trim();
+  try{
+   const url=new URL(endpoint);
+   if(url.protocol!=="https:"||url.username||url.password||url.port&&url.port!=="443")throw Error();
+  }catch{externalDiscoveryStatus.textContent="Enter a valid public HTTPS MCP endpoint.";return;}
+  const button=get("discoverExternalTools");
+  button.disabled=true;
+  externalDiscoveryStatus.textContent="Discovering tools…";
+  try{
+   const token=dialog.querySelector('input[name="__RequestVerificationToken"]')?.value;
+   const response=await fetch("/api/tools/mcp/discover",{
+    method:"POST",credentials:"same-origin",
+    headers:{"Content-Type":"application/json",...(token?{"RequestVerificationToken":token}:{})},
+    body:JSON.stringify({endpoint})
+   });
+   const result=await response.json();
+   if(!response.ok)throw new Error(result.error||"Discovery failed.");
+   const tools=Array.isArray(result.tools)?result.tools:[];
+   for(const tool of tools){
+    const label=document.createElement("label");
+    label.className="flex items-start gap-3 rounded-lg bg-raised p-3";
+    const checkbox=document.createElement("input");
+    checkbox.type="checkbox";checkbox.className="mt-1";checkbox.checked=true;
+    const info=document.createElement("span");info.className="grid gap-1";
+    const name=document.createElement("strong");name.className="text-sm text-heading";name.textContent=tool.name;
+    const description=document.createElement("span");description.className="text-xs text-muted";description.textContent=tool.description||"No description provided.";
+    info.append(name,description);label.append(checkbox,info);externalList.append(label);
+   }
+   externalDiscoveredPanel.hidden=tools.length===0;
+   get("externalSelectAll").checked=tools.length>0;
+   get("externalSelectedCount").textContent=tools.length+" selected";
+   externalDiscoveryStatus.textContent=tools.length+" tools discovered. Registration is not available yet.";
+  }catch(error){externalDiscoveryStatus.textContent=error.message||"Discovery failed.";}
+  finally{button.disabled=false;}
  });
  get("externalSelectAll").addEventListener("change",event=>{
   externalList.querySelectorAll('input[type="checkbox"]').forEach(input=>{input.checked=event.target.checked;});
