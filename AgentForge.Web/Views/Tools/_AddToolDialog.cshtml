@@ -67,29 +67,18 @@
             </section>
             <section data-tool-panel="external" aria-label="MCP tool discovery" hidden>
                 <input type="hidden" id="externalToolSource" value="mcpserver" />
-                <div class="mb-4">
-                    <label class="mb-1.5 block text-[13px] font-medium text-heading" for="externalToolEndpoint">MCP Server Endpoint <span class="ui-required-mark">*</span></label>
-                    <div class="flex flex-wrap items-center gap-2">
-                        <input class="ui-input min-w-0 flex-1 text-[13px]" id="externalToolEndpoint" type="url" placeholder="https://docs.mcp.cloudflare.com/mcp" />
-                        <button type="button" id="discoverExternalTools" class="ui-button shrink-0 px-3 py-2 text-[13px] font-medium">Discover tools</button>
-                    </div>
-                    <p id="externalDiscoveryStatus" class="mt-2 text-xs font-normal leading-5 text-muted" role="status" aria-live="polite">Enter a public HTTPS MCP endpoint to find available tools.</p>
-                    <div id="externalDiscoveryProgress" class="mt-2 flex items-center gap-2 text-xs text-muted" hidden>
-                        <span class="inline-block size-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden="true"></span>
-                        Connecting to MCP server…
-                    </div>
-                </div>
-                <div id="externalDiscoveredPanel" class="overflow-hidden rounded-lg border border-[var(--border)]" hidden>
-                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] bg-raised px-3 py-2">
-                        <h3 class="text-[13px] font-semibold leading-5 text-heading">Tools <span id="externalFoundCount" class="font-normal text-muted"></span></h3>
-                        <div class="flex flex-wrap items-center gap-3">
-                            <input class="ui-input h-8 w-44 text-xs" id="externalToolSearch" type="search" placeholder="Search tools…" aria-label="Search tools" />
-                            <label class="inline-flex cursor-pointer items-center gap-1.5 text-xs font-normal text-muted">Select all <input id="externalSelectAll" type="checkbox" /></label>
-                        </div>
-                    </div>
-                    <div id="externalDiscoveredList" class="max-h-72 overflow-y-auto divide-y divide-[var(--border)]" role="group" aria-label="Discovered tools"></div>
-                    <p id="externalSearchEmpty" class="px-3 py-6 text-center text-xs text-muted" hidden>No tools match your search.</p>
-                    <div class="border-t border-[var(--border)] px-3 py-2 text-xs font-normal text-muted"><span id="externalSelectedCount">0 selected</span></div>
+                <label for="externalToolEndpoint">MCP Server Endpoint</label>
+                <input id="externalToolEndpoint" type="url" placeholder="https://docs.mcp.cloudflare.com/mcp" />
+                <button type="button" id="discoverExternalTools">Discover tools</button>
+                <p id="externalDiscoveryStatus" role="status" aria-live="polite">Enter a public HTTPS MCP endpoint to find available tools.</p>
+                <div id="externalDiscoveryProgress" hidden>Connecting to MCP server…</div>
+                <div id="externalDiscoveredPanel" hidden>
+                    <h3>Tools <span id="externalFoundCount"></span></h3>
+                    <input id="externalToolSearch" type="search" placeholder="Search tools…" aria-label="Search tools" />
+                    <label><input id="externalSelectAll" type="checkbox" /> Select all</label>
+                    <div id="externalDiscoveredList" role="group" aria-label="Discovered tools"></div>
+                    <p id="externalSearchEmpty" hidden>No tools match your search.</p>
+                    <p id="externalSelectedCount">0 selected</p>
                 </div>
             </section>
             <p id="addToolFeedback" class="mt-4 min-h-5 text-[13px] ui-field-error" role="status" aria-live="polite"></p>
