@@ -48,18 +48,29 @@ public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logge
             if (init.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
                 return StatusCode(401, new { error = "Authentication-required MCP discovery is not supported yet." });
             if (!init.IsSuccessStatusCode) return BadRequest(new { error = "MCP initialize failed.", status = (int)init.StatusCode });
+            string negotiatedVersion;
             using (var document = await ParseAsync(init, cancellationToken))
-                if (!document.RootElement.TryGetProperty("result", out var result) || !result.TryGetProperty("protocolVersion", out _))
+            {
+                if (!document.RootElement.TryGetProperty("result", out var result) ||
+                    !result.TryGetProperty("protocolVersion", out var version) || version.ValueKind != JsonValueKind.String ||
+                    string.IsNullOrWhiteSpace(version.GetString()))
                     return BadRequest(new { error = "Invalid MCP initialize response." });
+                negotiatedVersion = version.GetString()!;
+            }
 
             var session = init.Headers.TryGetValues("Mcp-Session-Id", out var values) ? values.FirstOrDefault() : null;
             using (var message = new HttpRequestMessage(HttpMethod.Post, endpoint))
             {
-                message.Headers.TryAddWithoutValidation("MCP-Protocol-Version", "2025-03-26");
+                message.Headers.TryAddWithoutValidation("Accept", "application/json, text/event-stream");
+                message.Headers.TryAddWithoutValidation("MCP-Protocol-Version", negotiatedVersion);
                 if (session is not null) message.Headers.TryAddWithoutValidation("Mcp-Session-Id", session);
                 message.Content = new StringContent("{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}", Encoding.UTF8, "application/json");
                 using var notification = await client.SendAsync(message, cancellationToken);
-                if (!notification.IsSuccessStatusCode) return BadRequest(new { error = "MCP initialization notification failed." });
+                if (!notification.IsSuccessStatusCode)
+                {
+                    logger.LogWarning("MCP initialized notification rejected by {Host} with HTTP {Status}", endpoint.Host, (int)notification.StatusCode);
+                    return BadRequest(new { error = "MCP initialization notification failed.", status = (int)notification.StatusCode });
+                }
             }
 
             var discovered = new List<object>();
@@ -90,7 +101,7 @@ public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logge
             {
                 using var message = new HttpRequestMessage(HttpMethod.Post, endpoint);
                 message.Headers.TryAddWithoutValidation("Accept", "application/json, text/event-stream");
-                message.Headers.TryAddWithoutValidation("MCP-Protocol-Version", "2025-03-26");
+                message.Headers.TryAddWithoutValidation("MCP-Protocol-Version", negotiatedVersion);
                 if (sessionId is not null) message.Headers.TryAddWithoutValidation("Mcp-Session-Id", sessionId);
                 message.Content = new StringContent(JsonSerializer.Serialize(new { jsonrpc = "2.0", id, method, @params = parameters }), Encoding.UTF8, "application/json");
                 return await client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
