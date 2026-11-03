@@ -51,7 +51,8 @@ public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logge
             var description = tool.GetProperty("description").GetString() ?? "";
             var schema = tool.GetProperty("inputSchema").GetRawText();
             var configuration = JsonSerializer.Serialize(new { endpoint = request.Endpoint, toolName = name });
-            items.Add(new ImportMcpToolItem(persistedName, name, description, schema, configuration));
+            var displayName = System.Globalization.CultureInfo.InvariantCulture.TextInfo.ToTitleCase(name.Replace("_", " ").ToLowerInvariant());
+            items.Add(new ImportMcpToolItem(persistedName, displayName, description, schema, configuration));
         }
 
         try
