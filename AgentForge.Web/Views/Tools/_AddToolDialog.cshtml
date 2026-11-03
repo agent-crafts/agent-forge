@@ -68,19 +68,10 @@
             <section data-tool-panel="external" class="grid gap-2.5 [&_.ui-input]:w-full [&_.ui-select]:w-full [&_.ui-input]:min-w-0 [&_.ui-select]:min-w-0" aria-label="External tool configuration" hidden>
                 
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolSource">Source type</label>
-                <select class="ui-select" id="externalToolSource">
-                    @foreach (var sourceType in Enum.GetValues<ExternalToolSourceType>())
-                    {
-                        <option value="@sourceType.ToString().ToLowerInvariant()">@enumLabel(sourceType)</option>
-                    }
-                </select>
+                <select class="ui-select" id="externalToolSource"><option value="mcpserver">MCP Server</option></select>
                 <div id="externalEndpointField">
-                    <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolEndpoint">Specification URL / server endpoint</label>
-                    <input class="ui-input" id="externalToolEndpoint" type="url" placeholder="https://example.com/openapi.json" />
-                </div>
-                <div id="externalIntegrationField" hidden>
-                    <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolIntegration">Integration</label>
-                    <select class="ui-select" id="externalToolIntegration"><option value="">Choose an integration</option><option value="github">GitHub</option><option value="jira">Jira</option></select>
+                    <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolEndpoint">MCP server endpoint</label>
+                    <input class="ui-input" id="externalToolEndpoint" type="url" placeholder="https://example.com/mcp" />
                 </div>
                 <div class="rounded-lg bg-raised p-3 text-[13px] text-muted">Discover and select reusable tool definitions. Runtime configuration and credentials are supplied later per agent or Try Now.</div>
                 <div class="flex items-center gap-3"><ui-button id="discoverExternalTools" variant="secondary">Discover tools</ui-button><span id="externalDiscoveryStatus" role="status" aria-live="polite" class="text-[13px] text-muted">Not discovered</span></div>
