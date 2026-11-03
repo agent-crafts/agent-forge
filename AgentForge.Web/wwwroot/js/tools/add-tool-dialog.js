@@ -188,17 +188,33 @@
    for(const tool of tools){
     const row=document.createElement("label");
     row.dataset.mcpToolRow="";
+    row.className="flex cursor-pointer items-center gap-3 rounded-lg border border-[var(--border)] bg-raised px-3 py-3";
     const checkbox=document.createElement("input");
     checkbox.type="checkbox";
+    checkbox.className="shrink-0";
     checkbox.checked=true;
     const content=document.createElement("span");
+    content.className="flex min-w-0 flex-1 flex-col gap-1";
     const name=document.createElement("span");
+    name.className="block truncate text-[13px] font-semibold text-heading";
     name.textContent=tool.name;
     name.title=tool.name;
     const description=document.createElement("span");
-    description.textContent=" — "+(tool.description||"No description provided.");
+    description.className="block truncate text-[13px] leading-5 text-muted";
+    description.textContent=tool.description||"No description provided.";
+    description.title=tool.description||"No description provided.";
     content.append(name,description);
-    row.append(checkbox,content);
+    const keywords=String(tool.name||"").toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+    const tag=keywords.find(word=>word==="read"||word==="write");
+    if(tag){
+     const badge=document.createElement("span");
+     badge.className="shrink-0 rounded-md bg-[var(--active)] px-2 py-1 text-[11px] font-medium text-muted";
+     badge.textContent=tag==="read"?"Read":"Write";
+     badge.title="Keyword from tool name";
+     row.append(checkbox,content,badge);
+    }else{
+     row.append(checkbox,content);
+    }
     externalList.append(row);
    }
    get("externalFoundCount").textContent="("+tools.length+")";
