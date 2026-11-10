@@ -6,6 +6,8 @@
 >
 > **Update policy:** Update this file at the end of each meaningful learning module, implementation milestone, or mastery assessment. Do not mark a skill mastered based only on discussion or a merged PR.
 
+**MCP response size fix (2026-11-10, PR #27):** Increased the bounded MCP HTTP response allowance from 1 MiB to 8 MiB and introduced a distinct `mcp_response_too_large` failure. Committed to the existing PR branch; build, protocol regression tests, and live DeepWiki Try Now retry remain unverified. This is a bounded mitigation, not streaming/pagination of large tool results; mastery not assessed.
+
 **MCP execution Phase 1 (2026-11-03, feature/mcp-tool-execution):** Implemented initial guarded Streamable HTTP MCP client (`initialize`, initialized notification, `tools/call`), external MCP execution adapter, and DI gateway registration. User manually confirmed earlier discovery/import flow works. Execution build, automated tests, real MCP calls, auth review and browser verification remain pending; mastery not assessed. Next: verify against a real MCP endpoint, add protocol/error tests, review security and refine SSE handling before merge.
 
 **MCP discovery controller cleanup (2026-11-03, PR #26):** Extracted MCP transport/discovery into scoped typed `McpDiscoveryService`; both discover and import reuse the same service, removing controller-action invocation and JSON round-trip. Preserved API routes and MCP execution deferral. Committed; build, protocol, database, and browser verification pending; mastery not assessed.
