@@ -149,3 +149,15 @@
 /* Consistent borderless button focus across the app shell. */
 button:focus-visible,[role="button"]:focus-visible{outline:none!important;box-shadow:none!important}
 button:focus-visible:not(:disabled){filter:brightness(.9)}
+
+/* All standard workspace pages: scroll header and content together while keeping the sidebar intact. */
+.shell:has(.page-content) > .main { overflow-y: auto; min-height: 0; }
+.shell:has(.page-content) > .main > .topbar { flex: none; }
+.shell:has(.page-content) > .main > .page-content { flex: none; overflow: visible; }
+
+/* Agent Details: keep the viewport from becoming a second scroll container.
+   The main workspace remains the sole page-content scroller. */
+body:has(#agentPlaygroundPanel) { height: 100dvh; overflow: hidden; }
+body:has(#agentPlaygroundPanel) > .shell,
+body:has(#agentPlaygroundPanel) .shell { height: 100dvh; min-height: 0; }
+body:has(#agentPlaygroundPanel) .main { min-height: 0; }
