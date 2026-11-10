@@ -2,7 +2,7 @@
 @{
     var assignedToolCount = (ViewData["AssignedAgentToolIds"] as HashSet<Guid>)?.Count ?? 0;
 }
-<section class="ui-panel agent-playground" aria-labelledby="agentPlaygroundHeading" data-agent-id="@Model.Id">
+<section class="ui-panel agent-playground mt-6" aria-labelledby="agentPlaygroundHeading" data-agent-id="@Model.Id">
     <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
             <h2 id="agentPlaygroundHeading">Playground</h2>
