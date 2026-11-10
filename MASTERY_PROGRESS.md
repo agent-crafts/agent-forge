@@ -6,6 +6,8 @@
 >
 > **Update policy:** Update this file at the end of each meaningful learning module, implementation milestone, or mastery assessment. Do not mark a skill mastered based only on discussion or a merged PR.
 
+**GPT-4o provider configuration (2026-11-10, feature/openai-gpt-4o-configuration):** Configured default OpenAI GPT-4o endpoint and model, added environment/user-secrets API key resolution and Bearer authentication, and documented local setup. Code committed on feature branch; build, tests and live API verification pending. Agent tool-calling runtime remains unimplemented; mastery not assessed.
+
 **MCP response size fix (2026-11-10, PR #27):** Increased the bounded MCP HTTP response allowance from 1 MiB to 8 MiB and introduced a distinct `mcp_response_too_large` failure. Committed to the existing PR branch; build, protocol regression tests, and live DeepWiki Try Now retry remain unverified. This is a bounded mitigation, not streaming/pagination of large tool results; mastery not assessed.
 
 **MCP execution Phase 1 (2026-11-03, feature/mcp-tool-execution):** Implemented initial guarded Streamable HTTP MCP client (`initialize`, initialized notification, `tools/call`), external MCP execution adapter, and DI gateway registration. User manually confirmed earlier discovery/import flow works. Execution build, automated tests, real MCP calls, auth review and browser verification remain pending; mastery not assessed. Next: verify against a real MCP endpoint, add protocol/error tests, review security and refine SSE handling before merge.
