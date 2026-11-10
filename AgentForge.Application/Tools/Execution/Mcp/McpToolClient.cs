@@ -10,7 +10,8 @@ namespace AgentForge.Application.Tools.Execution.Mcp;
 /// <summary>Executes a single Streamable HTTP MCP tool call against a public HTTPS endpoint.</summary>
 public sealed class McpToolClient
 {
-    private const int MaxResponseBytes = 1_048_576;
+    // Allow larger tool results while retaining a strict transport-level memory bound.
+    private const int MaxResponseBytes = 8 * 1024 * 1024;
 
     public async Task<JsonElement> CallAsync(Uri endpoint, string toolName, JsonElement arguments, CancellationToken cancellationToken)
     {
@@ -165,7 +166,10 @@ public sealed class McpToolClient
             (entry.TryGetProperty("result", out _) || entry.TryGetProperty("error", out _));
     }
 
-    internal sealed class ProtocolException(string operation, string reason)
+    internal sealed class ResponseTooLargeException(string operation)
+        : ProtocolException(operation, "The response exceeded the 8 MiB safety limit.");
+
+    internal class ProtocolException(string operation, string reason)
         : Exception($"MCP {operation}: {reason}");
 
     private sealed class ResponseStream(Stream source, string operation) : Stream
@@ -176,7 +180,7 @@ public sealed class McpToolClient
         {
             var read = await source.ReadAsync(buffer[..Math.Min(buffer.Length, _remaining + 1)], cancellationToken);
             _remaining -= read;
-            if (_remaining < 0) throw new ProtocolException(operation, "The response exceeded 1 MiB.");
+            if (_remaining < 0) throw new ResponseTooLargeException(operation);
             return read;
         }
 
