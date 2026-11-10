@@ -67,6 +67,14 @@
             </section>
             <section data-tool-panel="external" class="grid gap-2.5" aria-label="MCP tool discovery" hidden>
                 <input type="hidden" id="externalToolSource" value="mcpserver" />
+                <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolCategory">Category <span class="ui-required-mark" aria-hidden="true">*</span></label>
+                <select class="ui-select" id="externalToolCategory" name="externalCategory" required aria-required="true">
+                    @foreach (var category in Enum.GetValues<ToolCategory>())
+                    {
+                        <option value="@category.ToString().ToLowerInvariant()" selected="@(category == ToolCategory.Integration)">@enumLabel(category)</option>
+                    }
+                </select>
+                <p class="text-[13px] text-muted">Category applied to all selected imported tools.</p>
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="externalToolEndpoint">MCP Server Endpoint</label>
                 <div class="flex items-center gap-2">
                     <input class="ui-input min-w-0 flex-1" id="externalToolEndpoint" type="url" placeholder="https://docs.mcp.cloudflare.com/mcp" />
