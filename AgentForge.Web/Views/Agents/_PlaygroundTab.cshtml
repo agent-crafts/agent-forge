@@ -15,16 +15,16 @@
         <span class="ui-tool-card-badge">@assignedToolCount assigned tools</span>
         <span class="ui-tool-card-badge">Runtime not connected</span>
     </div>
-    <div class="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-3">
-        <div class="xl:col-span-2 flex min-w-0 flex-col rounded-xl border border-line bg-surface">
-            <div class="flex min-h-80 flex-col gap-3 p-4" data-playground-messages role="log" aria-live="polite" aria-label="Playground conversation">
+    <div class="mt-4 grid min-h-0 grid-cols-1 gap-4 xl:grid-cols-3" data-playground-layout>
+        <div class="xl:col-span-2 flex min-h-0 min-w-0 flex-col rounded-xl border border-line bg-surface">
+            <div class="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4" data-playground-messages role="log" aria-live="polite" aria-label="Playground conversation">
                 <div class="m-auto max-w-md text-center" data-playground-welcome>
                     <div class="mb-3 text-2xl" aria-hidden="true">✦</div>
                     <h3 class="font-semibold text-heading">Start a conversation</h3>
                     <p class="mt-2 text-sm text-muted">Your messages will appear here. Agent execution will become available when the runtime API is integrated.</p>
                 </div>
             </div>
-            <form class="border-t border-line p-3" data-playground-form>
+            <form class="shrink-0 border-t border-line p-3" data-playground-form>
                 <label for="agentPlaygroundMessage" class="sr-only">Message your agent</label>
                 <textarea id="agentPlaygroundMessage" rows="3" maxlength="8000" class="w-full resize-y rounded-xl border border-line bg-surface px-3 py-2 text-sm text-content" placeholder="Ask your agent anything..." data-playground-input></textarea>
                 <div class="mt-2 flex items-center justify-between gap-3">
@@ -33,7 +33,7 @@
                 </div>
             </form>
         </div>
-        <aside class="min-w-0 rounded-xl border border-line bg-surface p-4" aria-labelledby="playgroundTraceHeading">
+        <aside class="min-h-0 min-w-0 overflow-y-auto rounded-xl border border-line bg-surface p-4" aria-labelledby="playgroundTraceHeading">
             <h3 id="playgroundTraceHeading" class="font-semibold text-heading">Execution trace</h3>
             <p class="mt-1 text-xs text-muted">Tool calls, arguments, results and errors will appear here after a run.</p>
             <div class="mt-5 rounded-xl border border-dashed border-line p-5 text-center text-sm text-muted" data-playground-trace-empty>
