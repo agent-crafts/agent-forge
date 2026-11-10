@@ -57,6 +57,11 @@ public sealed class McpToolExecutionAdapter(McpToolClient client, ILogger<McpToo
                 : "Could not connect to the MCP server.";
             return ToolExecutionResult.Fail("mcp_execution_failed", message);
         }
+        catch (McpToolClient.ProtocolException ex)
+        {
+            logger.LogWarning("MCP protocol failure for tool {ToolId} at {Host}: {Reason}", tool.Id, endpointHost, ex.Message);
+            return ToolExecutionResult.Fail("mcp_execution_failed", ex.Message);
+        }
         catch (Exception ex) when (ex is JsonException or IOException or InvalidDataException or InvalidOperationException)
         {
             logger.LogWarning("MCP execution failed for tool {ToolId} at {Host}: {ErrorType}", tool.Id, endpointHost, ex.GetType().Name);

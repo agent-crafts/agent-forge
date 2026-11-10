@@ -100,8 +100,8 @@
 | Current learning module | Module 03 preparation — Tool Engineering lab (MCP execution) |
 | Current engineering milestone | DeepWiki import verified by the user. Draft PR #27 adds MCP execution and Try Now, including SSE response correlation and distinct failure messages. Local .NET build and protocol checks passed. A live call through the application still needs a successful retry. |
 | Current mastery assessment | Not assessed |
-| Next recommended action | Restart AgentForge on the latest branch and retry DeepWiki `read_wiki_structure` from Try Now. If it fails, use the updated response and the `McpToolExecutionAdapter` warning to identify the failure. |
-| Last progress review | 2026-11-10 — fixed and verified MCP response matching; live .NET protocol probe returned DeepWiki content through the environment proxy. |
+| Next recommended action | Restart AgentForge on the latest branch and retry DeepWiki `read_wiki_structure` from Try Now. If it fails, use the response's MCP operation and reason to isolate the failure. |
+| Last progress review | 2026-11-10 — the user reproduced a response-validation failure; added operation-specific diagnostics for the next retry. |
 
 **Agents Gallery design update (2026-10-25):** Cards now reuse the Tools gallery's shared `ui-item-card`, `ui-icon-tile`, `ui-item-content`, and badge styles in a two-column grid on draft PR #19. Static preview only; build and browser verification pending. No mastery assessment evidence.
 
@@ -152,6 +152,7 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Engineering:** CI build passed; local .NET build (Tailwind skipped) and all migrations on disposable PostgreSQL passed. A direct Cloudflare documentation search returned results. AgentForge import returned 502 in this environment, so a test-only external tool was seeded through Create. Execute rejected a missing `query` with `400 invalid_input`; a valid query reached the adapter and returned `400 mcp_execution_failed`. An isolated client call reported a socket error on direct connection to the same endpoint.
 - **Try Now:** Uses editable JSON initialized from the existing schema example, the shared JSON viewer and the existing antiforgery-protected execution endpoint. Local .NET/Tailwind build and Chromium smoke checks passed for keyboard navigation, JSON validation, mobile light/dark visibility and existing Try Now variants. The real API rejected a missing required argument. Success and network failure used intercepted browser responses. The user confirmed DeepWiki import. Live Try Now remains to be verified.
 - **Execution fix:** The user reported `mcp_execution_failed` from Try Now. The client now finds the matching JSON-RPC response in SSE without waiting for EOF, enforces a 1 MiB cap and 30-second overall deadline, and logs safe transport diagnostics. .NET fixtures covered notifications, wrong IDs, multiline events, open streams, size and cancellation. A live .NET protocol probe via the environment proxy returned DeepWiki wiki sections. The application API still encounters direct DNS failure in this environment, so the user-side cause and successful application retry are pending.
+- **Response diagnosis:** The user reproduced `InvalidDataException` at `mcp.deepwiki.com`. Execution now reports whether `initialize` or `tools/call` failed and identifies the reason, including any numeric JSON-RPC error code. The upstream message and payload remain private. The exact user-side failure is pending a retry with the new diagnostics.
 - **Mastery:** Not assessed.
 
 ### Module 00 — Agent domain and persistence

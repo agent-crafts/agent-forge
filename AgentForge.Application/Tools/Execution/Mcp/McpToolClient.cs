@@ -51,12 +51,11 @@ public sealed class McpToolClient
             clientInfo = new { name = "AgentForge", version = "0.1" }
         }, 1, null);
         initialize.EnsureSuccessStatusCode();
-        var response = await ReadResponseAsync(initialize, 1, cancellationToken);
-        if (!response.TryGetProperty("result", out var result) || result.ValueKind != JsonValueKind.Object ||
-            !result.TryGetProperty("protocolVersion", out var protocolVersion) ||
+        var result = await ReadResultAsync(initialize, 1, "initialize", cancellationToken);
+        if (!result.TryGetProperty("protocolVersion", out var protocolVersion) ||
             protocolVersion.ValueKind != JsonValueKind.String ||
             string.IsNullOrWhiteSpace(protocolVersion.GetString()))
-            throw new InvalidDataException("Invalid MCP initialize response.");
+            throw new ProtocolException("initialize", "The result does not specify a protocol version.");
         version = protocolVersion.GetString()!;
         var session = initialize.Headers.TryGetValues("Mcp-Session-Id", out var values)
             ? values.FirstOrDefault() : null;
@@ -73,13 +72,7 @@ public sealed class McpToolClient
 
         using var call = await SendAsync("tools/call", new { name = toolName, arguments }, 2, session);
         call.EnsureSuccessStatusCode();
-        var callResponse = await ReadResponseAsync(call, 2, cancellationToken);
-        if (callResponse.TryGetProperty("error", out _))
-            throw new InvalidDataException("MCP server returned a JSON-RPC error.");
-        if (!callResponse.TryGetProperty("result", out var toolResult) ||
-            toolResult.ValueKind != JsonValueKind.Object)
-            throw new InvalidDataException("Invalid MCP tools/call response.");
-        return toolResult;
+        return await ReadResultAsync(call, 2, "tools/call", cancellationToken);
 
         async Task<HttpResponseMessage> SendAsync(string method, object parameters, int id, string? sessionId)
         {
@@ -100,11 +93,43 @@ public sealed class McpToolClient
         }
     }
 
+    private static async Task<JsonElement> ReadResultAsync(
+        HttpResponseMessage response, int requestId, string operation, CancellationToken cancellationToken)
+    {
+        JsonElement message;
+        try
+        {
+            message = await ReadResponseAsync(response, requestId, operation, cancellationToken);
+        }
+        catch (JsonException)
+        {
+            throw new ProtocolException(operation, "The response contains invalid JSON.");
+        }
+        catch (Exception ex) when (ex is IOException or InvalidDataException)
+        {
+            throw new ProtocolException(operation, $"The HTTP response body could not be read ({ex.GetType().Name}).");
+        }
+
+        if (message.TryGetProperty("error", out var error))
+        {
+            var code = error.ValueKind == JsonValueKind.Object && error.TryGetProperty("code", out var value) &&
+                value.ValueKind == JsonValueKind.Number && value.TryGetInt32(out var number) ? (int?)number : null;
+            throw new ProtocolException(operation, code is { } remoteCode
+                ? $"The server returned JSON-RPC error {remoteCode}."
+                : "The server returned a JSON-RPC error without a numeric code.");
+        }
+
+        var result = message.GetProperty("result");
+        if (result.ValueKind != JsonValueKind.Object)
+            throw new ProtocolException(operation, "The JSON-RPC result is not an object.");
+        return result;
+    }
+
     private static async Task<JsonElement> ReadResponseAsync(
-        HttpResponseMessage response, int requestId, CancellationToken cancellationToken)
+        HttpResponseMessage response, int requestId, string operation, CancellationToken cancellationToken)
     {
         await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-        using var boundedStream = new ResponseStream(stream);
+        using var boundedStream = new ResponseStream(stream, operation);
         if (response.Content.Headers.ContentType?.MediaType == "text/event-stream")
         {
             await foreach (var item in SseParser.Create(boundedStream).EnumerateAsync(cancellationToken))
@@ -114,15 +139,13 @@ public sealed class McpToolClient
                 if (FindResponse(document.RootElement, requestId) is { } match)
                     return match.Clone();
             }
-        }
-        else
-        {
-            using var document = await JsonDocument.ParseAsync(boundedStream, cancellationToken: cancellationToken);
-            if (FindResponse(document.RootElement, requestId) is { } match)
-                return match.Clone();
+            throw new ProtocolException(operation, $"The event stream ended before a JSON-RPC response with ID {requestId} arrived.");
         }
 
-        throw new InvalidDataException("MCP response did not match the JSON-RPC request ID.");
+        using var json = await JsonDocument.ParseAsync(boundedStream, cancellationToken: cancellationToken);
+        if (FindResponse(json.RootElement, requestId) is { } responseMatch)
+            return responseMatch.Clone();
+        throw new ProtocolException(operation, $"The JSON body did not contain a response with ID {requestId}.");
     }
 
     private static JsonElement? FindResponse(JsonElement message, int requestId)
@@ -142,7 +165,10 @@ public sealed class McpToolClient
             (entry.TryGetProperty("result", out _) || entry.TryGetProperty("error", out _));
     }
 
-    private sealed class ResponseStream(Stream source) : Stream
+    internal sealed class ProtocolException(string operation, string reason)
+        : Exception($"MCP {operation}: {reason}");
+
+    private sealed class ResponseStream(Stream source, string operation) : Stream
     {
         private int _remaining = MaxResponseBytes;
 
@@ -150,7 +176,7 @@ public sealed class McpToolClient
         {
             var read = await source.ReadAsync(buffer[..Math.Min(buffer.Length, _remaining + 1)], cancellationToken);
             _remaining -= read;
-            if (_remaining < 0) throw new InvalidDataException("MCP response exceeds 1 MiB.");
+            if (_remaining < 0) throw new ProtocolException(operation, "The response exceeded 1 MiB.");
             return read;
         }
 
