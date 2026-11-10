@@ -5,7 +5,6 @@
     const category = panel.querySelector('[data-agent-tool-category]');
     const rows = [...panel.querySelectorAll('[data-agent-tool-row]')];
     const save = panel.querySelector('[data-agent-tools-save]');
-    const status = panel.querySelector('[data-agent-tools-status]');
     const filter = () => {
         const q = search.value.trim().toLowerCase();
         let visible = 0;
@@ -21,7 +20,6 @@
     category.addEventListener('change', filter);
     save.addEventListener('click', async () => {
         save.disabled = true;
-        status.textContent = 'Saving...';
         const toolIds = [...panel.querySelectorAll('[data-agent-tool-toggle]:checked')].map(x => x.value);
         const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
         try {
@@ -34,9 +32,9 @@
                 const body = await response.json().catch(() => ({}));
                 throw new Error(body.error || 'Could not save agent tools.');
             }
-            status.textContent = 'Tool assignments saved.';
+            window.AgentForgeToast?.show({ type: 'success', title: 'Tools saved', message: 'Tool assignments saved.' });
         } catch (error) {
-            status.textContent = error.message;
+            window.AgentForgeToast?.show({ type: 'error', title: 'Unable to save tools', message: error.message || 'Could not save agent tools.' });
         } finally {
             save.disabled = false;
         }
