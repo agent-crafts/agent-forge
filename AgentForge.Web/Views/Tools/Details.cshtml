@@ -23,7 +23,8 @@
         foreach (var property in properties.EnumerateObject())
         {
             var value = property.Value;
-            var type = value.TryGetProperty("type", out var typeElement) ? typeElement.GetString() : "string";
+            var type = value.ValueKind == JsonValueKind.Object && value.TryGetProperty("type", out var typeElement)
+                && typeElement.ValueKind == JsonValueKind.String ? typeElement.GetString() : null;
             example[property.Name] = type switch
             {
                 "integer" => value.TryGetProperty("minimum", out var minimum) && minimum.TryGetInt32(out var min) ? Math.Max(1, min) : 1,
@@ -86,7 +87,8 @@
                         @foreach (var property in properties.EnumerateObject())
                         {
                             var parameter = property.Value;
-                            var type = parameter.TryGetProperty("type", out var parameterType) ? parameterType.ToString() : "any";
+                            var type = parameter.ValueKind == JsonValueKind.Object && parameter.TryGetProperty("type", out var parameterType)
+                                ? parameterType.ToString() : "any";
                             <tr><td><code>@property.Name</code></td><td>@type</td><td>@if (required.Contains(property.Name)) { <span class="ui-required">Yes</span> } else { <span>No</span> }</td></tr>
                         }
                         </tbody>
@@ -104,7 +106,7 @@
                 <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="m7 9 3 3-3 3M12 15h5"/></svg></span> Example Input</h2><p>Illustrative values based on the schema; not executed.</p></div><partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, CssClass = "ui-copy", CopyTarget = "tool-example-code" }' /></div>
                 <partial name="_JsonViewer" model='("tool-example-code", (string?)exampleJson)' />
             </section>
-            <p class="ui-footnote">The GitHub issue tool supports a limited read-only test in the Try Now tab. Other tools require an approved execution adapter.</p>
+            <p class="ui-footnote">Open Try Now to see whether this tool can run from the catalog.</p>
         </div>
     </div>
     </div>
@@ -200,6 +202,29 @@
                 </section>
             </div>
         }
+        else if (Model.Kind == "external" && Model.ExecutorKey == "mcp")
+        {
+            <div class="ui-columns">
+                <section class="ui-panel min-w-0">
+                    <h2>Try this MCP tool</h2>
+                    <form id="mcpToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-4 grid gap-4">
+                        @Html.AntiForgeryToken()
+                        <div class="ui-field">
+                            <label class="ui-field-label" for="mcpToolArguments">Arguments (JSON)</label>
+                            <p id="mcpToolArgumentsHint" class="ui-field-hint">Replace the example values with your inputs. Use {} for a tool without arguments.</p>
+                            <textarea id="mcpToolArguments" class="ui-textarea" rows="8" spellcheck="false" aria-describedby="mcpToolArgumentsHint mcpToolArgumentsError">@exampleJson</textarea>
+                            <p id="mcpToolArgumentsError" class="ui-field-error" role="alert" hidden></p>
+                        </div>
+                        <ui-button id="mcpToolRun" variant="primary" type="submit">Run Tool</ui-button>
+                    </form>
+                </section>
+                <section class="ui-panel min-w-0">
+                    <h2>Response</h2>
+                    <p id="mcpToolStatus" class="ui-subtitle" role="status">Not run</p>
+                    <partial name="_JsonViewer" model='("mcpToolResult", (string?)null)' />
+                </section>
+            </div>
+        }
         else
         {
             <div class="rounded-2xl border border-line bg-surface p-6"><h2 class="text-lg font-bold text-heading">Try Now</h2><p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></div>
@@ -254,6 +279,7 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
 <script src="~/js/shared/json-viewer.js" asp-append-version="true"></script>
 <script src="~/js/tools/github-tool-try.js" asp-append-version="true"></script>
 <script src="~/js/tools/http-json-tool-try.js" asp-append-version="true"></script>
+<script src="~/js/tools/mcp-tool-try.js" asp-append-version="true"></script>
 
 <div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@Model.Category" data-tool-kind="@Model.Kind" data-tool-image-url="@Model.ImageUrl" data-tool-schema="@Model.JsonSchema" data-tool-executor-key="@Model.ExecutorKey" data-tool-configuration="@Model.ConfigurationJson"></div>
 <partial name="~/Views/Tools/_AddToolDialog.cshtml" />
