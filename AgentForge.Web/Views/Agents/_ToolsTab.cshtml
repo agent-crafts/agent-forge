@@ -20,12 +20,25 @@
     <div class="agent-tools-list ui-grid grid grid-cols-1 gap-3 lg:grid-cols-2">
         @foreach (var tool in tools)
         {
-            <article class="agent-tool-row ui-item-card flex min-w-0 items-start gap-3 rounded-xl border border-line bg-surface px-3 py-3" data-agent-tool-row data-category="@tool.Category" data-search="@($"{tool.Name} {tool.DisplayName} {tool.Description} {tool.Category}".ToLowerInvariant())">
-                <div class="ui-item-content flex min-w-0 flex-1 flex-col gap-0.5">
-                    <h3 class="ui-item-title break-words text-sm font-semibold text-heading">@tool.DisplayName</h3>
-                    <p class="ui-item-description break-words text-xs leading-5 text-muted">@tool.Description</p>
-                    <span class="ui-tool-card-badge">@tool.Category</span>
-                </div>
+            <article class="agent-tool-row ui-item-card group flex min-w-0 items-start gap-3 rounded-xl border border-line bg-surface px-3 py-3 text-content transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm" data-agent-tool-row data-category="@tool.Category" data-search="@($"{tool.Name} {tool.DisplayName} {tool.Description} {tool.Category}".ToLowerInvariant())">
+                <span aria-hidden="true" class="ui-icon-tile self-start">
+                    @if (!string.IsNullOrWhiteSpace(tool.ImageUrl))
+                    {
+                        <img src="@(tool.ImageUrl.StartsWith("tools/") ? "/api/files/" + tool.ImageUrl : tool.ImageUrl)" alt="" class="h-full w-full object-contain" />
+                    }
+                    else
+                    {
+                        <partial name="_ToolIcon" model='@(tool.Name == "get_github_issue" ? "github" : "wrench")' />
+                    }
+                </span>
+                <span class="ui-item-content flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span class="ui-item-title break-words text-sm font-semibold text-heading">@tool.DisplayName</span>
+                    <span class="ui-item-description block min-w-0 max-w-full truncate text-xs leading-5 text-muted" title="@tool.Description">@tool.Description</span>
+                    <span class="ui-tool-card-badges" aria-label="Tool kind and category">
+                        <span class="ui-tool-card-badge"><span class="ui-tool-card-badge-label">Kind</span> @tool.Kind</span>
+                        <span class="ui-tool-card-badge"><span class="ui-tool-card-badge-label">Category</span> @tool.Category</span>
+                    </span>
+                </span>
                 <label class="agent-tool-toggle">
                     <input type="checkbox" value="@tool.Id" data-agent-tool-toggle checked="@assigned.Contains(tool.Id)" aria-label="Enable @tool.DisplayName" />
                     <span aria-hidden="true"></span>
@@ -34,7 +47,7 @@
         }
         <p class="agent-tools-empty" data-agent-tool-empty hidden>No tools match your search or category.</p>
     </div>
-    <div class="agent-instructions-actions">
+    <div class="agent-instructions-actions justify-end">
         <button type="button" class="ui-button ui-button--primary" data-agent-tools-save>Save Changes</button>
     </div>
 </section>
