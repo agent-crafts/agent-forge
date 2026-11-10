@@ -3,10 +3,19 @@
     Layout = "_AppLayout";
 }
 <style>
-/* Agent details: scroll the full page so the topbar moves away with the profile and tabs. */
-body:has(.agent-details-page) .shell { height: auto; min-height: 100dvh; }
-body:has(.agent-details-page) .main { min-height: 100dvh; }
-body:has(.agent-details-page) .page-content { flex: 1 0 auto; overflow: visible; }
+/* Only the main topbar scrolls away; keep the existing app shell and page layout. */
+body:has(.agent-details-page) .topbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+body:has(.agent-details-page) .main {
+    position: relative;
+}
+body:has(.agent-details-page) .page-content {
+    padding-top: 100px;
+}
 </style>
 <div class="ui-detail agent-details-page">
     <section class="ui-profile ui-tool-profile">
