@@ -94,7 +94,7 @@
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
  const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);saveButton.disabled=kind==="external"&&!editMode&&selectedCount()===0;saveButton.title="";status.textContent="";};
- if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";githubOwner.value="";githubRepo.value="";updateExecutor();status.textContent="";resetExternalDiscovery();update();schema();dialog.showModal();});
+ if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;get("externalToolCategory").value="integration";iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";githubOwner.value="";githubRepo.value="";updateExecutor();status.textContent="";resetExternalDiscovery();update();schema();dialog.showModal();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
   get("toolKindSelector").hidden=true;
@@ -282,6 +282,7 @@
   if(kind==="external"&&!editMode){
    const toolNames=[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>row.querySelector("input").checked).map(row=>row.dataset.mcpToolName);
    if(!toolNames.length){status.textContent="Select at least one MCP tool.";return;}
+   if(!categoryValues[get("externalToolCategory").value]){status.textContent="Select a valid category.";get("externalToolCategory").focus();return;}
    saving=true;
    saveButton.disabled=true;
    status.textContent="Importing selected tools…";
@@ -290,7 +291,7 @@
     const response=await fetch("/api/tools/mcp/import",{
      method:"POST",credentials:"same-origin",
      headers:{"Content-Type":"application/json",...(token?{"RequestVerificationToken":token}:{})},
-     body:JSON.stringify({endpoint:get("externalToolEndpoint").value.trim(),toolNames})
+     body:JSON.stringify({endpoint:get("externalToolEndpoint").value.trim(),toolNames,category:categoryValues[get("externalToolCategory").value]})
     });
     const body=await response.text();
     let result={};
