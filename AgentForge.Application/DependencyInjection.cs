@@ -7,6 +7,7 @@ using AgentForge.Application.Tools.Registry.Http;
 using AgentForge.Application.Tools.Execution;
 using AgentForge.Application.Tools.Execution.GitHub;
 using AgentForge.Application.Tools.Execution.Http;
+using AgentForge.Application.Tools.Execution.Mcp;
 using AgentForge.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,8 @@ public static class DependencyInjection
         services.AddScoped<IToolExecutor, HttpGetJsonExecutor>();
         services.AddScoped<IToolExecutorRegistry, ToolExecutorRegistry>();
         services.AddScoped<IToolExecutionAdapter, CustomToolExecutionAdapter>();
+        services.AddScoped<McpToolClient>();
+        services.AddScoped<IToolExecutionAdapter, McpToolExecutionAdapter>();
         services.AddScoped<IToolExecutionGateway, ToolExecutionGateway>();
 
         return services;
