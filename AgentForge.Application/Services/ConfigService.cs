@@ -19,6 +19,7 @@ public class ConfigService : IConfigService
             Provider = configuration["AI:Provider"],
             BaseUrl = configuration["AI:BaseUrl"],
             Model = configuration["AI:Model"],
+            ApiKey = configuration["AI:ApiKey"] ?? configuration["OPENAI_API_KEY"],
             Embedding = configuration["AI:Embedding"],
             TimeoutSeconds = configuration["AI:TimeoutSeconds"] != null 
                 ? int.Parse(configuration["AI:TimeoutSeconds"] ?? "0") 
