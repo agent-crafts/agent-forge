@@ -98,10 +98,10 @@
 | --- | --- |
 | Current phase | Module 00 — Baseline & Roadmap Alignment (planned) |
 | Current learning module | Module 03 preparation — Tool Engineering lab (MCP execution) |
-| Current engineering milestone | MCP discovery/import merged in PR #26 and the user verified DeepWiki import locally. Draft PR #27 adds MCP execution and Try Now. .NET/Tailwind build, API input rejection and Chromium smoke checks passed. Live execution from Try Now remains to be verified. |
+| Current engineering milestone | DeepWiki import verified by the user. Draft PR #27 adds MCP execution and Try Now, including SSE response correlation and distinct failure messages. Local .NET build and protocol checks passed. A live call through the application still needs a successful retry. |
 | Current mastery assessment | Not assessed |
-| Next recommended action | Run DeepWiki `read_wiki_structure` from Try Now and verify returned content. Address SSE response matching and time bounds before merge. |
-| Last progress review | 2026-11-10 — MCP Try Now UI wired and verified with local API and Chromium checks. |
+| Next recommended action | Restart AgentForge on the latest branch and retry DeepWiki `read_wiki_structure` from Try Now. If it fails, use the updated response and the `McpToolExecutionAdapter` warning to identify the failure. |
+| Last progress review | 2026-11-10 — fixed and verified MCP response matching; live .NET protocol probe returned DeepWiki content through the environment proxy. |
 
 **Agents Gallery design update (2026-10-25):** Cards now reuse the Tools gallery's shared `ui-item-card`, `ui-icon-tile`, `ui-item-content`, and badge styles in a two-column grid on draft PR #19. Static preview only; build and browser verification pending. No mastery assessment evidence.
 
@@ -136,7 +136,7 @@ These phases are **provisional** until reconciled with the project's training ma
 | 00 | Baseline, curriculum alignment, repository architecture | In progress | UI and persistence foundations exist; Agent domain and PostgreSQL migration committed on feature branch, unverified | Not assessed |
 | 01 | LLM foundations: tokens, attention, transformers, inference | Not started | Not started | Not assessed |
 | 02 | LLM application engineering: messages, context, persistence, streaming | Not started | Not started | Not assessed |
-| 03 | Agent runtime: tool calling, state, execution loops, guardrails | In progress — MCP call flow and response correlation explored in the Tool Engineering lab | In progress — MCP execution adapter and Try Now on draft PR #27; live Try Now check pending | Not assessed |
+| 03 | Agent runtime: tool calling, state, execution loops, guardrails | In progress — MCP call flow, response correlation, and read bounds explored | In progress — MCP execution and Try Now on draft PR #27; protocol checks passed, live application retry pending | Not assessed |
 | 04 | Knowledge: embeddings, retrieval, RAG, memory | Not started | Not started | Not assessed |
 | 05 | Evaluation and production AI: tracing, security, reliability, cost | Not started | Not started | Not assessed |
 | 06 | AI-native SDLC: specs, coding agents, reviews, approvals, workflows | Not started | Not started | Not assessed |
@@ -151,6 +151,7 @@ These phases are **provisional** until reconciled with the project's training ma
 - **Knowledge:** Streamable HTTP can carry progress notifications before the JSON-RPC response. The response ID correlates it to the request.
 - **Engineering:** CI build passed; local .NET build (Tailwind skipped) and all migrations on disposable PostgreSQL passed. A direct Cloudflare documentation search returned results. AgentForge import returned 502 in this environment, so a test-only external tool was seeded through Create. Execute rejected a missing `query` with `400 invalid_input`; a valid query reached the adapter and returned `400 mcp_execution_failed`. An isolated client call reported a socket error on direct connection to the same endpoint.
 - **Try Now:** Uses editable JSON initialized from the existing schema example, the shared JSON viewer and the existing antiforgery-protected execution endpoint. Local .NET/Tailwind build and Chromium smoke checks passed for keyboard navigation, JSON validation, mobile light/dark visibility and existing Try Now variants. The real API rejected a missing required argument. Success and network failure used intercepted browser responses. The user confirmed DeepWiki import. Live Try Now remains to be verified.
+- **Execution fix:** The user reported `mcp_execution_failed` from Try Now. The client now finds the matching JSON-RPC response in SSE without waiting for EOF, enforces a 1 MiB cap and 30-second overall deadline, and logs safe transport diagnostics. .NET fixtures covered notifications, wrong IDs, multiline events, open streams, size and cancellation. A live .NET protocol probe via the environment proxy returned DeepWiki wiki sections. The application API still encounters direct DNS failure in this environment, so the user-side cause and successful application retry are pending.
 - **Mastery:** Not assessed.
 
 ### Module 00 — Agent domain and persistence
@@ -204,7 +205,7 @@ These phases are **provisional** until reconciled with the project's training ma
 
 | Date | Decision / gap | Rationale | Evidence / follow-up |
 | --- | --- | --- | --- |
-| 2026-11-10 | MCP execution verification gaps | Direct client connection to the public endpoint failed in the test environment; an isolated SSE fixture confirmed the reader picks a notification before response ID `2` | Match the request ID and bound response-body reads. Verify a live read-only call from Try Now in an environment with direct egress. |
+| 2026-11-10 | MCP execution diagnostics | SSE fixture verified the reader fix. Live protocol probe succeeded via the environment proxy, while the application API logged `NameResolutionError` on its direct connection in this environment. | Retry Try Now on the user's machine and use the new API message and application warning if it fails. |
 | 2026-10-24 | PostgreSQL and single-user local-first boundary chosen | Versioned EF Core migrations in Infrastructure; identity/membership deferred | Feature branch; build/migration verification pending |
 | 2026-10-22 | External tool contract uses `issue_number` and `minimum: 1` | Stable factory schema customization plus adapter mapping; user-confirmed schema/runtime stub checks | PR #10; no live LLM call yet |
 | 2026-10-21 | Track learning, implementation, and mastery independently | Merged code alone does not establish understanding | This tracker |
@@ -215,7 +216,7 @@ These phases are **provisional** until reconciled with the project's training ma
 
 ## 5. Next-session handoff
 
-**Read this section first in a new chat.** Continue draft PR #27 on `feature/mcp-tool-execution`. Open the imported DeepWiki `read_wiki_structure` tool, enter `{"repoName":"dotnet/aspnetcore"}` in Try Now, and verify Success with returned wiki sections. Keep the notification-before-response SSE fixture for the transport fix. Agent CRUD and mastery assessment are separate checks.
+**Read this section first in a new chat.** Continue draft PR #27 on `feature/mcp-tool-execution`. Update and restart AgentForge. Open the imported DeepWiki `read_wiki_structure` tool, enter `{"repoName":"dotnet/aspnetcore"}` in Try Now, and verify Success with returned wiki sections. If the call fails, collect the response and `McpToolExecutionAdapter` warning. Agent CRUD and mastery assessment are separate checks.
 
 1. Read this file from the latest repository branch (prefer `main` for merged progress).
 2. Verify current branches, PRs, and relevant code through GitHub; do not rely solely on this summary.
