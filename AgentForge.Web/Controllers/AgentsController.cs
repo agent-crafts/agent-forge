@@ -1,5 +1,6 @@
 using AgentForge.Application.Agents.Commands;
 using AgentForge.Application.Agents.Queries;
+using AgentForge.Core.Repositories;
 using AgentForge.Core.Domains;
 using AgentForge.Core.Utilities;
 using Mediator;
@@ -43,6 +44,32 @@ public sealed class AgentsController(ISender sender) : ControllerBase
             return BadRequest(new { error = exception.Message });
         }
     }
+
+    [HttpGet("{id:guid}/tools")]
+    public async Task<IActionResult> GetTools(Guid id, CancellationToken cancellationToken)
+    {
+        var agent = await sender.Send(new GetAgentByIdQuery(id), cancellationToken);
+        if (agent is null || !agent.IsActive) return NotFound();
+        return Ok(await sender.Send(new GetAgentToolIdsQuery(id), cancellationToken));
+    }
+
+    [HttpPut("{id:guid}/tools")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SetTools(Guid id, [FromBody] SetToolsRequest request, CancellationToken cancellationToken)
+    {
+        if (request?.ToolIds is null) return BadRequest(new { error = "Tool IDs are required." });
+        try
+        {
+            return await sender.Send(new SetAgentToolsCommand(id, request.ToolIds), cancellationToken)
+                ? NoContent() : NotFound();
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    public sealed record SetToolsRequest(Guid[] ToolIds);
 
     [HttpDelete("{id:guid}")]
     [ValidateAntiForgeryToken]
