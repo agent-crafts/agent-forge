@@ -26,11 +26,11 @@
             </div>
             <form class="shrink-0 border-t border-line p-3" data-playground-form>
                 <label for="agentPlaygroundMessage" class="sr-only">Message your agent</label>
-                <textarea id="agentPlaygroundMessage" rows="3" maxlength="8000" class="w-full resize-y rounded-xl border border-line bg-surface px-3 py-2 text-sm text-content" placeholder="Ask your agent anything..." data-playground-input></textarea>
-                <div class="mt-2 flex items-center justify-between gap-3">
-                    <span class="text-xs text-muted">UI preview · execution unavailable</span>
-                    <button type="submit" class="ui-button ui-button--primary" data-playground-send disabled title="Agent Runtime is not connected">Send</button>
+                <div class="flex items-end gap-2">
+                    <textarea id="agentPlaygroundMessage" rows="2" maxlength="8000" class="min-w-0 flex-1 resize-y rounded-xl border border-line bg-surface px-3 py-2 text-sm text-content" placeholder="Ask your agent anything..." data-playground-input></textarea>
+                    <button type="submit" class="ui-button ui-button--primary shrink-0" data-playground-send disabled title="Agent Runtime is not connected">Send</button>
                 </div>
+                <p class="mt-2 text-xs text-muted">UI preview · execution unavailable</p>
             </form>
         </div>
         <aside class="min-w-0 rounded-xl border border-line bg-surface p-4" aria-labelledby="playgroundTraceHeading">
