@@ -79,6 +79,10 @@ public sealed class WorkspaceController(ISender sender) : Controller
         var agent = await sender.Send(new GetAgentByIdQuery(id), cancellationToken);
         if (agent is null || !agent.IsActive) return NotFound();
 
+        var tools = await sender.Send(new GetToolsPageQuery(
+            new PagedQuery<Tool>(1, 200, tool => tool.IsActive)), cancellationToken);
+        ViewData["AvailableAgentTools"] = tools.Items.ToArray();
+        ViewData["AssignedAgentToolIds"] = (await sender.Send(new GetAgentToolIdsQuery(id), cancellationToken)).ToHashSet();
         ViewData["Title"] = agent.Name;
         ViewData["Section"] = "agents";
         return View("~/Views/Agents/Details.cshtml", AgentsController.AgentCard.From(agent));
