@@ -57,6 +57,11 @@ public sealed class McpToolExecutionAdapter(McpToolClient client, ILogger<McpToo
                 : "Could not connect to the MCP server.";
             return ToolExecutionResult.Fail("mcp_execution_failed", message);
         }
+        catch (McpToolClient.ResponseTooLargeException ex)
+        {
+            logger.LogWarning("MCP response size limit exceeded for tool {ToolId} at {Host}: {Reason}", tool.Id, endpointHost, ex.Message);
+            return ToolExecutionResult.Fail("mcp_response_too_large", ex.Message);
+        }
         catch (McpToolClient.ProtocolException ex)
         {
             logger.LogWarning("MCP protocol failure for tool {ToolId} at {Host}: {Reason}", tool.Id, endpointHost, ex.Message);
