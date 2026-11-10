@@ -33,9 +33,8 @@ public sealed class Tool : Base
         ToolCategory category, string jsonSchema, string? imageUrl = null,
         string? executorKey = null, string configurationJson = "{}")
     {
-        if (string.IsNullOrWhiteSpace(name) || name.Length > 155 ||
-            !System.Text.RegularExpressions.Regex.IsMatch(name, @"^[a-z][a-z0-9_]*$"))
-            throw new ArgumentException("Tool name must be lowercase snake_case and at most 155 characters.", nameof(name));
+        if (string.IsNullOrWhiteSpace(name) || name.Length > 155)
+            throw new ArgumentException("Tool name is required and must be at most 155 characters.", nameof(name));
         if (string.IsNullOrWhiteSpace(displayName) || displayName.Length > 155)
             throw new ArgumentException("Display name is required and must be at most 155 characters.", nameof(displayName));
         if (!Enum.IsDefined(kind) || !Enum.IsDefined(category))

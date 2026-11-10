@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using AgentForge.Application.Tools.Commands;
+using AgentForge.Core.Enums;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,15 @@ public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logge
 {
     public sealed record DiscoverRequest(string Endpoint);
 
-    public sealed record ImportRequest(string Endpoint, string[] ToolNames);
+    public sealed record ImportRequest(string Endpoint, string[] ToolNames, ToolCategory Category = ToolCategory.Integration);
 
     [HttpPost("import")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Import([FromBody] ImportRequest request, CancellationToken cancellationToken)
     {
+        if (!Enum.IsDefined(request.Category))
+            return BadRequest(new { error = "Select a valid tool category." });
+
         if (request.ToolNames is null || request.ToolNames.Length is < 1 or > 200 ||
             request.ToolNames.Any(string.IsNullOrWhiteSpace) ||
             request.ToolNames.Distinct(StringComparer.Ordinal).Count() != request.ToolNames.Length)
@@ -56,7 +60,7 @@ public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logge
 
         try
         {
-            var count = await sender.Send(new ImportMcpToolsCommand(items), cancellationToken);
+            var count = await sender.Send(new ImportMcpToolsCommand(items, request.Category), cancellationToken);
             return Ok(new { imported = count });
         }
         catch (InvalidOperationException)

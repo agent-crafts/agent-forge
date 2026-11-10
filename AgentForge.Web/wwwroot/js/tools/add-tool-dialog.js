@@ -94,7 +94,7 @@
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
  const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);saveButton.disabled=kind==="external"&&!editMode&&selectedCount()===0;saveButton.title="";status.textContent="";};
- if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";githubOwner.value="";githubRepo.value="";updateExecutor();status.textContent="";resetExternalDiscovery();update();schema();dialog.showModal();});
+ if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;get("externalToolCategory").value="integration";iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";githubOwner.value="";githubRepo.value="";updateExecutor();status.textContent="";resetExternalDiscovery();update();schema();dialog.showModal();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
   get("toolKindSelector").hidden=true;
@@ -249,7 +249,7 @@
   return next;
  };
  const schema=()=>{if(executorSelect.value==="http.get_json"){const value=httpSchema();if(window.AgentForgeJsonViewer)window.AgentForgeJsonViewer.render(get("newToolSchema"),value);else get("newToolSchema").textContent=JSON.stringify(value,null,2);return;}if(executorSelect.value==="get_github_issue"){window.AgentForgeJsonViewer?.render(get("newToolSchema"),githubSchema);if(!window.AgentForgeJsonViewer)get("newToolSchema").textContent=JSON.stringify(githubSchema,null,2);return;}const properties={},required=[];rows.querySelectorAll(".ui-modal-parameter").forEach(r=>{const n=r.querySelector(".param-name").value.trim();if(!n)return;properties[n]={type:r.querySelector(".param-type").value};if(r.querySelector(".param-required").checked)required.push(n);});const value=editMode&&originalSchema?buildEditedSchema():{type:"object",properties,required,additionalProperties:false};if(window.AgentForgeJsonViewer){window.AgentForgeJsonViewer.render(get("newToolSchema"),value);}else{get("newToolSchema").textContent=JSON.stringify(value,null,2);}};
- get("addToolParameter").addEventListener("click",()=>{if(executorSelect.value==="get_github_issue")return;const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required pattern="[a-z][a-z0-9_]*" maxlength="155" placeholder="parameter_name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").hidden=true;r.querySelectorAll("input, select").forEach(field=>field.disabled=true);r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
+ get("addToolParameter").addEventListener("click",()=>{if(executorSelect.value==="get_github_issue")return;const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required maxlength="155" placeholder="Parameter name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").hidden=true;r.querySelectorAll("input, select").forEach(field=>field.disabled=true);r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
  const kindValues={custom:1,external:2};
  const categoryValues={general:1,development:2,integration:3,data:4,automation:5};
  const saveButton=get("previewToolConfiguration");
@@ -282,6 +282,7 @@
   if(kind==="external"&&!editMode){
    const toolNames=[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>row.querySelector("input").checked).map(row=>row.dataset.mcpToolName);
    if(!toolNames.length){status.textContent="Select at least one MCP tool.";return;}
+   if(!categoryValues[get("externalToolCategory").value]){status.textContent="Select a valid category.";get("externalToolCategory").focus();return;}
    saving=true;
    saveButton.disabled=true;
    status.textContent="Importing selected tools…";
@@ -290,7 +291,7 @@
     const response=await fetch("/api/tools/mcp/import",{
      method:"POST",credentials:"same-origin",
      headers:{"Content-Type":"application/json",...(token?{"RequestVerificationToken":token}:{})},
-     body:JSON.stringify({endpoint:get("externalToolEndpoint").value.trim(),toolNames})
+     body:JSON.stringify({endpoint:get("externalToolEndpoint").value.trim(),toolNames,category:categoryValues[get("externalToolCategory").value]})
     });
     const body=await response.text();
     let result={};
@@ -321,10 +322,10 @@
    if(!field.value.trim())errors.push([field,message]);
    else if(!field.checkValidity())errors.push([field,"Enter a valid value."]);
   }
-  if(name&&!/^[a-z][a-z0-9_]*$/.test(name)&&!errors.some(([f])=>f===get("newToolName")))errors.push([get("newToolName"),"Use lowercase snake_case."]);
+
   if(!category&&!errors.some(([f])=>f===get("newToolCategory")))errors.push([get("newToolCategory"),"Select a valid category."]);
   if(executorSelect.value==="http.get_json"){
-   if(httpParameterNames().some(name=>!/^[a-z][a-z0-9_]*$/.test(name)))errors.push([apiUrl,"URL placeholders must use lowercase snake_case names."]);
+   if(httpParameterNames().some(name=>!name.trim()||name.length>155))errors.push([apiUrl,"URL placeholder names must be between 1 and 155 characters."]);
    try{const url=new URL(apiUrl.value);if(url.protocol!=="https:"||(url.port&&url.port!=="443")||url.username||url.password||!url.hostname.includes(".")||url.hostname==="localhost"||url.hostname.endsWith(".localhost"))throw new Error();}
    catch{errors.push([apiUrl,"Enter a public HTTPS API URL (no credentials or custom ports)."]);}
   }
@@ -340,7 +341,7 @@
    const value=field.value.trim();
    clearFieldError(field);
    if(!value)errors.push([field,"Parameter name is required."]);
-   else if(!/^[a-z][a-z0-9_]*$/.test(value)||!field.checkValidity())errors.push([field,"Use lowercase snake_case."]);
+   else if(!field.checkValidity())errors.push([field,"Parameter name must be at most 155 characters."]);
    else if(parameterNames.has(value))errors.push([field,"Parameter names must be unique."]);
    parameterNames.add(value);
   }
