@@ -33,8 +33,13 @@
             </form>
         </div>
         <aside class="min-w-0 rounded-xl border border-line bg-surface p-4" aria-labelledby="playgroundTraceHeading">
-            <h3 id="playgroundTraceHeading" class="font-semibold text-heading">Execution trace</h3>
-            <p class="mt-1 text-xs text-muted">Tool calls, arguments, results and errors will appear here after a run.</p>
+            <div class="flex items-start gap-3 border-b border-line pb-4">
+                <span class="ui-panel-icon shrink-0" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h6v6H4zM14 5h6v6h-6zM9 11v4h8M17 15v4M14 19h6"/></svg></span>
+                <div class="min-w-0">
+                    <h3 id="playgroundTraceHeading" class="font-semibold text-heading">Execution trace</h3>
+                    <p class="mt-1 text-xs leading-relaxed text-muted">Tool calls, arguments, results and errors will appear here after a run.</p>
+                </div>
+            </div>
             <div class="mt-5 rounded-xl border border-dashed border-line p-5 text-center text-sm text-muted" data-playground-trace-empty>
                 No execution yet.
             </div>
