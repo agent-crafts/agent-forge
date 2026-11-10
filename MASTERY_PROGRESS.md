@@ -97,11 +97,11 @@
 | Field | Value |
 | --- | --- |
 | Current phase | Module 00 — Baseline & Roadmap Alignment (planned) |
-| Current learning module | Not started |
-| Current engineering milestone | UI foundation merged; static Agents Gallery added on draft PR #19 (build/browser unverified); GitHub Tool Try Now UI, read-only endpoint, and shared JSON viewer integrated on PR #12 (build/browser unverified); PostgreSQL persistence foundation, generic/specialized repositories, unit of work, and initial Tool create/get/page application handlers added on feature branch (unverified); Tool update/deactivate and Project use cases pending |
+| Current learning module | Module 03 preparation — Tool Engineering lab (MCP execution) |
+| Current engineering milestone | MCP discovery/import merged in PR #26. Draft PR #27 adds execution; .NET build, PostgreSQL migrations, and API input rejection verified. Successful external execution through AgentForge is blocked in the current environment. |
 | Current mastery assessment | Not assessed |
-| Next recommended action | Confirm latest PR #16 Chromium CI passes; expand Tools Add/Edit/Delete and Try Now browser coverage with test data; review accessibility/visual QA. Separately verify persistence migrations and integration tests |
-| Last progress review | 2026-10-27 — Agent domain/persistence implementation committed to feature branch; build, tests and PostgreSQL migration execution pending; mastery not assessed. Previously: 2026-10-25 (UI PR #16: component and Tools polish committed; Chromium smoke checks added; initial browser CI exposed launch-profile port mismatch, fixed in workflow; retest pending) |
+| Next recommended action | Fix SSE response matching and verify a read-only MCP call from AgentForge in an environment with direct public HTTPS egress. Wire Try Now after the API succeeds. |
+| Last progress review | 2026-11-10 — PR #27 local API and protocol verification on `1c64082`. |
 
 **Agents Gallery design update (2026-10-25):** Cards now reuse the Tools gallery's shared `ui-item-card`, `ui-icon-tile`, `ui-item-content`, and badge styles in a two-column grid on draft PR #19. Static preview only; build and browser verification pending. No mastery assessment evidence.
 
@@ -136,7 +136,7 @@ These phases are **provisional** until reconciled with the project's training ma
 | 00 | Baseline, curriculum alignment, repository architecture | In progress | UI and persistence foundations exist; Agent domain and PostgreSQL migration committed on feature branch, unverified | Not assessed |
 | 01 | LLM foundations: tokens, attention, transformers, inference | Not started | Not started | Not assessed |
 | 02 | LLM application engineering: messages, context, persistence, streaming | Not started | Not started | Not assessed |
-| 03 | Agent runtime: tool calling, state, execution loops, guardrails | Not started | Not started | Not assessed |
+| 03 | Agent runtime: tool calling, state, execution loops, guardrails | In progress — MCP call flow and response correlation explored in the Tool Engineering lab | In progress — MCP execution adapter on draft PR #27; live AgentForge call pending | Not assessed |
 | 04 | Knowledge: embeddings, retrieval, RAG, memory | Not started | Not started | Not assessed |
 | 05 | Evaluation and production AI: tracing, security, reliability, cost | Not started | Not started | Not assessed |
 | 06 | AI-native SDLC: specs, coding agents, reviews, approvals, workflows | Not started | Not started | Not assessed |
@@ -145,6 +145,14 @@ These phases are **provisional** until reconciled with the project's training ma
 **Allowed progress values:** Not started / In progress / Completed / Blocked / Not assessed / Demonstrated (as appropriate). Keep **Knowledge**, **Engineering**, and **Mastery** separate.
 
 ## 3. Active module
+
+### Current engineering lab — MCP execution (Module 03 preparation)
+
+- **Knowledge:** Streamable HTTP can carry progress notifications before the JSON-RPC response. The response ID correlates it to the request.
+- **Engineering:** CI build passed; local .NET build (Tailwind skipped) and all migrations on disposable PostgreSQL passed. A direct Cloudflare documentation search returned results. AgentForge import returned 502 in this environment, so a test-only external tool was seeded through Create. Execute rejected a missing `query` with `400 invalid_input`; a valid query reached the adapter and returned `400 mcp_execution_failed`. An isolated client call reported a socket error on direct connection to the same endpoint.
+- **Mastery:** Not assessed. Successful end-to-end execution and browser verification are pending.
+
+### Module 00 — Agent domain and persistence
 
 - **Module ID / title:** Module 00 — Agent domain, persistence, and application use cases
 - **Problem and why it matters:** Global reusable Agent definitions need validated domain state and durable, versioned PostgreSQL persistence.
@@ -195,6 +203,7 @@ These phases are **provisional** until reconciled with the project's training ma
 
 | Date | Decision / gap | Rationale | Evidence / follow-up |
 | --- | --- | --- | --- |
+| 2026-11-10 | MCP execution verification gaps | Direct client connection to the public endpoint failed in the test environment; an isolated SSE fixture confirmed the reader picks a notification before response ID `2` | Match the request ID and bound response-body reads, then verify the live API in an environment with direct egress before wiring Try Now. |
 | 2026-10-24 | PostgreSQL and single-user local-first boundary chosen | Versioned EF Core migrations in Infrastructure; identity/membership deferred | Feature branch; build/migration verification pending |
 | 2026-10-22 | External tool contract uses `issue_number` and `minimum: 1` | Stable factory schema customization plus adapter mapping; user-confirmed schema/runtime stub checks | PR #10; no live LLM call yet |
 | 2026-10-21 | Track learning, implementation, and mastery independently | Merged code alone does not establish understanding | This tracker |
@@ -205,7 +214,7 @@ These phases are **provisional** until reconciled with the project's training ma
 
 ## 5. Next-session handoff
 
-**Read this section first in a new chat.** Agent persistence next: review feature branch PR, run .NET build/tests, run PostgreSQL migration and pending-model-change check, then address review findings. Do not claim mastery.
+**Read this section first in a new chat.** Continue draft PR #27 on `feature/mcp-tool-execution`. Use a fixture that emits a progress notification before the `tools/call` response, then repeat import and execute against a read-only MCP endpoint from an environment with direct egress. Verify `200` and returned tool data before wiring Try Now. Agent CRUD and mastery assessment are separate checks.
 
 1. Read this file from the latest repository branch (prefer `main` for merged progress).
 2. Verify current branches, PRs, and relevant code through GitHub; do not rely solely on this summary.
