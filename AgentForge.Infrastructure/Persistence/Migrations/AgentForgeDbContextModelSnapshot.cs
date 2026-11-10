@@ -95,6 +95,24 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("AgentForge.Core.Domains.AgentTool", b =>
+                {
+                    b.Property<Guid>("AgentId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("agent_id");
+
+                    b.Property<Guid>("ToolId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("tool_id");
+
+                    b.HasKey("AgentId", "ToolId");
+
+                    b.HasIndex("ToolId")
+                        .HasDatabaseName("ix_agent_tools_tool_id");
+
+                    b.ToTable("agent_tools", (string)null);
+                });
+
             modelBuilder.Entity("AgentForge.Core.Domains.Project", b =>
                 {
                     b.Property<Guid>("Id")
@@ -214,6 +232,21 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
 
                     b.ToTable("tools", (string)null);
                 });
+            modelBuilder.Entity("AgentForge.Core.Domains.AgentTool", b =>
+                {
+                    b.HasOne("AgentForge.Core.Domains.Agent", null)
+                        .WithMany()
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AgentForge.Core.Domains.Tool", null)
+                        .WithMany()
+                        .HasForeignKey("ToolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
 #pragma warning restore 612, 618
         }
     }
