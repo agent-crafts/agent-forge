@@ -149,3 +149,8 @@
 /* Consistent borderless button focus across the app shell. */
 button:focus-visible,[role="button"]:focus-visible{outline:none!important;box-shadow:none!important}
 button:focus-visible:not(:disabled){filter:brightness(.9)}
+
+/* All standard workspace pages: scroll header and content together while keeping the sidebar intact. */
+.shell:has(.page-content) > .main { overflow-y: auto; min-height: 0; }
+.shell:has(.page-content) > .main > .topbar { flex: none; }
+.shell:has(.page-content) > .main > .page-content { flex: none; overflow: visible; }
