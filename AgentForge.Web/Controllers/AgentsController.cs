@@ -1,6 +1,7 @@
 using AgentForge.Application.Agents.Commands;
 using AgentForge.Application.Agents.Queries;
 using AgentForge.Core.Repositories;
+using AgentForge.Core.Clients;
 using AgentForge.Core.Domains;
 using AgentForge.Core.Utilities;
 using Mediator;
@@ -10,7 +11,7 @@ namespace AgentForge.Web.Controllers;
 
 [ApiController]
 [Route("api/agents")]
-public sealed class AgentsController(ISender sender) : ControllerBase
+public sealed class AgentsController(ISender sender, ILlmClient llmClient, ILogger<AgentsController> logger) : ControllerBase
 {
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -42,6 +43,43 @@ public sealed class AgentsController(ISender sender) : ControllerBase
         catch (ArgumentException exception)
         {
             return BadRequest(new { error = exception.Message });
+        }
+    }
+
+    public sealed record PlaygroundChatRequest(string? Message);
+
+    [HttpPost("{id:guid}/playground/chat")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PlaygroundChat(Guid id, [FromBody] PlaygroundChatRequest? request, CancellationToken cancellationToken)
+    {
+        var message = request?.Message?.Trim();
+        if (string.IsNullOrWhiteSpace(message) || message.Length > 8000)
+            return BadRequest(new { error = "Message must contain 1–8000 characters." });
+
+        var agent = await sender.Send(new GetAgentByIdQuery(id), cancellationToken);
+        if (agent is null || !agent.IsActive) return NotFound();
+
+        var messages = new List<LlmMessage>();
+        if (!string.IsNullOrWhiteSpace(agent.SystemInstructions))
+            messages.Add(new SystemMessage(agent.SystemInstructions));
+        messages.Add(new UserMessage(message));
+
+        try
+        {
+            // Deliberately text-only: tool execution and session history belong to the Agent Runtime.
+            var response = await llmClient.ChatAsync(new LlmChatRequest(messages), cancellationToken);
+            if (response.ToolCalls.Count > 0 || string.IsNullOrWhiteSpace(response.Content))
+                return StatusCode(StatusCodes.Status502BadGateway, new { error = "LLM did not return a text response." });
+            return Ok(new { response = response.Content });
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(exception, "Playground LLM call failed for agent {AgentId}", id);
+            return StatusCode(StatusCodes.Status502BadGateway, new { error = "LLM request failed. Check provider configuration and server logs." });
         }
     }
 
