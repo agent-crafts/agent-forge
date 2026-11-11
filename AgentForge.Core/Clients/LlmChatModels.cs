@@ -2,13 +2,20 @@ using System.Text.Json;
 
 namespace AgentForge.Core.Clients;
 
-public enum LlmRole { System, User, Assistant, Tool }
+// Message variants model valid conversation roles without unrelated nullable fields.
+public abstract record LlmMessage;
 
-public sealed record LlmMessage(
-    LlmRole Role,
+public sealed record SystemMessage(string Content) : LlmMessage;
+
+public sealed record UserMessage(string Content) : LlmMessage;
+
+public sealed record AssistantMessage(
     string? Content,
-    string? ToolCallId = null,
-    IReadOnlyList<LlmToolCall>? ToolCalls = null);
+    IReadOnlyList<LlmToolCall> ToolCalls) : LlmMessage;
+
+public sealed record ToolResultMessage(
+    string ToolCallId,
+    string Content) : LlmMessage;
 
 public sealed record LlmToolDefinition(string Name, string Description, JsonElement Parameters);
 
