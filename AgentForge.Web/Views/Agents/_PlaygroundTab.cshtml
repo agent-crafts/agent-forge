@@ -6,14 +6,14 @@
     <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
             <h2 id="agentPlaygroundHeading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 7 7-7 7"/><path d="M16 19h5"/></svg></span> Playground</h2>
-            <p class="ui-subtitle">Test conversations and inspect tool execution when the Agent Runtime is connected.</p>
+            <p class="ui-subtitle">Chat with the configured LLM. Tool execution and session history are not enabled yet.</p>
         </div>
         <button type="button" class="ui-button ui-button--secondary" data-playground-reset>New session</button>
     </div>
     <div class="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted">
         <span class="ui-tool-card-badge">@Model.Name</span>
         <span class="ui-tool-card-badge">@assignedToolCount assigned tools</span>
-        <span class="ui-tool-card-badge">Runtime not connected</span>
+        <span class="ui-tool-card-badge">LLM chat only</span>
     </div>
     <div class="mt-4 grid grid-cols-1 items-stretch gap-4 xl:grid-cols-3" style="min-height: 100vh;" data-playground-layout>
         <div class="xl:col-span-2 flex min-w-0 flex-col rounded-xl border border-line bg-surface" style="min-height: 100vh;">
@@ -28,14 +28,14 @@
                 <div class="m-auto max-w-md text-center" data-playground-welcome>
                     <div class="mb-3 text-2xl" aria-hidden="true">✦</div>
                     <h3 class="font-semibold text-heading">Start a conversation</h3>
-                    <p class="mt-2 text-sm text-muted">Your messages will appear here. Agent execution will become available when the runtime API is integrated.</p>
+                    <p class="mt-2 text-sm text-muted">Send a message to test this agent's instructions with the configured LLM. Tools are not executed yet.</p>
                 </div>
             </div>
             <form class="shrink-0 border-t border-line p-3" data-playground-form>
                 <label for="agentPlaygroundMessage" class="sr-only">Message your agent</label>
                 <div class="flex items-end gap-2">
                     <textarea id="agentPlaygroundMessage" rows="2" maxlength="8000" class="min-w-0 flex-1 resize-y rounded-xl border border-line bg-surface px-3 py-2 text-sm text-content" placeholder="Ask your agent anything..." data-playground-input></textarea>
-                    <button type="submit" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border-0 bg-accent text-xl font-bold text-white opacity-40" style="width:35px;height:35px;border-radius:10px;background:var(--accent);color:var(--button-text);cursor:not-allowed;" data-playground-send disabled aria-label="Send message" title="Agent Runtime is not connected">↑</button>
+                    <button type="submit" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border-0 bg-accent text-xl font-bold text-white " style="width:35px;height:35px;border-radius:10px;background:var(--accent);color:var(--button-text);cursor:pointer;" data-playground-send aria-label="Send message" title="Send message">↑</button>
                 </div>
             </form>
         </div>
