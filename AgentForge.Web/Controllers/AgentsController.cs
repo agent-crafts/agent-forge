@@ -73,7 +73,7 @@ public sealed class AgentsController(ISender sender, ILlmClient llmClient, ILogg
             trace.Add(new { type, status, timestamp = DateTimeOffset.UtcNow, durationMs, details });
 
         Record("run.started", "success", new { runId, agentId = id });
-        Record("llm.request", "success", new { messageCount = messages.Count, toolsEnabled = false });
+        Record("llm.request", "success", new { stepName = "Inference #1", arguments = new { messageCount = messages.Count, messageRoles = messages.Select(m => m switch { SystemMessage => "system", UserMessage => "user", _ => "other" }).ToArray(), toolsEnabled = false } });
 
         try
         {
@@ -93,7 +93,7 @@ public sealed class AgentsController(ISender sender, ILlmClient llmClient, ILogg
             llmTimer.Stop();
             var valid = response.ToolCalls.Count == 0 && !string.IsNullOrWhiteSpace(response.Content);
             Record("llm.response", valid ? "success" : "failed",
-                new { finishReason = response.FinishReason, toolCallCount = response.ToolCalls.Count },
+                new { stepName = "Inference #1", model = response.Model, providerRequestId = response.ProviderRequestId, finishReason = response.FinishReason, toolCallCount = response.ToolCalls.Count, usage = response.Usage, costUsd = (decimal?)null, costStatus = "Pricing not configured" },
                 llmTimer.ElapsedMilliseconds);
             if (!valid)
             {
