@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using AgentForge.Application.Agents.Commands;
 using AgentForge.Application.Agents.Queries;
 using AgentForge.Core.Repositories;
@@ -64,13 +65,46 @@ public sealed class AgentsController(ISender sender, ILlmClient llmClient, ILogg
             messages.Add(new SystemMessage(agent.SystemInstructions));
         messages.Add(new UserMessage(message));
 
+        var runId = Guid.NewGuid();
+        var startedAt = DateTimeOffset.UtcNow;
+        var timer = Stopwatch.StartNew();
+        var trace = new List<object>();
+        void Record(string type, string status, object details, long durationMs = 0) =>
+            trace.Add(new { type, status, timestamp = DateTimeOffset.UtcNow, durationMs, details });
+
+        Record("run.started", "success", new { runId, agentId = id });
+        Record("llm.request", "success", new { messageCount = messages.Count, toolsEnabled = false });
+
         try
         {
             // Deliberately text-only: tool execution and session history belong to the Agent Runtime.
-            var response = await llmClient.ChatAsync(new LlmChatRequest(messages), cancellationToken);
-            if (response.ToolCalls.Count > 0 || string.IsNullOrWhiteSpace(response.Content))
-                return StatusCode(StatusCodes.Status502BadGateway, new { error = "LLM did not return a text response." });
-            return Ok(new { response = response.Content });
+            var llmTimer = Stopwatch.StartNew();
+            LlmChatResponse response;
+            try
+            {
+                response = await llmClient.ChatAsync(new LlmChatRequest(messages), cancellationToken);
+            }
+            catch
+            {
+                llmTimer.Stop();
+                Record("llm.response", "failed", new { message = "LLM request failed" }, llmTimer.ElapsedMilliseconds);
+                throw;
+            }
+            llmTimer.Stop();
+            var valid = response.ToolCalls.Count == 0 && !string.IsNullOrWhiteSpace(response.Content);
+            Record("llm.response", valid ? "success" : "failed",
+                new { finishReason = response.FinishReason, toolCallCount = response.ToolCalls.Count },
+                llmTimer.ElapsedMilliseconds);
+            if (!valid)
+            {
+                timer.Stop();
+                Record("run.completed", "failed", new { startedAt }, timer.ElapsedMilliseconds);
+                return StatusCode(StatusCodes.Status502BadGateway,
+                    new { error = "LLM did not return a text response.", trace });
+            }
+            timer.Stop();
+            Record("run.completed", "success", new { startedAt }, timer.ElapsedMilliseconds);
+            return Ok(new { response = response.Content, trace });
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -78,8 +112,11 @@ public sealed class AgentsController(ISender sender, ILlmClient llmClient, ILogg
         }
         catch (Exception exception)
         {
+            timer.Stop();
+            Record("run.completed", "failed", new { startedAt }, timer.ElapsedMilliseconds);
             logger.LogError(exception, "Playground LLM call failed for agent {AgentId}", id);
-            return StatusCode(StatusCodes.Status502BadGateway, new { error = "LLM request failed. Check provider configuration and server logs." });
+            return StatusCode(StatusCodes.Status502BadGateway,
+                new { error = "LLM request failed. Check provider configuration and server logs.", trace });
         }
     }
 
