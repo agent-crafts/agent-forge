@@ -181,3 +181,15 @@ body:has(#agentPlaygroundPanel) .main { min-height: 0; }
 [data-playground-messages]{overflow-y:auto;min-height:0;align-content:start}
 [data-playground-messages] .af-message__card{max-width:85%}
 @media(max-width:640px){.af-message__card{max-width:90%;padding:10px 12px}.af-message__avatar{width:27px;height:27px}.af-message{gap:7px}}
+
+/* Agent Playground execution trace */
+.af-trace-run{padding:0 0 14px 14px;border-left:2px solid var(--line);margin:0 0 18px 6px}
+.af-trace-run__heading{font-size:12px;font-weight:700;color:var(--heading);margin:0 0 12px}
+.af-trace-event{position:relative;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin:0 0 9px;min-width:0}
+.af-trace-event:before{content:"";position:absolute;left:-20px;top:15px;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--surface)}
+.af-trace-event summary{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:11px;cursor:pointer;font-size:12px;font-weight:600;color:var(--heading)}
+.af-trace-status{margin-left:auto;font-size:10px;border:1px solid var(--line);border-radius:99px;padding:2px 6px;color:var(--muted)}
+.af-trace-status--failed{color:#d04c4c}
+.af-trace-status--success{color:#16835d}
+.af-trace-duration{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.af-trace-event pre{font-size:11px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;padding:10px;border-top:1px solid var(--line);color:var(--content)}
