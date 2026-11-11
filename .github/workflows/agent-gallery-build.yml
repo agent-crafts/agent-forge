@@ -7,6 +7,7 @@ on:
       - 'AgentForge.Core/**'
       - 'AgentForge.Infrastructure/**'
       - 'AgentForge.Web/**'
+      - 'tests/AgentForge.LlmContract.Tests/**'
       - 'scripts/verify-agent-gallery.sh'
       - '.github/workflows/agent-gallery-build.yml'
   workflow_dispatch:
@@ -24,3 +25,5 @@ jobs:
           node-version: '22'
       - name: Restore and build
         run: bash scripts/verify-agent-gallery.sh
+      - name: LLM contract regression checks
+        run: dotnet run --project tests/AgentForge.LlmContract.Tests/AgentForge.LlmContract.Tests.csproj --configuration Release
