@@ -25,7 +25,12 @@ public sealed record LlmChatRequest(
     IReadOnlyList<LlmMessage> Messages,
     IReadOnlyList<LlmToolDefinition>? Tools = null);
 
+public sealed record LlmTokenUsage(int? InputTokens, int? OutputTokens, int? TotalTokens, int? CachedInputTokens, int? ReasoningTokens);
+
 public sealed record LlmChatResponse(
     string? Content,
     IReadOnlyList<LlmToolCall> ToolCalls,
-    string? FinishReason);
+    string? FinishReason,
+    LlmTokenUsage? Usage = null,
+    string? Model = null,
+    string? ProviderRequestId = null);
