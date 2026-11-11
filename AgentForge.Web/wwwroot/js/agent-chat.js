@@ -58,23 +58,33 @@
     renderTabs();
     document.querySelector('.sidebar').classList.remove('open');
   }
-  async function deleteChat(id) {
+  const deleteDialog = document.getElementById('deleteChatDialog');
+  const confirmDelete = document.getElementById('confirmDeleteChat');
+  let pendingDeleteId = null;
+
+  function deleteChat(id) {
     const chat = chats.find(c => c.id === id);
-    if (!chat) return;
-    const confirmed = await window.ConfirmDialog.show({
-      title: 'Delete conversation?',
-      message: 'Delete "' + chat.title + '" permanently? This action cannot be undone.',
-      confirmText: 'Delete',
-      variant: 'danger'
-    });
-    if (!confirmed || !chats.some(c => c.id === id)) return;
+    if (!chat || !deleteDialog || !confirmDelete) return;
+    pendingDeleteId = id;
+    deleteDialog.querySelector('.ui-dialog-body p').textContent =
+      'Delete "' + chat.title + '" permanently? This action cannot be undone.';
+    deleteDialog.showModal();
+  }
+
+  confirmDelete?.addEventListener('click', () => {
+    const id = pendingDeleteId;
+    pendingDeleteId = null;
+    deleteDialog.close();
+    if (!id || !chats.some(c => c.id === id)) return;
     const wasActive = id === currentChatId;
     if (wasActive && activeController) activeController.abort();
     chats = chats.filter(c => c.id !== id);
     saveChats();
     if (wasActive) selectChat(chats[0]?.id || null);
     else renderTabs();
-  }
+  });
+
+  deleteDialog?.addEventListener('close', () => { pendingDeleteId = null; });
   function createChat() {
     const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now());
     chats.unshift({ id, title: 'New Chat', messages: [] });
