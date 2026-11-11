@@ -161,3 +161,23 @@ body:has(#agentPlaygroundPanel) { height: 100dvh; overflow: hidden; }
 body:has(#agentPlaygroundPanel) > .shell,
 body:has(#agentPlaygroundPanel) .shell { height: 100dvh; min-height: 0; }
 body:has(#agentPlaygroundPanel) .main { min-height: 0; }
+
+/* Shared conversation messages: global Chat and Agent Playground */
+.af-message{display:flex;align-items:flex-start;gap:10px;width:100%;min-width:0}
+.af-message--user{justify-content:flex-end}
+.af-message__avatar{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:11px;background:var(--avatar);color:var(--accent);font-size:19px}
+.af-message--tool .af-message__avatar{background:var(--surface-raised);color:var(--muted);font-size:16px}
+.af-message__card{max-width:min(84%,680px);min-width:0;border:1px solid var(--line);border-radius:5px 16px 16px 16px;background:var(--surface);padding:11px 15px}
+.af-message--user .af-message__card{background:var(--user-bubble);border-color:var(--line-strong);border-radius:16px 16px 5px 16px}
+.af-message--tool .af-message__card{background:var(--surface-raised);border-style:dashed;width:min(84%,680px)}
+.af-message__label{display:flex;align-items:center;gap:9px;margin-bottom:5px;font-size:11px;font-weight:700;letter-spacing:.02em;color:var(--muted)}
+.af-message--user .af-message__label{justify-content:flex-end;color:var(--accent)}
+.af-message__body{color:var(--content);font-size:14px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.af-message__status{font-size:10px;font-weight:600;border-radius:999px;border:1px solid var(--line-strong);padding:2px 7px}
+.af-message__card--success .af-message__status{color:#16835d}
+.af-message__card--failed .af-message__status{color:#d04c4c}
+.af-message__card--running .af-message__status{color:var(--muted)}
+#messages{gap:18px}
+[data-playground-messages]{overflow-y:auto;min-height:0;align-content:start}
+[data-playground-messages] .af-message__card{max-width:85%}
+@media(max-width:640px){.af-message__card{max-width:90%;padding:10px 12px}.af-message__avatar{width:27px;height:27px}.af-message{gap:7px}}
