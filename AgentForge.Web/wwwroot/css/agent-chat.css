@@ -193,3 +193,18 @@ body:has(#agentPlaygroundPanel) .main { min-height: 0; }
 .af-trace-status--success{color:#16835d}
 .af-trace-duration{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
 .af-trace-event pre{font-size:11px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;padding:10px;border-top:1px solid var(--line);color:var(--content)}
+
+/* Bounded Playground panes and per-inference inspector */
+[data-playground-layout]{height:clamp(440px,calc(100dvh - 290px),850px);min-height:440px}
+[data-playground-layout]>div,[data-playground-layout]>aside{min-height:0;height:100%;overflow:hidden}
+[data-playground-layout]>aside{display:flex;flex-direction:column}
+[data-playground-messages]{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.af-inspector-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:14px}
+.af-inspector-summary{flex:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px;border-bottom:1px solid var(--line)}
+.af-inspector-summary>div{min-width:0;display:flex;flex-direction:column;gap:3px}
+.af-inspector-summary strong{font-size:13px;color:var(--heading);overflow-wrap:anywhere}
+.af-inspector-summary span{font-size:10px;color:var(--muted)}
+.af-inspector-tabs{display:flex;flex-wrap:wrap;gap:4px;padding:7px 9px}
+.af-inspector-tabs button{border:1px solid var(--line);border-radius:6px;padding:5px 7px;background:var(--surface);color:var(--content);font-size:10px;cursor:pointer}
+.af-inspector-tabs button[aria-pressed="true"]{background:var(--active);border-color:var(--accent);color:var(--accent)}
+@media(max-width:1279px){[data-playground-layout]{height:auto;min-height:0}[data-playground-layout]>div,[data-playground-layout]>aside{height:clamp(400px,65dvh,680px)}}
