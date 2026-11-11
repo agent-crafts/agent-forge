@@ -107,6 +107,21 @@ public sealed class LlmClient(HttpClient client, IConfigService config) : ILlmCl
             throw new InvalidOperationException("LLM returned neither content nor tool calls.");
         var finishReason = choice.TryGetProperty("finish_reason", out var finish) && finish.ValueKind == JsonValueKind.String
             ? finish.GetString() : null;
-        return new LlmChatResponse(content, calls, finishReason);
+        static int? ReadInt(JsonElement element, string property) =>
+            element.ValueKind == JsonValueKind.Object && element.TryGetProperty(property, out var value)
+                && value.ValueKind == JsonValueKind.Number && value.TryGetInt32(out var count) ? count : null;
+        LlmTokenUsage? usage = null;
+        if (root.TryGetProperty("usage", out var usageValue) && usageValue.ValueKind == JsonValueKind.Object)
+        {
+            usageValue.TryGetProperty("prompt_tokens_details", out var promptDetails);
+            usageValue.TryGetProperty("completion_tokens_details", out var completionDetails);
+            usage = new LlmTokenUsage(ReadInt(usageValue, "prompt_tokens"),
+                ReadInt(usageValue, "completion_tokens"), ReadInt(usageValue, "total_tokens"),
+                ReadInt(promptDetails, "cached_tokens"), ReadInt(completionDetails, "reasoning_tokens"));
+        }
+        var model = root.TryGetProperty("model", out var modelValue) && modelValue.ValueKind == JsonValueKind.String
+            ? modelValue.GetString() : null;
+        var requestId = response.Headers.TryGetValues("x-request-id", out var ids) ? ids.FirstOrDefault() : null;
+        return new LlmChatResponse(content, calls, finishReason, usage, model, requestId);
     }
 }
