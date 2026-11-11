@@ -88,22 +88,10 @@
   let activeController = null;
   function scrollDown() { conversation.scrollTop = conversation.scrollHeight; }
   function appendMessage(role, content) {
-    const row = document.createElement('div');
-    row.className = 'message ' + role;
-    if (role === 'assistant') {
-      const avatar = document.createElement('div');
-      avatar.className = 'avatar';
-      avatar.textContent = '✦';
-      row.append(avatar);
-    }
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.textContent = content;
-    row.append(bubble);
-    messages.append(row);
     welcome.hidden = true;
+    const body = window.AgentForgeConversation.append(messages, role, content);
     scrollDown();
-    return bubble;
+    return body;
   }
   function resize() { prompt.style.height = 'auto'; prompt.style.height = Math.min(prompt.scrollHeight, 180) + 'px'; }
   prompt.addEventListener('input', resize);
