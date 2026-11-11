@@ -23,11 +23,42 @@
     const traceList = panel.querySelector('[data-playground-trace]');
     const traceEmpty = panel.querySelector('[data-playground-trace-empty]');
     const traceTitles = {
-        'run.started': 'Run started',
-        'llm.request': 'LLM request',
-        'llm.response': 'LLM response',
-        'run.completed': 'Run completed'
+        'run.started': 'Started working',
+        'llm.request': 'Asked the AI model',
+        'llm.response': 'Received an AI response',
+        'run.completed': 'Finished'
     };
+
+    function describeEvent(event) {
+        const details = event.details || {};
+        switch (event.type) {
+            case 'run.started':
+                return 'The agent started processing your message.';
+            case 'llm.request':
+                return 'The agent sent your request to the configured AI model.';
+            case 'llm.response': {
+                const model = typeof details.model === 'string' && details.model.trim()
+                    ? details.model : 'the AI model';
+                return 'Received a response from ' + model + '.';
+            }
+            case 'run.completed':
+                return event.status === 'failed'
+                    ? 'The agent could not finish this request.'
+                    : event.status === 'completed' || event.status === 'success'
+                        ? 'The agent finished processing your request.'
+                        : 'The run ended. Check its status for more information.';
+            default:
+                return 'The agent recorded an execution step.';
+        }
+    }
+
+    function eventStatus(event) {
+        if (event.status === 'failed' || event.status === 'error') return ['Failed', 'failed'];
+        if (event.status === 'completed' || event.status === 'success') return ['Completed', 'success'];
+        if (event.status === 'started' || event.status === 'running' || event.status === 'pending')
+            return ['In progress', 'pending'];
+        return ['Recorded', 'pending'];
+    }
 
     const summaryPanel = panel.querySelector('[data-playground-summary]');
     const formatTokens = value => typeof value === 'number' ? value.toLocaleString() : 'N/A';
@@ -62,49 +93,36 @@
             summaryPanel.append(cell);
         }
         for (const event of events) {
-            const item = document.createElement('details');
+            const item = document.createElement('div');
             item.className = 'af-trace-event';
-            const title = document.createElement('summary');
-            const name = document.createElement('span');
-            name.textContent = traceTitles[event.type] || event.type || 'Event';
+            const title = document.createElement('div');
+            title.className = 'flex flex-wrap items-center gap-2';
+            const name = document.createElement('strong');
+            name.textContent = traceTitles[event.type] || 'Execution step';
             const status = document.createElement('span');
-            status.className = 'af-trace-status af-trace-status--' + (event.status === 'failed' ? 'failed' : 'success');
-            status.textContent = event.status === 'failed' ? 'Failed' : 'Done';
+            const [statusText, statusKind] = eventStatus(event);
+            status.className = 'af-trace-status af-trace-status--' + statusKind;
+            status.textContent = statusText;
             const durationText = document.createElement('span');
             durationText.className = 'af-trace-duration';
             durationText.textContent = typeof event.durationMs === 'number' && event.durationMs > 0
                 ? event.durationMs + ' ms' : '';
             title.append(name, status, durationText);
-            item.append(title);
-            const tabs = document.createElement('div');
-            tabs.className = 'af-inspector-tabs';
+            const description = document.createElement('p');
+            description.className = 'mt-2 text-sm text-muted';
+            description.textContent = describeEvent(event);
+            item.append(title, description);
+
+            const technical = document.createElement('details');
+            technical.className = 'mt-2';
+            const toggle = document.createElement('summary');
+            toggle.className = 'cursor-pointer text-xs text-muted';
+            toggle.textContent = 'Technical details';
             const content = document.createElement('pre');
-            const details = event.details || {};
-            const views = {
-                Request: event.type === 'llm.request' ? details.arguments || details : { message: 'Not applicable to this event' },
-                Response: event.type === 'llm.response' ? {
-                    model: details.model, providerRequestId: details.providerRequestId,
-                    finishReason: details.finishReason, toolCallCount: details.toolCallCount
-                } : details,
-                Usage: event.type === 'llm.response' ? {
-                    ...details.usage, costUsd: details.costUsd, costStatus: details.costStatus
-                } : { message: 'No usage reported for this event' },
-                Timing: { timestamp: event.timestamp, durationMs: event.durationMs }
-            };
-            function choose(tab) {
-                content.textContent = JSON.stringify(views[tab], null, 2);
-                for (const button of tabs.children)
-                    button.setAttribute('aria-pressed', String(button.textContent === tab));
-            }
-            for (const tab of Object.keys(views)) {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.textContent = tab;
-                button.addEventListener('click', () => choose(tab));
-                tabs.append(button);
-            }
-            choose(event.type === 'llm.response' ? 'Usage' : 'Request');
-            item.append(tabs, content);
+            content.className = 'mt-2 overflow-x-auto text-xs';
+            content.textContent = JSON.stringify(event, null, 2);
+            technical.append(toggle, content);
+            item.append(technical);
             group.append(item);
         }
         traceList.prepend(group);
