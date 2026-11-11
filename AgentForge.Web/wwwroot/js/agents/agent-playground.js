@@ -22,110 +22,91 @@
 
     const traceList = panel.querySelector('[data-playground-trace]');
     const traceEmpty = panel.querySelector('[data-playground-trace-empty]');
-    const traceTitles = {
-        'run.started': 'Started working',
-        'llm.request': 'Asked the AI model',
-        'llm.response': 'Received an AI response',
-        'run.completed': 'Finished'
-    };
-
-    function describeEvent(event) {
-        const details = event.details || {};
-        switch (event.type) {
-            case 'run.started':
-                return 'The agent started processing your message.';
-            case 'llm.request':
-                return 'The agent sent your request to the configured AI model.';
-            case 'llm.response': {
-                const model = typeof details.model === 'string' && details.model.trim()
-                    ? details.model : 'the AI model';
-                return 'Received a response from ' + model + '.';
-            }
-            case 'run.completed':
-                return event.status === 'failed'
-                    ? 'The agent could not finish this request.'
-                    : event.status === 'completed' || event.status === 'success'
-                        ? 'The agent finished processing your request.'
-                        : 'The run ended. Check its status for more information.';
-            default:
-                return 'The agent recorded an execution step.';
-        }
-    }
-
-    function eventStatus(event) {
-        if (event.status === 'failed' || event.status === 'error') return ['Failed', 'failed'];
-        if (event.status === 'completed' || event.status === 'success') return ['Completed', 'success'];
-        if (event.status === 'started' || event.status === 'running' || event.status === 'pending')
-            return ['In progress', 'pending'];
-        return ['Recorded', 'pending'];
-    }
-
     const summaryPanel = panel.querySelector('[data-playground-summary]');
-    const formatTokens = value => typeof value === 'number' ? value.toLocaleString() : 'N/A';
+    const labels = {
+        'run.started': ['Agent started', 'Processing your request.', '▶'],
+        'llm.request': ['Contacting AI', 'Sending the request to the AI model.', '↗'],
+        'llm.response': ['AI responded', 'The AI model returned a response.', '✦'],
+        'run.completed': ['Completed', 'Your response is ready.', '✓']
+    };
+    const durationLabel = ms => ms >= 1000 ? (ms / 1000).toFixed(1) + 's' : ms + 'ms';
+    function statusOf(event) {
+        if (event.status === 'failed' || event.status === 'error') return 'failed';
+        if (event.status === 'completed' || event.status === 'success') return 'success';
+        return 'neutral';
+    }
     function renderTrace(events) {
         if (!Array.isArray(events) || !events.length) return;
         traceEmpty.hidden = true;
         traceList.hidden = false;
-        summaryPanel.hidden = false;
-        const run = events.find(e => e.type === 'run.completed');
-        const response = events.find(e => e.type === 'llm.response');
-        const usage = response?.details?.usage;
-        const duration = run?.durationMs;
+        const run = events.find(event => event.type === 'run.completed');
+        const failed = events.some(event => statusOf(event) === 'failed');
+        const outcome = failed ? 'Failed' : run && statusOf(run) === 'success' ? 'Completed' : 'Recorded';
+        const runNumber = traceList.children.length + 1;
         const group = document.createElement('section');
-        group.className = 'af-trace-run';
+        group.className = 'af-activity-run';
         const heading = document.createElement('div');
-        heading.className = 'af-trace-run__heading';
-        heading.textContent = 'Run ' + (traceList.children.length + 1) + ' · ' + (run?.status || 'unknown');
+        heading.className = 'af-activity-heading';
+        const title = document.createElement('strong');
+        title.textContent = 'Run #' + runNumber;
+        const badge = document.createElement('span');
+        badge.className = 'af-activity-badge af-activity-badge--' + (failed ? 'failed' : run && statusOf(run) === 'success' ? 'success' : 'neutral');
+        badge.textContent = outcome;
+        heading.append(title, badge);
         group.append(heading);
-        const metrics = [
-            ['Duration', typeof duration === 'number' ? duration + ' ms' : 'N/A'],
-            ['Tokens', formatTokens(usage?.totalTokens)],
-            ['Cost', 'N/A']
-        ];
-        summaryPanel.replaceChildren();
-        for (const [label, value] of metrics) {
-            const cell = document.createElement('div');
-            const metric = document.createElement('strong');
-            metric.textContent = value;
-            const caption = document.createElement('span');
-            caption.textContent = label;
-            cell.append(metric, caption);
-            summaryPanel.append(cell);
-        }
+        const timeline = document.createElement('ol');
+        timeline.className = 'af-activity-timeline';
         for (const event of events) {
-            const item = document.createElement('div');
-            item.className = 'af-trace-event';
-            const title = document.createElement('div');
-            title.className = 'flex flex-wrap items-center gap-2';
+            const item = document.createElement('li');
+            item.className = 'af-activity-step';
+            const state = statusOf(event);
+            const icon = document.createElement('span');
+            icon.className = 'af-activity-icon af-activity-icon--' + (state === 'failed' ? 'failed' : event.type === 'run.completed' ? 'success' : 'neutral');
+            icon.setAttribute('aria-hidden', 'true');
+            const [label, description, symbol] = labels[event.type] || ['Execution step', 'The agent recorded an activity.', '•'];
+            icon.textContent = state === 'failed' ? '!' : symbol;
+            const body = document.createElement('div');
+            body.className = 'af-activity-body';
+            const line = document.createElement('div');
+            line.className = 'af-activity-line';
             const name = document.createElement('strong');
-            name.textContent = traceTitles[event.type] || 'Execution step';
-            const status = document.createElement('span');
-            const [statusText, statusKind] = eventStatus(event);
-            status.className = 'af-trace-status af-trace-status--' + statusKind;
-            status.textContent = statusText;
-            const durationText = document.createElement('span');
-            durationText.className = 'af-trace-duration';
-            durationText.textContent = typeof event.durationMs === 'number' && event.durationMs > 0
-                ? event.durationMs + ' ms' : '';
-            title.append(name, status, durationText);
-            const description = document.createElement('p');
-            description.className = 'mt-2 text-sm text-muted';
-            description.textContent = describeEvent(event);
-            item.append(title, description);
-
+            name.textContent = state === 'failed' && event.type === 'run.completed' ? 'Run failed' : label;
+            line.append(name);
+            if (typeof event.durationMs === 'number' && event.durationMs >= 0) {
+                const time = document.createElement('span');
+                time.className = 'af-activity-time';
+                time.textContent = durationLabel(event.durationMs);
+                line.append(time);
+            }
+            const detail = document.createElement('p');
+            detail.textContent = state === 'failed' ? 'This step failed. Open details for more information.' : description;
+            body.append(line, detail);
             const technical = document.createElement('details');
-            technical.className = 'mt-2';
+            technical.className = 'af-activity-details';
             const toggle = document.createElement('summary');
-            toggle.className = 'cursor-pointer text-xs text-muted';
             toggle.textContent = 'Technical details';
-            const content = document.createElement('pre');
-            content.className = 'mt-2 overflow-x-auto text-xs';
-            content.textContent = JSON.stringify(event, null, 2);
-            technical.append(toggle, content);
-            item.append(technical);
-            group.append(item);
+            const raw = document.createElement('pre');
+            raw.textContent = JSON.stringify(event, null, 2);
+            technical.append(toggle, raw);
+            body.append(technical);
+            item.append(icon, body);
+            timeline.append(item);
         }
+        group.append(timeline);
+        const footer = document.createElement('div');
+        footer.className = 'af-activity-footer';
+        const count = document.createElement('span');
+        count.textContent = events.length + ' steps · ' + outcome.toLowerCase();
+        footer.append(count);
+        if (typeof run?.durationMs === 'number') {
+            const time = document.createElement('span');
+            time.textContent = durationLabel(run.durationMs) + ' total';
+            footer.append(time);
+        }
+        group.append(footer);
         traceList.prepend(group);
+        summaryPanel.hidden = true;
+        summaryPanel.replaceChildren();
     }
 
     form.addEventListener('submit', async event => {
