@@ -14,18 +14,10 @@
     let controller = null;
 
     function appendMessage(role, content) {
-        welcome?.remove();
-        const item = document.createElement('div');
-        item.className = 'rounded-xl border border-line p-3 text-sm whitespace-pre-wrap break-words';
-        const heading = document.createElement('div');
-        heading.className = 'mb-1 text-xs font-semibold text-muted';
-        heading.textContent = role;
-        const body = document.createElement('div');
-        body.textContent = content;
-        item.append(heading, body);
-        messages.append(item);
-        item.scrollIntoView({ block: 'nearest' });
-        return item;
+        panel.querySelector('[data-playground-welcome]')?.remove();
+        const empty = messages.querySelector('[data-playground-empty]');
+        empty?.remove();
+        return window.AgentForgeConversation.append(messages, role, content);
     }
 
     form.addEventListener('submit', async event => {
@@ -37,9 +29,9 @@
         input.disabled = true;
         const currentGeneration = generation;
         controller = new AbortController();
-        appendMessage('You', message);
+        appendMessage('user', message);
         input.value = '';
-        const placeholder = appendMessage('Agent', 'Thinking...');
+        const placeholder = appendMessage('assistant', 'Thinking...');
         const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
         try {
             const response = await fetch('/api/agents/' + encodeURIComponent(agentId) + '/playground/chat', {
@@ -54,10 +46,10 @@
             });
             const result = await response.json().catch(() => ({}));
             if (!response.ok) throw new Error(result.error || 'LLM request failed (HTTP ' + response.status + ').');
-            if (currentGeneration === generation) placeholder.lastChild.textContent = result.response;
+            if (currentGeneration === generation) placeholder.textContent = result.response;
         } catch (error) {
             if (currentGeneration === generation) {
-                placeholder.lastChild.textContent = error.name === 'AbortError' ? 'Request cancelled.' : 'Unable to get a response.';
+                placeholder.textContent = error.name === 'AbortError' ? 'Request cancelled.' : 'Unable to get a response.';
                 if (error.name !== 'AbortError')
                     window.AgentForgeToast?.show({ type: 'error', title: 'Playground request failed', message: error.message });
             }
@@ -83,6 +75,7 @@
         messages.replaceChildren();
         const empty = document.createElement('div');
         empty.className = 'm-auto max-w-md text-center text-sm text-muted';
+        empty.dataset.playgroundEmpty = '';
         empty.textContent = 'Start a conversation. Messages are not saved between requests.';
         messages.append(empty);
         input.focus();
