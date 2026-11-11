@@ -29,37 +29,82 @@
         'run.completed': 'Run completed'
     };
 
+    const summaryPanel = panel.querySelector('[data-playground-summary]');
+    const formatTokens = value => typeof value === 'number' ? value.toLocaleString() : 'N/A';
     function renderTrace(events) {
         if (!Array.isArray(events) || !events.length) return;
         traceEmpty.hidden = true;
         traceList.hidden = false;
+        summaryPanel.hidden = false;
+        const run = events.find(e => e.type === 'run.completed');
+        const response = events.find(e => e.type === 'llm.response');
+        const usage = response?.details?.usage;
+        const duration = run?.durationMs;
         const group = document.createElement('section');
         group.className = 'af-trace-run';
         const heading = document.createElement('div');
         heading.className = 'af-trace-run__heading';
-        heading.textContent = 'Execution ' + (traceList.children.length + 1);
+        heading.textContent = 'Run ' + (traceList.children.length + 1) + ' · ' + (run?.status || 'unknown');
         group.append(heading);
+        const metrics = [
+            ['Duration', typeof duration === 'number' ? duration + ' ms' : 'N/A'],
+            ['Tokens', formatTokens(usage?.totalTokens)],
+            ['Cost', 'N/A']
+        ];
+        summaryPanel.replaceChildren();
+        for (const [label, value] of metrics) {
+            const cell = document.createElement('div');
+            const metric = document.createElement('strong');
+            metric.textContent = value;
+            const caption = document.createElement('span');
+            caption.textContent = label;
+            cell.append(metric, caption);
+            summaryPanel.append(cell);
+        }
         for (const event of events) {
             const item = document.createElement('details');
             item.className = 'af-trace-event';
-            const summary = document.createElement('summary');
+            const title = document.createElement('summary');
             const name = document.createElement('span');
             name.textContent = traceTitles[event.type] || event.type || 'Event';
             const status = document.createElement('span');
             status.className = 'af-trace-status af-trace-status--' + (event.status === 'failed' ? 'failed' : 'success');
             status.textContent = event.status === 'failed' ? 'Failed' : 'Done';
-            const duration = document.createElement('span');
-            duration.className = 'af-trace-duration';
-            duration.textContent = typeof event.durationMs === 'number' && event.durationMs > 0
+            const durationText = document.createElement('span');
+            durationText.className = 'af-trace-duration';
+            durationText.textContent = typeof event.durationMs === 'number' && event.durationMs > 0
                 ? event.durationMs + ' ms' : '';
-            summary.append(name, status, duration);
-            const detail = document.createElement('pre');
-            detail.textContent = JSON.stringify({
-                timestamp: event.timestamp,
-                durationMs: event.durationMs,
-                ...event.details
-            }, null, 2);
-            item.append(summary, detail);
+            title.append(name, status, durationText);
+            item.append(title);
+            const tabs = document.createElement('div');
+            tabs.className = 'af-inspector-tabs';
+            const content = document.createElement('pre');
+            const details = event.details || {};
+            const views = {
+                Request: event.type === 'llm.request' ? details.arguments || details : { message: 'Not applicable to this event' },
+                Response: event.type === 'llm.response' ? {
+                    model: details.model, providerRequestId: details.providerRequestId,
+                    finishReason: details.finishReason, toolCallCount: details.toolCallCount
+                } : details,
+                Usage: event.type === 'llm.response' ? {
+                    ...details.usage, costUsd: details.costUsd, costStatus: details.costStatus
+                } : { message: 'No usage reported for this event' },
+                Timing: { timestamp: event.timestamp, durationMs: event.durationMs }
+            };
+            function choose(tab) {
+                content.textContent = JSON.stringify(views[tab], null, 2);
+                for (const button of tabs.children)
+                    button.setAttribute('aria-pressed', String(button.textContent === tab));
+            }
+            for (const tab of Object.keys(views)) {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.textContent = tab;
+                button.addEventListener('click', () => choose(tab));
+                tabs.append(button);
+            }
+            choose(event.type === 'llm.response' ? 'Usage' : 'Request');
+            item.append(tabs, content);
             group.append(item);
         }
         traceList.prepend(group);
@@ -122,6 +167,8 @@
         traceList.replaceChildren();
         traceList.hidden = true;
         traceEmpty.hidden = false;
+        summaryPanel.hidden = true;
+        summaryPanel.replaceChildren();
         const empty = document.createElement('div');
         empty.className = 'm-auto max-w-md text-center text-sm text-muted';
         empty.dataset.playgroundEmpty = '';
