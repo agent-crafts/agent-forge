@@ -10,7 +10,7 @@ public sealed class LlmClient(HttpClient client, IConfigService config) : ILlmCl
 {
     public async Task<string?> GenerateAsync(string prompt, CancellationToken token)
     {
-        var response = await ChatAsync(new LlmChatRequest([new LlmMessage(LlmRole.User, prompt)]), token);
+        var response = await ChatAsync(new LlmChatRequest([new UserMessage(prompt)]), token);
         return response.Content ?? throw new InvalidOperationException("LLM returned an empty response.");
     }
 
@@ -24,19 +24,36 @@ public sealed class LlmClient(HttpClient client, IConfigService config) : ILlmCl
 
         var messages = request.Messages.Select(message =>
         {
-            var item = new Dictionary<string, object?>
+            var item = new Dictionary<string, object?>();
+            switch (message)
             {
-                ["role"] = message.Role.ToString().ToLowerInvariant(),
-                ["content"] = message.Content
-            };
-            if (message.ToolCallId is not null) item["tool_call_id"] = message.ToolCallId;
-            if (message.ToolCalls is { Count: > 0 })
-                item["tool_calls"] = message.ToolCalls.Select(call => new
-                {
-                    id = call.Id,
-                    type = "function",
-                    function = new { name = call.Name, arguments = call.Arguments.GetRawText() }
-                }).ToArray();
+                case SystemMessage system:
+                    item["role"] = "system";
+                    item["content"] = system.Content;
+                    break;
+                case UserMessage user:
+                    item["role"] = "user";
+                    item["content"] = user.Content;
+                    break;
+                case AssistantMessage assistant:
+                    item["role"] = "assistant";
+                    item["content"] = assistant.Content;
+                    if (assistant.ToolCalls.Count > 0)
+                        item["tool_calls"] = assistant.ToolCalls.Select(call => new
+                        {
+                            id = call.Id,
+                            type = "function",
+                            function = new { name = call.Name, arguments = call.Arguments.GetRawText() }
+                        }).ToArray();
+                    break;
+                case ToolResultMessage tool:
+                    item["role"] = "tool";
+                    item["tool_call_id"] = tool.ToolCallId;
+                    item["content"] = tool.Content;
+                    break;
+                default:
+                    throw new ArgumentException($"Unsupported LLM message type: {message?.GetType().Name ?? "null"}", nameof(request));
+            }
             return item;
         }).ToArray();
 
