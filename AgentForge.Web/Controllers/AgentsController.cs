@@ -45,6 +45,25 @@ public sealed class AgentsController(ISender sender) : ControllerBase
         }
     }
 
+    public sealed record PlaygroundChatRequest(string? Message);
+
+    [HttpPost("{id:guid}/playground/chat")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PlaygroundChat(
+        Guid id, [FromBody] PlaygroundChatRequest? request, CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(
+            new PlaygroundChatCommand(id, request?.Message), cancellationToken);
+        return result.Outcome switch
+        {
+            PlaygroundChatOutcome.InvalidMessage => BadRequest(new { error = result.Error }),
+            PlaygroundChatOutcome.AgentNotFound => NotFound(),
+            PlaygroundChatOutcome.Success => Ok(new { response = result.Response, trace = result.Trace }),
+            _ => StatusCode(StatusCodes.Status502BadGateway,
+                new { error = result.Error, trace = result.Trace })
+        };
+    }
+
     [HttpGet("{id:guid}/tools")]
     public async Task<IActionResult> GetTools(Guid id, CancellationToken cancellationToken)
     {

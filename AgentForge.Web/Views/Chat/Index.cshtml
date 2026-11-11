@@ -30,6 +30,8 @@
             <p class="disclaimer">Responses are generated locally. Chat history is kept in this browser tab only; the model receives each message independently.</p>
         </div>
 
+<ui-delete id="deleteChatDialog" title="Delete conversation?" description="This conversation will be removed from this browser." confirm-button-id="confirmDeleteChat" confirm-text="Delete" />
+
 @section Scripts {
     <script src="~/js/agent-chat.js" asp-append-version="true"></script>
 }
