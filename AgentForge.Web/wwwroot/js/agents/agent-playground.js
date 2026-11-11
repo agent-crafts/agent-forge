@@ -136,7 +136,7 @@
             const result = await response.json().catch(() => ({}));
             if (currentGeneration === generation) renderTrace(result.trace);
             if (!response.ok) throw new Error(result.error || 'LLM request failed (HTTP ' + response.status + ').');
-            if (currentGeneration === generation) placeholder.textContent = result.response;
+            if (currentGeneration === generation) window.AgentForgeConversation.setContent(placeholder, 'assistant', result.response);
         } catch (error) {
             if (currentGeneration === generation) {
                 placeholder.textContent = error.name === 'AbortError' ? 'Request cancelled.' : 'Unable to get a response.';

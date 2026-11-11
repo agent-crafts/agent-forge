@@ -2,6 +2,15 @@
 // Tool cards are available to the future runtime; no tool execution is simulated here.
 window.AgentForgeConversation = (() => {
     const allowedRoles = new Set(['user', 'assistant', 'tool']);
+    function setContent(body, role, content) {
+        const value = content ?? '';
+        if (role === 'assistant' && window.marked?.parse && window.DOMPurify?.sanitize) {
+            body.innerHTML = window.DOMPurify.sanitize(window.marked.parse(value));
+        } else {
+            // Never render untrusted content as HTML without both libraries.
+            body.textContent = value;
+        }
+    }
     function append(container, role, content, options = {}) {
         if (!allowedRoles.has(role)) throw new Error('Unsupported conversation role');
         const row = document.createElement('div');
@@ -20,7 +29,7 @@ window.AgentForgeConversation = (() => {
         card.className = 'af-message__card';
         const body = document.createElement('div');
         body.className = 'af-message__body';
-        body.textContent = content ?? '';
+        setContent(body, role, content);
         if (role === 'tool') {
             const status = ['running', 'success', 'failed'].includes(options.status) ? options.status : 'running';
             card.classList.add('af-message__card--' + status);
@@ -36,5 +45,5 @@ window.AgentForgeConversation = (() => {
         row.scrollIntoView({ block: 'nearest' });
         return body;
     }
-    return { append };
+    return { append, setContent };
 })();

@@ -2,7 +2,30 @@
 @{
     var assignedToolCount = (ViewData["AssignedAgentToolIds"] as HashSet<Guid>)?.Count ?? 0;
 }
+<script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
 <style>
+.agent-playground .af-message--assistant .af-message__body { overflow-wrap:anywhere; white-space:normal; line-height:1.65; }
+.agent-playground .af-message--assistant .af-message__body > :first-child { margin-top:0; }
+.agent-playground .af-message--assistant .af-message__body > :last-child { margin-bottom:0; }
+.agent-playground .af-message--assistant .af-message__body p { margin:.45em 0; }
+.agent-playground .af-message--assistant .af-message__body li { margin:.2em 0; padding:0; }
+.agent-playground .af-message--assistant .af-message__body li > p { margin:.2em 0; }
+.agent-playground .af-message--assistant .af-message__body pre { white-space:pre; }
+.agent-playground .af-message--assistant .af-message__body ul { list-style:disc; padding-left:1.5em; margin:.6em 0; }
+.agent-playground .af-message--assistant .af-message__body ol { list-style:decimal; padding-left:1.5em; margin:.6em 0; }
+.agent-playground .af-message--assistant .af-message__body h1,.agent-playground .af-message--assistant .af-message__body h2,.agent-playground .af-message--assistant .af-message__body h3 { font-weight:700; margin:.8em 0 .4em; }
+.agent-playground .af-message--assistant .af-message__body h1 { font-size:1.35em; }
+.agent-playground .af-message--assistant .af-message__body h2 { font-size:1.2em; }
+.agent-playground .af-message--assistant .af-message__body h3 { font-size:1.1em; }
+.agent-playground .af-message--assistant .af-message__body pre { overflow-x:auto; padding:12px; border-radius:8px; background:rgba(148,163,184,.12); margin:.65em 0; }
+.agent-playground .af-message--assistant .af-message__body code { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+.agent-playground .af-message--assistant .af-message__body :not(pre) > code { padding:2px 4px; border-radius:4px; background:rgba(148,163,184,.12); }
+.agent-playground .af-message--assistant .af-message__body table { display:block; overflow-x:auto; border-collapse:collapse; margin:.65em 0; }
+.agent-playground .af-message--assistant .af-message__body th,.agent-playground .af-message--assistant .af-message__body td { border:1px solid var(--line,rgba(148,163,184,.3)); padding:6px 10px; }
+.agent-playground .af-message--assistant .af-message__body a { color:var(--accent,#60a5fa); text-decoration:underline; }
+.agent-playground .af-message--assistant .af-message__body blockquote { border-left:3px solid var(--line,rgba(148,163,184,.4)); padding-left:12px; margin:.65em 0; }
+
 .agent-playground .af-activity-run { padding: 14px; border-bottom: 1px solid var(--line, rgba(148,163,184,.2)); }
 .agent-playground .af-activity-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:16px; color:var(--text-heading,inherit); }
 .agent-playground .af-activity-badge { border:1px solid rgba(148,163,184,.3); border-radius:999px; padding:3px 10px; font-size:11px; }
