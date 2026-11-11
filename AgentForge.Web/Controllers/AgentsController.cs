@@ -1,8 +1,6 @@
-using System.Diagnostics;
 using AgentForge.Application.Agents.Commands;
 using AgentForge.Application.Agents.Queries;
 using AgentForge.Core.Repositories;
-using AgentForge.Core.Clients;
 using AgentForge.Core.Domains;
 using AgentForge.Core.Utilities;
 using Mediator;
@@ -12,7 +10,7 @@ namespace AgentForge.Web.Controllers;
 
 [ApiController]
 [Route("api/agents")]
-public sealed class AgentsController(ISender sender, ILlmClient llmClient, ILogger<AgentsController> logger) : ControllerBase
+public sealed class AgentsController(ISender sender) : ControllerBase
 {
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -51,73 +49,19 @@ public sealed class AgentsController(ISender sender, ILlmClient llmClient, ILogg
 
     [HttpPost("{id:guid}/playground/chat")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> PlaygroundChat(Guid id, [FromBody] PlaygroundChatRequest? request, CancellationToken cancellationToken)
+    public async Task<IActionResult> PlaygroundChat(
+        Guid id, [FromBody] PlaygroundChatRequest? request, CancellationToken cancellationToken)
     {
-        var message = request?.Message?.Trim();
-        if (string.IsNullOrWhiteSpace(message) || message.Length > 8000)
-            return BadRequest(new { error = "Message must contain 1–8000 characters." });
-
-        var agent = await sender.Send(new GetAgentByIdQuery(id), cancellationToken);
-        if (agent is null || !agent.IsActive) return NotFound();
-
-        var messages = new List<LlmMessage>();
-        if (!string.IsNullOrWhiteSpace(agent.SystemInstructions))
-            messages.Add(new SystemMessage(agent.SystemInstructions));
-        messages.Add(new UserMessage(message));
-
-        var runId = Guid.NewGuid();
-        var startedAt = DateTimeOffset.UtcNow;
-        var timer = Stopwatch.StartNew();
-        var trace = new List<object>();
-        void Record(string type, string status, object details, long durationMs = 0) =>
-            trace.Add(new { type, status, timestamp = DateTimeOffset.UtcNow, durationMs, details });
-
-        Record("run.started", "success", new { runId, agentId = id });
-        Record("llm.request", "success", new { stepName = "Inference #1", arguments = new { messageCount = messages.Count, messageRoles = messages.Select(m => m switch { SystemMessage => "system", UserMessage => "user", _ => "other" }).ToArray(), toolsEnabled = false } });
-
-        try
+        var result = await sender.Send(
+            new PlaygroundChatCommand(id, request?.Message), cancellationToken);
+        return result.Outcome switch
         {
-            // Deliberately text-only: tool execution and session history belong to the Agent Runtime.
-            var llmTimer = Stopwatch.StartNew();
-            LlmChatResponse response;
-            try
-            {
-                response = await llmClient.ChatAsync(new LlmChatRequest(messages), cancellationToken);
-            }
-            catch
-            {
-                llmTimer.Stop();
-                Record("llm.response", "failed", new { message = "LLM request failed" }, llmTimer.ElapsedMilliseconds);
-                throw;
-            }
-            llmTimer.Stop();
-            var valid = response.ToolCalls.Count == 0 && !string.IsNullOrWhiteSpace(response.Content);
-            Record("llm.response", valid ? "success" : "failed",
-                new { stepName = "Inference #1", model = response.Model, providerRequestId = response.ProviderRequestId, finishReason = response.FinishReason, toolCallCount = response.ToolCalls.Count, usage = response.Usage, costUsd = (decimal?)null, costStatus = "Pricing not configured" },
-                llmTimer.ElapsedMilliseconds);
-            if (!valid)
-            {
-                timer.Stop();
-                Record("run.completed", "failed", new { startedAt }, timer.ElapsedMilliseconds);
-                return StatusCode(StatusCodes.Status502BadGateway,
-                    new { error = "LLM did not return a text response.", trace });
-            }
-            timer.Stop();
-            Record("run.completed", "success", new { startedAt }, timer.ElapsedMilliseconds);
-            return Ok(new { response = response.Content, trace });
-        }
-        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-        {
-            throw;
-        }
-        catch (Exception exception)
-        {
-            timer.Stop();
-            Record("run.completed", "failed", new { startedAt }, timer.ElapsedMilliseconds);
-            logger.LogError(exception, "Playground LLM call failed for agent {AgentId}", id);
-            return StatusCode(StatusCodes.Status502BadGateway,
-                new { error = "LLM request failed. Check provider configuration and server logs.", trace });
-        }
+            PlaygroundChatOutcome.InvalidMessage => BadRequest(new { error = result.Error }),
+            PlaygroundChatOutcome.AgentNotFound => NotFound(),
+            PlaygroundChatOutcome.Success => Ok(new { response = result.Response, trace = result.Trace }),
+            _ => StatusCode(StatusCodes.Status502BadGateway,
+                new { error = result.Error, trace = result.Trace })
+        };
     }
 
     [HttpGet("{id:guid}/tools")]
