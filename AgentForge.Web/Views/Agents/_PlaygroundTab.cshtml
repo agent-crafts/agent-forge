@@ -88,6 +88,31 @@
 .agent-playground .af-trace-token-grid > div { display:flex; flex-direction:column; gap:3px; padding:8px; background:rgba(148,163,184,.06); border-radius:7px; }
 .agent-playground .af-trace-token-grid strong { font-size:15px; font-variant-numeric:tabular-nums; }
 .agent-playground .af-trace-token-grid span,.agent-playground .af-trace-token-inline { font-size:11px; color:var(--text-muted,#94a3b8); }
+
+/* Execution trace: request overview, clickable steps and accessible detail dialogs. */
+.agent-playground .af-trace-step-list { display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:10px;list-style:none;padding:0;margin:0; }
+.agent-playground .af-trace-step-list .af-activity-step { padding:0; }
+.agent-playground .af-trace-step-list .af-trace-event { height:100%;min-height:120px;padding:14px; }
+.agent-playground .af-trace-controls { justify-content:flex-end;flex-wrap:wrap; }
+.af-trace-modal-overlay { position:fixed;inset:0;z-index:10000;background:rgba(4,9,20,.75);display:flex;align-items:center;justify-content:center;padding:20px; }
+.af-trace-modal { width:min(760px,100%);max-height:min(85vh,900px);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line,rgba(148,163,184,.3));border-radius:16px;background:var(--surface,#182131);color:var(--text-heading,inherit);box-shadow:0 25px 80px rgba(0,0,0,.35); }
+.af-trace-modal-header { display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line,rgba(148,163,184,.2)); }
+.af-trace-modal-header h3 { font-size:17px;font-weight:700;margin:0; }
+.af-trace-modal-body { overflow:auto;padding:20px; }
+.af-trace-modal-body p { margin:0 0 14px;line-height:1.6; }
+.af-trace-modal-body h4 { font-size:13px;margin:18px 0 8px;font-weight:700; }
+.af-trace-detail-row { display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--line,rgba(148,163,184,.14));font-size:12px; }
+.af-trace-detail-row span { text-align:right;overflow-wrap:anywhere; }
+.af-trace-modal-body details { margin-top:18px; }
+.af-trace-modal-body summary { cursor:pointer; }
+.af-trace-modal-body pre { max-height:260px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:12px;background:rgba(0,0,0,.16);border-radius:8px;font-size:11px; }
+.af-trace-flow { display:flex;flex-direction:column;align-items:center;gap:4px; }
+.af-trace-flow-node { width:min(100%,460px);display:flex;flex-direction:column;gap:5px;text-align:center;border:1px solid var(--line,rgba(148,163,184,.3));border-radius:12px;background:rgba(99,102,241,.07);color:inherit;padding:15px;cursor:pointer; }
+.af-trace-flow-node:not(:disabled):hover { border-color:var(--accent,#6366f1); }
+.af-trace-flow-node:disabled { cursor:default;opacity:.75; }
+.af-trace-flow-node small { color:var(--text-muted,#94a3b8);line-height:1.5; }
+.af-trace-flow-arrow { font-size:22px;color:var(--text-muted,#94a3b8); }
+@media(max-width:600px) { .af-trace-modal-overlay { padding:8px; }.af-trace-modal-body { padding:14px; }.af-trace-modal-header { padding:14px; } }
 </style>
 <section class="ui-panel agent-playground" style="margin-top: 16px;" aria-labelledby="agentPlaygroundHeading" data-agent-id="@Model.Id">
     <div class="flex flex-wrap items-center justify-between gap-3">
