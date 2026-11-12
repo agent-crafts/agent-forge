@@ -1,3 +1,4 @@
+using AgentForge.Application.Agents.Runtime;
 using AgentForge.Application.Chat.Commands;
 using AgentForge.Application.Services;
 using AgentForge.Application.Tools;
@@ -21,6 +22,7 @@ public static class DependencyInjection
         services.AddSingleton<IConfigService, ConfigService>();
         services.AddScoped<IFileService, FileService>();
 
+        services.AddScoped<IAgentRuntime, AgentRuntime>();
         services.AddScoped<ChatCommand>();
         services.AddScoped<GitHubTools>();
         services.AddScoped<HttpApiTools>();
