@@ -71,110 +71,167 @@
         if (!Array.isArray(events) || !events.length) return;
         traceEmpty.hidden = true;
         traceList.hidden = false;
-        const { completed: run, failures, tools, toolResults, llmCalls, outcome } = traceSummary(events);
-        const failed = failures.length > 0;
-        const runFailed = run && statusOf(run) === 'failed';
-        const runNumber = traceList.children.length + 1;
+        const { completed, failures, tools, toolResults, llmCalls, outcome } = traceSummary(events);
         const group = document.createElement('section');
         group.className = 'af-activity-run';
-        const heading = document.createElement('div');
-        heading.className = 'af-activity-heading';
+        const header = document.createElement('div');
+        header.className = 'af-activity-heading';
         const title = document.createElement('strong');
-        title.textContent = 'Run #' + runNumber;
+        title.textContent = 'Run #' + (traceList.children.length + 1);
         const badge = document.createElement('span');
-        badge.className = 'af-activity-badge af-activity-badge--' + (runFailed ? 'failed' : failed ? 'neutral' : run && statusOf(run) === 'success' ? 'success' : 'neutral');
+        badge.className = 'af-activity-badge af-activity-badge--' + (completed && statusOf(completed) === 'failed' ? 'failed' : failures.length ? 'neutral' : completed ? 'success' : 'neutral');
         badge.textContent = outcome;
-        heading.append(title, badge);
-        group.append(heading);
-        const overview = document.createElement('div');
-        overview.className = 'af-activity-footer';
-        const stats = [
-            llmCalls.length + ' AI call' + (llmCalls.length === 1 ? '' : 's'),
-            tools.length + ' tool call' + (tools.length === 1 ? '' : 's'),
-            toolResults.filter(event => statusOf(event) === 'failed').length + ' tool failure(s)',
-            typeof run?.durationMs === 'number' ? durationLabel(run.durationMs) + ' total' : 'Duration unavailable'
-        ];
-        for (const stat of stats) {
-            const span = document.createElement('span');
-            span.textContent = stat;
-            overview.append(span);
+        header.append(title, badge);
+        group.append(header);
+
+        const metrics = document.createElement('div');
+        metrics.className = 'af-trace-metrics';
+        for (const [value, label] of [
+            [typeof completed?.durationMs === 'number' ? durationLabel(completed.durationMs) : '—', 'Duration'],
+            [String(llmCalls.length), 'AI calls'],
+            [String(tools.length), 'Tool calls'],
+            [String(toolResults.filter(e => statusOf(e) === 'failed').length), 'Tool errors']
+        ]) {
+            const metric = document.createElement('div');
+            metric.className = 'af-trace-metric';
+            const number = document.createElement('strong');
+            number.textContent = value;
+            const caption = document.createElement('span');
+            caption.textContent = label;
+            metric.append(number, caption);
+            metrics.append(metric);
         }
-        group.append(overview);
+        group.append(metrics);
+
+        const controls = document.createElement('div');
+        controls.className = 'af-trace-controls';
+        const filter = document.createElement('select');
+        filter.className = 'af-trace-filter';
+        filter.setAttribute('aria-label', 'Filter execution events');
+        for (const [value, label] of [['all', 'All events'], ['llm', 'AI calls'], ['tool', 'Tools'], ['failed', 'Errors']]) {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = label;
+            filter.append(option);
+        }
+        const copy = document.createElement('button');
+        copy.type = 'button';
+        copy.className = 'af-trace-copy';
+        copy.textContent = 'Copy JSON';
+        copy.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(JSON.stringify(events, null, 2));
+                copy.textContent = 'Copied';
+            } catch {
+                copy.textContent = 'Copy unavailable';
+            }
+        });
+        controls.append(filter, copy);
+        group.append(controls);
+
+        const workspace = document.createElement('div');
+        workspace.className = 'af-trace-workspace';
         const timeline = document.createElement('ol');
         timeline.className = 'af-activity-timeline';
-        const pendingTools = new Map();
-        for (const event of events) {
-            const callId = event.details?.toolCallId;
-            if (event.type === 'tool.request' && callId) pendingTools.set(callId, event);
+        timeline.setAttribute('aria-label', 'Execution events');
+        const inspector = document.createElement('section');
+        inspector.className = 'af-trace-inspector';
+        inspector.setAttribute('aria-label', 'Selected event details');
+        const rows = [];
+
+        function selectEvent(index) {
+            rows.forEach((row, i) => {
+                row.button.setAttribute('aria-pressed', String(i === index));
+                row.item.classList.toggle('af-trace-selected', i === index);
+            });
+            const event = events[index];
+            inspector.replaceChildren();
+            const heading = document.createElement('div');
+            heading.className = 'af-trace-inspector-heading';
+            const eventTitle = document.createElement('strong');
+            eventTitle.textContent = (labels[event.type]?.[0] || event.type) + (event.details?.toolName ? ': ' + event.details.toolName : '');
+            const status = document.createElement('span');
+            status.className = 'af-activity-badge af-activity-badge--' + (statusOf(event) === 'failed' ? 'failed' : 'neutral');
+            status.textContent = event.status || 'recorded';
+            heading.append(eventTitle, status);
+            inspector.append(heading);
+            const summary = document.createElement('p');
+            summary.textContent = traceDescription(event, statusOf(event), labels[event.type]?.[1] || 'Execution event');
+            inspector.append(summary);
+            const metadata = document.createElement('dl');
+            metadata.className = 'af-trace-metadata';
+            for (const [key, value] of [
+                ['Type', event.type],
+                ['Duration', typeof event.durationMs === 'number' ? durationLabel(event.durationMs) : null],
+                ['Error code', event.details?.errorCode],
+                ['Tool call ID', event.details?.toolCallId]
+            ]) {
+                if (value == null) continue;
+                const dt = document.createElement('dt');
+                dt.textContent = key;
+                const dd = document.createElement('dd');
+                dd.textContent = value;
+                metadata.append(dt, dd);
+            }
+            inspector.append(metadata);
+            const details = document.createElement('details');
+            details.className = 'af-activity-details';
+            details.open = true;
+            const toggle = document.createElement('summary');
+            toggle.textContent = 'Raw event JSON';
+            const raw = document.createElement('pre');
+            raw.textContent = JSON.stringify(event, null, 2);
+            details.append(toggle, raw);
+            inspector.append(details);
+        }
+
+        events.forEach((event, index) => {
+            const state = statusOf(event);
             const item = document.createElement('li');
             item.className = 'af-activity-step';
-            const state = statusOf(event);
-            const icon = document.createElement('span');
-            icon.className = 'af-activity-icon af-activity-icon--' + (state === 'failed' ? 'failed' : event.type === 'run.completed' ? 'success' : 'neutral');
-            icon.setAttribute('aria-hidden', 'true');
-            const [label, description, symbol] = labels[event.type] || ['Execution step', 'The agent recorded an activity.', '•'];
-            icon.textContent = state === 'failed' ? '!' : symbol;
-            const body = document.createElement('div');
-            body.className = 'af-activity-body';
-            const line = document.createElement('div');
-            line.className = 'af-activity-line';
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'af-trace-event';
+            button.setAttribute('aria-pressed', 'false');
+            const symbol = document.createElement('span');
+            symbol.className = 'af-activity-icon af-activity-icon--' + (state === 'failed' ? 'failed' : event.type === 'run.completed' ? 'success' : 'neutral');
+            symbol.textContent = state === 'failed' ? '!' : (labels[event.type]?.[2] || '•');
+            symbol.setAttribute('aria-hidden', 'true');
+            const content = document.createElement('span');
+            content.className = 'af-trace-event-content';
             const name = document.createElement('strong');
-            name.textContent = state === 'failed' && event.type === 'run.completed' ? 'Run failed' : event.type === 'tool.request' || event.type === 'tool.response' ? label + ': ' + (event.details?.toolName || 'Unknown tool') : label;
-            line.append(name);
-            if (typeof event.durationMs === 'number' && event.durationMs >= 0) {
+            name.textContent = (labels[event.type]?.[0] || event.type) + (event.details?.toolName ? ': ' + event.details.toolName : '');
+            const description = document.createElement('small');
+            description.textContent = traceDescription(event, state, labels[event.type]?.[1] || 'Execution event');
+            content.append(name, description);
+            button.append(symbol, content);
+            if (typeof event.durationMs === 'number') {
                 const time = document.createElement('span');
                 time.className = 'af-activity-time';
                 time.textContent = durationLabel(event.durationMs);
-                line.append(time);
+                button.append(time);
             }
-            const detail = document.createElement('p');
-            detail.textContent = traceDescription(event, state, description);
-            body.append(line, detail);
-            if (event.type === 'tool.response' && callId && pendingTools.has(callId)) {
-                const correlation = document.createElement('p');
-                correlation.textContent = 'Result for tool call ' + callId;
-                correlation.className = 'af-activity-time';
-                body.append(correlation);
-                pendingTools.delete(callId);
-            }
-            const technical = document.createElement('details');
-            technical.className = 'af-activity-details';
-            const toggle = document.createElement('summary');
-            toggle.textContent = 'Technical details';
-            const raw = document.createElement('pre');
-            raw.textContent = JSON.stringify(event, null, 2);
-            technical.append(toggle, raw);
-            body.append(technical);
-            item.append(icon, body);
+            button.addEventListener('click', () => selectEvent(index));
+            item.append(button);
             timeline.append(item);
-        }
-        group.append(timeline);
-        const footer = document.createElement('div');
-        footer.className = 'af-activity-footer';
-        const count = document.createElement('span');
-        count.textContent = events.length + ' steps · ' + outcome.toLowerCase();
-        footer.append(count);
-        const exportButton = document.createElement('button');
-        exportButton.type = 'button';
-        exportButton.className = 'af-activity-time';
-        exportButton.textContent = 'Copy trace JSON';
-        exportButton.setAttribute('aria-label', 'Copy full execution trace JSON');
-        exportButton.addEventListener('click', async () => {
-            try {
-                await navigator.clipboard.writeText(JSON.stringify(events, null, 2));
-                exportButton.textContent = 'Copied';
-            } catch {
-                exportButton.textContent = 'Copy unavailable';
-            }
+            rows.push({ item, button, event });
         });
-        footer.append(exportButton);
-        if (typeof run?.durationMs === 'number') {
-            const time = document.createElement('span');
-            time.textContent = durationLabel(run.durationMs) + ' total';
-            footer.append(time);
-        }
-        group.append(footer);
+        filter.addEventListener('change', () => {
+            rows.forEach(({ item, event }) => {
+                const visible = filter.value === 'all' ||
+                    filter.value === 'failed' && statusOf(event) === 'failed' ||
+                    filter.value === 'tool' && event.type.startsWith('tool.') ||
+                    filter.value === 'llm' && event.type.startsWith('llm.');
+                item.hidden = !visible;
+            });
+            const first = rows.find(row => !row.item.hidden);
+            if (first) selectEvent(rows.indexOf(first));
+            else inspector.replaceChildren();
+        });
+        workspace.append(timeline, inspector);
+        group.append(workspace);
         traceList.prepend(group);
+        selectEvent(Math.max(0, events.findIndex(event => statusOf(event) === 'failed')));
         summaryPanel.hidden = true;
         summaryPanel.replaceChildren();
     }
