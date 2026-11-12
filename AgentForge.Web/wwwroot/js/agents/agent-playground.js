@@ -27,7 +27,9 @@
         'run.started': ['Agent started', 'Processing your request.', '▶'],
         'llm.request': ['Contacting AI', 'Sending the request to the AI model.', '↗'],
         'llm.response': ['AI responded', 'The AI model returned a response.', '✦'],
-        'run.completed': ['Completed', 'Your response is ready.', '✓']
+        'run.completed': ['Completed', 'Your response is ready.', '✓'],
+        'tool.request': ['Calling tool', 'The agent requested a tool execution.', '↗'],
+        'tool.response': ['Tool result', 'The tool returned an execution result.', '⚙']
     };
     const durationLabel = ms => ms >= 1000 ? (ms / 1000).toFixed(1) + 's' : ms + 'ms';
     function statusOf(event) {
@@ -35,13 +37,33 @@
         if (event.status === 'completed' || event.status === 'success') return 'success';
         return 'neutral';
     }
+    function traceDescription(event, state, fallback) {
+        const details = event.details || {};
+        if (event.type === 'tool.request')
+            return 'Executing ' + (details.toolName || 'the requested tool') + '.';
+        if (event.type === 'tool.response') {
+            if (state !== 'failed') return (details.toolName || 'Tool') + ' executed successfully.';
+            const code = details.errorCode || 'unknown_error';
+            const guidance = {
+                invalid_configuration: 'Check the saved tool configuration and required MCP connection settings.',
+                mcp_execution_failed: 'Check MCP endpoint connectivity and server logs.',
+                mcp_response_too_large: 'The MCP response exceeded the configured size limit.',
+                tool_result_too_large: 'The tool output exceeded the agent run limit.',
+                upstream_timeout: 'The upstream service timed out. Check connectivity and retry.'
+            };
+            return 'Tool execution failed (' + code + '). ' + (guidance[code] || 'Inspect the tool configuration and server logs.');
+        }
+        if (state === 'failed') return 'This step failed. Review technical details for diagnostic information.';
+        return fallback;
+    }
     function renderTrace(events) {
         if (!Array.isArray(events) || !events.length) return;
         traceEmpty.hidden = true;
         traceList.hidden = false;
         const run = events.find(event => event.type === 'run.completed');
         const failed = events.some(event => statusOf(event) === 'failed');
-        const outcome = failed ? 'Failed' : run && statusOf(run) === 'success' ? 'Completed' : 'Recorded';
+        const runFailed = run && statusOf(run) === 'failed';
+        const outcome = runFailed ? 'Failed' : failed ? 'Completed with errors' : run && statusOf(run) === 'success' ? 'Completed' : 'Recorded';
         const runNumber = traceList.children.length + 1;
         const group = document.createElement('section');
         group.className = 'af-activity-run';
@@ -50,7 +72,7 @@
         const title = document.createElement('strong');
         title.textContent = 'Run #' + runNumber;
         const badge = document.createElement('span');
-        badge.className = 'af-activity-badge af-activity-badge--' + (failed ? 'failed' : run && statusOf(run) === 'success' ? 'success' : 'neutral');
+        badge.className = 'af-activity-badge af-activity-badge--' + (runFailed ? 'failed' : failed ? 'neutral' : run && statusOf(run) === 'success' ? 'success' : 'neutral');
         badge.textContent = outcome;
         heading.append(title, badge);
         group.append(heading);
@@ -70,7 +92,7 @@
             const line = document.createElement('div');
             line.className = 'af-activity-line';
             const name = document.createElement('strong');
-            name.textContent = state === 'failed' && event.type === 'run.completed' ? 'Run failed' : label;
+            name.textContent = state === 'failed' && event.type === 'run.completed' ? 'Run failed' : event.type === 'tool.request' || event.type === 'tool.response' ? label + ': ' + (event.details?.toolName || 'Unknown tool') : label;
             line.append(name);
             if (typeof event.durationMs === 'number' && event.durationMs >= 0) {
                 const time = document.createElement('span');
@@ -79,7 +101,7 @@
                 line.append(time);
             }
             const detail = document.createElement('p');
-            detail.textContent = state === 'failed' ? 'This step failed. Open details for more information.' : description;
+            detail.textContent = traceDescription(event, state, description);
             body.append(line, detail);
             const technical = document.createElement('details');
             technical.className = 'af-activity-details';
