@@ -85,204 +85,218 @@
             : failures.length ? 'Errors recorded' : 'Incomplete';
         return { completed, failures, tools, toolResults, llmCalls, outcome, tokens };
     }
+    // A request is represented by one run; pair request/response events into business-readable steps.
+    function buildSteps(events) {
+        const steps = [];
+        const pending = { llm: [], tool: [] };
+        events.forEach((event, index) => {
+            const kind = event.type.startsWith('llm.') ? 'llm' : event.type.startsWith('tool.') ? 'tool' : 'run';
+            if (event.type === 'llm.request' || event.type === 'tool.request') {
+                const step = { kind, request: event, response: null, index, title: kind === 'llm' ? 'AI inference' : (event.details?.toolName || 'Tool execution') };
+                steps.push(step);
+                pending[kind].push(step);
+            } else if (event.type === 'llm.response' || event.type === 'tool.response') {
+                const id = event.details?.toolCallId;
+                let matchIndex = kind === 'tool' && id ? pending.tool.findIndex(step => step.request.details?.toolCallId === id) : -1;
+                if (matchIndex < 0) matchIndex = 0;
+                const step = pending[kind].splice(matchIndex, 1)[0];
+                if (step) { step.response = event; if (event.details?.toolName) step.title = event.details.toolName; }
+                else steps.push({ kind, request: null, response: event, index, title: kind === 'llm' ? 'AI inference' : (event.details?.toolName || 'Tool execution') });
+            } else if (event.type !== 'run.started' && event.type !== 'run.completed') {
+                steps.push({ kind: 'run', request: event, response: null, index, title: labels[event.type]?.[0] || event.type });
+            }
+        });
+        let inference = 0;
+        steps.forEach(step => { if (step.kind === 'llm') step.title = 'Inference #' + (++inference); });
+        return steps;
+    }
+    function stepStatus(step) {
+        return statusOf(step.response || step.request);
+    }
+    function stepDuration(step) {
+        const value = step.response?.durationMs ?? step.request?.durationMs;
+        return typeof value === 'number' ? value : null;
+    }
+    function stepSummary(step) {
+        const event = step.response || step.request;
+        if (step.kind === 'llm') return step.response ? 'The model returned an inference result.' : 'The model request was sent; no response event was recorded.';
+        if (step.kind === 'tool') return traceDescription(event, stepStatus(step), 'Tool execution recorded.');
+        return traceDescription(event, stepStatus(step), labels[event.type]?.[1] || 'Execution event.');
+    }
+    function addText(parent, tag, value, className) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        element.textContent = value;
+        parent.append(element);
+        return element;
+    }
     function renderTrace(events) {
         if (!Array.isArray(events) || !events.length) return;
         traceEmpty.hidden = true;
         traceList.hidden = false;
-        const { completed, failures, tools, toolResults, llmCalls, outcome, tokens } = traceSummary(events);
-        const group = document.createElement('section');
-        group.className = 'af-activity-run';
-        const header = document.createElement('div');
-        header.className = 'af-activity-heading';
-        const title = document.createElement('strong');
-        title.textContent = 'Run #' + (traceList.children.length + 1);
-        const badge = document.createElement('span');
-        badge.className = 'af-activity-badge af-activity-badge--' + (completed && statusOf(completed) === 'failed' ? 'failed' : failures.length ? 'neutral' : completed ? 'success' : 'neutral');
-        badge.textContent = outcome;
-        header.append(title, badge);
-        group.append(header);
-
+        const summary = traceSummary(events);
+        const steps = buildSteps(events);
+        const run = document.createElement('section');
+        run.className = 'af-activity-run';
+        const heading = document.createElement('div');
+        heading.className = 'af-activity-heading';
+        addText(heading, 'strong', 'Run #' + (traceList.children.length + 1));
+        addText(heading, 'span', summary.outcome, 'af-activity-badge');
+        run.append(heading);
         const metrics = document.createElement('div');
         metrics.className = 'af-trace-metrics';
-        for (const [value, label] of [
-            [typeof completed?.durationMs === 'number' ? durationLabel(completed.durationMs) : '—', 'Duration'],
-            [String(llmCalls.length), 'AI calls'],
-            [String(tools.length), 'Tool calls'],
-            [String(toolResults.filter(e => statusOf(e) === 'failed').length), 'Tool errors'],
-            [tokens.total === null ? 'N/A' : tokens.total.toLocaleString(), 'Total tokens'],
-            [tokens.input === null ? 'N/A' : tokens.input.toLocaleString(), 'Input tokens'],
-            [tokens.output === null ? 'N/A' : tokens.output.toLocaleString(), 'Output tokens']
-        ]) {
-            const metric = document.createElement('div');
-            metric.className = 'af-trace-metric';
-            const number = document.createElement('strong');
-            number.textContent = value;
-            const caption = document.createElement('span');
-            caption.textContent = label;
-            metric.append(number, caption);
-            metrics.append(metric);
-        }
-        group.append(metrics);
-
+        const duration = summary.completed?.durationMs;
+        const totalStepTime = steps.reduce((n, s) => n + (stepDuration(s) || 0), 0);
+        const metricValues = [
+            ['Total time', typeof duration === 'number' ? durationLabel(duration) : 'N/A'],
+            ['Step time sum', steps.some(s => stepDuration(s) !== null) ? durationLabel(totalStepTime) : 'N/A'],
+            ['Steps', String(steps.length)],
+            ['AI calls', String(summary.llmCalls.length)],
+            ['Tool calls', String(summary.tools.length)],
+            ['Errors', String(steps.filter(s => stepStatus(s) === 'failed').length)],
+            ['Total tokens', summary.tokens.total == null ? 'N/A' : summary.tokens.total.toLocaleString()],
+            ['Input tokens', summary.tokens.input == null ? 'N/A' : summary.tokens.input.toLocaleString()],
+            ['Output tokens', summary.tokens.output == null ? 'N/A' : summary.tokens.output.toLocaleString()]
+        ];
+        metricValues.forEach(([label, value]) => {
+            const cell = document.createElement('div');
+            cell.className = 'af-trace-metric';
+            addText(cell, 'strong', value);
+            addText(cell, 'span', label);
+            metrics.append(cell);
+        });
+        run.append(metrics);
         const controls = document.createElement('div');
         controls.className = 'af-trace-controls';
-        const filter = document.createElement('select');
-        filter.className = 'af-trace-filter';
-        filter.setAttribute('aria-label', 'Filter execution events');
-        for (const [value, label] of [['all', 'All events'], ['llm', 'AI calls'], ['tool', 'Tools'], ['failed', 'Errors']]) {
-            const option = document.createElement('option');
-            option.value = value;
-            option.textContent = label;
-            filter.append(option);
-        }
-        const copy = document.createElement('button');
+        const flow = addText(controls, 'button', 'View business flow', 'af-trace-copy');
+        flow.type = 'button';
+        const copy = addText(controls, 'button', 'Copy JSON', 'af-trace-copy');
         copy.type = 'button';
-        copy.className = 'af-trace-copy';
-        copy.textContent = 'Copy JSON';
         copy.addEventListener('click', async () => {
-            try {
-                await navigator.clipboard.writeText(JSON.stringify(events, null, 2));
-                copy.textContent = 'Copied';
-            } catch {
-                copy.textContent = 'Copy unavailable';
-            }
+            try { await navigator.clipboard.writeText(JSON.stringify(events, null, 2)); copy.textContent = 'Copied'; }
+            catch { copy.textContent = 'Copy unavailable'; }
         });
-        controls.append(filter, copy);
-        group.append(controls);
-
-        const workspace = document.createElement('div');
-        workspace.className = 'af-trace-workspace';
-        const timeline = document.createElement('ol');
-        timeline.className = 'af-activity-timeline';
-        timeline.setAttribute('aria-label', 'Execution events');
-        const inspector = document.createElement('section');
-        inspector.className = 'af-trace-inspector';
-        inspector.setAttribute('aria-label', 'Selected event details');
-        const rows = [];
-
-        function selectEvent(index) {
-            rows.forEach((row, i) => {
-                row.button.setAttribute('aria-pressed', String(i === index));
-                row.item.classList.toggle('af-trace-selected', i === index);
-            });
-            const event = events[index];
-            inspector.replaceChildren();
-            const heading = document.createElement('div');
-            heading.className = 'af-trace-inspector-heading';
-            const eventTitle = document.createElement('strong');
-            eventTitle.textContent = (labels[event.type]?.[0] || event.type) + (event.details?.toolName ? ': ' + event.details.toolName : '');
-            const status = document.createElement('span');
-            status.className = 'af-activity-badge af-activity-badge--' + (statusOf(event) === 'failed' ? 'failed' : 'neutral');
-            status.textContent = event.status || 'recorded';
-            heading.append(eventTitle, status);
-            inspector.append(heading);
-            const summary = document.createElement('p');
-            summary.textContent = traceDescription(event, statusOf(event), labels[event.type]?.[1] || 'Execution event');
-            inspector.append(summary);
-            const metadata = document.createElement('dl');
-            metadata.className = 'af-trace-metadata';
-            for (const [key, value] of [
-                ['Type', event.type],
-                ['Duration', typeof event.durationMs === 'number' ? durationLabel(event.durationMs) : null],
-                ['Error code', event.details?.errorCode],
-                ['Tool call ID', event.details?.toolCallId]
-            ]) {
-                if (value == null) continue;
-                const dt = document.createElement('dt');
-                dt.textContent = key;
-                const dd = document.createElement('dd');
-                dd.textContent = value;
-                metadata.append(dt, dd);
-            }
-            inspector.append(metadata);
-            if (event.type === 'llm.response') {
-                const usage = tokenUsage(event);
-                const usagePanel = document.createElement('div');
-                usagePanel.className = 'af-trace-token-panel';
-                const usageTitle = document.createElement('strong');
-                usageTitle.textContent = 'Token usage · this inference';
-                usagePanel.append(usageTitle);
-                const usageGrid = document.createElement('div');
-                usageGrid.className = 'af-trace-token-grid';
-                for (const [key, label] of [['input','Input'],['output','Output'],['total','Total'],['cached','Cached input'],['reasoning','Reasoning']]) {
-                    const cell = document.createElement('div');
-                    const number = document.createElement('strong');
-                    number.textContent = usage?.[key] == null ? 'N/A' : usage[key].toLocaleString();
-                    const caption = document.createElement('span');
-                    caption.textContent = label;
-                    cell.append(number, caption);
-                    usageGrid.append(cell);
+        run.append(controls);
+        const list = document.createElement('ol');
+        list.className = 'af-activity-timeline af-trace-step-list';
+        run.append(list);
+        function openModal(title, contentBuilder) {
+            const overlay = document.createElement('div');
+            overlay.className = 'af-trace-modal-overlay';
+            const dialog = document.createElement('section');
+            dialog.className = 'af-trace-modal';
+            dialog.setAttribute('role', 'dialog');
+            dialog.setAttribute('aria-modal', 'true');
+            const dialogTitle = 'af-trace-dialog-title-' + Math.random().toString(36).slice(2);
+            dialog.setAttribute('aria-labelledby', dialogTitle);
+            const top = document.createElement('div');
+            top.className = 'af-trace-modal-header';
+            const h = addText(top, 'h3', title);
+            h.id = dialogTitle;
+            const close = addText(top, 'button', 'Close ×', 'af-trace-copy');
+            close.type = 'button';
+            dialog.append(top);
+            const body = document.createElement('div');
+            body.className = 'af-trace-modal-body';
+            contentBuilder(body);
+            dialog.append(body);
+            overlay.append(dialog);
+            const previousFocus = document.activeElement;
+            const dismiss = () => { document.removeEventListener('keydown', onKey); overlay.remove(); previousFocus?.focus(); };
+            const onKey = e => {
+                if (e.key === 'Escape') dismiss();
+                if (e.key === 'Tab') {
+                    const focusable = [...dialog.querySelectorAll('button,summary,[tabindex]')].filter(x => !x.hasAttribute('disabled'));
+                    if (!focusable.length) return;
+                    const first = focusable[0], last = focusable[focusable.length - 1];
+                    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
                 }
-                usagePanel.append(usageGrid);
-                inspector.append(usagePanel);
-            }
-            const details = document.createElement('details');
-            details.className = 'af-activity-details';
-            details.open = true;
-            const toggle = document.createElement('summary');
-            toggle.textContent = 'Raw event JSON';
-            const raw = document.createElement('pre');
-            raw.textContent = JSON.stringify(event, null, 2);
-            details.append(toggle, raw);
-            inspector.append(details);
+            };
+            close.addEventListener('click', dismiss);
+            overlay.addEventListener('click', e => { if (e.target === overlay) dismiss(); });
+            document.addEventListener('keydown', onKey);
+            document.body.append(overlay);
+            close.focus();
         }
-
-        events.forEach((event, index) => {
-            const state = statusOf(event);
-            const item = document.createElement('li');
-            item.className = 'af-activity-step';
+        function detailSection(parent, label, value) {
+            const row = document.createElement('div');
+            row.className = 'af-trace-detail-row';
+            addText(row, 'strong', label);
+            addText(row, 'span', value == null ? 'Not recorded' : String(value));
+            parent.append(row);
+        }
+        function openStep(step) {
+            openModal(step.title + ' · Step details', body => {
+                addText(body, 'p', stepSummary(step));
+                detailSection(body, 'Status', stepStatus(step));
+                detailSection(body, 'Duration', stepDuration(step) === null ? 'N/A' : durationLabel(stepDuration(step)));
+                if (step.kind === 'llm') {
+                    const u = tokenUsage(step.response || {});
+                    [['Input tokens',u?.input],['Output tokens',u?.output],['Total tokens',u?.total],['Cached input',u?.cached],['Reasoning',u?.reasoning]].forEach(([label,value]) => detailSection(body,label,value == null ? 'N/A' : value.toLocaleString()));
+                } else detailSection(body, 'Tokens', 'N/A · tool execution');
+                const details = step.response?.details || {};
+                if (stepStatus(step) === 'failed') {
+                    addText(body, 'h4', 'Technical error');
+                    detailSection(body, 'Error code', details.errorCode || 'Not recorded');
+                    detailSection(body, 'Technical message', details.errorMessage || details.message || 'Not recorded in trace');
+                    addText(body, 'h4', 'Business impact');
+                    addText(body, 'p', 'This step did not complete successfully. The effect on the user request depends on the agent response; a classified business error was not recorded.');
+                }
+                addText(body, 'h4', 'Input / Output');
+                detailSection(body, 'Input', 'Full input payload is not recorded in the current trace.');
+                detailSection(body, 'Output', 'Full output payload is not recorded in the current trace.');
+                const raw = document.createElement('details');
+                addText(raw, 'summary', 'Raw step events');
+                addText(raw, 'pre', JSON.stringify({ request: step.request, response: step.response }, null, 2));
+                body.append(raw);
+            });
+        }
+        steps.forEach((step, index) => {
+            const li = document.createElement('li');
+            li.className = 'af-activity-step';
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'af-trace-event';
-            button.setAttribute('aria-pressed', 'false');
-            const symbol = document.createElement('span');
-            symbol.className = 'af-activity-icon af-activity-icon--' + (state === 'failed' ? 'failed' : event.type === 'run.completed' ? 'success' : 'neutral');
-            symbol.textContent = state === 'failed' ? '!' : (labels[event.type]?.[2] || '•');
-            symbol.setAttribute('aria-hidden', 'true');
+            const icon = addText(button, 'span', stepStatus(step) === 'failed' ? '!' : step.kind === 'llm' ? '✦' : '⚙', 'af-activity-icon');
+            icon.setAttribute('aria-hidden', 'true');
             const content = document.createElement('span');
             content.className = 'af-trace-event-content';
-            const name = document.createElement('strong');
-            name.textContent = (labels[event.type]?.[0] || event.type) + (event.details?.toolName ? ': ' + event.details.toolName : '');
-            const description = document.createElement('small');
-            description.textContent = traceDescription(event, state, labels[event.type]?.[1] || 'Execution event');
-            content.append(name, description);
-            if (event.type === 'llm.response') {
-                const usage = tokenUsage(event);
-                const tokenLine = document.createElement('small');
-                tokenLine.className = 'af-trace-token-inline';
-                tokenLine.textContent = usage?.total != null
-                    ? usage.total.toLocaleString() + ' tokens · ' + (usage.input == null ? 'N/A' : usage.input.toLocaleString()) + ' in / ' + (usage.output == null ? 'N/A' : usage.output.toLocaleString()) + ' out'
-                    : 'Token usage unavailable';
-                content.append(tokenLine);
-            }
-            button.append(symbol, content);
-            if (typeof event.durationMs === 'number') {
-                const time = document.createElement('span');
-                time.className = 'af-activity-time';
-                time.textContent = durationLabel(event.durationMs);
-                button.append(time);
-            }
-            button.addEventListener('click', () => selectEvent(index));
-            item.append(button);
-            timeline.append(item);
-            rows.push({ item, button, event });
+            addText(content, 'strong', (index + 1) + '. ' + step.title);
+            addText(content, 'small', stepSummary(step));
+            const u = step.kind === 'llm' ? tokenUsage(step.response || {}) : null;
+            addText(content, 'small', 'Time: ' + (stepDuration(step) === null ? 'N/A' : durationLabel(stepDuration(step))) + ' · Tokens: ' + (step.kind === 'llm' ? (u?.total == null ? 'N/A' : u.total.toLocaleString()) + ' (in ' + (u?.input ?? 'N/A') + ' / out ' + (u?.output ?? 'N/A') + ')' : 'N/A') + ' · ' + stepStatus(step), 'af-trace-token-inline');
+            button.append(content);
+            button.addEventListener('click', () => openStep(step));
+            li.append(button);
+            list.append(li);
         });
-        filter.addEventListener('change', () => {
-            rows.forEach(({ item, event }) => {
-                const visible = filter.value === 'all' ||
-                    filter.value === 'failed' && statusOf(event) === 'failed' ||
-                    filter.value === 'tool' && event.type.startsWith('tool.') ||
-                    filter.value === 'llm' && event.type.startsWith('llm.');
-                item.hidden = !visible;
+        flow.addEventListener('click', () => openModal('Request business flow', body => {
+            addText(body, 'p', 'Observed execution sequence. Business decisions and branches are not captured by the current trace.');
+            const diagram = document.createElement('div');
+            diagram.className = 'af-trace-flow';
+            const nodes = [{ title: 'Request received', summary: 'Agent run started', step: null },
+                ...steps.map(s => ({ title: s.title, summary: stepSummary(s), step: s })),
+                { title: summary.outcome, summary: 'Run outcome', step: null }];
+            nodes.forEach((node, index) => {
+                if (index) addText(diagram, 'div', '↓', 'af-trace-flow-arrow');
+                const item = document.createElement('button');
+                item.type = 'button';
+                item.className = 'af-trace-flow-node';
+                addText(item, 'strong', node.title);
+                addText(item, 'small', node.summary);
+                if (node.step) {
+                    addText(item, 'small', 'Time: ' + (stepDuration(node.step) == null ? 'N/A' : durationLabel(stepDuration(node.step))) + ' · Status: ' + stepStatus(node.step));
+                    item.addEventListener('click', () => {
+                        document.querySelector('.af-trace-modal-overlay')?.querySelector('.af-trace-modal-header button')?.click();
+                        openStep(node.step);
+                    });
+                } else item.disabled = true;
+                diagram.append(item);
             });
-            const first = rows.find(row => !row.item.hidden);
-            if (first) selectEvent(rows.indexOf(first));
-            else inspector.replaceChildren();
-        });
-        workspace.append(timeline, inspector);
-        group.append(workspace);
-        traceList.prepend(group);
-        selectEvent(Math.max(0, events.findIndex(event => statusOf(event) === 'failed')));
+            body.append(diagram);
+        }));
+        traceList.prepend(run);
         summaryPanel.hidden = true;
         summaryPanel.replaceChildren();
     }
