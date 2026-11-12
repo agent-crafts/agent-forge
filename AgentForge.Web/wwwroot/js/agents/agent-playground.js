@@ -56,22 +56,40 @@
         if (state === 'failed') return 'This step failed. Review technical details for diagnostic information.';
         return fallback;
     }
+    function tokenUsage(event) {
+        const usage = event.details?.usage;
+        if (!usage) return null;
+        const read = key => {
+            const value = usage[key] ?? usage[key.charAt(0).toUpperCase() + key.slice(1)];
+            return typeof value === 'number' && Number.isFinite(value) ? value : null;
+        };
+        return {
+            input: read('inputTokens'),
+            output: read('outputTokens'),
+            total: read('totalTokens'),
+            cached: read('cachedInputTokens'),
+            reasoning: read('reasoningTokens')
+        };
+    }
     function traceSummary(events) {
         const completed = [...events].reverse().find(event => event.type === 'run.completed');
         const failures = events.filter(event => statusOf(event) === 'failed');
         const tools = events.filter(event => event.type === 'tool.request');
         const toolResults = events.filter(event => event.type === 'tool.response');
         const llmCalls = events.filter(event => event.type === 'llm.request');
+        const usage = events.filter(e => e.type === 'llm.response').map(tokenUsage).filter(Boolean);
+        const sum = key => usage.some(u => u[key] !== null) ? usage.reduce((n, u) => n + (u[key] ?? 0), 0) : null;
+        const tokens = { input: sum('input'), output: sum('output'), total: sum('total'), cached: sum('cached'), reasoning: sum('reasoning') };
         const outcome = completed
             ? statusOf(completed) === 'failed' ? 'Failed' : failures.length ? 'Completed with errors' : 'Completed'
             : failures.length ? 'Errors recorded' : 'Incomplete';
-        return { completed, failures, tools, toolResults, llmCalls, outcome };
+        return { completed, failures, tools, toolResults, llmCalls, outcome, tokens };
     }
     function renderTrace(events) {
         if (!Array.isArray(events) || !events.length) return;
         traceEmpty.hidden = true;
         traceList.hidden = false;
-        const { completed, failures, tools, toolResults, llmCalls, outcome } = traceSummary(events);
+        const { completed, failures, tools, toolResults, llmCalls, outcome, tokens } = traceSummary(events);
         const group = document.createElement('section');
         group.className = 'af-activity-run';
         const header = document.createElement('div');
@@ -90,7 +108,10 @@
             [typeof completed?.durationMs === 'number' ? durationLabel(completed.durationMs) : '—', 'Duration'],
             [String(llmCalls.length), 'AI calls'],
             [String(tools.length), 'Tool calls'],
-            [String(toolResults.filter(e => statusOf(e) === 'failed').length), 'Tool errors']
+            [String(toolResults.filter(e => statusOf(e) === 'failed').length), 'Tool errors'],
+            [tokens.total === null ? 'N/A' : tokens.total.toLocaleString(), 'Total tokens'],
+            [tokens.input === null ? 'N/A' : tokens.input.toLocaleString(), 'Input tokens'],
+            [tokens.output === null ? 'N/A' : tokens.output.toLocaleString(), 'Output tokens']
         ]) {
             const metric = document.createElement('div');
             metric.className = 'af-trace-metric';
@@ -174,6 +195,27 @@
                 metadata.append(dt, dd);
             }
             inspector.append(metadata);
+            if (event.type === 'llm.response') {
+                const usage = tokenUsage(event);
+                const usagePanel = document.createElement('div');
+                usagePanel.className = 'af-trace-token-panel';
+                const usageTitle = document.createElement('strong');
+                usageTitle.textContent = 'Token usage · this inference';
+                usagePanel.append(usageTitle);
+                const usageGrid = document.createElement('div');
+                usageGrid.className = 'af-trace-token-grid';
+                for (const [key, label] of [['input','Input'],['output','Output'],['total','Total'],['cached','Cached input'],['reasoning','Reasoning']]) {
+                    const cell = document.createElement('div');
+                    const number = document.createElement('strong');
+                    number.textContent = usage?.[key] == null ? 'N/A' : usage[key].toLocaleString();
+                    const caption = document.createElement('span');
+                    caption.textContent = label;
+                    cell.append(number, caption);
+                    usageGrid.append(cell);
+                }
+                usagePanel.append(usageGrid);
+                inspector.append(usagePanel);
+            }
             const details = document.createElement('details');
             details.className = 'af-activity-details';
             details.open = true;
@@ -204,6 +246,15 @@
             const description = document.createElement('small');
             description.textContent = traceDescription(event, state, labels[event.type]?.[1] || 'Execution event');
             content.append(name, description);
+            if (event.type === 'llm.response') {
+                const usage = tokenUsage(event);
+                const tokenLine = document.createElement('small');
+                tokenLine.className = 'af-trace-token-inline';
+                tokenLine.textContent = usage?.total != null
+                    ? usage.total.toLocaleString() + ' tokens · ' + (usage.input == null ? 'N/A' : usage.input.toLocaleString()) + ' in / ' + (usage.output == null ? 'N/A' : usage.output.toLocaleString()) + ' out'
+                    : 'Token usage unavailable';
+                content.append(tokenLine);
+            }
             button.append(symbol, content);
             if (typeof event.durationMs === 'number') {
                 const time = document.createElement('span');
