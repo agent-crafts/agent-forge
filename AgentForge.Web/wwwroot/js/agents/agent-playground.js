@@ -56,14 +56,24 @@
         if (state === 'failed') return 'This step failed. Review technical details for diagnostic information.';
         return fallback;
     }
+    function traceSummary(events) {
+        const completed = [...events].reverse().find(event => event.type === 'run.completed');
+        const failures = events.filter(event => statusOf(event) === 'failed');
+        const tools = events.filter(event => event.type === 'tool.request');
+        const toolResults = events.filter(event => event.type === 'tool.response');
+        const llmCalls = events.filter(event => event.type === 'llm.request');
+        const outcome = completed
+            ? statusOf(completed) === 'failed' ? 'Failed' : failures.length ? 'Completed with errors' : 'Completed'
+            : failures.length ? 'Errors recorded' : 'Incomplete';
+        return { completed, failures, tools, toolResults, llmCalls, outcome };
+    }
     function renderTrace(events) {
         if (!Array.isArray(events) || !events.length) return;
         traceEmpty.hidden = true;
         traceList.hidden = false;
-        const run = events.find(event => event.type === 'run.completed');
-        const failed = events.some(event => statusOf(event) === 'failed');
+        const { completed: run, failures, tools, toolResults, llmCalls, outcome } = traceSummary(events);
+        const failed = failures.length > 0;
         const runFailed = run && statusOf(run) === 'failed';
-        const outcome = runFailed ? 'Failed' : failed ? 'Completed with errors' : run && statusOf(run) === 'success' ? 'Completed' : 'Recorded';
         const runNumber = traceList.children.length + 1;
         const group = document.createElement('section');
         group.className = 'af-activity-run';
@@ -76,9 +86,26 @@
         badge.textContent = outcome;
         heading.append(title, badge);
         group.append(heading);
+        const overview = document.createElement('div');
+        overview.className = 'af-activity-footer';
+        const stats = [
+            llmCalls.length + ' AI call' + (llmCalls.length === 1 ? '' : 's'),
+            tools.length + ' tool call' + (tools.length === 1 ? '' : 's'),
+            toolResults.filter(event => statusOf(event) === 'failed').length + ' tool failure(s)',
+            typeof run?.durationMs === 'number' ? durationLabel(run.durationMs) + ' total' : 'Duration unavailable'
+        ];
+        for (const stat of stats) {
+            const span = document.createElement('span');
+            span.textContent = stat;
+            overview.append(span);
+        }
+        group.append(overview);
         const timeline = document.createElement('ol');
         timeline.className = 'af-activity-timeline';
+        const pendingTools = new Map();
         for (const event of events) {
+            const callId = event.details?.toolCallId;
+            if (event.type === 'tool.request' && callId) pendingTools.set(callId, event);
             const item = document.createElement('li');
             item.className = 'af-activity-step';
             const state = statusOf(event);
@@ -103,6 +130,13 @@
             const detail = document.createElement('p');
             detail.textContent = traceDescription(event, state, description);
             body.append(line, detail);
+            if (event.type === 'tool.response' && callId && pendingTools.has(callId)) {
+                const correlation = document.createElement('p');
+                correlation.textContent = 'Result for tool call ' + callId;
+                correlation.className = 'af-activity-time';
+                body.append(correlation);
+                pendingTools.delete(callId);
+            }
             const technical = document.createElement('details');
             technical.className = 'af-activity-details';
             const toggle = document.createElement('summary');
@@ -120,6 +154,20 @@
         const count = document.createElement('span');
         count.textContent = events.length + ' steps · ' + outcome.toLowerCase();
         footer.append(count);
+        const exportButton = document.createElement('button');
+        exportButton.type = 'button';
+        exportButton.className = 'af-activity-time';
+        exportButton.textContent = 'Copy trace JSON';
+        exportButton.setAttribute('aria-label', 'Copy full execution trace JSON');
+        exportButton.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(JSON.stringify(events, null, 2));
+                exportButton.textContent = 'Copied';
+            } catch {
+                exportButton.textContent = 'Copy unavailable';
+            }
+        });
+        footer.append(exportButton);
         if (typeof run?.durationMs === 'number') {
             const time = document.createElement('span');
             time.textContent = durationLabel(run.durationMs) + ' total';
