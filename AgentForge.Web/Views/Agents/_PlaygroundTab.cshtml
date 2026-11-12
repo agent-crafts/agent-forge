@@ -46,19 +46,47 @@
 .agent-playground .af-activity-details summary { cursor:pointer; width:fit-content; }
 .agent-playground .af-activity-details pre { overflow:auto; max-height:220px; padding:8px; margin-top:6px; border-radius:6px; background:rgba(0,0,0,.18); white-space:pre-wrap; overflow-wrap:anywhere; }
 .agent-playground .af-activity-footer { display:flex; justify-content:space-between; gap:8px; border-top:1px solid rgba(148,163,184,.2); padding-top:12px; font-size:12px; color:var(--text-muted,#94a3b8); }
+
+.agent-playground .af-trace-metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:0 0 14px; }
+.agent-playground .af-trace-metric { display:flex; flex-direction:column; gap:2px; padding:10px; border:1px solid var(--line,rgba(148,163,184,.2)); border-radius:10px; background:rgba(148,163,184,.055); }
+.agent-playground .af-trace-metric strong { color:var(--text-heading,inherit); font-size:19px; line-height:1.3; }
+.agent-playground .af-trace-metric span { font-size:11px; color:var(--text-muted,#94a3b8); }
+.agent-playground .af-trace-controls { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; }
+.agent-playground .af-trace-filter,.agent-playground .af-trace-copy { border:1px solid var(--line,rgba(148,163,184,.3)); border-radius:8px; background:var(--surface,transparent); color:var(--text-heading,inherit); padding:7px 9px; font-size:12px; min-width:0; }
+.agent-playground .af-trace-copy { cursor:pointer; white-space:nowrap; }
+.agent-playground .af-trace-workspace { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }
+.agent-playground .af-activity-step { display:block; padding:0 0 7px; }
+.agent-playground .af-activity-step::before { display:none; }
+.agent-playground .af-activity-step[hidden] { display:none; }
+.agent-playground .af-trace-event { display:flex; align-items:flex-start; gap:8px; width:100%; text-align:left; cursor:pointer; padding:9px 8px; border:1px solid var(--line,rgba(148,163,184,.2)); border-radius:10px; background:transparent; color:inherit; }
+.agent-playground .af-trace-event:hover,.agent-playground .af-trace-selected .af-trace-event { background:rgba(99,102,241,.08); border-color:rgba(99,102,241,.45); }
+.agent-playground .af-trace-event:focus-visible,.agent-playground .af-trace-copy:focus-visible,.agent-playground .af-trace-filter:focus-visible { outline:2px solid var(--accent,#6366f1); outline-offset:2px; }
+.agent-playground .af-trace-event .af-activity-icon { flex-basis:26px; height:26px; font-size:12px; }
+.agent-playground .af-trace-event-content { display:flex; flex-direction:column; gap:4px; flex:1; min-width:0; }
+.agent-playground .af-trace-event-content strong { font-size:12px; overflow-wrap:anywhere; }
+.agent-playground .af-trace-event-content small { font-size:11px; line-height:1.4; color:var(--text-muted,#94a3b8); overflow-wrap:anywhere; }
+.agent-playground .af-trace-inspector { min-width:0; border:1px solid var(--line,rgba(148,163,184,.2)); border-radius:11px; padding:12px; background:rgba(148,163,184,.035); }
+.agent-playground .af-trace-inspector-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+.agent-playground .af-trace-inspector-heading strong { font-size:13px; overflow-wrap:anywhere; min-width:0; }
+.agent-playground .af-trace-inspector > p { font-size:12px; line-height:1.5; margin:10px 0; color:var(--text-muted,#94a3b8); }
+.agent-playground .af-trace-metadata { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.5fr); gap:7px; font-size:11px; margin:12px 0; }
+.agent-playground .af-trace-metadata dt { color:var(--text-muted,#94a3b8); }
+.agent-playground .af-trace-metadata dd { margin:0; overflow-wrap:anywhere; font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+.agent-playground .af-activity-details pre { max-height:320px; white-space:pre-wrap; }
+@media (min-width:1536px) { .agent-playground .af-trace-workspace { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } }
 </style>
 <section class="ui-panel agent-playground" style="margin-top: 16px;" aria-labelledby="agentPlaygroundHeading" data-agent-id="@Model.Id">
     <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
             <h2 id="agentPlaygroundHeading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 7 7-7 7"/><path d="M16 19h5"/></svg></span> Playground</h2>
-            <p class="ui-subtitle">Chat with the configured LLM. Tool execution and session history are not enabled yet.</p>
+            <p class="ui-subtitle">Test your agent with its assigned tools and inspect each execution.</p>
         </div>
         <button type="button" class="ui-button ui-button--secondary" data-playground-reset>New session</button>
     </div>
     <div class="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted">
         <span class="ui-tool-card-badge">@Model.Name</span>
         <span class="ui-tool-card-badge">@assignedToolCount assigned tools</span>
-        <span class="ui-tool-card-badge">LLM chat only</span>
+        <span class="ui-tool-card-badge">Execution tracing</span>
     </div>
     <div class="mt-4 grid grid-cols-1 items-stretch gap-4 xl:grid-cols-3" style="height: 100vh; min-height: 0;" data-playground-layout>
         <div class="xl:col-span-2 flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl border border-line bg-surface">
@@ -73,7 +101,7 @@
                 <div class="m-auto max-w-md text-center" data-playground-welcome>
                     <div class="mb-3 text-2xl" aria-hidden="true">✦</div>
                     <h3 class="font-semibold text-heading">Start a conversation</h3>
-                    <p class="mt-2 text-sm text-muted">Send a message to test this agent's instructions with the configured LLM. Tools are not executed yet.</p>
+                    <p class="mt-2 text-sm text-muted">Send a message to test your agent and inspect its execution trace.</p>
                 </div>
             </div>
             <form class="shrink-0 border-t border-line p-3" data-playground-form>
@@ -89,7 +117,7 @@
                 <span class="ui-panel-icon shrink-0" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h6v6H4zM14 5h6v6h-6zM9 11v4h8M17 15v4M14 19h6"/></svg></span>
                 <div class="min-w-0">
                     <h3 id="playgroundTraceHeading" class="m-0 text-sm font-semibold text-heading">Execution trace</h3>
-                    <p class="m-0 text-xs leading-snug text-muted">Follow your agent's execution steps.</p>
+                    <p class="m-0 text-xs leading-snug text-muted">Inspect AI calls, tool executions, and errors.</p>
                 </div>
             </div>
             <div class="af-inspector-summary" data-playground-summary hidden></div>
