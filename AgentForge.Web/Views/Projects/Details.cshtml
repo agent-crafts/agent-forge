@@ -4,10 +4,30 @@
 }
 <div class="mb-6"><a class="text-sm text-muted" href="/projects">← Projects</a></div>
 <div class="rounded-xl border border-line bg-surface p-6">
+    <div class="ui-profile-icon mb-4" aria-hidden="true">
+        @if (Model.Icon.StartsWith("projects/", StringComparison.Ordinal))
+        {
+            <img src="@("/api/files/" + Model.Icon)" alt="" width="64" height="64" class="h-16 w-16 rounded-xl object-cover" />
+        }
+        else
+        {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10H3z"/></svg>
+        }
+    </div>
     <h2 class="mb-4 text-lg font-semibold">Project Details</h2>
-    <form id="editProjectForm" class="flex max-w-xl flex-col gap-4" data-project-id="@Model.Id">
+    <form id="editProjectForm" class="flex max-w-xl flex-col gap-4" data-project-id="@Model.Id" data-project-icon="@Model.Icon">
         <label for="editProjectName">Project Name</label>
         <input id="editProjectName" class="ui-input" name="name" maxlength="200" value="@Model.Name" required />
+        <label for="editProjectIconUpload" class="ui-field-label">Project icon (optional)</label>
+        <div class="ui-file">
+            <label class="ui-file-avatar" for="editProjectIconUpload">
+                <span id="editProjectIconFallback" class="ui-file-fallback" aria-hidden="true" @(string.IsNullOrWhiteSpace(Model.Icon) ? "" : "hidden")>▣</span>
+                <img id="editProjectIconPreview" class="ui-file-preview" alt="" width="96" height="96" src="@(Model.Icon.StartsWith("projects/", StringComparison.Ordinal) ? "/api/files/" + Model.Icon : "")" hidden="@string.IsNullOrWhiteSpace(Model.Icon)" />
+                <span class="ui-file-change" aria-hidden="true">✎</span>
+                <input id="editProjectIconUpload" class="ui-file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+            </label>
+            <p class="ui-file-hint">PNG, JPG, WebP or GIF, up to 2 MB.</p>
+        </div>
         <label for="editProjectDescription">Description</label>
         <textarea id="editProjectDescription" class="ui-input" name="description" maxlength="2000" rows="5">@Model.Description</textarea>
         <p id="projectFormError" class="text-sm text-red-600" role="alert" hidden></p>
