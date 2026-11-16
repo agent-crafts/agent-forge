@@ -4,32 +4,18 @@ namespace AgentForge.Core.Enums;
 
 public enum ToolCategory
 {
-    // Legacy values retained to keep existing string-persisted tools readable.
-
-    [Description("General")]
-    General = 1,
-
-    [Description("Development")]
-    Development = 2,
-
-    [Description("Integration")]
-    Integration = 3,
-
-    [Description("Data")]
-    Data = 4,
-
-    [Description("Automation")]
-    Automation = 5,
-
     [Description("Discovery")]
-    Discovery = 6,
+    Discovery = 1,
 
     [Description("Design")]
-    Design = 7,
+    Design = 2,
+
+    [Description("Development")]
+    Development = 3,
 
     [Description("Quality")]
-    Quality = 8,
+    Quality = 4,
 
     [Description("Deployment")]
-    Deployment = 9
+    Deployment = 5
 }
