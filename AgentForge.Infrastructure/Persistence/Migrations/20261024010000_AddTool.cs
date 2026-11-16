@@ -19,7 +19,7 @@ public partial class AddTool : Migration
                 display_name = table.Column<string>(type: "character varying(155)", maxLength: 155, nullable: false),
                 description = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
                 kind = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                category = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
+                category = table.Column<int>(type: "integer", nullable: false),
                 image_url = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: true),
                 json_schema = table.Column<string>(type: "jsonb", nullable: false)
             },
