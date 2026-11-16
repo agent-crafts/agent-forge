@@ -1,0 +1,21 @@
+@model AgentForge.Core.Domains.Project
+@{
+    Layout = "_AppLayout";
+}
+<div class="mb-6"><a class="text-sm text-muted" href="/projects">← Projects</a></div>
+<div class="rounded-xl border border-line bg-surface p-6">
+    <h2 class="mb-4 text-lg font-semibold">Project Details</h2>
+    <form id="editProjectForm" class="flex max-w-xl flex-col gap-4" data-project-id="@Model.Id">
+        <label for="editProjectName">Project Name</label>
+        <input id="editProjectName" class="ui-input" name="name" maxlength="200" value="@Model.Name" required />
+        <label for="editProjectDescription">Description</label>
+        <textarea id="editProjectDescription" class="ui-input" name="description" maxlength="2000" rows="5">@Model.Description</textarea>
+        <p id="projectFormError" class="text-sm text-red-600" role="alert" hidden></p>
+        <div class="flex gap-3">
+            <button type="submit" class="ui-button rounded-xl border border-line-strong bg-raised px-4 py-2 font-semibold">Save Changes</button>
+            <button type="button" id="archiveProject" class="ui-button rounded-xl border border-line px-4 py-2">Archive Project</button>
+        </div>
+    </form>
+</div>
+@Html.AntiForgeryToken()
+<script src="~/js/projects/projects.js" asp-append-version="true"></script>
