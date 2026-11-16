@@ -7,7 +7,6 @@ public sealed class Project : Base
     public string Name { get; private set; } = string.Empty;
     public string? Description { get; private set; }
     public string Icon { get; private set; } = string.Empty;
-    public bool IsArchived { get; private set; }
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset UpdatedAt { get; private set; }
 
@@ -36,7 +35,6 @@ public sealed class Project : Base
             throw new ArgumentException("Project name must contain 1–200 characters.", nameof(name));
         if (description?.Length > 2000)
             throw new ArgumentException("Project description must be at most 2000 characters.", nameof(description));
-        if (IsArchived) throw new InvalidOperationException("Archived projects cannot be edited.");
         Name = name.Trim();
         Description = description;
         Icon = ValidateIcon(icon);
@@ -53,10 +51,4 @@ public sealed class Project : Base
         return normalized;
     }
 
-    public void Archive()
-    {
-        if (IsArchived) return;
-        IsArchived = true;
-        UpdatedAt = DateTimeOffset.UtcNow;
-    }
 }
