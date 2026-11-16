@@ -1,4 +1,5 @@
 using AgentForge.Application.Agents.Queries;
+using AgentForge.Application.Projects;
 using AgentForge.Application.Tools.Queries;
 using AgentForge.Core.Domains;
 using AgentForge.Core.Enums;
@@ -23,6 +24,28 @@ public sealed class WorkspaceController(ISender sender) : Controller
         ["knowledge"] = ("Knowledge", "Connect documents and knowledge sources to your agents."),
         ["runs"] = ("Runs", "Inspect agent executions, steps, and tool calls.")
     };
+
+    [HttpGet("projects")]
+    public async Task<IActionResult> Projects([FromQuery] int pageNumber = 1, CancellationToken cancellationToken = default)
+    {
+        if (pageNumber < 1) return BadRequest("Invalid page number.");
+        var page = await sender.Send(new GetProjectsPageQuery(pageNumber, 20), cancellationToken);
+        ViewData["Title"] = "Projects";
+        ViewData["Section"] = "projects";
+        ViewData["PageNumber"] = page.PageNumber;
+        ViewData["TotalPages"] = page.TotalPages;
+        return View("~/Views/Projects/Index.cshtml", page.Items);
+    }
+
+    [HttpGet("projects/{id:guid}")]
+    public async Task<IActionResult> ProjectDetails(Guid id, CancellationToken cancellationToken)
+    {
+        var project = await sender.Send(new GetProjectByIdQuery(id), cancellationToken);
+        if (project is null || project.IsArchived) return NotFound();
+        ViewData["Title"] = project.Name;
+        ViewData["Section"] = "projects";
+        return View("~/Views/Projects/Details.cshtml", project);
+    }
 
     [HttpGet("tools")]
     public async Task<IActionResult> Tools(CancellationToken cancellationToken)
@@ -88,7 +111,7 @@ public sealed class WorkspaceController(ISender sender) : Controller
         return View("~/Views/Agents/Details.cshtml", AgentsController.AgentCard.From(agent));
     }
 
-    [HttpGet("{section:regex(^(projects|specifications|workflows|tasks|reviews|pipelines|knowledge|runs)$)}")]
+    [HttpGet("{section:regex(^(specifications|workflows|tasks|reviews|pipelines|knowledge|runs)$)}")]
     public IActionResult Index(string section)
     {
         if (!Pages.TryGetValue(section, out var page)) return NotFound();
