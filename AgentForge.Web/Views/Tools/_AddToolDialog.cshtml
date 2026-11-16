@@ -32,7 +32,7 @@
                 <select class="ui-select" id="newToolCategory" name="category" required aria-required="true" aria-describedby="toolCategoryHelp newToolCategoryError">
                     @foreach (var category in Enum.GetValues<ToolCategory>())
                     {
-                        <option value="@category.ToString().ToLowerInvariant()">@enumLabel(category)</option>
+                        <option value="@((int)category)">@enumLabel(category)</option>
                     }
                 </select>
                 <p id="newToolCategoryError" class="ui-field-error hidden" role="alert"></p>
@@ -71,7 +71,7 @@
                 <select class="ui-select" id="externalToolCategory" name="externalCategory" required aria-required="true">
                     @foreach (var category in Enum.GetValues<ToolCategory>())
                     {
-                        <option value="@category.ToString().ToLowerInvariant()" selected="@(category == ToolCategory.Discovery)">@enumLabel(category)</option>
+                        <option value="@((int)category)" selected="@(category == ToolCategory.Discovery)">@enumLabel(category)</option>
                     }
                 </select>
                 <p class="text-[13px] text-muted">Category applied to all selected imported tools.</p>
