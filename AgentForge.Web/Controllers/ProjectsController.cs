@@ -1,5 +1,7 @@
 using AgentForge.Application.Projects.Commands;
 using AgentForge.Application.Projects.Queries;
+using AgentForge.Core.Domains;
+using AgentForge.Core.Utilities;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +34,7 @@ public sealed class ProjectsController(ISender sender) : ControllerBase
     public async Task<IActionResult> List([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20, CancellationToken ct = default)
     {
         if (pageNumber < 1 || pageSize is < 1 or > 100) return BadRequest("Invalid pagination parameters.");
-        return Ok(await sender.Send(new GetProjectsPageQuery(new AgentForge.Core.Utilities.PagedQuery<AgentForge.Core.Domains.Project>(pageNumber, pageSize, p => p.IsActive && !p.IsArchived, p => p.OrderBy(x => x.Name))), ct));
+        return Ok(await sender.Send(new GetProjectsPageQuery(new PagedQuery<Project>(pageNumber, pageSize, p => p.IsActive && !p.IsArchived, p => p.OrderBy(x => x.Name))), ct));
     }
 
     [HttpPut("{id:guid}")]
@@ -53,4 +55,14 @@ public sealed class ProjectsController(ISender sender) : ControllerBase
         => await sender.Send(new ArchiveProjectCommand(id), ct) ? NoContent() : NotFound();
 
     public sealed record ProjectDetailsRequest(string Name, string? Description, string? Icon = null);
+
+    // Compatibility model for Razor views; API actions return domain models.
+    public sealed record ProjectCard(string Id, string Name, string? Description, string Icon,
+        DateTimeOffset CreatedAt, DateTimeOffset UpdatedAt, bool IsArchived)
+    {
+        public static ProjectCard From(Project project) => new(
+            project.Id.ToString(), project.Name, project.Description,
+            project.Icon.StartsWith("projects/", StringComparison.Ordinal) ? "/api/files/" + project.Icon : string.Empty,
+            project.CreatedAt, project.UpdatedAt, project.IsArchived);
+    }
 }
