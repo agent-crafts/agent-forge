@@ -114,9 +114,9 @@
         @if (Model.ExecutorKey == "get_github_issue" || Model.Name == "get_github_issue")
         {
             <div class="ui-columns tool-try-layout">
-                <section class="ui-panel min-w-0">
-                    <h2 class="text-lg font-bold text-heading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try this tool</h2>
-                    <p class="mt-1 text-sm leading-6 text-muted">Provide the input parameters and run the tool to see the response.</p>
+                <div class="ui-stack"><section class="ui-panel min-w-0">
+                    <h2 ><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try this tool</h2>
+                    <p class="ui-subtitle">Provide the input parameters and run the tool to see the response.</p>
                     <form id="githubToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-6 grid gap-5">
                         @Html.AntiForgeryToken()
                         <div class="grid gap-2">
@@ -139,10 +139,10 @@
                             <partial name="_Button" model='new UiButtonModel { Text = "Reset", Variant = UiButtonVariant.Secondary, Type = "reset", Id = "githubToolReset", Icon = "↻" }' />
                         </div>
                     </form>
-                </section>
-                <section class="ui-panel flex min-w-0 flex-col">
+                </section></div>
+                <div class="ui-stack"><section class="ui-panel flex min-w-0 flex-col">
                     <div class="flex flex-wrap items-start justify-between gap-3">
-                        <div><h2 class="text-lg font-bold text-heading">Response</h2><p class="mt-1 text-sm text-muted">The tool response will appear here after execution.</p></div>
+                        <div><h2 >Response</h2><p class="ui-subtitle">The tool response will appear here after execution.</p></div>
                         <div class="flex flex-wrap items-center gap-2 text-xs text-muted">
                             <span id="githubToolStatus" class="rounded-full bg-raised px-3 py-1.5 font-semibold">Not run</span>
                             <span id="githubToolDuration" class="rounded-full bg-raised px-3 py-1.5" hidden></span>
@@ -167,15 +167,15 @@
                         <pre class="ui-code h-full min-h-80 max-h-[560px] overflow-auto rounded-xl border border-line bg-[#151d2b] p-4 text-xs leading-6"><code id="githubToolResultRaw">Run the tool to view the raw response.</code></pre>
                     </div>
 
-                </section>
+                </section></div>
             </div>
         }
         else if (Model.ExecutorKey == "http.get_json")
         {
             <div class="ui-columns">
-                <section class="ui-panel">
-                    <h2 class="text-lg font-bold text-heading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try HTTP GET JSON</h2>
-                    <p class="mt-2 text-sm text-muted">Runs the saved API URL using the input parameters below.</p>
+                <div class="ui-stack"><section class="ui-panel">
+                    <h2 ><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try HTTP GET JSON</h2>
+                    <p class="ui-subtitle">Runs the saved API URL using the input parameters below.</p>
                     <form id="httpJsonTryForm" action="/api/tools/@Model.Id/execute" class="mt-5 grid gap-3">
                         @Html.AntiForgeryToken()
                         @if (hasProperties)
@@ -194,18 +194,18 @@
                         }
                         <button type="submit" class="ui-button ui-button-primary">Run Tool</button>
                     </form>
-                </section>
-                <section class="ui-panel">
-                    <h2 class="text-lg font-bold text-heading">Response</h2>
-                    <p id="httpJsonTryStatus" role="status" class="mt-2 text-sm text-muted">Not run</p>
+                </section></div>
+                <div class="ui-stack"><section class="ui-panel">
+                    <h2 >Response</h2>
+                    <p id="httpJsonTryStatus" role="status" class="ui-subtitle">Not run</p>
                     <pre class="mt-4 max-h-[560px] overflow-auto rounded-xl bg-[#151d2b] p-4 text-xs text-white"><code id="httpJsonTryResult">Run the tool to see its response.</code></pre>
-                </section>
+                </section></div>
             </div>
         }
         else if (Model.Kind == "external" && Model.ExecutorKey == "mcp")
         {
             <div class="ui-columns">
-                <section class="ui-panel min-w-0">
+                <div class="ui-stack"><section class="ui-panel min-w-0">
                     <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try this MCP tool</h2>
                     <form id="mcpToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-4 grid gap-4">
                         @Html.AntiForgeryToken()
@@ -217,17 +217,17 @@
                         </div>
                         <ui-button id="mcpToolRun" variant="primary" type="submit">Run Tool</ui-button>
                     </form>
-                </section>
-                <section class="ui-panel min-w-0">
+                </section></div>
+                <div class="ui-stack"><section class="ui-panel min-w-0">
                     <h2>Response</h2>
                     <p id="mcpToolStatus" class="ui-subtitle" role="status">Not run</p>
                     <partial name="_JsonViewer" model='("mcpToolResult", (string?)null)' />
-                </section>
+                </section></div>
             </div>
         }
         else
         {
-            <div class="ui-panel"><h2 class="text-lg font-bold text-heading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try Now</h2><p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></div>
+            <div class="ui-columns"><div class="ui-stack"><section class="ui-panel"><h2 ><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try Now</h2><p class="ui-subtitle">This tool does not have an approved UI execution adapter yet.</p><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></section></div></div>
         }
     </section>
 </div>
