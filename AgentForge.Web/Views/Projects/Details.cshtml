@@ -22,7 +22,7 @@
         <div class="ui-file">
             <label class="ui-file-avatar" for="editProjectIconUpload">
                 <span id="editProjectIconFallback" class="ui-file-fallback" aria-hidden="true" @(string.IsNullOrWhiteSpace(Model.Icon) ? "" : "hidden")>▣</span>
-                <img id="editProjectIconPreview" class="ui-file-preview" alt="" width="96" height="96" src="@(Model.Icon.StartsWith("projects/", StringComparison.Ordinal) ? "/api/files/" + Model.Icon : "")" hidden="@string.IsNullOrWhiteSpace(Model.Icon)" />
+                <img id="editProjectIconPreview" class="ui-file-preview" alt="" width="96" height="96" src="@(Model.Icon.StartsWith("projects/", StringComparison.Ordinal) ? "/api/files/" + Model.Icon : "")" hidden="@(string.IsNullOrWhiteSpace(Model.Icon))" />
                 <span class="ui-file-change" aria-hidden="true">✎</span>
                 <input id="editProjectIconUpload" class="ui-file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
             </label>
