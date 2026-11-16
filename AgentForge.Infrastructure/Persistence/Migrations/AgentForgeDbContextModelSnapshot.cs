@@ -140,12 +140,6 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
                         .HasDefaultValue(true)
                         .HasColumnName("is_active");
 
-                    b.Property<bool>("IsArchived")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_archived");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
