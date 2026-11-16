@@ -51,7 +51,7 @@ public sealed class FileService(IHostEnvironment environment) : IFileService
     {
         var owner = filename.Split('/')[0];
         var name = filename.Split('/').Last();
-        if (owner is not ("agents" or "tools") || filename != owner + "/" + name) return null;
+        if (owner is not ("agents" or "tools" or "projects") || filename != owner + "/" + name) return null;
         var extension = Path.GetExtension(name);
         var stem = Path.GetFileNameWithoutExtension(name);
         if (stem.Length != 24 || !stem.All(Uri.IsHexDigit) || !MimeTypes.TryGetValue(extension, out var mime))
