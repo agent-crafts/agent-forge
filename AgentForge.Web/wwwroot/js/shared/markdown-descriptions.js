@@ -1,8 +1,11 @@
 (() => {
   // Render from textContent rather than HTML to preserve Razor's output encoding.
   const render = (source, target) => {
-    if (!window.marked || !window.DOMPurify) return;
-    target.innerHTML = DOMPurify.sanitize(marked.parse(source, { breaks: true }));
+    if (typeof window.marked?.parse !== 'function' || !window.DOMPurify?.sanitize) {
+      target.textContent = 'Markdown preview is unavailable. Please reload the page and try again.';
+      return;
+    }
+    target.innerHTML = window.DOMPurify.sanitize(window.marked.parse(source, { breaks: true, gfm: true }));
     target.querySelectorAll('a[href]').forEach(link => {
       const url = link.getAttribute('href') || '';
       if (!/^(https?:\/\/|mailto:|\/)/i.test(url)) link.removeAttribute('href');
@@ -87,8 +90,7 @@
     button.addEventListener('click', () => {
       const body = previewDialog.querySelector('[data-preview-body]');
       body.replaceChildren();
-      if (window.marked && window.DOMPurify) render(input.value, body);
-      else body.textContent = input.value;
+      render(input.value, body);
       previewDialog.showModal();
     });
   });
