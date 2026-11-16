@@ -26,7 +26,7 @@
             <span aria-hidden="true" class="ui-icon-tile self-start text-xl font-semibold">@if (agent.Icon.StartsWith("/api/files/", StringComparison.Ordinal) || agent.Icon.StartsWith("/uploads/agent-icons/", StringComparison.Ordinal)) { <img src="@agent.Icon" alt="" width="40" height="40" class="h-10 w-10 rounded-lg object-cover" /> } else { <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="40" height="40"><path d="M12 3v3M4 12H2m20 0h-2M6 20h12a3 3 0 0 0 3-3v-6a5 5 0 0 0-5-5H8a5 5 0 0 0-5 5v6a3 3 0 0 0 3 3ZM8 13h.01M16 13h.01" /></svg> }</span>
             <div class="ui-item-content flex min-w-0 flex-1 flex-col gap-0.5">
                 <span class="ui-item-title break-words text-sm font-semibold text-heading">@agent.Name</span>
-                <span class="ui-item-description break-words text-xs leading-5 text-muted">@agent.Description</span>
+                <span class="ui-item-description block min-w-0 max-w-full truncate text-xs leading-5 text-muted" title="@agent.Description">@agent.Description</span>
                 <div class="ui-tool-card-badges" aria-label="Agent category and capabilities">
                     <span class="ui-tool-card-badge"><span class="ui-tool-card-badge-label">Category</span> @agent.Category</span>
                     @if (agent.Tags.Length > 0)
