@@ -58,11 +58,11 @@ public sealed class ProjectsController(ISender sender) : ControllerBase
 
     // Compatibility model for Razor views; API actions return domain models.
     public sealed record ProjectCard(string Id, string Name, string? Description, string Icon,
-        DateTimeOffset CreatedAt, DateTimeOffset UpdatedAt, bool IsArchived)
+        DateTimeOffset CreatedAt, DateTimeOffset UpdatedAt)
     {
         public static ProjectCard From(Project project) => new(
             project.Id.ToString(), project.Name, project.Description,
             project.Icon.StartsWith("projects/", StringComparison.Ordinal) ? "/api/files/" + project.Icon : string.Empty,
-            project.CreatedAt, project.UpdatedAt, project.IsArchived);
+            project.CreatedAt, project.UpdatedAt);
     }
 }
