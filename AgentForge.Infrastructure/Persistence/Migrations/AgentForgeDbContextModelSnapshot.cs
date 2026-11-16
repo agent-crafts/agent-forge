@@ -167,10 +167,8 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)")
+                    b.Property<int>("Category")
+                        .HasColumnType("integer")
                         .HasColumnName("category");
 
                     b.Property<string>("ConfigurationJson")
