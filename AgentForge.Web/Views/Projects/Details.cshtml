@@ -19,7 +19,11 @@
             }
         </div>
         <div class="ui-profile-main">
-            <div class="ui-profile-title"><h1>@Model.Name</h1></div>
+            <div class="flex w-full flex-col items-start gap-4">
+                <div class="ui-profile-title"><h1>@Model.Name</h1></div>
+                @* Temporary count until Project-Agent assignments are implemented. *@
+                <div class="ui-tags"><span>Agents · 3</span></div>
+            </div>
         </div>
     </section>
     <section class="ui-panel mt-6">
