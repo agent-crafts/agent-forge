@@ -16,7 +16,7 @@ public partial class AddAgents : Migration
                 id = table.Column<Guid>(type: "uuid", nullable: false),
                 name = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
                 description = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
-                category = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
+                category = table.Column<int>(type: "integer", nullable: false),
                 icon = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                 tags = table.Column<string[]>(type: "text[]", nullable: false),
                 system_instructions = table.Column<string>(type: "text", nullable: false),
@@ -30,7 +30,7 @@ public partial class AddAgents : Migration
                 table.CheckConstraint("ck_agents_name_not_blank", "length(btrim(name)) > 0");
                 table.CheckConstraint("ck_agents_description_not_blank", "length(btrim(description)) > 0");
                 table.CheckConstraint("ck_agents_instructions_valid", "length(btrim(system_instructions)) BETWEEN 1 AND 12000");
-                table.CheckConstraint("ck_agents_category_valid", "category IN ('Development','Planning','Quality','Testing','Operations','Documentation','Research','Data','Other')");
+                table.CheckConstraint("ck_agents_category_valid", "category BETWEEN 0 AND 8");
                 table.CheckConstraint("ck_agents_tags_count", "cardinality(tags) <= 10");
             });
 
