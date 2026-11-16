@@ -29,7 +29,7 @@
     <section class="ui-panel mt-6">
         <h2>Overview</h2>
         <p class="ui-subtitle">Project description and information.</p>
-        <p>@(string.IsNullOrWhiteSpace(Model.Description) ? "No description provided." : Model.Description)</p>
+        <div class="ui-markdown-content" data-markdown-render>@(string.IsNullOrWhiteSpace(Model.Description) ? "No description provided." : Model.Description)</div>
     </section>
 </div>
 <partial name="~/Views/Projects/_CreateProjectDialog.cshtml" />
