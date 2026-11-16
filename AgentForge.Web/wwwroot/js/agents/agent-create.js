@@ -8,7 +8,6 @@
   let editingAgent = null;
   let saving = false;
   let previewUrl = null;
-  const categoryNames = ['Development', 'Planning', 'Quality', 'Testing', 'Operations', 'Documentation', 'Research', 'Data', 'Other'];
   const get = id => document.getElementById(id);
   const dialogTitle = get('createAgentTitle');
   const dialogDescription = get('createAgentDescription');
@@ -89,7 +88,7 @@
       : null;
   };
 
-  const categoryValue = agent => typeof agent.category === 'number' ? categoryNames[agent.category] || '' : agent.category || '';
+  const categoryValue = agent => String(agent.category ?? '');
 
   dialog.addEventListener('input', event => {
     if (event.target.matches('input,textarea,select')) clearFieldError(event.target);
@@ -154,7 +153,7 @@
     const name = nameField.value.trim();
     const description = descriptionField.value.trim();
     const tags = tagsField.value.split(',').map(tag => tag.trim()).filter(Boolean);
-    const category = categoryNames.indexOf(displayCategory.value);
+    const category = Number(displayCategory.value);
     const errors = [];
     const requiredFields = [
       [nameField, 'Agent name is required.'],
@@ -167,7 +166,7 @@
       else if (!field.checkValidity()) errors.push([field, 'Enter a valid value.']);
     }
     clearFieldError(tagsField);
-    if (displayCategory.value && category < 0 && !errors.some(([field]) => field === displayCategory))
+    if (displayCategory.value && !Array.from(displayCategory.options).some(option => option.value === displayCategory.value) && !errors.some(([field]) => field === displayCategory))
       errors.push([displayCategory, 'Select a valid category.']);
     if (tags.length > 10) errors.push([tagsField, 'At most 10 tags are allowed.']);
     else if (tags.some(tag => tag.length > 40)) errors.push([tagsField, 'Each tag must be 1–40 characters.']);

@@ -94,7 +94,7 @@
  const get=id=>document.getElementById(id);
  const status=get("addToolFeedback");
  const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);saveButton.disabled=kind==="external"&&!editMode&&selectedCount()===0;saveButton.title="";status.textContent="";};
- if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;get("externalToolCategory").value="discovery";iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";githubOwner.value="";githubRepo.value="";updateExecutor();status.textContent="";resetExternalDiscovery();update();schema();dialog.showModal();});
+ if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}get("newToolCategory").selectedIndex=0;get("externalToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";githubOwner.value="";githubRepo.value="";updateExecutor();status.textContent="";resetExternalDiscovery();update();schema();dialog.showModal();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
   get("toolKindSelector").hidden=true;
@@ -250,8 +250,6 @@
  };
  const schema=()=>{if(executorSelect.value==="http.get_json"){const value=httpSchema();if(window.AgentForgeJsonViewer)window.AgentForgeJsonViewer.render(get("newToolSchema"),value);else get("newToolSchema").textContent=JSON.stringify(value,null,2);return;}if(executorSelect.value==="get_github_issue"){window.AgentForgeJsonViewer?.render(get("newToolSchema"),githubSchema);if(!window.AgentForgeJsonViewer)get("newToolSchema").textContent=JSON.stringify(githubSchema,null,2);return;}const properties={},required=[];rows.querySelectorAll(".ui-modal-parameter").forEach(r=>{const n=r.querySelector(".param-name").value.trim();if(!n)return;properties[n]={type:r.querySelector(".param-type").value};if(r.querySelector(".param-required").checked)required.push(n);});const value=editMode&&originalSchema?buildEditedSchema():{type:"object",properties,required,additionalProperties:false};if(window.AgentForgeJsonViewer){window.AgentForgeJsonViewer.render(get("newToolSchema"),value);}else{get("newToolSchema").textContent=JSON.stringify(value,null,2);}};
  get("addToolParameter").addEventListener("click",()=>{if(executorSelect.value==="get_github_issue")return;const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required maxlength="155" placeholder="Parameter name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").hidden=true;r.querySelectorAll("input, select").forEach(field=>field.disabled=true);r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
- const kindValues={custom:1,external:2};
- const categoryValues={discovery:1,design:2,development:3,quality:4,deployment:5};
  const saveButton=get("previewToolConfiguration");
  let saving=false;
  const fieldError=(field,message)=>{
@@ -282,7 +280,7 @@
   if(kind==="external"&&!editMode){
    const toolNames=[...externalList.querySelectorAll("[data-mcp-tool-row]")].filter(row=>row.querySelector("input").checked).map(row=>row.dataset.mcpToolName);
    if(!toolNames.length){status.textContent="Select at least one MCP tool.";return;}
-   if(!categoryValues[get("externalToolCategory").value]){status.textContent="Select a valid category.";get("externalToolCategory").focus();return;}
+   if(!get("externalToolCategory").checkValidity()){status.textContent="Select a valid category.";get("externalToolCategory").focus();return;}
    saving=true;
    saveButton.disabled=true;
    status.textContent="Importing selected tools…";
@@ -291,7 +289,7 @@
     const response=await fetch("/api/tools/mcp/import",{
      method:"POST",credentials:"same-origin",
      headers:{"Content-Type":"application/json",...(token?{"RequestVerificationToken":token}:{})},
-     body:JSON.stringify({endpoint:get("externalToolEndpoint").value.trim(),toolNames,category:categoryValues[get("externalToolCategory").value]})
+     body:JSON.stringify({endpoint:get("externalToolEndpoint").value.trim(),toolNames,category:Number(get("externalToolCategory").value)})
     });
     const body=await response.text();
     let result={};
@@ -309,7 +307,7 @@
   const displayName=get("newToolDisplayName").value.trim();
   const description=get("newToolDescription").value.trim();
   let imageUrl=editMode?editContext.dataset.toolImageUrl||null:null;
-  const category=categoryValues[get("newToolCategory").value];
+  const category=Number(get("newToolCategory").value);
   const errors=[];
   const requiredFields=[
    [get("newToolName"),"Tool name is required."],
@@ -381,7 +379,7 @@
    }
    const response=await fetch(editMode?"/api/tools/"+editContext.dataset.toolId:"/api/tools",{
     method:editMode?"PUT":"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({...(editMode?{id:editContext.dataset.toolId}:{}),name,displayName,description,kind:kindValues[kind],category,jsonSchema,imageUrl,executorKey,configurationJson})
+    body:JSON.stringify({...(editMode?{id:editContext.dataset.toolId}:{}),name,displayName,description,kind:Number(dialog.querySelector('input[name="toolKind"]:checked').dataset.kindId),category,jsonSchema,imageUrl,executorKey,configurationJson})
    });
    if(!response.ok){
     const contentType=response.headers.get("content-type")||"";

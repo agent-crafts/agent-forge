@@ -31,10 +31,8 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)")
+                    b.Property<int>("Category")
+                        .HasColumnType("integer")
                         .HasColumnName("category");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -86,7 +84,7 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
 
                     b.ToTable("agents", null, t =>
                         {
-                            t.HasCheckConstraint("ck_agents_category_valid", "category IN ('Development','Planning','Quality','Testing','Operations','Documentation','Research','Data','Other')");
+                            t.HasCheckConstraint("ck_agents_category_valid", "category BETWEEN 1 AND 5");
 
                             t.HasCheckConstraint("ck_agents_description_not_blank", "length(btrim(description)) > 0");
 
@@ -152,10 +150,8 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)")
+                    b.Property<int>("Category")
+                        .HasColumnType("integer")
                         .HasColumnName("category");
 
                     b.Property<string>("Description")
@@ -186,10 +182,8 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
                         .HasColumnType("jsonb")
                         .HasColumnName("json_schema");
 
-                    b.Property<string>("Kind")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)")
+                    b.Property<int>("Kind")
+                        .HasColumnType("integer")
                         .HasColumnName("kind");
 
                     b.Property<string>("Name")

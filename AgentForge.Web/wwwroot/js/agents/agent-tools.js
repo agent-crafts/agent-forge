@@ -18,6 +18,7 @@
     };
     search.addEventListener('input', filter);
     category.addEventListener('change', filter);
+    filter();
     save.addEventListener('click', async () => {
         save.disabled = true;
         const toolIds = [...panel.querySelectorAll('[data-agent-tool-toggle]:checked')].map(x => x.value);
