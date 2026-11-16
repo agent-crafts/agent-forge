@@ -2,13 +2,9 @@ namespace AgentForge.Core.Enums;
 
 public enum AgentCategory
 {
-    Development,
-    Planning,
-    Quality,
-    Testing,
-    Operations,
-    Documentation,
-    Research,
-    Data,
-    Other
+    Discovery = 1,
+    Design = 2,
+    Development = 3,
+    Quality = 4,
+    Deployment = 5
 }
