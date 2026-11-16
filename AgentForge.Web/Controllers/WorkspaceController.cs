@@ -1,5 +1,6 @@
 using AgentForge.Application.Agents.Queries;
-using AgentForge.Application.Projects;
+using AgentForge.Application.Projects.Commands;
+using AgentForge.Application.Projects.Queries;
 using AgentForge.Application.Tools.Queries;
 using AgentForge.Core.Domains;
 using AgentForge.Core.Enums;
@@ -29,7 +30,7 @@ public sealed class WorkspaceController(ISender sender) : Controller
     public async Task<IActionResult> Projects([FromQuery] int pageNumber = 1, CancellationToken cancellationToken = default)
     {
         if (pageNumber < 1) return BadRequest("Invalid page number.");
-        var page = await sender.Send(new GetProjectsPageQuery(pageNumber, 20), cancellationToken);
+        var page = await sender.Send(new GetProjectsPageQuery(new PagedQuery<Project>(pageNumber, 20, p => p.IsActive && !p.IsArchived, p => p.OrderBy(x => x.Name))), cancellationToken);
         ViewData["Title"] = "Projects";
         ViewData["Section"] = "projects";
         ViewData["PageNumber"] = page.PageNumber;
