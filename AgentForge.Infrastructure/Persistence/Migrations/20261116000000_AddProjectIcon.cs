@@ -13,15 +13,10 @@ public partial class AddProjectIcon : Migration
             name: "icon", table: "projects", type: "character varying(2048)",
             maxLength: 2048, nullable: false, defaultValue: "");
 
-        migrationBuilder.DropColumn(name: "is_archived", table: "projects");
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.AddColumn<bool>(
-            name: "is_archived", table: "projects", type: "boolean",
-            nullable: false, defaultValue: false);
-
         migrationBuilder.DropColumn(name: "icon", table: "projects");
     }
 }
