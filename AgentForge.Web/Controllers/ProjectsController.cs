@@ -41,7 +41,7 @@ public sealed class ProjectsController(ISender sender) : ControllerBase
     {
         try
         {
-            return await sender.Send(new UpdateProjectCommand(id, request.Name, request.Description), ct)
+            return await sender.Send(new UpdateProjectCommand(id, request.Name, request.Description, request.Icon), ct)
                 ? NoContent() : NotFound();
         }
         catch (ArgumentException ex) { return BadRequest(new { error = ex.Message }); }
@@ -52,5 +52,5 @@ public sealed class ProjectsController(ISender sender) : ControllerBase
     public async Task<IActionResult> Archive(Guid id, CancellationToken ct)
         => await sender.Send(new ArchiveProjectCommand(id), ct) ? NoContent() : NotFound();
 
-    public sealed record ProjectDetailsRequest(string Name, string? Description);
+    public sealed record ProjectDetailsRequest(string Name, string? Description, string? Icon = null);
 }
