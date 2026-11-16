@@ -209,10 +209,8 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
                         .HasColumnType("jsonb")
                         .HasColumnName("json_schema");
 
-                    b.Property<string>("Kind")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)")
+                    b.Property<int>("Kind")
+                        .HasColumnType("integer")
                         .HasColumnName("kind");
 
                     b.Property<string>("Name")
