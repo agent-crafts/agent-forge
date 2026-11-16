@@ -1,9 +1,10 @@
 @using AgentForge.Core.Domains
+@using AgentForge.Core.Enums
 @model AgentForge.Web.Controllers.AgentsController.AgentCard
 @{
     var tools = ViewData["AvailableAgentTools"] as Tool[] ?? [];
     var assigned = ViewData["AssignedAgentToolIds"] as HashSet<Guid> ?? [];
-    var categories = tools.Select(t => t.Category).Distinct().OrderBy(x => (int)x).ToArray();
+    var categories = Enum.GetValues<ToolCategory>();
 }
 <section class="ui-panel agent-tools" aria-labelledby="agentToolsHeading" data-agent-id="@Model.Id">
     <style>
