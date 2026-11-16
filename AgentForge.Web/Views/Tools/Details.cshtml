@@ -110,11 +110,11 @@
         </div>
     </div>
     </div>
-    <section id="toolTryPanel" role="tabpanel" aria-labelledby="toolTryTab" hidden class="mt-6">
+    <section id="toolTryPanel" role="tabpanel" aria-labelledby="toolTryTab" hidden>
         @if (Model.ExecutorKey == "get_github_issue" || Model.Name == "get_github_issue")
         {
-            <div class="tool-try-layout grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.35fr)]">
-                <section class="min-w-0 rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
+            <div class="ui-columns tool-try-layout">
+                <section class="ui-panel min-w-0">
                     <h2 class="text-lg font-bold text-heading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try this tool</h2>
                     <p class="mt-1 text-sm leading-6 text-muted">Provide the input parameters and run the tool to see the response.</p>
                     <form id="githubToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-6 grid gap-5">
@@ -140,7 +140,7 @@
                         </div>
                     </form>
                 </section>
-                <section class="flex min-w-0 flex-col rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
+                <section class="ui-panel flex min-w-0 flex-col">
                     <div class="flex flex-wrap items-start justify-between gap-3">
                         <div><h2 class="text-lg font-bold text-heading">Response</h2><p class="mt-1 text-sm text-muted">The tool response will appear here after execution.</p></div>
                         <div class="flex flex-wrap items-center gap-2 text-xs text-muted">
@@ -172,8 +172,8 @@
         }
         else if (Model.ExecutorKey == "http.get_json")
         {
-            <div class="grid gap-4 xl:grid-cols-2">
-                <section class="rounded-2xl border border-line bg-surface p-6">
+            <div class="ui-columns">
+                <section class="ui-panel">
                     <h2 class="text-lg font-bold text-heading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try HTTP GET JSON</h2>
                     <p class="mt-2 text-sm text-muted">Runs the saved API URL using the input parameters below.</p>
                     <form id="httpJsonTryForm" action="/api/tools/@Model.Id/execute" class="mt-5 grid gap-3">
@@ -195,7 +195,7 @@
                         <button type="submit" class="ui-button ui-button-primary">Run Tool</button>
                     </form>
                 </section>
-                <section class="rounded-2xl border border-line bg-surface p-6">
+                <section class="ui-panel">
                     <h2 class="text-lg font-bold text-heading">Response</h2>
                     <p id="httpJsonTryStatus" role="status" class="mt-2 text-sm text-muted">Not run</p>
                     <pre class="mt-4 max-h-[560px] overflow-auto rounded-xl bg-[#151d2b] p-4 text-xs text-white"><code id="httpJsonTryResult">Run the tool to see its response.</code></pre>
@@ -227,7 +227,7 @@
         }
         else
         {
-            <div class="rounded-2xl border border-line bg-surface p-6"><h2 class="text-lg font-bold text-heading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try Now</h2><p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></div>
+            <div class="ui-panel"><h2 class="text-lg font-bold text-heading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try Now</h2><p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></div>
         }
     </section>
 </div>
