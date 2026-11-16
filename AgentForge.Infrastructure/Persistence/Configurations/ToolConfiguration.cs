@@ -17,7 +17,7 @@ internal sealed class ToolConfiguration : IEntityTypeConfiguration<Tool>
         builder.HasIndex(x => x.Name).IsUnique();
         builder.Property(x => x.DisplayName).HasColumnName("display_name").HasMaxLength(155).IsRequired();
         builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(4000).IsRequired();
-        builder.Property(x => x.Kind).HasColumnName("kind").HasConversion<string>().HasMaxLength(32).IsRequired();
+        builder.Property(x => x.Kind).HasColumnName("kind").HasConversion<int>().IsRequired();
         builder.Property(x => x.Category).HasColumnName("category").HasConversion<int>().IsRequired();
         builder.Property(x => x.ImageUrl).HasColumnName("image_url").HasMaxLength(2048);
         builder.Property(x => x.ExecutorKey).HasColumnName("executor_key").HasMaxLength(155);
