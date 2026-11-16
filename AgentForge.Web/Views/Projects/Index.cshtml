@@ -42,7 +42,7 @@
         </div>
     </nav>
 }
-<p id="projectEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>No projects found on this page.</p>
+<p id="projectEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>@(Model.Count == 0 ? "No projects yet. Create your first project." : "No projects found on this page.")</p>
 <partial name="~/Views/Projects/_CreateProjectDialog.cshtml" />
 <script src="~/js/projects/project-create.js" asp-append-version="true"></script>
 <script src="~/js/projects/projects-gallery.js" asp-append-version="true"></script>
