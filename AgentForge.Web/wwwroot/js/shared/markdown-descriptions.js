@@ -56,13 +56,26 @@
     input.before(toolbar);
   });
 
+  // One dedicated modal is shared by all description editors.
+  const previewDialog = document.createElement('dialog');
+  previewDialog.className = 'ui-markdown-preview-dialog';
+  previewDialog.setAttribute('aria-labelledby', 'markdownPreviewTitle');
+  previewDialog.innerHTML = `
+    <div class="ui-markdown-preview-header">
+      <h2 id="markdownPreviewTitle">Markdown Preview</h2>
+      <button type="button" class="ui-markdown-toolbar-button" data-close-markdown-preview aria-label="Close preview">Close</button>
+    </div>
+    <div class="ui-markdown-content ui-markdown-preview-body" data-preview-body></div>
+  `;
+  document.body.appendChild(previewDialog);
+  previewDialog.querySelector('[data-close-markdown-preview]').addEventListener('click', () => previewDialog.close());
+  previewDialog.addEventListener('click', event => {
+    if (event.target === previewDialog) previewDialog.close();
+  });
+
   document.querySelectorAll('[data-markdown-preview-button]').forEach(button => {
-    const id = button.dataset.markdownPreviewButton;
-    const input = document.getElementById(id);
-    const preview = [...document.querySelectorAll('[data-markdown-preview]')]
-      .find(node => node.dataset.markdownPreview === id);
-    if (!input || !preview) return;
-    // Keep Preview as the last control in the same formatting toolbar.
+    const input = document.getElementById(button.dataset.markdownPreviewButton);
+    if (!input) return;
     const toolbar = input.previousElementSibling;
     if (toolbar?.classList.contains('ui-markdown-toolbar')) {
       button.classList.remove('ui-button', 'ui-button--secondary');
@@ -70,23 +83,13 @@
       button.textContent = 'Preview';
       toolbar.appendChild(button);
     }
+    button.removeAttribute('aria-pressed');
     button.addEventListener('click', () => {
-      const show = preview.hidden;
-      if (show) render(input.value, preview);
-      preview.hidden = !show;
-      button.textContent = show ? 'Edit' : 'Preview';
-      button.setAttribute('aria-pressed', String(show));
-      input.hidden = show;
-    });
-    const dialog = input.closest('dialog');
-    dialog?.addEventListener('close', () => {
-      input.hidden = false;
-      preview.hidden = true;
-      button.textContent = 'Preview';
-      button.setAttribute('aria-pressed', 'false');
-    });
-    input.addEventListener('input', () => {
-      if (!preview.hidden) render(input.value, preview);
+      const body = previewDialog.querySelector('[data-preview-body]');
+      body.replaceChildren();
+      if (window.marked && window.DOMPurify) render(input.value, body);
+      else body.textContent = input.value;
+      previewDialog.showModal();
     });
   });
 })();
