@@ -15,7 +15,7 @@ internal sealed class AgentConfiguration : IEntityTypeConfiguration<Agent>
             table.HasCheckConstraint("ck_agents_description_not_blank", "length(btrim(description)) > 0");
             table.HasCheckConstraint("ck_agents_instructions_valid", "length(btrim(system_instructions)) <= 12000");
             table.HasCheckConstraint("ck_agents_category_valid",
-                "category BETWEEN 0 AND 8");
+                "category BETWEEN 1 AND 5");
             table.HasCheckConstraint("ck_agents_tags_count", "cardinality(tags) <= 10");
         });
         builder.HasKey(x => x.Id);
