@@ -15,7 +15,7 @@ internal sealed class AgentConfiguration : IEntityTypeConfiguration<Agent>
             table.HasCheckConstraint("ck_agents_description_not_blank", "length(btrim(description)) > 0");
             table.HasCheckConstraint("ck_agents_instructions_valid", "length(btrim(system_instructions)) <= 12000");
             table.HasCheckConstraint("ck_agents_category_valid",
-                "category IN ('Development','Planning','Quality','Testing','Operations','Documentation','Research','Data','Other')");
+                "category BETWEEN 0 AND 8");
             table.HasCheckConstraint("ck_agents_tags_count", "cardinality(tags) <= 10");
         });
         builder.HasKey(x => x.Id);
@@ -23,7 +23,7 @@ internal sealed class AgentConfiguration : IEntityTypeConfiguration<Agent>
         builder.Property(x => x.IsActive).HasColumnName("is_active").HasDefaultValue(true).IsRequired();
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(80).IsRequired();
         builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(300).IsRequired();
-        builder.Property(x => x.Category).HasColumnName("category").HasConversion<string>().HasMaxLength(32).IsRequired();
+        builder.Property(x => x.Category).HasColumnName("category").HasConversion<int>().IsRequired();
         builder.Property(x => x.Icon).HasColumnName("icon").HasMaxLength(2048).IsRequired();
         builder.Property(x => x.Tags).HasColumnName("tags").HasColumnType("text[]").IsRequired();
         builder.Property(x => x.SystemInstructions).HasColumnName("system_instructions").HasColumnType("text").IsRequired();
