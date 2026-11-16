@@ -15,7 +15,7 @@ public sealed class McpDiscoveryController(ILogger<McpDiscoveryController> logge
 {
     public sealed record DiscoverRequest(string Endpoint);
 
-    public sealed record ImportRequest(string Endpoint, string[] ToolNames, ToolCategory Category = ToolCategory.Integration);
+    public sealed record ImportRequest(string Endpoint, string[] ToolNames, ToolCategory Category = ToolCategory.Discovery);
 
     [HttpPost("import")]
     [ValidateAntiForgeryToken]
