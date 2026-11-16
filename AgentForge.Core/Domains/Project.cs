@@ -48,7 +48,7 @@ public sealed class Project : Base
         var normalized = icon?.Trim() ?? string.Empty;
         if (normalized.Length > 2048)
             throw new ArgumentException("Icon must be at most 2048 characters.", nameof(icon));
-        if (normalized.Length > 0 && !System.Text.RegularExpressions.Regex.IsMatch(normalized, @"^projects/[a-f0-9]{24}\\.(png|jpg|webp|gif)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+        if (normalized.Length > 0 && !System.Text.RegularExpressions.Regex.IsMatch(normalized, @"^projects/[a-f0-9]{24}\.(png|jpg|webp|gif)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
             throw new ArgumentException("Icon must reference an uploaded project image.", nameof(icon));
         return normalized;
     }
