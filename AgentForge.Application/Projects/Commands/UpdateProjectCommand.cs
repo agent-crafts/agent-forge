@@ -13,7 +13,7 @@ public sealed class UpdateProjectCommandHandler(IRepository<Project> projects, I
     {
         ArgumentNullException.ThrowIfNull(command);
         var project = await projects.GetByIdAsync(command.Id, cancellationToken);
-        if (project is null || !project.IsActive || project.IsArchived) return false;
+        if (project is null || !project.IsActive) return false;
         project.UpdateDetails(command.Name, command.Description, command.Icon);
         projects.Update(project);
         await unitOfWork.SaveChangesAsync(cancellationToken);
