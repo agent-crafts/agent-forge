@@ -115,7 +115,7 @@
         {
             <div class="tool-try-layout grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.35fr)]">
                 <section class="min-w-0 rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
-                    <h2 class="text-lg font-bold text-heading">Try this tool</h2>
+                    <h2 class="text-lg font-bold text-heading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try this tool</h2>
                     <p class="mt-1 text-sm leading-6 text-muted">Provide the input parameters and run the tool to see the response.</p>
                     <form id="githubToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-6 grid gap-5">
                         @Html.AntiForgeryToken()
@@ -174,7 +174,7 @@
         {
             <div class="grid gap-4 xl:grid-cols-2">
                 <section class="rounded-2xl border border-line bg-surface p-6">
-                    <h2 class="text-lg font-bold text-heading">Try HTTP GET JSON</h2>
+                    <h2 class="text-lg font-bold text-heading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try HTTP GET JSON</h2>
                     <p class="mt-2 text-sm text-muted">Runs the saved API URL using the input parameters below.</p>
                     <form id="httpJsonTryForm" action="/api/tools/@Model.Id/execute" class="mt-5 grid gap-3">
                         @Html.AntiForgeryToken()
@@ -206,7 +206,7 @@
         {
             <div class="ui-columns">
                 <section class="ui-panel min-w-0">
-                    <h2>Try this MCP tool</h2>
+                    <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try this MCP tool</h2>
                     <form id="mcpToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-4 grid gap-4">
                         @Html.AntiForgeryToken()
                         <div class="ui-field">
@@ -227,7 +227,7 @@
         }
         else
         {
-            <div class="rounded-2xl border border-line bg-surface p-6"><h2 class="text-lg font-bold text-heading">Try Now</h2><p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></div>
+            <div class="rounded-2xl border border-line bg-surface p-6"><h2 class="text-lg font-bold text-heading"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span> Try Now</h2><p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></div>
         }
     </section>
 </div>
