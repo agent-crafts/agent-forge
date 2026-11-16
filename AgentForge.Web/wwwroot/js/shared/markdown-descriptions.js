@@ -31,6 +31,13 @@
       button.setAttribute('aria-pressed', String(show));
       input.hidden = show;
     });
+    const dialog = input.closest('dialog');
+    dialog?.addEventListener('close', () => {
+      input.hidden = false;
+      preview.hidden = true;
+      button.textContent = 'Preview Markdown';
+      button.setAttribute('aria-pressed', 'false');
+    });
     input.addEventListener('input', () => {
       if (!preview.hidden) render(input.value, preview);
     });
