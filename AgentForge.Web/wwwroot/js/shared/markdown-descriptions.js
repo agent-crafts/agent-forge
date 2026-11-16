@@ -62,11 +62,19 @@
     const preview = [...document.querySelectorAll('[data-markdown-preview]')]
       .find(node => node.dataset.markdownPreview === id);
     if (!input || !preview) return;
+    // Keep Preview as the last control in the same formatting toolbar.
+    const toolbar = input.previousElementSibling;
+    if (toolbar?.classList.contains('ui-markdown-toolbar')) {
+      button.classList.remove('ui-button', 'ui-button--secondary');
+      button.classList.add('ui-markdown-toolbar-button');
+      button.textContent = 'Preview';
+      toolbar.appendChild(button);
+    }
     button.addEventListener('click', () => {
       const show = preview.hidden;
       if (show) render(input.value, preview);
       preview.hidden = !show;
-      button.textContent = show ? 'Edit Markdown' : 'Preview Markdown';
+      button.textContent = show ? 'Edit' : 'Preview';
       button.setAttribute('aria-pressed', String(show));
       input.hidden = show;
     });
@@ -74,7 +82,7 @@
     dialog?.addEventListener('close', () => {
       input.hidden = false;
       preview.hidden = true;
-      button.textContent = 'Preview Markdown';
+      button.textContent = 'Preview';
       button.setAttribute('aria-pressed', 'false');
     });
     input.addEventListener('input', () => {
