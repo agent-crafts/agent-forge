@@ -27,6 +27,18 @@ public sealed class Project : Base
         };
     }
 
+    public void UpdateDetails(string name, string? description)
+    {
+        if (string.IsNullOrWhiteSpace(name) || name.Trim().Length > 200)
+            throw new ArgumentException("Project name must contain 1–200 characters.", nameof(name));
+        if (description?.Length > 2000)
+            throw new ArgumentException("Project description must be at most 2000 characters.", nameof(description));
+        if (IsArchived) throw new InvalidOperationException("Archived projects cannot be edited.");
+        Name = name.Trim();
+        Description = description;
+        UpdatedAt = DateTimeOffset.UtcNow;
+    }
+
     public void Archive()
     {
         if (IsArchived) return;
