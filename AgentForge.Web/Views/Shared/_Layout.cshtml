@@ -25,6 +25,11 @@
       .ui-markdown-toolbar-button { border: 1px solid var(--line, #cbd5e1); border-radius: .4rem; padding: .3rem .55rem; font-size: .8rem; background: var(--surface-raised, #f8fafc); color: var(--content, inherit); cursor: pointer; }
       .ui-markdown-toolbar-button:hover { background: var(--hover, #e2e8f0); }
       .ui-markdown-toolbar-button:focus-visible { outline: 2px solid var(--accent, currentColor); outline-offset: 2px; }
+      .ui-markdown-preview-dialog { width: min(760px, calc(100vw - 2rem)); max-height: min(80vh, 850px); overflow: auto; padding: 1.5rem; border: 1px solid var(--line, #cbd5e1); border-radius: .85rem; background: var(--surface, #fff); color: var(--content, #172033); box-shadow: 0 20px 65px #0005; }
+      .ui-markdown-preview-dialog::backdrop { background: #0008; }
+      .ui-markdown-preview-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line, #cbd5e1); }
+      .ui-markdown-preview-header h2 { font-size: 1.15rem; font-weight: 700; }
+      .ui-markdown-preview-body { padding-top: 1rem; min-height: 6rem; }
     </style>
 </head>
 <body>
