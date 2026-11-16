@@ -1,4 +1,5 @@
-using AgentForge.Application.Projects;
+using AgentForge.Application.Projects.Commands;
+using AgentForge.Application.Projects.Queries;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,7 +32,7 @@ public sealed class ProjectsController(ISender sender) : ControllerBase
     public async Task<IActionResult> List([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20, CancellationToken ct = default)
     {
         if (pageNumber < 1 || pageSize is < 1 or > 100) return BadRequest("Invalid pagination parameters.");
-        return Ok(await sender.Send(new GetProjectsPageQuery(pageNumber, pageSize), ct));
+        return Ok(await sender.Send(new GetProjectsPageQuery(new AgentForge.Core.Utilities.PagedQuery<AgentForge.Core.Domains.Project>(pageNumber, pageSize, p => p.IsActive && !p.IsArchived, p => p.OrderBy(x => x.Name))), ct));
     }
 
     [HttpPut("{id:guid}")]
