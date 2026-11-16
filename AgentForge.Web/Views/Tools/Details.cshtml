@@ -73,7 +73,7 @@
             <section class="ui-panel" id="tool-overview">
                 <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M8 3h7l6 6h-6V3"/><path d="M8 13h8M8 17h8"/></svg></span> Overview</h2>
                 <p class="ui-subtitle">What this tool does and when to use it.</p>
-                <p>@Model.Description</p>
+                <div class="ui-markdown-content" data-markdown-render>@Model.Description</div>
                 <div class="ui-note"><strong>When to use this tool</strong><p>Use this tool when its registered capability matches your task. Review the input contract before integrating it into an agent workflow.</p></div>
             </section>
             <section class="ui-panel" id="tool-parameters">
