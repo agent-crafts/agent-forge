@@ -1,11 +1,11 @@
-<ui-modal id="createProjectDialog" title="Create New Project" description="Create the project identity." title-id="createProjectTitle" description-id="createProjectDescription" css-class="tool-config-dialog" width="1080" primary-text="Save" primary-button-id="submitProjectForm" cancel-text="Cancel" cancel-button-id="cancelProjectDialog" close-button-id="closeProjectDialog">
+<ui-modal id="createProjectDialog" title="Create New Project" description="Create the project identity." title-id="createProjectTitle" description-id="createProjectDescription" css-class="tool-config-dialog" width="640" primary-text="Save" primary-button-id="submitProjectForm" cancel-text="Cancel" cancel-button-id="cancelProjectDialog" close-button-id="closeProjectDialog">
     @Html.AntiForgeryToken()
     <form id="projectCreateForm" novalidate>
-        <section class="grid gap-2.5 [&_.ui-input]:w-full" aria-label="Project information">
-            <label class="ui-field-label" for="projectName">Project Name <span class="ui-required-mark" aria-hidden="true">*</span></label>
-            <input class="ui-input" id="projectName" name="name" maxlength="200" required aria-required="true" />
-            <label class="ui-field-label" for="projectDescription">Description</label>
-            <textarea class="ui-input min-h-24" id="projectDescription" name="description" maxlength="2000"></textarea>
+        <section class="grid gap-2.5 [&_.ui-input]:w-full [&_.ui-input]:min-w-0" aria-label="Project information">
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="projectName">Project Name <span class="ui-required-mark" aria-hidden="true">*</span></label>
+            <input class="ui-input" id="projectName" name="name" placeholder="e.g. AgentForge Workspace" maxlength="200" required aria-required="true" />
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="projectDescription">Description</label>
+            <textarea class="ui-input min-h-24" id="projectDescription" name="description" placeholder="What is this project about?" maxlength="2000"></textarea>
             <label class="ui-field-label" for="projectIconUpload">Project icon (optional)</label>
             <div class="ui-file">
                 <label class="ui-file-avatar" for="projectIconUpload">
