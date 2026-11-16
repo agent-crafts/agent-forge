@@ -6,7 +6,7 @@ using Mediator;
 namespace AgentForge.Application.Tools.Commands;
 
 public sealed record ImportMcpToolItem(string Name, string DisplayName, string Description, string JsonSchema, string ConfigurationJson);
-public sealed record ImportMcpToolsCommand(IReadOnlyList<ImportMcpToolItem> Tools, ToolCategory Category = ToolCategory.Integration) : ICommand<int>;
+public sealed record ImportMcpToolsCommand(IReadOnlyList<ImportMcpToolItem> Tools, ToolCategory Category = ToolCategory.Discovery) : ICommand<int>;
 
 public sealed class ImportMcpToolsCommandHandler(IToolRepository repository, IUnitOfWork unitOfWork)
     : ICommandHandler<ImportMcpToolsCommand, int>
