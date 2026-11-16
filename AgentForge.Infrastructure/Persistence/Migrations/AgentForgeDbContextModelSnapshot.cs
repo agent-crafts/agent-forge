@@ -81,7 +81,7 @@ namespace AgentForge.Infrastructure.Persistence.Migrations
 
                     b.ToTable("agents", null, t =>
                         {
-                            t.HasCheckConstraint("ck_agents_category_valid", "category BETWEEN 0 AND 8");
+                            t.HasCheckConstraint("ck_agents_category_valid", "category BETWEEN 1 AND 5");
 
                             t.HasCheckConstraint("ck_agents_description_not_blank", "length(btrim(description)) > 0");
 
