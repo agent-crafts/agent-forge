@@ -27,14 +27,14 @@ public sealed class ProjectsController(ISender sender) : ControllerBase
     public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
     {
         var project = await sender.Send(new GetProjectByIdQuery(id), ct);
-        return project is null || project.IsArchived ? NotFound() : Ok(project);
+        return project is null || !project.IsActive ? NotFound() : Ok(project);
     }
 
     [HttpGet]
     public async Task<IActionResult> List([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20, CancellationToken ct = default)
     {
         if (pageNumber < 1 || pageSize is < 1 or > 100) return BadRequest("Invalid pagination parameters.");
-        return Ok(await sender.Send(new GetProjectsPageQuery(new PagedQuery<Project>(pageNumber, pageSize, p => p.IsActive && !p.IsArchived, p => p.OrderBy(x => x.Name))), ct));
+        return Ok(await sender.Send(new GetProjectsPageQuery(new PagedQuery<Project>(pageNumber, pageSize, p => p.IsActive, p => p.OrderBy(x => x.Name))), ct));
     }
 
     [HttpPut("{id:guid}")]
@@ -49,10 +49,10 @@ public sealed class ProjectsController(ISender sender) : ControllerBase
         catch (ArgumentException ex) { return BadRequest(new { error = ex.Message }); }
     }
 
-    [HttpPost("{id:guid}/archive")]
+    [HttpDelete("{id:guid}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Archive(Guid id, CancellationToken ct)
-        => await sender.Send(new ArchiveProjectCommand(id), ct) ? NoContent() : NotFound();
+    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+        => await sender.Send(new DeleteProjectCommand(id), ct) ? NoContent() : NotFound();
 
     public sealed record ProjectDetailsRequest(string Name, string? Description, string? Icon = null);
 
