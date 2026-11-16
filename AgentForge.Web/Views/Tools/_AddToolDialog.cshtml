@@ -71,7 +71,7 @@
                 <select class="ui-select" id="externalToolCategory" name="externalCategory" required aria-required="true">
                     @foreach (var category in Enum.GetValues<ToolCategory>())
                     {
-                        <option value="@category.ToString().ToLowerInvariant()" selected="@(category == ToolCategory.Integration)">@enumLabel(category)</option>
+                        <option value="@category.ToString().ToLowerInvariant()" selected="@(category == ToolCategory.Discovery)">@enumLabel(category)</option>
                     }
                 </select>
                 <p class="text-[13px] text-muted">Category applied to all selected imported tools.</p>
