@@ -30,7 +30,7 @@
                 
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolCategory">Category <span class="ui-required-mark" aria-hidden="true">*</span></label>
                 <select class="ui-select" id="newToolCategory" name="category" required aria-required="true" aria-describedby="toolCategoryHelp newToolCategoryError">
-                    @foreach (var category in Enum.GetValues<ToolCategory>().Where(category => category is ToolCategory.Discovery or ToolCategory.Design or ToolCategory.Development or ToolCategory.Quality or ToolCategory.Deployment))
+                    @foreach (var category in Enum.GetValues<ToolCategory>())
                     {
                         <option value="@category.ToString().ToLowerInvariant()">@enumLabel(category)</option>
                     }
