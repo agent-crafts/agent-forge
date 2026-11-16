@@ -12,6 +12,39 @@
         }
         return response;
     }
+    async function uploadIcon(input) {
+        const file = input?.files?.[0];
+        if (!file) return null;
+        if (file.size > 2 * 1024 * 1024 || !['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(file.type))
+            throw new Error('Choose PNG, JPG, WebP or GIF under 2 MB.');
+        const body = new FormData();
+        body.append('file', file);
+        const response = await fetch('/api/files/projects', {
+            method: 'POST', credentials: 'same-origin',
+            headers: token ? { RequestVerificationToken: token } : {}, body
+        });
+        const result = await response.json().catch(() => null);
+        if (!response.ok) throw new Error(result?.error || 'Project icon upload failed.');
+        return result.filename;
+    }
+    function setupIconPreview(inputId, previewId, fallbackId) {
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+        const fallback = document.getElementById(fallbackId);
+        let objectUrl;
+        input?.addEventListener('change', () => {
+            if (objectUrl) URL.revokeObjectURL(objectUrl);
+            const file = input.files?.[0];
+            objectUrl = file ? URL.createObjectURL(file) : null;
+            if (preview) {
+                if (objectUrl) { preview.src = objectUrl; preview.hidden = false; }
+                else { preview.removeAttribute('src'); preview.hidden = true; }
+            }
+            if (fallback) fallback.hidden = !!objectUrl;
+        });
+    }
+    setupIconPreview('projectIconUpload', 'projectIconPreview', 'projectIconFallback');
+    setupIconPreview('editProjectIconUpload', 'editProjectIconPreview', 'editProjectIconFallback');
     const dialog = document.getElementById('projectDialog');
     document.getElementById('openProjectDialog')?.addEventListener('click', () => dialog?.showModal());
     document.getElementById('cancelProjectDialog')?.addEventListener('click', () => dialog?.close());
@@ -20,9 +53,11 @@
         const button = event.currentTarget.querySelector('[type="submit"]');
         button.disabled = true;
         try {
+            const icon = await uploadIcon(document.getElementById('projectIconUpload'));
             const response = await request('/api/projects', 'POST', {
                 name: document.getElementById('projectName').value,
-                description: document.getElementById('projectDescription').value
+                description: document.getElementById('projectDescription').value,
+                icon
             });
             const { id } = await response.json();
             location.assign('/projects/' + encodeURIComponent(id));
@@ -35,9 +70,11 @@
         const button = editForm.querySelector('[type="submit"]');
         button.disabled = true;
         try {
+            const icon = await uploadIcon(document.getElementById('editProjectIconUpload')) || editForm.dataset.projectIcon || null;
             await request('/api/projects/' + encodeURIComponent(id), 'PUT', {
                 name: document.getElementById('editProjectName').value,
-                description: document.getElementById('editProjectDescription').value
+                description: document.getElementById('editProjectDescription').value,
+                icon
             });
             location.reload();
         } catch (e) { showError(e.message); button.disabled = false; }
