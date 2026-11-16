@@ -4,7 +4,7 @@
 @{
     Layout = "_AppLayout";
     Func<Enum, string> enumLabel = value => value.GetType().GetField(value.ToString())?.GetCustomAttributes(typeof(DescriptionAttribute), false).OfType<DescriptionAttribute>().FirstOrDefault()?.Description ?? value.ToString();
-    var categoryOptions = new[] { new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = "All Categories", Value = "all" } }.Concat(Enum.GetValues<ToolCategory>().Where(category => category is ToolCategory.Discovery or ToolCategory.Design or ToolCategory.Development or ToolCategory.Quality or ToolCategory.Deployment).Select(category => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = enumLabel(category), Value = category.ToString().ToLowerInvariant() })).ToList();
+    var categoryOptions = new[] { new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = "All Categories", Value = "all" } }.Concat(Enum.GetValues<ToolCategory>().Select(category => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem { Text = enumLabel(category), Value = category.ToString().ToLowerInvariant() })).ToList();
 }
 <div class="ui-toolbar mb-6 flex flex-wrap items-center gap-3">
     <label class="ui-visually-hidden" for="toolSearch">Search tools</label>
