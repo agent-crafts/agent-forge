@@ -26,11 +26,11 @@
 .agent-playground .af-message--assistant .af-message__body a { color:var(--accent,#60a5fa); text-decoration:underline; }
 .agent-playground .af-message--assistant .af-message__body blockquote { border-left:3px solid var(--line,rgba(148,163,184,.4)); padding-left:12px; margin:.65em 0; }
 
-.agent-playground [data-playground-layout] { height: 900px; grid-template-rows: minmax(0, 1fr); }
-.agent-playground [data-playground-layout] > * { min-height: 0; height: 100%; }
+/* Increase only the conversation panel; preserve the Playground layout and spacing. */
+.agent-playground [data-playground-layout] { align-items: start; }
+.agent-playground [data-playground-layout] > :first-child { height: 760px; }
 .agent-playground [data-playground-messages] { min-height: 0; flex: 1 1 0%; overflow-y: auto; }
-@media (max-width: 1279px) { .agent-playground [data-playground-layout] { height: auto; grid-template-rows: 700px 500px; } }
-@media (max-width: 639px) { .agent-playground [data-playground-layout] { grid-template-rows: 600px 420px; } }
+@media (max-width: 639px) { .agent-playground [data-playground-layout] > :first-child { height: 600px; } }
 .agent-playground .af-activity-run { padding: 14px; border-bottom: 1px solid var(--line, rgba(148,163,184,.2)); }
 .agent-playground .af-activity-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:16px; color:var(--text-heading,inherit); }
 .agent-playground .af-activity-badge { border:1px solid rgba(148,163,184,.3); border-radius:999px; padding:3px 10px; font-size:11px; }
