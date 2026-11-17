@@ -16,6 +16,7 @@
   const projectFeedback = document.getElementById('workspaceProjectFeedback');
   const projectKey = 'agentforge.activeProjectPreview';
   const projectDetailsPattern = /^\/projects\/([0-9a-f-]{36})(?:\/)?$/i;
+  const onProjectGrid = window.location.pathname.replace(/\/$/, '') === '/projects';
 
   function selectedProjectId() {
     return projectDetailsPattern.exec(window.location.pathname)?.[1] || '';
@@ -25,6 +26,13 @@
     if (projectOverview) {
       projectOverview.href = id ? '/projects/' + encodeURIComponent(id) : '/projects';
       projectOverview.setAttribute('aria-disabled', String(!id));
+    }
+  }
+  function showProjectLandingMessage(message) {
+    const landing = document.getElementById('userProjectLanding');
+    if (landing) {
+      landing.textContent = message;
+      landing.hidden = false;
     }
   }
   async function loadProjectSwitcher() {
@@ -48,6 +56,7 @@
       projectSelect.replaceChildren();
       if (!projects.length) {
         projectSelect.add(new Option('No projects available', ''));
+        showProjectLandingMessage('No projects available yet.');
         updateProjectOverview();
         return;
       }
@@ -62,12 +71,16 @@
       const initial = [current, saved].find(id => Array.from(projectSelect.options).some(o => o.value === id));
       if (initial) projectSelect.value = initial;
       updateProjectOverview();
+      if (readMode() === 'user' && onProjectGrid && projectSelect.value) {
+        window.location.replace('/projects/' + encodeURIComponent(projectSelect.value));
+      }
     } catch (error) {
       projectSelect.replaceChildren(new Option('Projects unavailable', ''));
       if (projectFeedback) {
         projectFeedback.hidden = false;
         projectFeedback.textContent = error.message;
       }
+      showProjectLandingMessage('Could not load projects. Please refresh to try again.');
       updateProjectOverview();
     } finally {
       projectSelect.disabled = !Array.from(projectSelect.options).some(option => option.value);
@@ -93,6 +106,7 @@
     userNav.hidden = !isUser;
     if (adminFooter) adminFooter.hidden = isUser;
     if (brand) brand.textContent = isUser ? 'PROJECT WORKSPACE' : 'ADMINISTRATION';
+    document.documentElement.dataset.workspaceMode = isUser ? 'user' : 'admin';
     menu?.querySelectorAll('[data-workspace-select]').forEach(item => {
       item.setAttribute('aria-checked', String(item.dataset.workspaceSelect === mode));
     });
