@@ -109,95 +109,12 @@
     </div>
     </div>
     <section id="toolTryPanel" role="tabpanel" aria-labelledby="toolTryTab" hidden>
-        @if (Model.ExecutorKey == "get_github_issue" || Model.Name == "get_github_issue")
-        {
-            <div class="ui-columns tool-try-layout">
-                <div class="ui-stack"><section class="ui-panel min-w-0">
-                    <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span><div class="ui-panel-title-copy"><h2>Try this tool</h2>
-                    <p class="ui-subtitle">Provide the input parameters and run the tool to see the response.</p></div></div>
-                    <form id="githubToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-6 grid gap-5">
-                        @Html.AntiForgeryToken()
-                        <div class="grid gap-2">
-                            <label for="githubRepoOwner" class="text-sm font-semibold text-heading">Repository Owner</label>
-                            <input id="githubRepoOwner" type="text" value="@(githubOwner ?? "")" readonly aria-describedby="githubRepoOwnerHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
-                            <p id="githubRepoOwnerHelp" class="text-xs text-muted">The GitHub organization or user.</p>
-                        </div>
-                        <div class="grid gap-2">
-                            <label for="githubRepoName" class="text-sm font-semibold text-heading">Repository Name</label>
-                            <input id="githubRepoName" type="text" value="@(githubRepo ?? "")" readonly aria-describedby="githubRepoNameHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
-                            <p id="githubRepoNameHelp" class="text-xs text-muted">The repository name.</p>
-                        </div>
-                        <div class="grid gap-2">
-                            <label for="githubIssueNumber" class="text-sm font-semibold text-heading">Issue Number <span class="text-red-500">*</span> <span class="text-muted" title="Required positive integer">ⓘ</span></label>
-                            <input id="githubIssueNumber" name="issueNumber" type="number" min="1" step="1" required placeholder="e.g. 12" aria-describedby="githubIssueNumberHelp" class="ui-input w-full rounded-xl border border-line bg-surface px-4 py-3 text-sm text-content focus-visible:outline-2 focus-visible:outline-accent" />
-                            <p id="githubIssueNumberHelp" class="text-xs text-muted">The number of the issue to retrieve.</p>
-                        </div>
-                        <div class="flex flex-col gap-3 sm:flex-row">
-                            <partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Type = "submit", Id = "githubToolRun", Icon = "▷", LabelId = "githubToolRunLabel", CssClass = "flex-1" }' />
-                        </div>
-                    </form>
-                </section></div>
-                <div class="ui-stack"><section class="ui-panel flex min-w-0 flex-col">
-                    <div class="flex flex-wrap items-start justify-between gap-3">
-                        <div><div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8v1c0 2-1 3-3 3 2 0 3 1 3 3v1c0 2 0 4 3 4M16 4c3 0 3 2 3 4v1c0 2 1 3 3 3-2 0-3 1-3 3v1c0 2 0 4-3 4"/></svg></span><div class="ui-panel-title-copy"><h2>Response</h2><p class="ui-subtitle">The tool response will appear here after execution.</p></div></div></div>
-                        <div class="flex flex-wrap items-center gap-2 text-xs text-muted">
-                            <span id="githubToolStatus" class="rounded-full bg-raised px-3 py-1.5 font-semibold">Not run</span>
-                            <span id="githubToolDuration" class="rounded-full bg-raised px-3 py-1.5" hidden></span>
-                            
-                        </div>
-                    </div>
-                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
-                        <div class="flex items-center gap-2" role="tablist" aria-label="Response format">
-                            <partial name="_Button" model='new UiButtonModel { Text = "JSON", Variant = UiButtonVariant.Outlined, Id = "githubResponseJsonTab", Role = "tab", AriaSelected = "true", AriaControls = "githubResponseJsonPanel" }' />
-                            <partial name="_Button" model='new UiButtonModel { Text = "Formatted", Variant = UiButtonVariant.Outlined, Id = "githubResponseFormattedTab", Role = "tab", AriaSelected = "false", AriaControls = "githubResponseFormattedPanel" }' />
-                            <partial name="_Button" model='new UiButtonModel { Text = "Raw", Variant = UiButtonVariant.Outlined, Id = "githubResponseRawTab", Role = "tab", AriaSelected = "false", AriaControls = "githubResponseRawPanel" }' />
-                        </div>
-                        <partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, Id = "githubToolCopy", Disabled = true }' />
-                    </div>
-                    <div id="githubResponseJsonPanel" role="tabpanel" aria-labelledby="githubResponseJsonTab" class="mt-4 min-h-80">
-                        <partial name="_JsonViewer" model='("githubToolResultJson", (string?)null)' />
-                    </div>
-                    <div id="githubResponseFormattedPanel" role="tabpanel" aria-labelledby="githubResponseFormattedTab" hidden class="mt-4 min-h-80 rounded-xl border border-line bg-raised p-5">
-                        <div id="githubToolResultFormatted" class="grid gap-4 text-sm text-content">Run the tool to view formatted issue details.</div>
-                    </div>
-                    <div id="githubResponseRawPanel" role="tabpanel" aria-labelledby="githubResponseRawTab" hidden class="mt-4 min-h-80">
-                        <pre class="ui-code h-full min-h-80 max-h-[560px] overflow-auto rounded-xl border border-line bg-[#151d2b] p-4 text-xs leading-6"><code id="githubToolResultRaw">Run the tool to view the raw response.</code></pre>
-                    </div>
-
-                </section></div>
-            </div>
-        }
-        else if (Model.ExecutorKey == "http.get_json")
+        @if (Model.ExecutorKey == "get_github_issue" || Model.Name == "get_github_issue" || Model.ExecutorKey == "http.get_json" || (Model.Kind == "external" && Model.ExecutorKey == "mcp"))
         {
             <div class="ui-columns">
                 <div class="ui-stack"><section class="ui-panel min-w-0">
                     <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span><div class="ui-panel-title-copy"><h2>Try this tool</h2>
                     <p class="ui-subtitle">Enter JSON arguments to execute this tool.</p></div></div>
-                    <form id="httpJsonTryForm" method="post" action="/api/tools/@Model.Id/execute" class="grid gap-4">
-                        @Html.AntiForgeryToken()
-                        <div class="ui-field">
-                            <label class="ui-field-label" for="httpJsonArguments">Arguments (JSON)</label>
-                            <p id="httpJsonArgumentsHint" class="ui-field-hint">Replace the example values with your inputs. Use {} for a tool without arguments.</p>
-                            <textarea id="httpJsonArguments" class="ui-textarea" rows="8" spellcheck="false" aria-describedby="httpJsonArgumentsHint httpJsonArgumentsError">@exampleJson</textarea>
-                            <p id="httpJsonArgumentsError" class="ui-field-error" role="alert" hidden></p>
-                        </div>
-                        <button id="httpJsonToolRun" class="ui-button ui-button--primary" type="submit">Run Tool</button>
-                    </form>
-                </section></div>
-                <div class="ui-stack"><section class="ui-panel min-w-0">
-                    <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8v1c0 2-1 3-3 3 2 0 3 1 3 3-2 0-3 1-3 3v1c0 2 0 4 3 4M16 4c3 0 3 2 3 4v1c0 2 1 3 3 3-2 0-3 1-3 3v1c0 2 0 4-3 4"/></svg></span><div class="ui-panel-title-copy"><h2>Response</h2>
-                    <p class="ui-subtitle">Inspect the response returned by the tool.</p></div></div>
-                    <p id="httpJsonTryStatus" class="ui-subtitle" role="status">Not run</p>
-                    <partial name="_JsonViewer" model='("httpJsonTryResult", (string?)null)' />
-                </section></div>
-            </div>
-        }
-        else if (Model.Kind == "external" && Model.ExecutorKey == "mcp")
-        {
-            <div class="ui-columns">
-                <div class="ui-stack"><section class="ui-panel min-w-0">
-                    <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span><div class="ui-panel-title-copy"><h2>Try this MCP tool</h2>
-                    <p class="ui-subtitle">Enter JSON arguments to execute this MCP tool.</p></div></div>
                     <form id="mcpToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="grid gap-4">
                         @Html.AntiForgeryToken()
                         <div class="ui-field">
@@ -211,7 +128,7 @@
                 </section></div>
                 <div class="ui-stack"><section class="ui-panel min-w-0">
                     <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8v1c0 2-1 3-3 3 2 0 3 1 3 3v1c0 2 0 4 3 4M16 4c3 0 3 2 3 4v1c0 2 1 3 3 3-2 0-3 1-3 3v1c0 2 0 4-3 4"/></svg></span><div class="ui-panel-title-copy"><h2>Response</h2>
-                    <p class="ui-subtitle">Inspect the response returned by the MCP server.</p></div></div>
+                    <p class="ui-subtitle">Inspect the response returned by the tool.</p></div></div>
                     <p id="mcpToolStatus" class="ui-subtitle" role="status">Not run</p>
                     <partial name="_JsonViewer" model='("mcpToolResult", (string?)null)' />
                 </section></div>
@@ -269,8 +186,6 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
 </script>
 
 <script src="~/js/shared/json-viewer.js" asp-append-version="true"></script>
-<script src="~/js/tools/github-tool-try.js" asp-append-version="true"></script>
-<script src="~/js/tools/http-json-tool-try.js" asp-append-version="true"></script>
 <script src="~/js/tools/mcp-tool-try.js" asp-append-version="true"></script>
 
 <div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@((int)Enum.Parse<AgentForge.Core.Enums.ToolCategory>(Model.Category, ignoreCase: true))" data-tool-kind="@Model.Kind" data-tool-image-url="@Model.ImageUrl" data-tool-schema="@Model.JsonSchema" data-tool-executor-key="@Model.ExecutorKey" data-tool-configuration="@Model.ConfigurationJson"></div>
