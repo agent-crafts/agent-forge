@@ -5,7 +5,8 @@
         @Html.AntiForgeryToken()
         <partial name="_MarkdownEditor" model='"agentSystemInstructions"' view-data='new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData) { ["MarkdownContent"] = Model.SystemInstructions }' />
         <div class="agent-instructions-actions">
-            <button id="previewAgentInstructions" type="button" class="ui-button ui-button--secondary" aria-pressed="false">Preview</button>
+            <button id="previewAgentInstructions" type="button" class="ui-button ui-button--secondary">Preview</button>
+            <button id="editAgentInstructions" type="button" class="ui-button ui-button--secondary" hidden>Edit</button>
             <button id="saveAgentInstructions" type="submit" class="ui-button ui-button--primary">Save Changes</button>
         </div>
     </form>
@@ -29,7 +30,8 @@
 .agent-markdown-component .editor-statusbar .agent-instructions-actions { margin-top: 0; }
 .agent-markdown-component .editor-statusbar .ui-button { font-size: .875rem; }
 /* Preview hides the top Markdown formatting controls; Edit restores them. */
-#agentInstructionsForm.is-instructions-preview .editor-toolbar { display: none; }
+#agentInstructionsForm.is-instructions-preview .editor-toolbar { display: none !important; }
+#agentInstructionsForm .agent-instructions-actions [hidden] { display: none !important; }
 #agentInstructionsForm.is-instructions-preview #saveAgentInstructions { opacity: .5; cursor: not-allowed; }
 #agentInstructionsForm.is-instructions-preview .EasyMDEContainer .CodeMirror,
 #agentInstructionsForm.is-instructions-preview .EasyMDEContainer .editor-preview { border: 0; border-radius: 0; box-shadow: none; }
