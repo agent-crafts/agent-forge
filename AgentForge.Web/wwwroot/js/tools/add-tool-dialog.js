@@ -82,7 +82,7 @@
   originalSchema=JSON.parse(d.toolSchema);
   executorSelect.value=d.toolExecutorKey||"";
   let savedConfig={};try{savedConfig=JSON.parse(d.toolConfiguration||"{}");}catch{}
-  apiUrl.value=savedConfig.url||"";githubOwner.value=savedConfig.owner||"";githubRepo.value=savedConfig.repo||"";updateExecutor();
+  apiUrl.value=savedConfig.url||"";githubOwner.value=savedConfig.owner||"";githubRepo.value=savedConfig.repo||"";rows.replaceChildren();updateExecutor();
   get("addToolTitle").textContent="Edit Tool";
   get("addToolIntro").textContent="Update saved tool configuration.";
   saveButton.textContent="Save Changes";
@@ -95,7 +95,6 @@
   iconInput.value="";showIcon(iconSrc(d.toolImageUrl));
   dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.checked=r.value==="custom";r.disabled=true;});
   update();
-  lockGithubParameters();
   dialog.showModal();
   // Populate CodeMirror after the hidden dialog becomes visible.
   setToolDescription(existingDescription);
