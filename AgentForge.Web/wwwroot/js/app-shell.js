@@ -11,6 +11,76 @@
   const chatToggle = document.getElementById('chatGroupToggle');
   const chatTabs = document.getElementById('chatTabs');
   const mobileQuery = window.matchMedia('(max-width: 640px)');
+  const projectSelect = document.getElementById('workspaceProjectSelect');
+  const projectOverview = document.getElementById('workspaceProjectOverview');
+  const projectFeedback = document.getElementById('workspaceProjectFeedback');
+  const projectKey = 'agentforge.activeProjectPreview';
+  const projectDetailsPattern = /^\/projects\/([0-9a-f-]{36})(?:\/)?$/i;
+
+  function selectedProjectId() {
+    return projectDetailsPattern.exec(window.location.pathname)?.[1] || '';
+  }
+  function updateProjectOverview() {
+    const id = projectSelect?.value;
+    if (projectOverview) {
+      projectOverview.href = id ? '/projects/' + encodeURIComponent(id) : '/projects';
+      projectOverview.setAttribute('aria-disabled', String(!id));
+    }
+  }
+  async function loadProjectSwitcher() {
+    if (!projectSelect) return;
+    projectSelect.disabled = true;
+    try {
+      // Project membership is not implemented yet: this is a catalog preview, not an authorized "My Projects" list.
+      const projects = [];
+      let pageNumber = 1;
+      let totalPages = 1;
+      do {
+        const response = await fetch('/api/projects?pageNumber=' + pageNumber + '&pageSize=100', { headers: { Accept: 'application/json' } });
+        if (!response.ok) throw new Error('Unable to load projects (' + response.status + ').');
+        const page = await response.json();
+        const items = page.items ?? page.Items;
+        if (!Array.isArray(items)) throw new Error('Unexpected projects response.');
+        projects.push(...items);
+        totalPages = Number(page.totalPages ?? page.TotalPages ?? 1);
+        pageNumber++;
+      } while (pageNumber <= totalPages && pageNumber <= 100);
+      projectSelect.replaceChildren();
+      if (!projects.length) {
+        projectSelect.add(new Option('No projects available', ''));
+        updateProjectOverview();
+        return;
+      }
+      for (const project of projects) {
+        const id = String(project.id ?? project.Id ?? '');
+        const name = String(project.name ?? project.Name ?? '');
+        if (/^[0-9a-f-]{36}$/i.test(id) && name) projectSelect.add(new Option(name, id));
+      }
+      let saved = '';
+      try { saved = localStorage.getItem(projectKey) || ''; } catch { /* unavailable */ }
+      const current = selectedProjectId();
+      const initial = [current, saved].find(id => Array.from(projectSelect.options).some(o => o.value === id));
+      if (initial) projectSelect.value = initial;
+      updateProjectOverview();
+    } catch (error) {
+      projectSelect.replaceChildren(new Option('Projects unavailable', ''));
+      if (projectFeedback) {
+        projectFeedback.hidden = false;
+        projectFeedback.textContent = error.message;
+      }
+      updateProjectOverview();
+    } finally {
+      projectSelect.disabled = !Array.from(projectSelect.options).some(option => option.value);
+    }
+  }
+  projectSelect?.addEventListener('change', () => {
+    const id = projectSelect.value;
+    if (!id) return;
+    try { localStorage.setItem(projectKey, id); } catch { /* unavailable */ }
+    updateProjectOverview();
+    window.location.assign('/projects/' + encodeURIComponent(id));
+  });
+  void loadProjectSwitcher();
 
   // This is a UI-only preview. Never use this setting for authorization.
   function readMode() {
