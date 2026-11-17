@@ -53,7 +53,7 @@
     } catch (error) {
       window.AgentForgeToast?.show({ type: 'error', title: 'Unable to save instructions', message: error.message || 'Unable to save instructions.' });
     } finally {
-      button.disabled = false;
+      button.disabled = form.classList.contains('is-instructions-preview');
     }
   });
 })();
