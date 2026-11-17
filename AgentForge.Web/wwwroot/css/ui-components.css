@@ -200,7 +200,8 @@
 #toolParameterRows .ui-modal-parameter{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 #toolParameterRows .param-name{flex:2 1 180px;min-width:0}
 #toolParameterRows .param-type{flex:1 1 130px;min-width:0}
-#toolParameterRows .param-remove{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:10px;background:transparent;box-shadow:none;color:#dc2626}
+#toolParameterRows .param-required:not(:disabled),#toolParameterRows .param-required:not(:disabled)+span,#toolParameterRows label:has(.param-required:not(:disabled)){cursor:pointer}
+#toolParameterRows .param-remove{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:10px;background:transparent;box-shadow:none;color:#dc2626;cursor:pointer}
 #toolParameterRows .param-remove svg{display:block;width:22px;height:22px;flex:none}
 #toolParameterRows .param-remove:hover,#toolParameterRows .param-remove:focus-visible{background:rgba(220,38,38,.12);box-shadow:none;color:#b91c1c}
 
