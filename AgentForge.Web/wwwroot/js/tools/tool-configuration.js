@@ -23,6 +23,7 @@
     keyLabel.textContent = "Key";
     const keyInput = document.createElement("input");
     keyInput.className = "ui-input";
+    keyInput.type = "text";
     keyInput.placeholder = "SETTING_NAME";
     keyInput.value = key;
     keyInput.required = true;
@@ -35,6 +36,7 @@
     valueLabel.textContent = "Value (optional)";
     const valueInput = document.createElement("input");
     valueInput.className = "ui-input";
+    valueInput.type = "text";
     valueInput.placeholder = "Value";
     valueInput.value = value;
     valueField.append(valueLabel, valueInput);
@@ -63,7 +65,11 @@
     return;
   }
   Object.entries(configuration).forEach(([key, value]) => addRow(key, typeof value === "string" ? value : JSON.stringify(value)));
-  document.getElementById("addToolConfiguration").addEventListener("click", () => addRow());
+  document.getElementById("addToolConfiguration").addEventListener("click", () => {
+    addRow();
+    rows.lastElementChild?.querySelector("input")?.focus();
+    status.textContent = "";
+  });
 
   form.addEventListener("submit", async event => {
     event.preventDefault();
