@@ -39,9 +39,9 @@
 .lf-progress-timeline{padding:22px 24px 20px}
 .lf-progress-track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:0;margin:0;list-style:none}
 .lf-progress-item{position:relative;min-width:0}
-.lf-progress-item:not(:first-child)::before{content:"";position:absolute;left:-50%;width:100%;height:3px;top:13px;background:#e2e8f0}
-.lf-progress-item.is-earlier:not(:first-child)::before,.lf-progress-item.is-current:not(:first-child)::before{background:#20a3fa}
-.lf-progress-link{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:9px;color:var(--lf-muted);text-decoration:none;font-size:12px;font-weight:650;outline-offset:4px}
+.lf-progress-item:not(:last-child)::after{content:"";position:absolute;left:50%;width:100%;height:3px;top:13px;background:#e2e8f0;z-index:0}
+.lf-progress-item.is-earlier:not(:last-child)::after{background:#16a34a}
+.lf-progress-link{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:9px;color:var(--lf-muted);text-decoration:none;font-size:12px;font-weight:650;outline-offset:4px}
 .lf-progress-node{width:29px;height:29px;display:grid;place-items:center;border-radius:50%;border:3px solid #d6dfea;background:var(--lf-surface);color:#6d7f98;font-size:11px;z-index:1;box-shadow:0 0 0 4px var(--lf-surface)}
 .lf-progress-item.is-earlier .lf-progress-node{background:#16a34a;border-color:#16a34a;color:#fff}
 .lf-progress-item.is-current .lf-progress-node{border-color:#20a3fa;color:#1686e3;background:#e9f6ff}
@@ -50,4 +50,4 @@
 .lf-progress-name{color:var(--heading,inherit);font-size:12px}
 .lf-progress-percent{color:var(--lf-muted);font-size:11px}
 .lf-progress-link:hover .lf-progress-node{transform:scale(1.08)}
-@media(max-width:650px){.lf-project-identity{padding:15px}.lf-progress-timeline{padding:18px 12px}.lf-progress-name{font-size:10px;overflow-wrap:anywhere}.lf-progress-link{gap:7px}.lf-project-title strong{font-size:14px}.lf-progress-item:not(:first-child)::before{top:13px}}
+@media(max-width:650px){.lf-project-identity{padding:15px}.lf-progress-timeline{padding:18px 12px}.lf-progress-name{font-size:10px;overflow-wrap:anywhere}.lf-progress-link{gap:7px}.lf-project-title strong{font-size:14px}.lf-progress-item:not(:last-child)::after{top:13px}}
