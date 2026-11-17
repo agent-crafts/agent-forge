@@ -96,7 +96,7 @@
  const update=()=>{const kind=dialog.querySelector('input[name="toolKind"]:checked').value;dialog.querySelectorAll("[data-tool-panel]").forEach(p=>p.hidden=p.dataset.toolPanel!==kind);saveButton.disabled=kind==="external"&&!editMode&&selectedCount()===0;saveButton.title="";status.textContent="";};
  const toolDescriptionEditor=()=>get("newToolDescription")?.closest("[data-markdown-editor]")?.markdownEditor;
  const setToolDescription=value=>{get("newToolDescription").value=value;toolDescriptionEditor()?.value(value);};
- const refreshToolDescription=()=>requestAnimationFrame(()=>toolDescriptionEditor()?.codemirror.refresh());
+ const refreshToolDescription=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>toolDescriptionEditor()?.codemirror.refresh()));
  if(open)open.addEventListener("click",()=>{editMode=false;originalSchema=null;get("toolKindSelector").hidden=false;get("addToolTitle").textContent="Add Tool";get("addToolIntro").textContent="Configure a custom tool or connect an external source.";saveButton.textContent="Save";for(const id of ["newToolName","newToolDisplayName","newToolDescription"]){get(id).value="";get(id).readOnly=false;clearFieldError(get(id));}setToolDescription("");get("newToolCategory").selectedIndex=0;get("externalToolCategory").selectedIndex=0;iconInput.value="";showIcon(null);dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.disabled=false;r.checked=r.value==="custom";});rows.replaceChildren();executorSelect.value="";apiUrl.value="";githubOwner.value="";githubRepo.value="";updateExecutor();status.textContent="";resetExternalDiscovery();update();schema();dialog.showModal();refreshToolDescription();});
  if(editOpen&&editContext)editOpen.addEventListener("click",()=>{
   editMode=true;
@@ -112,13 +112,17 @@
   get("newToolName").value=d.toolName;
   get("newToolName").readOnly=true;
   get("newToolDisplayName").value=d.toolDisplayName;
-  setToolDescription(d.toolDescription||"");
+  const existingDescription=d.toolDescription||"";
+  setToolDescription(existingDescription);
   get("newToolCategory").value=d.toolCategory;
   iconInput.value="";showIcon(iconSrc(d.toolImageUrl));
   dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>{r.checked=r.value==="custom";r.disabled=true;});
   update();
   lockGithubParameters();
-  dialog.showModal();refreshToolDescription();
+  dialog.showModal();
+  // Populate CodeMirror after the hidden dialog becomes visible.
+  setToolDescription(existingDescription);
+  refreshToolDescription();
  });
  dialog.querySelectorAll("[data-modal-close], [data-tool-close], #closeAddToolDialog, #cancelAddToolDialog").forEach(b=>b.addEventListener("click",()=>dialog.close()));
  dialog.querySelectorAll('input[name="toolKind"]').forEach(r=>r.addEventListener("change",update));
