@@ -15,6 +15,53 @@
   const projectOverview = document.getElementById('workspaceProjectOverview');
   const projectFeedback = document.getElementById('workspaceProjectFeedback');
   const projectKey = 'agentforge.activeProjectPreview';
+  const projectToggle = document.getElementById('workspaceProjectToggle');
+  const projectOptions = document.getElementById('workspaceProjectOptions');
+  const projectName = document.getElementById('workspaceProjectName');
+  function closeProjectOptions() {
+    if (projectOptions) projectOptions.hidden = true;
+    projectToggle?.setAttribute('aria-expanded', 'false');
+  }
+  function syncProjectPicker() {
+    if (!projectSelect || !projectToggle || !projectOptions) return;
+    projectToggle.disabled = projectSelect.disabled;
+    projectName.textContent = projectSelect.selectedOptions[0]?.textContent || 'Select project';
+    projectOptions.replaceChildren();
+    for (const option of projectSelect.options) {
+      if (!option.value) continue;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'workspace-project-option';
+      button.setAttribute('role', 'option');
+      button.setAttribute('aria-selected', String(option.value === projectSelect.value));
+      button.textContent = option.textContent;
+      button.addEventListener('click', () => {
+        projectSelect.value = option.value;
+        closeProjectOptions();
+        projectSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      projectOptions.append(button);
+    }
+  }
+  projectToggle?.addEventListener('click', () => {
+    if (!projectOptions || projectToggle.disabled) return;
+    const open = projectOptions.hidden;
+    projectOptions.hidden = !open;
+    projectToggle.setAttribute('aria-expanded', String(open));
+    if (open) projectOptions.querySelector('[aria-selected="true"]')?.focus();
+  });
+  projectOptions?.addEventListener('keydown', event => {
+    const options = Array.from(projectOptions.querySelectorAll('[role="option"]'));
+    const index = options.indexOf(document.activeElement);
+    if (event.key === 'Escape') { closeProjectOptions(); projectToggle.focus(); }
+    else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      options[(index + (event.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length]?.focus();
+    }
+  });
+  document.addEventListener('pointerdown', event => {
+    if (!event.target.closest('.workspace-project-picker')) closeProjectOptions();
+  });
   const projectDetailsPattern = /^\/projects\/([0-9a-f-]{36})(?:\/)?$/i;
   const onProjectGrid = window.location.pathname.replace(/\/$/, '') === '/projects';
 
@@ -84,6 +131,7 @@
       updateProjectOverview();
     } finally {
       projectSelect.disabled = !Array.from(projectSelect.options).some(option => option.value);
+      syncProjectPicker();
     }
   }
   projectSelect?.addEventListener('change', () => {
@@ -106,6 +154,7 @@
     userNav.hidden = !isUser;
     if (adminFooter) adminFooter.hidden = isUser;
     if (brand) brand.textContent = isUser ? 'PROJECT WORKSPACE' : 'ADMINISTRATION';
+    closeProjectOptions();
     document.documentElement.dataset.workspaceMode = isUser ? 'user' : 'admin';
     menu?.querySelectorAll('[data-workspace-select]').forEach(item => {
       item.setAttribute('aria-checked', String(item.dataset.workspaceSelect === mode));
