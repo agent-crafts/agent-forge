@@ -59,23 +59,35 @@
         const { start, end } = savedSelection ?? { start: input.selectionStart, end: input.selectionEnd };
         const selected = input.value.slice(start, end);
         const inline = ['Bold', 'Italic', 'Code', 'Link'].includes(label);
-        const wrappedSelection = inline && selected.startsWith(prefix) && selected.endsWith(suffix) && selected.length > prefix.length + suffix.length;
-        const wrappedOutside = inline && start >= prefix.length && input.value.slice(start - prefix.length, start) === prefix && input.value.slice(end, end + suffix.length) === suffix;
+        // Markdown emphasis delimiters must touch non-whitespace characters.
+        // Keep whitespace outside the markers even when it was selected.
+        const leading = inline ? (selected.match(/^\\s*/) || [''])[0] : '';
+        const trailing = inline ? (selected.match(/\\s*$/) || [''])[0] : '';
+        const coreStart = start + leading.length;
+        const coreEnd = Math.max(coreStart, end - trailing.length);
+        const core = input.value.slice(coreStart, coreEnd);
+        const wrappedSelection = inline && core.startsWith(prefix) && core.endsWith(suffix) && core.length > prefix.length + suffix.length;
+        const wrappedOutside = inline && coreStart >= prefix.length && input.value.slice(coreStart - prefix.length, coreStart) === prefix && input.value.slice(coreEnd, coreEnd + suffix.length) === suffix;
         let replaceStart = start;
         let replaceEnd = end;
         let insertion;
         let selectStart;
         let selectEnd;
         if (wrappedSelection) {
-          insertion = selected.slice(prefix.length, -suffix.length);
-          selectStart = start;
-          selectEnd = start + insertion.length;
+          const unwrapped = core.slice(prefix.length, -suffix.length);
+          insertion = leading + unwrapped + trailing;
+          selectStart = start + leading.length;
+          selectEnd = selectStart + unwrapped.length;
         } else if (wrappedOutside) {
-          replaceStart -= prefix.length;
-          replaceEnd += suffix.length;
-          insertion = selected;
-          selectStart = replaceStart;
-          selectEnd = replaceStart + insertion.length;
+          replaceStart = coreStart - prefix.length;
+          replaceEnd = coreEnd + suffix.length;
+          insertion = leading + core + trailing;
+          selectStart = replaceStart + leading.length;
+          selectEnd = selectStart + core.length;
+        } else if (inline && core) {
+          insertion = leading + prefix + core + suffix + trailing;
+          selectStart = start + leading.length + prefix.length;
+          selectEnd = selectStart + core.length;
         } else {
           const content = selected || placeholder;
           insertion = prefix + content + suffix;
