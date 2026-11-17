@@ -26,6 +26,8 @@
 .agent-playground .af-message--assistant .af-message__body a { color:var(--accent,#60a5fa); text-decoration:underline; }
 .agent-playground .af-message--assistant .af-message__body blockquote { border-left:3px solid var(--line,rgba(148,163,184,.4)); padding-left:12px; margin:.65em 0; }
 
+.agent-playground [data-playground-layout] { height: clamp(520px, 72vh, 850px); }
+.agent-playground [data-playground-layout] > * { min-height: 0; }
 .agent-playground .af-activity-run { padding: 14px; border-bottom: 1px solid var(--line, rgba(148,163,184,.2)); }
 .agent-playground .af-activity-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:16px; color:var(--text-heading,inherit); }
 .agent-playground .af-activity-badge { border:1px solid rgba(148,163,184,.3); border-radius:999px; padding:3px 10px; font-size:11px; }
