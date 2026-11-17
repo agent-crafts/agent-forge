@@ -4,7 +4,8 @@
     var pageNumber = (int)(ViewData["PageNumber"] ?? 1);
     var totalPages = (int)(ViewData["TotalPages"] ?? 0);
 }
-<div class="ui-toolbar mb-6 flex flex-wrap items-center gap-3">
+<p id="userProjectLanding" role="status">Opening your project…</p>
+<div id="projectAdminToolbar" class="ui-toolbar mb-6 flex flex-wrap items-center gap-3">
     <label class="ui-visually-hidden" for="projectSearch">Search projects</label>
     <div class="min-w-0 flex-1"><ui-input id="projectSearch" type="search" auto-complete="off" placeholder="Search projects..." /></div>
     <ui-button id="openProjectDialog" variant="secondary" text="+ Add Project" aria-label="Add Project" aria-has-popup="dialog" aria-controls="createProjectDialog" />
@@ -38,7 +39,7 @@
 </div>
 @if (totalPages > 1)
 {
-    <nav class="mt-5 flex items-center justify-between gap-3" aria-label="Projects pages">
+    <nav id="projectAdminPagination" class="mt-5 flex items-center justify-between gap-3" aria-label="Projects pages">
         <span class="text-sm text-muted">Page @pageNumber of @totalPages</span>
         <div class="flex gap-2">
             @if (pageNumber > 1) { <a class="ui-button" href="/projects?pageNumber=@(pageNumber - 1)">Previous</a> }
