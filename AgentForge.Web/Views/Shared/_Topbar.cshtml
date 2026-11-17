@@ -16,10 +16,7 @@
                 <strong aria-current="page">@title</strong>
             </nav>
         }
-        else
-        {
-            <strong>@title</strong>
-        }
+        else { <strong>@title</strong> }
         <span>@description</span>
     </div>
     <div class="flex items-center gap-3">
@@ -28,5 +25,15 @@
             <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"/></svg>
         </button>
         <span class="top-pill">Local</span>
+        <div class="workspace-profile">
+            <button id="workspaceProfileToggle" class="workspace-profile-toggle" type="button" aria-label="Open workspace menu" aria-haspopup="menu" aria-expanded="false" aria-controls="workspaceProfileMenu">
+                <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+            </button>
+            <div id="workspaceProfileMenu" class="workspace-profile-menu" role="menu" aria-label="Workspace mode" hidden>
+                <div class="workspace-menu-heading">Workspace preview <small>Navigation only · not an access role</small></div>
+                <button type="button" role="menuitemradio" aria-checked="true" data-workspace-select="admin">Admin Portal</button>
+                <button type="button" role="menuitemradio" aria-checked="false" data-workspace-select="user">User Workspace</button>
+            </div>
+        </div>
     </div>
 </header>
