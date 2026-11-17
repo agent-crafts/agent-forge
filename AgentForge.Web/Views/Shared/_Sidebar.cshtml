@@ -30,9 +30,13 @@
     </nav>
     <nav class="app-nav workspace-user-nav" aria-label="Project workspace navigation" hidden>
         <label class="workspace-project-label" for="workspaceProjectSelect">MY PROJECTS</label>
-        <select id="workspaceProjectSelect" class="workspace-project-select" aria-label="Active project">
+        <div class="workspace-project-picker">
+        <button type="button" id="workspaceProjectToggle" class="workspace-project-toggle" aria-haspopup="listbox" aria-expanded="false" aria-controls="workspaceProjectOptions" disabled><span id="workspaceProjectName">Loading projects…</span><span aria-hidden="true">⌄</span></button>
+        <div id="workspaceProjectOptions" class="workspace-project-options" role="listbox" aria-label="Projects" hidden></div>
+        <select id="workspaceProjectSelect" class="workspace-project-select" aria-label="Active project" tabindex="-1" hidden>
             <option value="">Loading projects…</option>
         </select>
+        </div>
         <p class="workspace-project-feedback" id="workspaceProjectFeedback" role="status" hidden></p>
         <a class="side-link @(isChat ? "active" : "")" aria-current="@(isChat ? "page" : null)" href="/chat"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="@icons["chat"]" /></svg><span class="sidebar-nav-label">Chat</span></a>
         <div class="side-label nav-section-break">PROJECT WORKSPACE</div>
