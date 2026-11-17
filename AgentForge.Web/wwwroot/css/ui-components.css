@@ -654,3 +654,20 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 :is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-preview-side{background:var(--surface);color:var(--content)}
 :is(#createAgentDialog, #addToolDialog) .agent-markdown-component .CodeMirror-cursor{border-left-color:var(--heading)}
 :is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-statusbar{color:var(--muted)}
+
+/* Keep the Markdown preview heading visible while long descriptions scroll. */
+.ui-markdown-preview-dialog[open]{
+  display:flex;
+  flex-direction:column;
+  max-height:min(85dvh,800px);
+  overflow:hidden;
+}
+.ui-markdown-preview-dialog .ui-markdown-preview-header{
+  flex:0 0 auto;
+}
+.ui-markdown-preview-dialog .ui-markdown-preview-body{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
