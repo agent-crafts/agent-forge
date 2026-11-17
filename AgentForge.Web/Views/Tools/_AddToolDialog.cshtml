@@ -20,15 +20,6 @@
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolName">Tool Name <span class="ui-required-mark" aria-hidden="true">*</span></label>
                 <input class="ui-input" id="newToolName" name="name" placeholder="Read Project Status" maxlength="155" required aria-required="true" aria-describedby="newToolNameError" />
                 <p id="newToolNameError" class="ui-field-error hidden" role="alert"></p>
-                <div class="mt-2 flex items-center justify-between gap-3">
-                    <label class="block text-[13px] font-semibold text-heading" for="newToolDescription">Description <span class="ui-required-mark" aria-hidden="true">*</span></label>
-                    <button type="button" class="ui-markdown-toolbar-button text-xs" data-markdown-preview-button="newToolDescription" aria-label="Preview description">Preview</button>
-                </div>
-                <div class="agent-markdown-component" data-markdown-editor data-markdown-description>
-                    <textarea class="ui-input w-full" id="newToolDescription" name="description" placeholder="What does this tool do?" maxlength="4000" required aria-required="true" aria-describedby="newToolDescriptionError"></textarea>
-                </div>
-                <p id="newToolDescriptionError" class="ui-field-error hidden" role="alert"></p>
-                
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolDisplayName">Display Name <span class="ui-required-mark" aria-hidden="true">*</span></label>
                 <input class="ui-input" id="newToolDisplayName" name="displayName" placeholder="Read Project Status" maxlength="155" required aria-required="true" aria-describedby="newToolDisplayNameError" />
                 <p id="newToolDisplayNameError" class="ui-field-error hidden" role="alert"></p>
@@ -43,6 +34,15 @@
                 <p id="newToolCategoryError" class="ui-field-error hidden" role="alert"></p>
                 
                 <p id="toolCategoryHelp" class="text-[13px] text-muted">Select the category that best describes this tool.</p>
+                <div class="mt-2 flex items-center justify-between gap-3">
+                    <label class="block text-[13px] font-semibold text-heading" for="newToolDescription">Description <span class="ui-required-mark" aria-hidden="true">*</span></label>
+                    <button type="button" class="ui-markdown-toolbar-button text-xs" data-markdown-preview-button="newToolDescription" aria-label="Preview description">Preview</button>
+                </div>
+                <div class="agent-markdown-component" data-markdown-editor data-markdown-description>
+                    <textarea class="ui-input w-full" id="newToolDescription" name="description" placeholder="What does this tool do?" maxlength="4000" required aria-required="true" aria-describedby="newToolDescriptionError"></textarea>
+                </div>
+                <p id="newToolDescriptionError" class="ui-field-error hidden" role="alert"></p>
+                
                 <label for="newToolIconUpload" class="ui-field-label">Tool icon (optional)</label>
                 <div class="ui-file">
                     <label class="ui-file-avatar" for="newToolIconUpload">
