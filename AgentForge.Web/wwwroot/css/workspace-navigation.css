@@ -13,3 +13,6 @@
 .workspace-profile-menu button:hover,.workspace-profile-menu button[aria-checked="true"]{background:var(--active)}
 .workspace-profile-menu button[aria-checked="true"]::after{content:"✓";float:right;color:var(--accent)}
 @media(max-width:640px){.workspace-profile-menu{right:0;min-width:205px}}
+
+/* Chat conversation history is not part of either sidebar menu. */
+.chat-sidebar-group[hidden]{display:none!important}
