@@ -46,7 +46,7 @@
     remove.setAttribute("aria-label", "Remove configuration");
     remove.title = "Remove configuration";
     remove.innerHTML = '<svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg>';
-    remove.addEventListener("click", () => { row.remove(); status.textContent = ""; });
+    remove.addEventListener("click", () => { row.remove(); emptyMessage.hidden = rows.children.length > 0; status.textContent = ""; });
     if (fixedKeys.has(key)) {
       keyInput.readOnly = true;
       remove.disabled = true;
@@ -66,9 +66,38 @@
     save.disabled = true;
     return;
   }
-  Object.entries(configuration).forEach(([key, value]) => addRow(key, typeof value === "string" ? value : JSON.stringify(value)));
+  const emptyMessage = document.createElement("p");
+  emptyMessage.className = "ui-field-hint";
+  emptyMessage.textContent = "No configurations added yet.";
+  rows.before(emptyMessage);
+  function renderConfiguration() {
+    rows.replaceChildren();
+    Object.entries(configuration).forEach(([key, value]) => addRow(key, typeof value === "string" ? value : JSON.stringify(value)));
+    emptyMessage.hidden = rows.children.length > 0;
+  }
+  renderConfiguration();
+
+  const tab = document.getElementById("toolConfigurationTab");
+  tab?.addEventListener("click", async () => {
+    if (rows.querySelector("input:focus")) return;
+    status.textContent = "Loading configuration…";
+    try {
+      const response = await fetch("/api/tools/" + encodeURIComponent(context.dataset.toolId), { credentials: "same-origin", cache: "no-store" });
+      if (!response.ok) throw new Error("Could not load configuration (" + response.status + ").");
+      const tool = await response.json();
+      const parsed = JSON.parse(tool.configurationJson || "{}");
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("Tool configuration is not a JSON object.");
+      configuration = parsed;
+      context.dataset.toolConfiguration = JSON.stringify(parsed);
+      renderConfiguration();
+      status.textContent = "";
+    } catch (error) {
+      status.textContent = error.message || "Could not load configuration.";
+    }
+  });
   document.getElementById("addToolConfiguration").addEventListener("click", () => {
     addRow();
+    emptyMessage.hidden = true;
     rows.lastElementChild?.querySelector("input")?.focus();
     status.textContent = "";
   });
@@ -98,7 +127,7 @@
         ? configuration[key] : valueInput.value;
     }
     for (const key of fixedKeys) {
-      if (!Object.hasOwn(next, key) || !next[key].trim()) {
+      if (!Object.hasOwn(next, key) || typeof next[key] !== "string" || !next[key].trim()) {
         status.textContent = "Required configuration is missing: " + key;
         return;
       }
@@ -125,8 +154,7 @@
       if (!response.ok) throw new Error("Save failed (" + response.status + ").");
       configuration = next;
       context.dataset.toolConfiguration = JSON.stringify(next);
-      rows.replaceChildren();
-      Object.entries(next).forEach(([key, value]) => addRow(key, typeof value === "string" ? value : JSON.stringify(value)));
+      renderConfiguration();
       status.textContent = "Configuration saved.";
     } catch (error) {
       status.textContent = error.message || "Could not save configuration.";
