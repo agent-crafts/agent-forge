@@ -1,6 +1,5 @@
 /* Admin/User workspace navigation preview. Visibility is not authorization. */
 .workspace-admin-nav[hidden],.workspace-user-nav[hidden],.workspace-admin-only[hidden],.workspace-profile-menu[hidden]{display:none!important}
-.workspace-mode-label{font-size:11px;font-weight:650;letter-spacing:.05em;color:var(--muted);padding:0 12px}
 .workspace-nav-note{font-size:12px;line-height:1.65;color:var(--muted);margin:4px 12px}
 .workspace-profile{position:relative}
 .workspace-profile-toggle{display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--line-strong);border-radius:50%;background:var(--surface);color:var(--content);cursor:pointer}
@@ -16,3 +15,9 @@
 
 /* Chat conversation history is not part of either sidebar menu. */
 .chat-sidebar-group[hidden]{display:none!important}
+
+/* Slightly denser navigation in both workspaces without reducing icon or text size. */
+.sidebar .app-nav{gap:2px}
+.sidebar .app-nav .side-link{min-height:40px;padding:7px 11px;gap:10px}
+.sidebar .app-nav .side-label{margin-bottom:7px}
+.sidebar .app-nav .nav-section-break{margin-top:12px!important;padding-top:12px!important}
