@@ -16,7 +16,6 @@
 }
 <aside class="sidebar" id="workspaceSidebar">
     <a class="brand" href="/projects"><span class="brand-mark">✦</span><span>AgentForge <small data-workspace-brand>ADMINISTRATION</small></span></a>
-    <div class="workspace-mode-label" data-workspace-mode-label>Admin Portal</div>
     <nav class="app-nav workspace-admin-nav" aria-label="Administration navigation">
         <div class="side-label">PROJECT MANAGEMENT</div>
         @foreach (var item in new[] { ("projects", "Projects"), ("specifications", "Specifications"), ("workflows", "Workflows"), ("tasks", "Tasks"), ("reviews", "Reviews & Approvals"), ("pipelines", "Pipelines") })
@@ -46,6 +45,6 @@
     </div>
     <div class="side-footer">
         <div class="workspace-admin-only"><a class="side-link @(section == "design-system" ? "active" : "")" href="/design-system">Design System</a></div>
-        <div><span class="status-dot"></span> Local workspace · UI preview</div>
+        <div><span class="status-dot"></span> Local workspace</div>
     </div>
 </aside>
