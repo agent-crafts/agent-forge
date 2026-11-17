@@ -66,3 +66,10 @@
 .lf-root .lf-messages{max-height:none;overflow:visible;flex:1 0 auto}
 .lf-root .lf-chat,.lf-root .lf-artifacts{height:auto;max-height:none}
 .lf-root .lf-tabs{overflow-x:auto;overflow-y:hidden}
+
+
+/* Fix the actual double-scroll source: the 100dvh app shell and its scrollable page-content.
+   Keep page-content as the sole vertical scrolling region on lifecycle pages. */
+.shell:has(.lf-root){overflow:hidden}
+.shell:has(.lf-root)>.main{min-height:0;max-height:100%;overflow:hidden}
+.shell:has(.lf-root)>.main>.page-content{min-height:0;min-width:0;flex:1 1 0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain}
