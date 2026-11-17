@@ -33,6 +33,22 @@
       });
     }
     const previewButton = container.closest('form')?.querySelector('#previewAgentInstructions');
+    const syncInstructionsMode = () => {
+      if (!previewButton) return;
+      const previewing = editor.codemirror.getWrapperElement().classList.contains('editor-preview-active');
+      const form = container.closest('form');
+      form?.classList.toggle('is-instructions-preview', previewing);
+      previewButton.textContent = previewing ? 'Edit' : 'Preview';
+      previewButton.setAttribute('aria-pressed', String(previewing));
+      form?.querySelectorAll('.editor-toolbar button, .editor-toolbar a').forEach(control => {
+        if (control.tagName === 'BUTTON') control.disabled = previewing;
+        control.setAttribute('aria-disabled', String(previewing));
+        if (control.tagName === 'A') control.tabIndex = previewing ? -1 : 0;
+      });
+      const save = form?.querySelector('#saveAgentInstructions');
+      if (save) save.disabled = previewing;
+    };
+    if (previewButton) container.syncInstructionsMode = syncInstructionsMode;
     if (previewButton) {
       previewButton.addEventListener('click', () => {
         EasyMDE.togglePreview(editor);
