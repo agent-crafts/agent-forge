@@ -1,11 +1,12 @@
 @model AgentForge.Web.Controllers.AgentsController.AgentCard
 <section class="ui-panel agent-instructions">
-    <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l4 4v14H4V3h4Z"/><path d="M8 11h8M8 15h8M8 19h5"/></svg></span><div class="ui-panel-title-copy"><h2>System Instructions</h2><p class="ui-subtitle">Write instructions in Markdown using the editor toolbar.</p></div></div>
+    <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l4 4v14H4V3h4Z"/><path d="M8 11h8M8 15h8M8 19h5"/></svg></span><div class="ui-panel-title-copy"><h2>System Instructions</h2><p class="ui-subtitle">View instructions in Markdown, or select Edit to make changes.</p></div></div>
     <form id="agentInstructionsForm" data-agent-id="@Model.Id">
         @Html.AntiForgeryToken()
         <partial name="_MarkdownEditor" model='"agentSystemInstructions"' view-data='new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(ViewData) { ["MarkdownContent"] = Model.SystemInstructions }' />
         <div class="agent-instructions-actions">
-            <button id="saveAgentInstructions" type="submit" class="ui-button ui-button--primary">Save Changes</button>
+            <button id="editAgentInstructions" type="button" class="ui-button ui-button--secondary">Edit</button>
+            <button id="saveAgentInstructions" type="submit" class="ui-button ui-button--primary" disabled>Save Changes</button>
         </div>
     </form>
 </section>
@@ -27,6 +28,12 @@
 .agent-instructions-actions { display: flex; align-items: center; justify-content: flex-end; gap: .75rem; margin-top: .75rem; }
 .agent-markdown-component .editor-statusbar .agent-instructions-actions { margin-top: 0; }
 .agent-markdown-component .editor-statusbar .ui-button { font-size: .875rem; }
+#agentInstructionsForm.is-instructions-preview .editor-toolbar { display: none !important; }
+#agentInstructionsForm.is-instructions-preview .EasyMDEContainer .CodeMirror,
+#agentInstructionsForm.is-instructions-preview .EasyMDEContainer .editor-preview { border: 0; box-shadow: none; }
+#agentInstructionsForm.is-instructions-preview .EasyMDEContainer .editor-preview { padding-left: 0; padding-right: 0; }
+#agentInstructionsForm.is-instructions-preview #editAgentInstructions { display: inline-flex; }
+#agentInstructionsForm:not(.is-instructions-preview) #editAgentInstructions { display: none; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.js"></script>
