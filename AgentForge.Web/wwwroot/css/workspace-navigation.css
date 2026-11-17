@@ -16,17 +16,17 @@
 /* Chat conversation history is not part of either sidebar menu. */
 .chat-sidebar-group[hidden]{display:none!important}
 
-/* Compact navigation in both workspaces; user workspace receives a smaller scale below. */
+/* Shared compact sidebar navigation for Administration and Project Workspace. */
 .sidebar .app-nav{gap:2px}
 .sidebar .app-nav .side-link{min-height:40px;padding:7px 11px;gap:10px}
 .sidebar .app-nav .side-label{margin-bottom:7px}
 .sidebar .app-nav .nav-section-break{margin-top:12px!important;padding-top:12px!important}
 
-/* Compact user workspace navigation for the expanded lifecycle menu. */
-.sidebar .workspace-user-nav .side-link{min-height:34px;padding:5px 10px;gap:9px;font-size:12px;line-height:1.35}
-.sidebar .workspace-user-nav .sidebar-nav-icon{width:16px;height:16px;flex-shrink:0}
-.sidebar .workspace-user-nav .side-label{font-size:10px;margin-bottom:5px}
-.sidebar .workspace-user-nav .nav-section-break{margin-top:8px!important;padding-top:9px!important}
+/* Match Administration and Project Workspace item typography, icons, and spacing. */
+.sidebar .app-nav .side-link{min-height:34px;padding:5px 10px;gap:9px;font-size:12px;line-height:1.35}
+.sidebar .app-nav .sidebar-nav-icon{width:16px;height:16px;flex-shrink:0}
+.sidebar .app-nav .side-label{font-size:10px;margin-bottom:5px}
+.sidebar .app-nav .nav-section-break{margin-top:8px!important;padding-top:9px!important}
 
 /* Active project switcher: project selection navigates to the existing project overview. */
 .workspace-project-label{font-size:11px;font-weight:700;letter-spacing:1.3px;color:var(--muted);padding:0 11px}
