@@ -93,7 +93,16 @@
   originalSchema=JSON.parse(d.toolSchema);
   executorSelect.value=d.toolExecutorKey||"";
   let savedConfig={};try{savedConfig=JSON.parse(d.toolConfiguration||"{}");}catch{}
-  apiUrl.value=savedConfig.url||"";githubOwner.value=savedConfig.owner||"";githubRepo.value=savedConfig.repo||"";rows.replaceChildren();updateExecutor();
+  apiUrl.value=savedConfig.url||"";githubOwner.value=savedConfig.owner||"";githubRepo.value=savedConfig.repo||"";
+  rows.replaceChildren();
+  // Restore saved parameters before synchronizing URL placeholders.
+  // Otherwise HTTP tools only show parameters present in the URL.
+  if(executorSelect.value!=="get_github_issue"){
+   for(const [name,definition] of Object.entries(originalSchema.properties||{})){
+    addRow(name,definition,(originalSchema.required||[]).includes(name));
+   }
+  }
+  updateExecutor();
   get("addToolTitle").textContent="Edit Tool";
   get("addToolIntro").textContent="Update saved tool configuration.";
   saveButton.textContent="Save Changes";
