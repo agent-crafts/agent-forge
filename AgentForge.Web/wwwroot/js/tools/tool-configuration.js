@@ -14,6 +14,8 @@
   function addRow(key = "", value = "") {
     const row = document.createElement("div");
     row.className = "ui-field flex flex-wrap items-end gap-3";
+    row.dataset.originalKey = key;
+    row.dataset.originalValue = value;
     const keyField = document.createElement("label");
     keyField.className = "grid min-w-0 flex-1 gap-1";
     const keyLabel = document.createElement("span");
@@ -84,7 +86,8 @@
         valueInput.focus();
         return;
       }
-      next[key] = valueInput.value;
+      next[key] = key === row.dataset.originalKey && valueInput.value === row.dataset.originalValue && Object.hasOwn(configuration, key)
+        ? configuration[key] : valueInput.value;
     }
     for (const key of fixedKeys) {
       if (!Object.hasOwn(next, key) || !next[key].trim()) {
@@ -112,7 +115,10 @@
         })
       });
       if (!response.ok) throw new Error("Save failed (" + response.status + ").");
+      configuration = next;
       context.dataset.toolConfiguration = JSON.stringify(next);
+      rows.replaceChildren();
+      Object.entries(next).forEach(([key, value]) => addRow(key, typeof value === "string" ? value : JSON.stringify(value)));
       status.textContent = "Configuration saved.";
     } catch (error) {
       status.textContent = error.message || "Could not save configuration.";
