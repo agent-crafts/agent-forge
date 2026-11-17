@@ -2,6 +2,7 @@
     var section = (string)(ViewData["Section"] ?? "");
     var isChat = section == "chat";
     var icons = new Dictionary<string, string> {
+        ["dashboard"]="M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z",
         ["projects"]="M3 7h18M5 7V5l3-2h4l2 2h5v14H5Z",
         ["specifications"]="M6 3h9l4 4v14H6ZM15 3v5h4M9 12h7M9 16h7",
         ["workflows"]="M4 7h7l3 5h6M4 17h7l3-5h6",
@@ -44,7 +45,7 @@
         </div>
         <p class="workspace-project-feedback" id="workspaceProjectFeedback" role="status" hidden></p>
         <div class="side-label nav-section-break">PROJECT WORKSPACE</div>
-        <a class="side-link @(section == "projects" ? "active" : "")" href="#" id="workspaceProjectOverview"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="@icons["projects"]" /></svg><span class="sidebar-nav-label">Dashboard</span></a>
+        <a class="side-link @(section == "projects" ? "active" : "")" href="#" id="workspaceProjectOverview"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="@icons["dashboard"]" /></svg><span class="sidebar-nav-label">Dashboard</span></a>
         <a class="side-link @(section == "project-board" ? "active" : "")" href="#" data-project-section="board"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="@icons["tasks"]" /></svg><span class="sidebar-nav-label">Board</span></a>
         <a class="side-link @(section == "project-specifications" ? "active" : "")" href="#" data-project-section="specifications"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="@icons["specifications"]" /></svg><span class="sidebar-nav-label">Specifications</span></a>
         <a class="side-link @(section == "project-assistant" || isChat ? "active" : "")" href="#" data-project-section="assistant"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="@icons["chat"]" /></svg><span class="sidebar-nav-label">Assistant</span></a>
