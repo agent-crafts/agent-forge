@@ -42,11 +42,10 @@
     valueField.append(valueLabel, valueInput);
     const remove = document.createElement("button");
     remove.type = "button";
-    remove.className = "ui-button shrink-0";
-    remove.style.cssText = "background:transparent;border-color:transparent;color:#dc2626;";
+    remove.className = "param-remove";
     remove.setAttribute("aria-label", "Remove configuration");
     remove.title = "Remove configuration";
-    remove.innerHTML = '<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg>';
+    remove.innerHTML = '<svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg>';
     remove.addEventListener("click", () => { row.remove(); status.textContent = ""; });
     if (fixedKeys.has(key)) {
       keyInput.readOnly = true;
