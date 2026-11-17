@@ -36,9 +36,10 @@
         <div class="side-label nav-section-break">PROJECT DELIVERY</div>
         <p class="workspace-nav-note">Open a project to view its details. Project-scoped tasks, workflows and executions will appear here when membership and project bindings are implemented.</p>
     </nav>
-    <div class="chat-sidebar-group" data-chat-sidebar hidden="@(!isChat)">
-        <button type="button" class="chat-group-toggle" id="chatGroupToggle" aria-expanded="@(isChat ? "true" : "false")" aria-controls="chatTabs">Conversations <span class="chat-chevron">⌄</span></button>
-        <div class="chat-tabs" id="chatTabs" hidden="@(!isChat)">
+    @* Retained as hidden DOM hooks for the existing chat script; no conversation controls in the sidebar. *@
+    <div class="chat-sidebar-group" data-chat-sidebar hidden aria-hidden="true">
+        <button type="button" class="chat-group-toggle" id="chatGroupToggle" aria-expanded="false" aria-controls="chatTabs">Conversations <span class="chat-chevron">⌄</span></button>
+        <div class="chat-tabs" id="chatTabs" hidden>
             <button class="chat-tab-new" id="newChat" type="button"><span>＋</span> New Chat</button>
             <div id="chatTabList" class="chat-tab-list" aria-label="Conversations"></div>
         </div>
