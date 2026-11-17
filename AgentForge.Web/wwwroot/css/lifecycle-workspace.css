@@ -72,3 +72,9 @@
 .shell:has(.lf-root){height:auto;min-height:100dvh;overflow:visible}
 .shell:has(.lf-root)>.main{height:auto;min-height:0;max-height:none;overflow:visible}
 .shell:has(.lf-root)>.main>.page-content{flex:1 0 auto;min-height:0;min-width:0;overflow:visible}
+
+
+/* Keep the project sidebar pinned while the document scrolls; scroll its menu independently. */
+@media(min-width:641px){
+  .shell:has(.lf-root)>.sidebar{position:sticky;top:0;align-self:flex-start;height:100dvh;max-height:100dvh;overflow-y:auto;overscroll-behavior-y:contain}
+}
