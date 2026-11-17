@@ -22,7 +22,7 @@
       ],
       previewRender: markdown => DOMPurify.sanitize(editor.markdown(markdown)),
       maxHeight: container.hasAttribute('data-markdown-description') ? '350px' : '650px',
-      minHeight: container.hasAttribute('data-markdown-description') ? '160px' : '350px'
+      minHeight: container.hasAttribute('data-markdown-description') ? '160px' : container.closest('#agentInstructionsForm') ? '330px' : '350px'
     });
     container.markdownEditor = editor;
     const instructionsForm = container.closest('#agentInstructionsForm');
