@@ -11,13 +11,18 @@
 .lf-timeline-heading strong{color:var(--heading,inherit)}
 .lf-timeline-heading span{color:var(--lf-muted);font-size:11px}
 .lf-timeline-track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));list-style:none;margin:0;padding:0;position:relative}
-.lf-timeline-track::before{content:"";position:absolute;top:18px;left:10%;right:10%;height:3px;background:var(--lf-border);border-radius:3px}
+
 .lf-timeline-item{min-width:0;position:relative;text-align:center}
+.lf-timeline-item:not(:first-child)::before{content:"";position:absolute;top:17px;left:-50%;width:100%;height:3px;background:var(--lf-border);z-index:0}
+.lf-timeline-item.is-earlier:not(:first-child)::before,.lf-timeline-item.is-current:not(:first-child)::before{background:#16a34a}
 .lf-timeline-link{display:flex;flex-direction:column;align-items:center;gap:9px;text-decoration:none;color:var(--lf-muted);font-size:12px;font-weight:600;padding:0 2px 7px;outline-offset:4px}
 .lf-timeline-dot{display:grid;place-items:center;width:37px;height:37px;border-radius:50%;background:var(--lf-surface);border:2px solid var(--lf-border);color:var(--lf-muted);font-size:12px;z-index:1;transition:transform .15s,border-color .15s}
-.lf-timeline-item.is-earlier .lf-timeline-dot{border-color:var(--lf-accent);color:var(--lf-accent);background:var(--active,#eff2ff)}
+.lf-timeline-item.is-earlier .lf-timeline-dot{border-color:#16a34a;color:#fff;background:#16a34a}
+.lf-timeline-item.is-earlier .lf-timeline-label{color:#16a34a}
 .lf-timeline-item.is-current .lf-timeline-dot{background:var(--lf-accent);border-color:var(--lf-accent);color:#fff;box-shadow:0 0 0 4px var(--active,#eff2ff)}
 .lf-timeline-item.is-current .lf-timeline-label{color:var(--lf-accent);font-weight:750}
 .lf-timeline-link:hover .lf-timeline-dot{transform:scale(1.08);border-color:var(--lf-accent)}
 .lf-timeline-note{color:var(--lf-muted);font-size:10px;margin:8px 0 0;text-align:center}
 @media(max-width:650px){.lf-timeline{padding:14px 12px}.lf-timeline-heading{align-items:flex-start;flex-direction:column;margin-bottom:15px}.lf-timeline-label{font-size:10px;overflow-wrap:anywhere}.lf-timeline-dot{width:30px;height:30px}.lf-timeline-track::before{top:14px}.lf-timeline-link{gap:7px}}
+
+@media(max-width:650px){.lf-timeline-item:not(:first-child)::before{top:14px}}
