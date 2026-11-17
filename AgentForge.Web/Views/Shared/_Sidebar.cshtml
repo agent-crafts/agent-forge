@@ -24,7 +24,7 @@
     <a class="brand" href="/projects"><span class="brand-mark">✦</span><span>AgentForge <small data-workspace-brand>ADMINISTRATION</small></span></a>
     <nav class="app-nav workspace-admin-nav" aria-label="Administration navigation">
         <div class="side-label">PROJECT MANAGEMENT</div>
-        @foreach (var item in new[] { ("projects", "Projects"), ("specifications", "Specifications"), ("workflows", "Workflows"), ("tasks", "Tasks"), ("reviews", "Reviews & Approvals"), ("pipelines", "Pipelines") })
+        @foreach (var item in new[] { ("projects", "Projects"), ("tasks", "Tasks") })
         {
             <a class="side-link @(section == item.Item1 ? "active" : "")" aria-current="@(section == item.Item1 ? "page" : null)" href="/@(item.Item1)"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="@icons[item.Item1]" /></svg><span class="sidebar-nav-label">@item.Item2</span></a>
         }
