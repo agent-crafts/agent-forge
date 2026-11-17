@@ -1,0 +1,52 @@
+/* Admin/User workspace navigation preview. Visibility is not authorization. */
+.workspace-admin-nav[hidden],.workspace-user-nav[hidden],.workspace-admin-only[hidden],.workspace-profile-menu[hidden]{display:none!important}
+.workspace-nav-note{font-size:12px;line-height:1.65;color:var(--muted);margin:4px 12px}
+.workspace-profile{position:relative}
+.workspace-profile-toggle{display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--line-strong);border-radius:50%;background:var(--surface);color:var(--content);cursor:pointer}
+.workspace-profile-toggle:hover,.workspace-profile-toggle[aria-expanded="true"]{background:var(--hover)}
+.workspace-profile-toggle:focus-visible,.workspace-profile-menu button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.workspace-profile-menu{position:absolute;right:0;top:calc(100% + 10px);z-index:30;min-width:230px;padding:8px;border:1px solid var(--line-strong);border-radius:12px;background:var(--surface);box-shadow:0 16px 40px #0003}
+.workspace-menu-heading{font-size:12px;font-weight:700;padding:9px;color:var(--heading)}
+.workspace-menu-heading small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:4px}
+.workspace-profile-menu button{display:block;width:100%;padding:10px 12px;text-align:left;background:transparent;color:var(--content);border:0;border-radius:7px;cursor:pointer}
+.workspace-profile-menu button:hover,.workspace-profile-menu button[aria-checked="true"]{background:var(--active)}
+.workspace-profile-menu button[aria-checked="true"]::after{content:"✓";float:right;color:var(--accent)}
+@media(max-width:640px){.workspace-profile-menu{right:0;min-width:205px}}
+
+/* Chat conversation history is not part of either sidebar menu. */
+.chat-sidebar-group[hidden]{display:none!important}
+
+/* Shared compact sidebar navigation for Administration and Project Workspace. */
+.sidebar .app-nav{gap:2px}
+.sidebar .app-nav .side-link{min-height:40px;padding:7px 11px;gap:10px}
+.sidebar .app-nav .side-label{margin-bottom:7px}
+.sidebar .app-nav .nav-section-break{margin-top:12px!important;padding-top:12px!important}
+
+/* Match Administration and Project Workspace item typography, icons, and spacing. */
+.sidebar .app-nav .side-link{min-height:34px;padding:5px 10px;gap:9px;font-size:12px;line-height:1.35}
+.sidebar .app-nav .sidebar-nav-icon{width:16px;height:16px;flex-shrink:0}
+.sidebar .app-nav .side-label{font-size:10px;margin-bottom:5px}
+.sidebar .app-nav .nav-section-break{margin-top:8px!important;padding-top:9px!important}
+
+/* Active project switcher: project selection navigates to the existing project overview. */
+.workspace-project-label{font-size:11px;font-weight:700;letter-spacing:1.3px;color:var(--muted);padding:0 11px}
+.workspace-project-select{display:block;width:100%;min-width:0;min-height:40px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--surface);color:var(--content);font:inherit;font-size:13px}
+.workspace-project-select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.workspace-project-select:disabled{opacity:.65}
+.workspace-project-feedback{font-size:12px;color:var(--muted);margin:0 11px}
+
+/* User workspace opens on the selected project; the admin grid is never displayed in user mode. */
+html[data-workspace-mode="user"] #projectsGrid,
+html[data-workspace-mode="user"] #projectAdminToolbar,
+html[data-workspace-mode="user"] #projectEmpty,
+html[data-workspace-mode="user"] #projectAdminPagination,
+html[data-workspace-mode="user"] #projectProfile .ui-tool-actions{display:none!important}
+html[data-workspace-mode="admin"] #userProjectLanding{display:none!important}
+
+/* Project picker panel follows the shared surface, border, hover and focus tokens. */
+.workspace-project-picker{position:relative;min-width:0}
+.workspace-project-picker .workspace-project-select[hidden],.workspace-project-options[hidden]{display:none!important}
+.workspace-project-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:40px;padding:8px 11px;border:1px solid var(--line-strong);border-radius:9px;background:var(--surface);color:var(--content);font:inherit;font-size:13px;text-align:left;cursor:pointer}
+.workspace-project-toggle:disabled{opacity:.65;cursor:default}
+.workspace-project-toggle:focus-visible,.workspace-project-option:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.workspace-project-options{position:absolute;top:calc(100% + 5px);left:0;right:0}

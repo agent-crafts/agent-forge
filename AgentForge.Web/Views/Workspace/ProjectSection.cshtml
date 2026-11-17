@@ -1,0 +1,24 @@
+@{
+    Layout = "_AppLayout";
+    var projectName = ViewData["ProjectName"] as string ?? "Project";
+    var title = ViewData["Title"] as string ?? "Workspace";
+    var descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Board"] = "Project work items will appear here when the board data model and APIs are connected.",
+        ["Specifications"] = "Project specifications will appear here when document bindings and APIs are connected.",
+        ["Discovery"] = "Discovery activities and findings will appear here when project data is connected.",
+        ["Design"] = "Architecture and design work will appear here when project data is connected.",
+        ["Development"] = "Development work items and code changes will appear here when integrations are connected.",
+        ["Quality"] = "Reviews, testing, and validation results will appear here when integrations are connected.",
+        ["Deployment"] = "Releases and deployment information will appear here when integrations are connected.",
+        ["Workflows"] = "Project workflow definitions will appear here when project bindings are implemented.",
+        ["Runs"] = "Project execution history will appear here when run bindings are implemented."
+    };
+}
+<div class="ui-detail">
+    <section class="ui-panel">
+        <p class="ui-subtitle">@projectName</p>
+        <h1>@title</h1>
+        <p class="ui-subtitle">@(descriptions.TryGetValue(title, out var description) ? description : "Project workspace")</p>
+    </section>
+</div>

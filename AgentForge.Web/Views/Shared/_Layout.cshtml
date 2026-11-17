@@ -6,10 +6,16 @@
     <meta name="theme-color" content="#0d1117">
     <title>@ViewData["Title"] — AgentForge</title>
     <script src="~/js/theme.js" asp-append-version="true"></script>
+    <script>
+      // UI preview only; authorization must be enforced on the server.
+      try { document.documentElement.dataset.workspaceMode = localStorage.getItem('agentforge.workspacePreview') === 'user' ? 'user' : 'admin'; }
+      catch { document.documentElement.dataset.workspaceMode = 'admin'; }
+    </script>
     <link rel="stylesheet" href="~/css/agent-chat.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/toast.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/ui-components.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/app.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/workspace-navigation.css" asp-append-version="true">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.css">
     <style>
       .ui-markdown-content { overflow-wrap: anywhere; line-height: 1.65; }

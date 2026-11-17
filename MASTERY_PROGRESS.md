@@ -6,6 +6,10 @@
 >
 > **Update policy:** Update this file at the end of each meaningful learning module, implementation milestone, or mastery assessment. Do not mark a skill mastered based only on discussion or a merged PR.
 
+**User workspace IA extension (2026-11-17, PR #44):** Added project-scoped Development Operations (Discovery, Design, Development, Quality, Deployment) and Agent Studio (Workflows, Runs) navigation, routes, and landing pages. Project switcher retains active section. Source committed; no build/browser tests or project data bindings/authorization verified. Next: run smoke tests and implement project-scoped data contracts.
+
+**User workspace navigation (2026-11-17, PR #44):** Implemented project-specific Overview, Board, Specifications, and Assistant navigation routes and active-project switching. Board/Specifications are landing pages only; Assistant reuses existing chat without project-context binding. Source committed; build/browser testing and authorization remain pending.
+
 **Markdown preview rendering follow-up (2026-11-16, PR #43):** Removed raw-text fallback in preview; explicit marked.parse + DOMPurify rendering with unavailable-library message, plus heading/emphasis CSS. Source changes committed; browser/CDN verification pending.
 
 **Markdown preview modal (2026-11-16, PR #43):** Description Preview opens a shared standalone native dialog, leaving Agent/Tool/Project create/edit dialogs intact; removed inline preview containers. Committed; browser and accessibility verification pending.
