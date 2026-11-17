@@ -21,10 +21,17 @@
         'guide'
       ],
       previewRender: markdown => DOMPurify.sanitize(editor.markdown(markdown)),
-      maxHeight: '650px',
-      minHeight: '350px'
+      maxHeight: container.hasAttribute('data-markdown-description') ? '350px' : '650px',
+      minHeight: container.hasAttribute('data-markdown-description') ? '160px' : '350px'
     });
     container.markdownEditor = editor;
+    if (container.hasAttribute('data-markdown-description')) {
+      editor.codemirror.on('change', () => {
+        const value = editor.value();
+        textarea.value = value;
+        textarea.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    }
     const previewButton = container.closest('form')?.querySelector('#previewAgentInstructions');
     if (previewButton) {
       previewButton.addEventListener('click', () => {
