@@ -28,6 +28,10 @@
 .agent-instructions-actions { display: flex; align-items: center; gap: .75rem; margin-top: .75rem; }
 .agent-markdown-component .editor-statusbar .agent-instructions-actions { margin-top: 0; }
 .agent-markdown-component .editor-statusbar .ui-button { font-size: .875rem; }
+/* Preview shows only rendered instructions and the Edit action. */
+#agentInstructionsForm.is-instructions-preview .editor-toolbar,
+#agentInstructionsForm.is-instructions-preview .editor-statusbar > :not(.agent-instructions-actions),
+#agentInstructionsForm.is-instructions-preview #saveAgentInstructions { display: none; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.js"></script>
