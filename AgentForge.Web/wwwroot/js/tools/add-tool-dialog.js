@@ -78,11 +78,17 @@
   rows.querySelectorAll(".ui-modal-parameter input, .ui-modal-parameter select").forEach(field=>field.disabled=true);
   schema();
  };
+ // Execution routing is internal: a configured API URL implies the HTTP adapter.
+ // Preserve existing executor keys while editing, including legacy GitHub tools.
  const updateExecutor=()=>{
-  apiUrlField.hidden=executorSelect.value!=="http.get_json";
+  if(!editMode)executorSelect.value=apiUrl.value.trim()?"http.get_json":"";
+  apiUrlField.hidden=executorSelect.value==="get_github_issue";
   githubFields.hidden=executorSelect.value!=="get_github_issue";
   lockGithubParameters();
  };
+ apiUrl.addEventListener("input",()=>{
+  if(!editMode)updateExecutor();
+ });
  executorSelect.addEventListener("change",updateExecutor);
  let previewUrl=null;
  const iconInput=document.getElementById("newToolIconUpload");
