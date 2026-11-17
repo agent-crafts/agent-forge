@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="~/css/lifecycle-workspace.css" asp-append-version="true" />
 <div class="lf-root" data-lifecycle-stage="@stageKey">
     <header class="lf-heading">
-        <div><p class="lf-eyebrow">@projectName / AI-native engineering</p><h1>@title</h1><p class="lf-muted">@(descriptions.TryGetValue(stageKey, out var description) ? description : "Shared project artifacts and activity.")</p></div>
+        <div><h1>@title</h1><p class="lf-muted">@(descriptions.TryGetValue(stageKey, out var description) ? description : "Shared project artifacts and activity.")</p></div>
         <span class="lf-demo">● Interactive demo · sample data only</span>
     </header>
     <nav class="lf-timeline" aria-label="Engineering lifecycle">
