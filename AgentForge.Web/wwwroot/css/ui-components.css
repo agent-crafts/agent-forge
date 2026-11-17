@@ -204,8 +204,8 @@
 #toolParameterRows .param-type{flex:1 1 130px;min-width:0}
 #toolParameterRows .param-required:not(:disabled),#toolParameterRows .param-required:not(:disabled)+span,#toolParameterRows label:has(.param-required:not(:disabled)){cursor:pointer}
 #toolParameterRows .param-remove, #toolConfigurationRows .param-remove{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:10px;background:transparent;box-shadow:none;color:#dc2626;cursor:pointer}
-#toolParameterRows .param-remove, #toolConfigurationRows .param-remove svg{display:block;width:22px;height:22px;flex:none}
-#toolParameterRows .param-remove, #toolConfigurationRows .param-remove:hover,#toolParameterRows .param-remove:focus-visible{background:rgba(220,38,38,.12);box-shadow:none;color:#b91c1c}
+#toolParameterRows .param-remove svg,#toolConfigurationRows .param-remove svg{display:block;width:22px;height:22px;flex:none}
+#toolParameterRows .param-remove:hover,#toolParameterRows .param-remove:focus-visible,#toolConfigurationRows .param-remove:hover,#toolConfigurationRows .param-remove:focus-visible{background:rgba(220,38,38,.12);box-shadow:none;color:#b91c1c}
 
 .ui-file{display:flex;flex-direction:column;align-items:flex-start;gap:10px;width:fit-content;max-width:100%}
 .ui-file-avatar{position:relative;display:grid;width:96px;height:96px;margin:0;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--surface-raised);color:var(--heading);cursor:pointer}
