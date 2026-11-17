@@ -347,7 +347,17 @@
    if(row.querySelector(".param-required").checked)required.push(key);
   });
   const executorKey=executorSelect.value||null;
-  const configurationJson=JSON.stringify(executorKey==="http.get_json"?{url:apiUrl.value.trim()}:executorKey==="get_github_issue"?{owner:githubOwner.value.trim(),repo:githubRepo.value.trim()}:{});
+  let savedConfiguration={};
+  if(editMode&&editContext){
+   try{
+    const parsed=JSON.parse(editContext.dataset.toolConfiguration||"{}");
+    if(parsed&&typeof parsed==="object"&&!Array.isArray(parsed))savedConfiguration=parsed;
+   }catch{status.textContent="Existing configuration is invalid; edit cancelled to prevent data loss.";return;}
+  }
+  const configurationJson=JSON.stringify({
+   ...savedConfiguration,
+   ...(executorKey==="http.get_json"?{url:apiUrl.value.trim()}:executorKey==="get_github_issue"?{owner:githubOwner.value.trim(),repo:githubRepo.value.trim()}:{})
+  });
   const jsonSchema=JSON.stringify(executorKey==="get_github_issue"?githubSchema:buildSchema());
   status.textContent="";
   saving=true;
