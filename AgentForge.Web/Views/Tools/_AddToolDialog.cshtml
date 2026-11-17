@@ -21,8 +21,9 @@
                 <input class="ui-input" id="newToolName" name="name" placeholder="Read Project Status" maxlength="155" required aria-required="true" aria-describedby="newToolNameError" />
                 <p id="newToolNameError" class="ui-field-error hidden" role="alert"></p>
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolDescription">Description <span class="ui-required-mark" aria-hidden="true">*</span></label>
-                <textarea class="ui-input min-h-24" id="newToolDescription" data-markdown-input name="description" placeholder="What does this tool do?" maxlength="4000" required aria-required="true" aria-describedby="newToolDescriptionError"></textarea>
-                <button type="button" class="ui-button ui-button--secondary" data-markdown-preview-button="newToolDescription" aria-pressed="false">Preview Markdown</button>
+                <div class="agent-markdown-component" data-markdown-editor data-markdown-description>
+                    <textarea class="ui-input w-full" id="newToolDescription" name="description" placeholder="What does this tool do?" maxlength="4000" required aria-required="true" aria-describedby="newToolDescriptionError"></textarea>
+                </div>
                 <p id="newToolDescriptionError" class="ui-field-error hidden" role="alert"></p>
                 
                 <label class="mt-2 block text-[13px] font-semibold text-heading" for="newToolDisplayName">Display Name <span class="ui-required-mark" aria-hidden="true">*</span></label>
