@@ -71,14 +71,12 @@
     <div class="ui-columns">
         <div class="ui-stack">
             <section class="ui-panel" id="tool-overview">
-                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M8 3h7l6 6h-6V3"/><path d="M8 13h8M8 17h8"/></svg></span> Overview</h2>
-                <p class="ui-subtitle">What this tool does and when to use it.</p>
+                <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M8 3h7l6 6h-6V3"/><path d="M8 13h8M8 17h8"/></svg></span><div class="ui-panel-title-copy"><h2>Overview</h2><p class="ui-subtitle">What this tool does and when to use it.</p></div></div>
                 <div class="ui-markdown-content" data-markdown-render>@Model.Description</div>
                 <div class="ui-note"><strong>When to use this tool</strong><p>Use this tool when its registered capability matches your task. Review the input contract before integrating it into an agent workflow.</p></div>
             </section>
             <section class="ui-panel" id="tool-parameters">
-                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="var(--surface-raised)"/><circle cx="15" cy="17" r="2" fill="var(--surface-raised)"/></svg></span> Parameters</h2>
-                <p class="ui-subtitle">Required inputs and types from the registered schema.</p>
+                <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="var(--surface-raised)"/><circle cx="15" cy="17" r="2" fill="var(--surface-raised)"/></svg></span><div class="ui-panel-title-copy"><h2>Parameters</h2><p class="ui-subtitle">Required inputs and types from the registered schema.</p></div></div>
                 @if (hasProperties)
                 {
                     <div class="ui-table-scroll"><table class="ui-table">
@@ -99,11 +97,11 @@
         </div>
         <div class="ui-stack">
             <section class="ui-panel" id="tool-schema">
-                <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8v1c0 2-1 3-3 3 2 0 3 1 3 3v1c0 2 0 4 3 4M16 4c3 0 3 2 3 4v1c0 2 1 3 3 3-2 0-3 1-3 3v1c0 2 0 4-3 4"/></svg></span> JSON Schema</h2><p>The registered input contract for this tool.</p></div><partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, CssClass = "ui-copy", CopyTarget = "tool-schema-code" }' /></div>
+                <div class="ui-panel-heading"><div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8v1c0 2-1 3-3 3 2 0 3 1 3 3v1c0 2 0 4 3 4M16 4c3 0 3 2 3 4v1c0 2 1 3 3 3-2 0-3 1-3 3v1c0 2 0 4-3 4"/></svg></span><div class="ui-panel-title-copy"><h2>JSON Schema</h2><p class="ui-subtitle">The registered input contract for this tool.</p></div></div><partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, CssClass = "ui-copy", CopyTarget = "tool-schema-code" }' /></div>
                 <partial name="_JsonViewer" model='("tool-schema-code", (string?)formattedSchema)' />
             </section>
             <section class="ui-panel" id="tool-example">
-                <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="m7 9 3 3-3 3M12 15h5"/></svg></span> Example Input</h2><p>Illustrative values based on the schema; not executed.</p></div><partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, CssClass = "ui-copy", CopyTarget = "tool-example-code" }' /></div>
+                <div class="ui-panel-heading"><div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="m7 9 3 3-3 3M12 15h5"/></svg></span><div class="ui-panel-title-copy"><h2>Example Input</h2><p class="ui-subtitle">Illustrative values based on the schema; not executed.</p></div></div><partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, CssClass = "ui-copy", CopyTarget = "tool-example-code" }' /></div>
                 <partial name="_JsonViewer" model='("tool-example-code", (string?)exampleJson)' />
             </section>
             <p class="ui-footnote">Open Try Now to see whether this tool can run from the catalog.</p>
