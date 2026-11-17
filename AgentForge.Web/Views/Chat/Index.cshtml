@@ -1,7 +1,7 @@
 @{
-    ViewData["Title"] = "AgentForge Assistant";
-    ViewData["Description"] = "Local inference · Qwen";
-    ViewData["Section"] = "chat";
+    ViewData["Title"] = "Assistant";
+    ViewData["Description"] = ViewData["ProjectName"] is string name ? name + " · Local inference (project context not yet connected)" : "Local inference · Qwen";
+    ViewData["Section"] = ViewData["ProjectId"] is string ? "project-assistant" : "chat";
     Layout = "_AppLayout";
 }
         <section class="conversation" id="conversation" aria-label="Chat messages" aria-live="polite">
