@@ -58,9 +58,8 @@
 .ui-table td:first-child{color:var(--heading);font-weight:650}
 .ui-table code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}
 .ui-required{display:inline-block;padding:3px 7px;border-radius:6px;background:rgba(220,65,65,.11);color:#d74a4a;font-weight:650}
-.ui-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.ui-panel-heading h2{margin-bottom:3px}
-.ui-panel-heading p{margin-bottom:14px}
+.ui-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.ui-panel-heading .ui-panel-title-block{margin-bottom:0}
 .ui-copy{flex:none;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-raised);color:var(--content);font:inherit;font-size:12px;cursor:pointer}
 .ui-copy:hover{border-color:var(--accent)}
 .ui-code{margin:0;padding:18px;border:1px solid #263247;border-radius:10px;background:#151d2b;color:#d5e4fa;font:12px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;overflow:auto;white-space:pre;max-height:420px}
