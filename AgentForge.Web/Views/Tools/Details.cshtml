@@ -195,7 +195,8 @@
                 </section></div>
                 <div class="ui-stack"><section class="ui-panel">
                     <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg></span><div class="ui-panel-title-copy"><h2>Response</h2>
-                    <p class="ui-subtitle">The execution result will appear here.</p></div></div>\n                    <p id="httpJsonTryStatus" role="status" class="ui-subtitle">Not run</p>
+                    <p class="ui-subtitle">The execution result will appear here.</p></div></div>
+                    <p id="httpJsonTryStatus" role="status" class="ui-subtitle">Not run</p>
                     <pre class="mt-4 max-h-[560px] overflow-auto rounded-xl bg-[#151d2b] p-4 text-xs text-white"><code id="httpJsonTryResult">Run the tool to see its response.</code></pre>
                 </section></div>
             </div>
@@ -205,7 +206,8 @@
             <div class="ui-columns">
                 <div class="ui-stack"><section class="ui-panel min-w-0">
                     <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span><div class="ui-panel-title-copy"><h2>Try this MCP tool</h2>
-                    <p class="ui-subtitle">Enter JSON arguments to execute this MCP tool.</p></div></div>\n                    <form id="mcpToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-4 grid gap-4">
+                    <p class="ui-subtitle">Enter JSON arguments to execute this MCP tool.</p></div></div>
+                    <form id="mcpToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-4 grid gap-4">
                         @Html.AntiForgeryToken()
                         <div class="ui-field">
                             <label class="ui-field-label" for="mcpToolArguments">Arguments (JSON)</label>
@@ -218,7 +220,8 @@
                 </section></div>
                 <div class="ui-stack"><section class="ui-panel min-w-0">
                     <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></svg></span><div class="ui-panel-title-copy"><h2>Response</h2>
-                    <p class="ui-subtitle">Inspect the response returned by the MCP server.</p></div></div>\n                    <p id="mcpToolStatus" class="ui-subtitle" role="status">Not run</p>
+                    <p class="ui-subtitle">Inspect the response returned by the MCP server.</p></div></div>
+                    <p id="mcpToolStatus" class="ui-subtitle" role="status">Not run</p>
                     <partial name="_JsonViewer" model='("mcpToolResult", (string?)null)' />
                 </section></div>
             </div>
