@@ -68,8 +68,7 @@
 .lf-root .lf-tabs{overflow-x:auto;overflow-y:hidden}
 
 
-/* Fix the actual double-scroll source: the 100dvh app shell and its scrollable page-content.
-   Keep page-content as the sole vertical scrolling region on lifecycle pages. */
-.shell:has(.lf-root){overflow:hidden}
-.shell:has(.lf-root)>.main{min-height:0;max-height:100%;overflow:hidden}
-.shell:has(.lf-root)>.main>.page-content{min-height:0;min-width:0;flex:1 1 0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain}
+/* Lifecycle pages use the outer document scrollbar, not an inner content scrollbar. */
+.shell:has(.lf-root){height:auto;min-height:100dvh;overflow:visible}
+.shell:has(.lf-root)>.main{height:auto;min-height:0;max-height:none;overflow:visible}
+.shell:has(.lf-root)>.main>.page-content{flex:1 0 auto;min-height:0;min-width:0;overflow:visible}
