@@ -642,15 +642,15 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 @media(max-width:900px){.agent-playground [data-playground-layout]{height:auto;min-height:0}.agent-playground [data-playground-layout]>div,.agent-playground [data-playground-layout]>aside{min-height:360px}}
 
 /* Shared Markdown editor inside the agent create/edit modal. */
-#createAgentDialog .agent-markdown-component .editor-toolbar{background:var(--surface-raised);color:var(--heading);border-color:var(--line);opacity:1}
-#createAgentDialog .agent-markdown-component .editor-toolbar button,
-#createAgentDialog .agent-markdown-component .editor-toolbar a{color:var(--heading)!important;opacity:1}
-#createAgentDialog .agent-markdown-component .editor-toolbar button:hover,
-#createAgentDialog .agent-markdown-component .editor-toolbar button.active,
-#createAgentDialog .agent-markdown-component .editor-toolbar a:hover,
-#createAgentDialog .agent-markdown-component .editor-toolbar a.active{background:var(--hover);color:var(--heading)!important;border-color:var(--line-strong)}
-#createAgentDialog .agent-markdown-component .CodeMirror,
-#createAgentDialog .agent-markdown-component .editor-preview,
-#createAgentDialog .agent-markdown-component .editor-preview-side{background:var(--surface);color:var(--content)}
-#createAgentDialog .agent-markdown-component .CodeMirror-cursor{border-left-color:var(--heading)}
-#createAgentDialog .agent-markdown-component .editor-statusbar{color:var(--muted)}
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar{background:var(--surface-raised);color:var(--heading);border-color:var(--line);opacity:1}
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar button,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar a{color:var(--heading)!important;opacity:1}
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar button:hover,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar button.active,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar a:hover,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar a.active{background:var(--hover);color:var(--heading)!important;border-color:var(--line-strong)}
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .CodeMirror,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-preview,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-preview-side{background:var(--surface);color:var(--content)}
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .CodeMirror-cursor{border-left-color:var(--heading)}
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-statusbar{color:var(--muted)}
