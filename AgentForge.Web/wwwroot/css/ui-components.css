@@ -97,7 +97,7 @@
 .ui-detail [aria-label="Tool details sections"]{display:flex;gap:12px;margin-top:24px;border-bottom:1px solid var(--line)}
 .ui-detail [aria-label="Tool details sections"] button{padding:12px 20px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font-size:14px;font-weight:650;cursor:pointer}
 .ui-detail [aria-label="Tool details sections"] button[aria-selected=true]{border-bottom-color:var(--accent);color:var(--heading)}
-#toolTryPanel{margin-top:24px}
+
 #toolTryPanel>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:16px}
 #toolTryPanel>div>section{min-width:0;padding:24px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
 #toolTryPanel h2{margin:0;color:var(--heading);font-size:19px;font-weight:700}
