@@ -36,23 +36,56 @@
       ['Code', '`', '`', 'code'],
       ['Link', '[', '](https://example.com)', 'link text']
     ];
+    let selectionStart = 0;
+    let selectionEnd = 0;
+    const rememberSelection = () => {
+      selectionStart = input.selectionStart;
+      selectionEnd = input.selectionEnd;
+    };
+    ['select', 'keyup', 'click', 'input'].forEach(event => input.addEventListener(event, rememberSelection));
     controls.forEach(([label, prefix, suffix, placeholder]) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'ui-markdown-toolbar-button';
       button.textContent = label;
       button.setAttribute('aria-label', label);
+      // Keep the textarea selection when a toolbar control is clicked.
+      button.addEventListener('mousedown', event => event.preventDefault());
       button.addEventListener('click', () => {
-        const start = input.selectionStart;
-        const end = input.selectionEnd;
-        const selected = input.value.slice(start, end) || placeholder;
-        const insertion = prefix + selected + suffix;
-        const next = input.value.slice(0, start) + insertion + input.value.slice(end);
-        if (input.maxLength >= 0 && next.length > input.maxLength) return;
-        input.value = next;
+        const start = selectionStart;
+        const end = selectionEnd;
+        const selected = input.value.slice(start, end);
+        const isInline = ['Bold', 'Italic', 'Code', 'Link'].includes(label);
+        const alreadyWrapped = isInline && selected && input.value.slice(Math.max(0, start - prefix.length), start) === prefix && input.value.slice(end, end + suffix.length) === suffix;
+        let insertion;
+        let nextStart;
+        let nextEnd;
+        if (alreadyWrapped) {
+          insertion = selected;
+          const replaceStart = start - prefix.length;
+          const replaceEnd = end + suffix.length;
+          const next = input.value.slice(0, replaceStart) + insertion + input.value.slice(replaceEnd);
+          input.value = next;
+          nextStart = replaceStart;
+          nextEnd = replaceStart + insertion.length;
+        } else {
+          const content = selected || placeholder;
+          insertion = prefix + content + suffix;
+          const next = input.value.slice(0, start) + insertion + input.value.slice(end);
+          if (input.maxLength >= 0 && next.length > input.maxLength) {
+            input.setCustomValidity('Description is too long to apply this formatting.');
+            input.reportValidity();
+            input.setCustomValidity('');
+            return;
+          }
+          input.value = next;
+          nextStart = start + prefix.length;
+          nextEnd = nextStart + content.length;
+        }
         input.dispatchEvent(new Event('input', { bubbles: true }));
         input.focus();
-        input.setSelectionRange(start + prefix.length, start + prefix.length + selected.length);
+        input.setSelectionRange(nextStart, nextEnd);
+        rememberSelection();
       });
       toolbar.appendChild(button);
     });
