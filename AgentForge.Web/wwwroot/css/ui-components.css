@@ -44,7 +44,7 @@
 .ui-panel>p,.ui-panel-heading p{margin:0 0 15px;font-size:13px;line-height:1.75;color:var(--muted)}
 .ui-panel .ui-subtitle{margin:-4px 0 14px;font-size:12px;line-height:1.55;color:var(--muted)}
 .ui-panel-icon{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:9px;background:var(--surface-raised);color:var(--accent);font-size:15px;font-weight:700}
-.ui-panel-title-block{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.ui-panel-title-block{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .ui-panel-title-copy{min-width:0;flex:1}
 
 .ui-panel .ui-panel-title-copy .ui-subtitle{margin:0;font-size:12px;line-height:1.55;color:var(--muted)}
