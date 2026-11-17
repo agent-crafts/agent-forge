@@ -2,23 +2,139 @@
     Layout = "_AppLayout";
     var projectName = ViewData["ProjectName"] as string ?? "Project";
     var title = ViewData["Title"] as string ?? "Workspace";
-    var descriptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-    {
-        ["Board"] = "Project work items will appear here when the board data model and APIs are connected.",
-        ["Specifications"] = "Project specifications will appear here when document bindings and APIs are connected.",
-        ["Discovery"] = "Discovery activities and findings will appear here when project data is connected.",
-        ["Design"] = "Architecture and design work will appear here when project data is connected.",
-        ["Development"] = "Development work items and code changes will appear here when integrations are connected.",
-        ["Quality"] = "Reviews, testing, and validation results will appear here when integrations are connected.",
-        ["Deployment"] = "Releases and deployment information will appear here when integrations are connected.",
-        ["Workflows"] = "Project workflow definitions will appear here when project bindings are implemented.",
-        ["Runs"] = "Project execution history will appear here when run bindings are implemented."
+    var section = title.ToLowerInvariant();
+    var stages = new[] { ("discovery", "Discovery", "Product Owner"), ("design", "Design", "Design Agent"), ("development", "Development", "Engineering Agent"), ("quality", "Quality", "QA Agent"), ("deployment", "Deployment", "DevOps Agent") };
+    var projectId = ViewData["ProjectId"] as string ?? "";
+    var stageIndex = Array.FindIndex(stages, stage => stage.Item1 == section);
+    var agent = stageIndex >= 0 ? stages[stageIndex].Item3 : "Project Assistant";
+    var descriptions = new Dictionary<string, string> {
+        ["discovery"] = "Turn a product idea into approved requirements, features and task specifications.",
+        ["design"] = "Transform approved requirements into responsive, reviewable screens.",
+        ["development"] = "Explore the implementation plan, source files and build output.",
+        ["quality"] = "Review test scenarios, execution results and defects.",
+        ["deployment"] = "Prepare environments, review releases and inspect deployment health."
     };
 }
-<div class="ui-detail">
-    <section class="ui-panel">
-        <p class="ui-subtitle">@projectName</p>
-        <h1>@title</h1>
-        <p class="ui-subtitle">@(descriptions.TryGetValue(title, out var description) ? description : "Project workspace")</p>
-    </section>
+<link rel="stylesheet" href="~/css/lifecycle-workspace.css" asp-append-version="true" />
+<div class="lf-root" data-lifecycle-stage="@section">
+    <header class="lf-heading">
+        <div><p class="lf-eyebrow">@projectName / AI-native engineering</p><h1>@title</h1><p class="lf-muted">@(descriptions.TryGetValue(section, out var description) ? description : "Shared project artifacts and activity.")</p></div>
+        <span class="lf-demo">● Interactive demo · sample data only</span>
+    </header>
+    <nav class="lf-journey" aria-label="Engineering lifecycle">
+        @for (var i = 0; i < stages.Length; i++)
+        {
+            var stage = stages[i];
+            <a href="/projects/@projectId/@stage.Item1" class="lf-step @(stage.Item1 == section ? "is-current" : "")"><span class="lf-step-number">@(i + 1)</span><span>@stage.Item2</span></a>
+        }
+    </nav>
+    @if (stageIndex >= 0)
+    {
+        <div class="lf-split">
+            <section class="lf-chat lf-card" aria-label="@agent demo conversation">
+                <div class="lf-panel-head"><div><strong>@agent</strong><small>Guided workspace conversation</small></div><span class="lf-pill">Demo</span></div>
+                <div class="lf-messages" id="lfMessages" aria-live="polite">
+                    @if (section == "discovery")
+                    {
+                        <div class="lf-message lf-agent">Hi! I'll help turn your idea into a product plan. What problem are we solving, and who is it for?</div>
+                        <div class="lf-message lf-user">I want a healthcare appointment booking platform for patients and doctors.</div>
+                        <div class="lf-message lf-agent">I've drafted the business requirements, a feature backlog and task-level acceptance criteria. Review the artifacts on the right before approving.</div>
+                    }
+                    else if (section == "design")
+                    {
+                        <div class="lf-message lf-agent">I've translated the booking requirements into a responsive appointment booking screen. You can inspect the desktop and mobile previews.</div>
+                        <div class="lf-message lf-user">Make it easy to find a doctor and book an appointment.</div>
+                        <div class="lf-message lf-agent">The prototype includes search, specialties and a clear booking action. These are sample designs, not generated or saved files.</div>
+                    }
+                    else if (section == "development")
+                    {
+                        <div class="lf-message lf-agent">Here's a representative project tree and implementation excerpt for the appointment feature.</div>
+                        <div class="lf-message lf-user">Implement appointment booking and validate the input.</div>
+                        <div class="lf-message lf-agent">The file explorer and terminal on the right demonstrate how a real engineering run could be presented. No code has been executed.</div>
+                    }
+                    else if (section == "quality")
+                    {
+                        <div class="lf-message lf-agent">I prepared test cases from the acceptance criteria: successful booking, unavailable slot, invalid patient and cancellation window.</div>
+                        <div class="lf-message lf-user">Show me failed scenarios first.</div>
+                        <div class="lf-message lf-agent">The sample report highlights two failures and links them back to their feature. These results are illustrative, not executed tests.</div>
+                    }
+                    else
+                    {
+                        <div class="lf-message lf-agent">We can configure a preview environment, inspect deployment readiness and approve a release.</div>
+                        <div class="lf-message lf-user">Show me the preview deployment status.</div>
+                        <div class="lf-message lf-agent">The right panel shows example environments and a release checklist. No deployment has occurred.</div>
+                    }
+                </div>
+                <form class="lf-composer" id="lfDemoChat"><label class="lf-sr-only" for="lfPrompt">Demo message</label><input id="lfPrompt" autocomplete="off" placeholder="Ask @agent…" /><button type="submit">Send</button></form>
+                <p class="lf-disclaimer">Demo replies are scripted locally. No AI, API calls or persistence.</p>
+            </section>
+            <section class="lf-artifacts lf-card" aria-label="Stage artifacts">
+                <div class="lf-panel-head"><div><strong>@(section == "discovery" ? "Discovery artifacts" : section == "design" ? "Design studio" : section == "development" ? "Code workspace" : section == "quality" ? "Quality reports" : "Release center")</strong><small>Healthcare Booking · sample project</small></div><span class="lf-pill">v0.1 · Sample</span></div>
+                @if (section == "discovery")
+                {
+                    <div class="lf-tabs" role="tablist" aria-label="Discovery outputs"><button type="button" class="is-active" data-lf-tab="business">Business document</button><button type="button" data-lf-tab="features">Feature board</button><button type="button" data-lf-tab="specs">Task specs</button></div>
+                    <div class="lf-tab-panel" data-lf-panel="business"><div class="lf-document"><div class="lf-doc-title"><span>BRD-001</span><span class="lf-pill lf-green">Ready for review</span></div><h2>Healthcare Appointment Platform</h2><p class="lf-muted">Business requirements · version 0.1</p><h3>Problem statement</h3><p>Patients need a simple way to discover healthcare providers, see available slots and manage bookings without calling a clinic.</p><h3>Target users</h3><p>Patients, healthcare providers and clinic administrators.</p><h3>Business goals</h3><ul><li>Reduce friction when scheduling appointments.</li><li>Prevent double bookings.</li><li>Allow cancellation at least 24 hours before an appointment.</li></ul><h3>Success criteria</h3><p>A patient can discover a doctor, select a free slot and receive confirmation.</p></div></div>
+                    <div class="lf-tab-panel" data-lf-panel="features" hidden><div class="lf-stat-row"><div><strong>4</strong><small>Features</small></div><div><strong>8</strong><small>Tasks</small></div><div><strong>3</strong><small>Ready</small></div></div><div class="lf-board"><div><h3>Backlog</h3><article><strong>FEAT-004</strong><p>Notifications & reminders</p><small>2 tasks</small></article></div><div><h3>In progress</h3><article><strong>FEAT-002</strong><p>Doctor search & availability</p><small>2 tasks</small></article></div><div><h3>Ready</h3><article><strong>FEAT-001</strong><p>Authentication & profiles</p><small>2 tasks</small></article><article><strong>FEAT-003</strong><p>Appointment booking</p><small>2 tasks</small></article></div></div></div>
+                    <div class="lf-tab-panel" data-lf-panel="specs" hidden><div class="lf-spec"><span class="lf-pill">TASK-011 · FEAT-003</span><h2>Implement appointment booking API</h2><p><strong>User story:</strong> As a patient, I want to book an available slot so I can schedule a visit.</p><h3>Acceptance criteria</h3><ul><li>Only future, available slots can be booked.</li><li>Two patients cannot reserve the same slot.</li><li>A successful booking returns an identifier and confirmation.</li><li>Invalid patient or provider returns a validation error.</li></ul><h3>Dependencies</h3><p>Provider availability API, patient authentication and booking persistence.</p></div><div class="lf-spec"><span class="lf-pill">TASK-012 · FEAT-003</span><h3>Build appointment booking UI</h3><p>Search for a doctor, choose an available slot and show booking confirmation with accessible error states.</p></div></div>
+                }
+                else if (section == "design")
+                {
+                    <div class="lf-tabs" role="tablist" aria-label="Design outputs"><button type="button" class="is-active" data-lf-tab="preview">Live mockup</button><button type="button" data-lf-tab="design-files">Design files</button></div>
+                    <div class="lf-tab-panel" data-lf-panel="preview"><div class="lf-preview-toolbar"><span>Appointment booking · FEAT-003</span><div><button type="button" class="is-active" data-lf-viewport="desktop">Desktop</button><button type="button" data-lf-viewport="mobile">Mobile</button></div></div><div class="lf-browser"><div class="lf-browser-bar">● ● ● <span>healthcare.example / appointments</span></div><div class="lf-website"><header><strong>✚ CareConnect</strong><span>Find doctors &nbsp; Appointments &nbsp; Profile</span></header><div class="lf-hero"><div><span class="lf-pill">Find care faster</span><h2>Book your next appointment</h2><p>Find trusted providers and available appointments in minutes.</p><div class="lf-searchbox">Search doctors or specialties <span>Search</span></div></div><div class="lf-hero-graphic">✚</div></div><h3>Popular specialties</h3><div class="lf-specialties"><span>♡ General medicine</span><span>◈ Dermatology</span><span>♡ Cardiology</span><span>✦ Pediatrics</span></div></div></div><p class="lf-muted">Static HTML/CSS mockup. Search and booking are not functional.</p></div>
+                    <div class="lf-tab-panel" data-lf-panel="design-files" hidden><div class="lf-file-list"><div>▣ &nbsp; screens/booking.html <span>HTML mockup</span></div><div>◈ &nbsp; styles/tokens.css <span>Design tokens</span></div><div>▤ &nbsp; components/search-bar <span>UI component</span></div><div>▧ &nbsp; flows/appointment-booking <span>User journey</span></div></div><div class="lf-spec"><h3>Design decisions</h3><p>Responsive two-column hero, prominent search, accessible contrast and a clear appointment booking action.</p></div></div>
+                }
+                else if (section == "development")
+                {
+                    <div class="lf-code-layout"><aside class="lf-file-tree"><strong>EXPLORER</strong><div>▾ healthcare-app</div><div>　▾ src</div><button type="button" class="is-active" data-lf-file="booking">　　booking.ts</button><button type="button" data-lf-file="service">　　availability.ts</button><div>　　components/</div><div>　▸ tests/</div><div>　package.json</div></aside><div class="lf-editor"><div class="lf-editor-head" id="lfFilename">booking.ts · TASK-011</div><pre data-lf-code="booking"><code>export type BookingRequest = {
+  patientId: string;
+  providerId: string;
+  slotId: string;
+};
+
+export async function book(
+  request: BookingRequest
+) {
+  if (!request.slotId) {
+    throw new Error("Slot required");
+  }
+  return bookingApi.create(request);
+}</code></pre><pre data-lf-code="service" hidden><code>export async function getAvailableSlots(
+  providerId: string
+) {
+  return availabilityApi.list({
+    providerId,
+    futureOnly: true
+  });
+}</code></pre><div class="lf-terminal"><strong>TERMINAL · SAMPLE OUTPUT</strong><p>$ npm run build</p><p class="lf-terminal-ok">✓ Build completed · illustrative</p><p>$ npm test</p><p class="lf-terminal-ok">✓ 22 passed · illustrative</p></div></div></div><p class="lf-muted">Source excerpts and terminal output are mock data; no repository was generated or built.</p>
+                }
+                else if (section == "quality")
+                {
+                    <div class="lf-stat-row"><div><strong>24</strong><small>Example tests</small></div><div><strong>22</strong><small>Passed</small></div><div><strong>2</strong><small>Failed</small></div><div><strong>92%</strong><small>Pass rate</small></div></div><div class="lf-tabs" role="tablist" aria-label="Quality outputs"><button type="button" class="is-active" data-lf-tab="results">Test results</button><button type="button" data-lf-tab="cases">Test scenarios</button><button type="button" data-lf-tab="defects">Defects</button></div><div class="lf-tab-panel" data-lf-panel="results"><table class="lf-table"><thead><tr><th>Test</th><th>Type</th><th>Status</th></tr></thead><tbody><tr><td>Patient sign-in</td><td>Unit</td><td class="lf-pass">Passed</td></tr><tr><td>Booking available slot</td><td>Integration</td><td class="lf-pass">Passed</td></tr><tr><td>Cancellation after cutoff</td><td>Integration</td><td class="lf-fail">Failed</td></tr><tr><td>Concurrent slot booking</td><td>Integration</td><td class="lf-fail">Failed</td></tr><tr><td>Responsive booking page</td><td>E2E</td><td class="lf-pass">Passed</td></tr></tbody></table></div><div class="lf-tab-panel" data-lf-panel="cases" hidden><div class="lf-spec"><h3>Acceptance-criteria driven scenarios</h3><ol><li>Patient books an available future slot.</li><li>Patient cannot book a past slot.</li><li>Second patient cannot reserve an already booked slot.</li><li>Cancellation is blocked inside the 24-hour cutoff.</li><li>Booking confirmation is visible on mobile.</li></ol></div></div><div class="lf-tab-panel" data-lf-panel="defects" hidden><div class="lf-spec"><span class="lf-pill lf-red">DEF-001 · High</span><h3>Cancellation cutoff not enforced</h3><p>Related to TASK-011 / FEAT-003. Expected: reject cancellations less than 24 hours before start.</p></div><div class="lf-spec"><span class="lf-pill lf-red">DEF-002 · High</span><h3>Concurrent booking conflict</h3><p>Related to TASK-011 / FEAT-003. Expected: only one reservation can claim the slot.</p></div></div><p class="lf-muted">All results and defects are fictional demo data. No tests have run.</p>
+                }
+                else
+                {
+                    <div class="lf-stat-row"><div><strong>Preview</strong><small>Sample active</small></div><div><strong>Staging</strong><small>Sample ready</small></div><div><strong>Production</strong><small>Not deployed</small></div></div><div class="lf-tabs" role="tablist" aria-label="Deployment outputs"><button type="button" class="is-active" data-lf-tab="environments">Environments</button><button type="button" data-lf-tab="release">Release checklist</button><button type="button" data-lf-tab="logs">Logs</button></div><div class="lf-tab-panel" data-lf-panel="environments"><div class="lf-env"><div><strong>Preview</strong><p>Sample preview environment · v0.1.0</p></div><span class="lf-pill lf-green">Illustrative</span></div><div class="lf-env"><div><strong>Staging</strong><p>Awaiting QA sign-off</p></div><span class="lf-pill">Pending</span></div><div class="lf-env"><div><strong>Production</strong><p>No release deployed</p></div><span class="lf-pill lf-red">Not deployed</span></div></div><div class="lf-tab-panel" data-lf-panel="release" hidden><div class="lf-spec"><h3>Release v0.1.0</h3><ul><li>✓ Business requirements approved (sample)</li><li>✓ Design reviewed (sample)</li><li>✓ Build artifact prepared (sample)</li><li>⚠ Two QA failures require resolution</li><li>○ Production approval pending</li></ul><button type="button" class="lf-disabled-action" disabled>Deploy to production · demo only</button></div></div><div class="lf-tab-panel" data-lf-panel="logs" hidden><div class="lf-terminal lf-standalone"><strong>EXAMPLE RELEASE LOG</strong><p>10:01:02 Checking deployment configuration…</p><p>10:01:04 Preview health check: OK (sample)</p><p>10:01:05 Production release: not started</p></div></div><p class="lf-muted">No hosting provider, credentials, live URLs or deployment actions are connected.</p>
+                }
+            </section>
+        </div>
+        <div class="lf-bottom"><span>Shared artifacts: BRD-001 → FEAT-003 → TASK-011 → Design → Code → Tests → Release</span>@if (stageIndex < stages.Length - 1) { <a href="/projects/@projectId/@stages[stageIndex + 1].Item1">Explore @stages[stageIndex + 1].Item2 →</a> } else { <a href="/projects/@projectId/discovery">Return to Discovery ↺</a> }</div>
+    }
+    else if (section == "board" || section == "specifications")
+    {
+        <section class="lf-card lf-collection"><div class="lf-panel-head"><div><strong>@title</strong><small>Shared sample artifacts · no persistence</small></div><span class="lf-pill">Demo</span></div>
+            @if (section == "board")
+            {
+                <div class="lf-board"><div><h3>Backlog</h3><article><strong>FEAT-004</strong><p>Notifications & reminders</p><small>TASK-013 · TASK-014</small></article></div><div><h3>In progress</h3><article><strong>FEAT-002</strong><p>Doctor search & availability</p><small>TASK-009 · TASK-010</small></article></div><div><h3>Ready</h3><article><strong>FEAT-001</strong><p>Authentication & profiles</p><small>TASK-007 · TASK-008</small></article><article><strong>FEAT-003</strong><p>Appointment booking</p><small>TASK-011 · TASK-012</small></article></div></div>
+            }
+            else
+            {
+                <div class="lf-spec"><span class="lf-pill">BRD-001 · FEAT-003</span><h2>Appointment booking</h2><p><strong>TASK-011:</strong> Implement booking API. Prevent double booking, validate patient and provider, and confirm successful reservations.</p><p><strong>TASK-012:</strong> Build responsive booking UI with doctor search, available slots and confirmation states.</p><p><strong>Acceptance criteria:</strong> Book only available future slots; prevent concurrent reservations; allow cancellation until 24 hours before start.</p></div>
+            }
+        </section>
+    }
+    else
+    {
+        <section class="lf-card lf-collection"><div class="lf-panel-head"><div><strong>@title</strong><small>Lifecycle demo overview</small></div><span class="lf-pill">Sample</span></div><p class="lf-muted">This area will connect to project-specific @(section == "workflows" ? "workflow definitions" : "agent run history") in a later implementation.</p><div class="lf-spec"><h3>Example flow</h3><p>Discovery → Design → Development → Quality → Deployment</p><p>Every stage references shared business requirements, features and task specifications.</p></div></section>
+    }
 </div>
+<script src="~/js/lifecycle-workspace.js" asp-append-version="true" defer></script>
