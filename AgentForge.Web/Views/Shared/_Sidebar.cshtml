@@ -29,11 +29,15 @@
         }
     </nav>
     <nav class="app-nav workspace-user-nav" aria-label="Project workspace navigation" hidden>
-        <div class="side-label">MY WORKSPACE</div>
-        <a class="side-link @(section == "projects" ? "active" : "")" aria-current="@(section == "projects" ? "page" : null)" href="/projects"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="@icons["projects"]" /></svg><span class="sidebar-nav-label">My Projects</span></a>
+        <label class="workspace-project-label" for="workspaceProjectSelect">MY PROJECTS</label>
+        <select id="workspaceProjectSelect" class="workspace-project-select" aria-label="Active project">
+            <option value="">Loading projects…</option>
+        </select>
+        <p class="workspace-project-feedback" id="workspaceProjectFeedback" role="status" hidden></p>
         <a class="side-link @(isChat ? "active" : "")" aria-current="@(isChat ? "page" : null)" href="/chat"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="@icons["chat"]" /></svg><span class="sidebar-nav-label">Chat</span></a>
-        <div class="side-label nav-section-break">PROJECT DELIVERY</div>
-        <p class="workspace-nav-note">Open a project to view its details. Project-scoped tasks, workflows and executions will appear here when membership and project bindings are implemented.</p>
+        <div class="side-label nav-section-break">PROJECT WORKSPACE</div>
+        <a class="side-link @(section == "projects" ? "active" : "")" href="#" id="workspaceProjectOverview"><svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="@icons["projects"]" /></svg><span class="sidebar-nav-label">Overview</span></a>
+        <p class="workspace-nav-note">Project-specific workflows, tasks, agents and executions will be available when their project bindings and access controls are implemented.</p>
     </nav>
     @* Retained as hidden DOM hooks for the existing chat script; no conversation controls in the sidebar. *@
     <div class="chat-sidebar-group" data-chat-sidebar hidden aria-hidden="true">
