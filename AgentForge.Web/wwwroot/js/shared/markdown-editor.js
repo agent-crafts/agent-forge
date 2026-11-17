@@ -34,7 +34,12 @@
         if (currentlyPreview !== preview) EasyMDE.togglePreview(editor);
         instructionsForm.classList.toggle('is-instructions-preview', preview);
         if (saveButton) saveButton.disabled = preview;
-        if (!preview) editor.codemirror.refresh();
+        if (!preview) {
+          // EasyMDE preview can leave CodeMirror read-only after toggling back.
+          editor.codemirror.setOption('readOnly', false);
+          editor.codemirror.refresh();
+          editor.codemirror.focus();
+        }
       };
       container.setInstructionsMode = setInstructionsMode;
       editButton?.addEventListener('click', () => setInstructionsMode(false));
