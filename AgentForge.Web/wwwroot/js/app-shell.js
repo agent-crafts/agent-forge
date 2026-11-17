@@ -5,7 +5,6 @@
   const adminNav = document.querySelector('.workspace-admin-nav');
   const userNav = document.querySelector('.workspace-user-nav');
   const adminFooter = document.querySelector('.workspace-admin-only');
-  const modeLabel = document.querySelector('[data-workspace-mode-label]');
   const brand = document.querySelector('[data-workspace-brand]');
   const mobileButton = document.getElementById('workspaceMenu');
   const sidebar = document.getElementById('workspaceSidebar');
@@ -23,7 +22,6 @@
     adminNav.hidden = isUser;
     userNav.hidden = !isUser;
     if (adminFooter) adminFooter.hidden = isUser;
-    if (modeLabel) modeLabel.textContent = isUser ? 'User Workspace · Preview' : 'Admin Portal · Preview';
     if (brand) brand.textContent = isUser ? 'PROJECT WORKSPACE' : 'ADMINISTRATION';
     menu?.querySelectorAll('[data-workspace-select]').forEach(item => {
       item.setAttribute('aria-checked', String(item.dataset.workspaceSelect === mode));
