@@ -364,11 +364,11 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 @media(max-width:540px){.agent-instructions-heading{flex-wrap:wrap}.agent-prompt-preview{padding:16px;font-size:12px}}
 
 /* Refined Instructions tab: clear hierarchy and comfortable prompt reading. */
-#agentInstructionsPanel .agent-instructions{padding:24px;border-radius:16px}
-#agentInstructionsPanel .agent-instructions-heading{align-items:center;padding-bottom:22px}
-#agentInstructionsPanel .agent-instructions-heading h2{display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:20px;line-height:1.35}
-#agentInstructionsPanel .agent-instructions-heading .ui-panel-icon{flex:none}
-#agentInstructionsPanel .agent-instructions-heading .ui-subtitle{margin:0;font-size:13px;line-height:1.6}
+
+
+
+
+
 #agentInstructionsPanel .agent-instructions-badge{gap:7px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;white-space:nowrap}
 #agentInstructionsPanel .agent-instructions-badge::before{content:"";width:8px;height:8px;border:2px solid currentColor;border-radius:50%;opacity:.75}
 #agentInstructionsPanel .agent-instructions-body{padding-top:0}
@@ -387,17 +387,17 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 @media(max-width:640px){#agentInstructionsPanel .agent-instructions{padding:16px}#agentInstructionsPanel .agent-instructions-heading{align-items:flex-start;gap:10px}#agentInstructionsPanel .agent-prompt-preview{padding:16px;font-size:12px;max-height:540px}}
 
 /* Match the Instructions card heading to the Overview card headings. */
-#agentInstructionsPanel .agent-instructions{padding:var(--panel-padding,20px)}
-#agentInstructionsPanel .agent-instructions>h2{margin:0 0 12px}
+
+
 
 /* Agent tools catalog (sample UI only). */
 .agent-tools{margin-top:16px}
-.agent-tools-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-.agent-tools-heading h2{margin:0}
+.agent-tools-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+
 .agent-tools-controls{display:flex;gap:10px;flex-wrap:wrap}
 .agent-tools-search input,.agent-tools-controls select{height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--content);font-size:13px}
 .agent-tools-search input{min-width:200px}
-.agent-tools>.ui-subtitle{margin:12px 0 16px}
+
 .agent-tools-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
 .agent-tools-filters button{padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-raised);color:var(--muted);font-size:12px;cursor:pointer}
 .agent-tools-filters button.is-active{background:var(--active);color:var(--accent);border-color:var(--accent)}
@@ -422,9 +422,9 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 
 /* Agent-owned Skills workspace: preview UI, aligned with the Tools gallery. */
 .agent-skills{margin-top:16px}
-.agent-skills-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
-.agent-skills-heading h2{margin:0 0 12px}
-.agent-skills-heading .ui-subtitle{margin:0}
+.agent-skills-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+
+
 .agent-skills-primary{background:var(--accent);color:white;border:1px solid var(--accent);padding:9px 15px;border-radius:9px;cursor:pointer}
 .agent-skills-controls{display:flex;gap:12px;margin:20px 0 16px}
 .agent-skills-controls input,.agent-skills-controls select,.agent-skills-dialog input,.agent-skills-dialog textarea{padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--content);font:inherit}
@@ -465,7 +465,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 
 /* Planned agent detail tabs. */
 .agent-coming-soon{margin-top:16px}
-.agent-coming-soon>h2{margin:0 0 16px}
+
 .agent-coming-soon-content{padding:42px 18px;text-align:center;border:1px dashed var(--line);border-radius:12px}
 .agent-coming-soon-label{display:inline-block;padding:7px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;font-weight:600}
 .agent-coming-soon-content>p{margin:14px 0 0;color:var(--content);font-size:14px}
@@ -634,3 +634,9 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 }
 
 .ui-delete-dialog .ui-dialog-header { align-items: center; min-height: 64px; }
+
+/* Agent profile: share the Tool panel header system across tabs. */
+.agent-tools-heading .ui-panel-title-block,.agent-skills-heading .ui-panel-title-block,.agent-playground>.flex:first-child .ui-panel-title-block{margin-bottom:0}
+.agent-tools-heading .ui-panel-title-copy,.agent-skills-heading .ui-panel-title-copy{min-width:0}
+.agent-playground [data-playground-layout]{height:min(75vh,800px);min-height:420px}
+@media(max-width:900px){.agent-playground [data-playground-layout]{height:auto;min-height:0}.agent-playground [data-playground-layout]>div,.agent-playground [data-playground-layout]>aside{min-height:360px}}
