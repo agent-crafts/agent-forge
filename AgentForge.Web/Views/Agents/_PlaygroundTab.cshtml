@@ -26,8 +26,8 @@
 .agent-playground .af-message--assistant .af-message__body a { color:var(--accent,#60a5fa); text-decoration:underline; }
 .agent-playground .af-message--assistant .af-message__body blockquote { border-left:3px solid var(--line,rgba(148,163,184,.4)); padding-left:12px; margin:.65em 0; }
 
-/* Increase only the conversation panel; preserve the Playground layout and spacing. */
-.agent-playground [data-playground-layout] { align-items: start; }
+/* Let the grid grow with the conversation instead of clipping it at the global 75vh limit. */
+.agent-playground [data-playground-layout] { height: auto; min-height: 0; align-items: stretch; }
 .agent-playground [data-playground-layout] > :first-child { height: 620px; max-width: 100%; }
 .agent-playground [data-playground-messages] { min-height: 0; flex: 1 1 0%; overflow-y: auto; }
 @@media (max-width: 639px) { .agent-playground [data-playground-layout] > :first-child { height: 520px; } }
