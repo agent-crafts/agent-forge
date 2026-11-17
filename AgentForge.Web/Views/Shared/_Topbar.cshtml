@@ -29,10 +29,10 @@
             <button id="workspaceProfileToggle" class="workspace-profile-toggle" type="button" aria-label="Open workspace menu" aria-haspopup="menu" aria-expanded="false" aria-controls="workspaceProfileMenu">
                 <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
             </button>
-            <div id="workspaceProfileMenu" class="workspace-profile-menu" role="menu" aria-label="Workspace mode" hidden>
+            <div id="workspaceProfileMenu" class="workspace-profile-menu ui-dropdown-panel" role="menu" aria-label="Workspace mode" hidden>
                 <div class="workspace-menu-heading">Workspace preview <small>Navigation only · not an access role</small></div>
-                <button type="button" role="menuitemradio" aria-checked="true" data-workspace-select="admin">Admin Portal</button>
-                <button type="button" role="menuitemradio" aria-checked="false" data-workspace-select="user">User Workspace</button>
+                <button type="button" class="ui-dropdown-option" role="menuitemradio" aria-checked="true" data-workspace-select="admin">Admin Portal</button>
+                <button type="button" class="ui-dropdown-option" role="menuitemradio" aria-checked="false" data-workspace-select="user">User Workspace</button>
             </div>
         </div>
     </div>
