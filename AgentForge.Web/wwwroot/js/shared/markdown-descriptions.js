@@ -36,56 +36,64 @@
       ['Code', '`', '`', 'code'],
       ['Link', '[', '](https://example.com)', 'link text']
     ];
-    let selectionStart = 0;
-    let selectionEnd = 0;
-    const rememberSelection = () => {
-      selectionStart = input.selectionStart;
-      selectionEnd = input.selectionEnd;
+    // Read the live selection on activation; clicking a toolbar button must not
+    // replace the selected description text with a stale cursor position.
+    let savedSelection = null;
+    const saveSelection = () => {
+      savedSelection = { start: input.selectionStart, end: input.selectionEnd };
     };
-    ['select', 'keyup', 'click', 'input'].forEach(event => input.addEventListener(event, rememberSelection));
+    input.addEventListener('select', saveSelection);
+    input.addEventListener('keyup', saveSelection);
+    input.addEventListener('mouseup', saveSelection);
     controls.forEach(([label, prefix, suffix, placeholder]) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'ui-markdown-toolbar-button';
       button.textContent = label;
       button.setAttribute('aria-label', label);
-      // Keep the textarea selection when a toolbar control is clicked.
-      button.addEventListener('mousedown', event => event.preventDefault());
+      button.addEventListener('pointerdown', event => {
+        saveSelection();
+        event.preventDefault();
+      });
       button.addEventListener('click', () => {
-        const start = selectionStart;
-        const end = selectionEnd;
+        const { start, end } = savedSelection ?? { start: input.selectionStart, end: input.selectionEnd };
         const selected = input.value.slice(start, end);
-        const isInline = ['Bold', 'Italic', 'Code', 'Link'].includes(label);
-        const alreadyWrapped = isInline && selected && input.value.slice(Math.max(0, start - prefix.length), start) === prefix && input.value.slice(end, end + suffix.length) === suffix;
+        const inline = ['Bold', 'Italic', 'Code', 'Link'].includes(label);
+        const wrappedSelection = inline && selected.startsWith(prefix) && selected.endsWith(suffix) && selected.length > prefix.length + suffix.length;
+        const wrappedOutside = inline && start >= prefix.length && input.value.slice(start - prefix.length, start) === prefix && input.value.slice(end, end + suffix.length) === suffix;
+        let replaceStart = start;
+        let replaceEnd = end;
         let insertion;
-        let nextStart;
-        let nextEnd;
-        if (alreadyWrapped) {
+        let selectStart;
+        let selectEnd;
+        if (wrappedSelection) {
+          insertion = selected.slice(prefix.length, -suffix.length);
+          selectStart = start;
+          selectEnd = start + insertion.length;
+        } else if (wrappedOutside) {
+          replaceStart -= prefix.length;
+          replaceEnd += suffix.length;
           insertion = selected;
-          const replaceStart = start - prefix.length;
-          const replaceEnd = end + suffix.length;
-          const next = input.value.slice(0, replaceStart) + insertion + input.value.slice(replaceEnd);
-          input.value = next;
-          nextStart = replaceStart;
-          nextEnd = replaceStart + insertion.length;
+          selectStart = replaceStart;
+          selectEnd = replaceStart + insertion.length;
         } else {
           const content = selected || placeholder;
           insertion = prefix + content + suffix;
-          const next = input.value.slice(0, start) + insertion + input.value.slice(end);
-          if (input.maxLength >= 0 && next.length > input.maxLength) {
-            input.setCustomValidity('Description is too long to apply this formatting.');
-            input.reportValidity();
-            input.setCustomValidity('');
-            return;
-          }
-          input.value = next;
-          nextStart = start + prefix.length;
-          nextEnd = nextStart + content.length;
+          selectStart = start + prefix.length;
+          selectEnd = selectStart + content.length;
         }
-        input.dispatchEvent(new Event('input', { bubbles: true }));
+        const next = input.value.slice(0, replaceStart) + insertion + input.value.slice(replaceEnd);
+        if (input.maxLength >= 0 && next.length > input.maxLength) {
+          input.setCustomValidity('Description is too long to apply this formatting.');
+          input.reportValidity();
+          input.setCustomValidity('');
+          return;
+        }
+        input.value = next;
         input.focus();
-        input.setSelectionRange(nextStart, nextEnd);
-        rememberSelection();
+        input.setSelectionRange(selectStart, selectEnd);
+        saveSelection();
+        input.dispatchEvent(new Event('input', { bubbles: true }));
       });
       toolbar.appendChild(button);
     });
