@@ -108,6 +108,9 @@ public sealed class WorkspaceController(ISender sender) : Controller
         ViewData["AvailableAgentTools"] = tools.Items.ToArray();
         ViewData["AssignedAgentToolIds"] = (await sender.Send(new GetAgentToolIdsQuery(id), cancellationToken)).ToHashSet();
         ViewData["Title"] = agent.Name;
+        ViewData["ParentTitle"] = "Agents";
+        ViewData["ParentController"] = "Workspace";
+        ViewData["ParentAction"] = nameof(Agents);
         ViewData["Section"] = "agents";
         return View("~/Views/Agents/Details.cshtml", AgentsController.AgentCard.From(agent));
     }
