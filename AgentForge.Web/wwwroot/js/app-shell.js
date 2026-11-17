@@ -62,7 +62,7 @@
   document.addEventListener('pointerdown', event => {
     if (!event.target.closest('.workspace-project-picker')) closeProjectOptions();
   });
-  const projectDetailsPattern = /^\/projects\/([0-9a-f-]{36})(?:\/)?$/i;
+  const projectDetailsPattern = /^\/projects\/([0-9a-f-]{36})(?:\/(?:board|specifications|assistant))?\/?$/i;
   const onProjectGrid = window.location.pathname.replace(/\/$/, '') === '/projects';
 
   function selectedProjectId() {
@@ -74,6 +74,10 @@
       projectOverview.href = id ? '/projects/' + encodeURIComponent(id) : '/projects';
       projectOverview.setAttribute('aria-disabled', String(!id));
     }
+    userNav?.querySelectorAll('[data-project-section]').forEach(link => {
+      link.href = id ? '/projects/' + encodeURIComponent(id) + '/' + link.dataset.projectSection : '#';
+      link.setAttribute('aria-disabled', String(!id));
+    });
   }
   function showProjectLandingMessage(message) {
     const landing = document.getElementById('userProjectLanding');
@@ -139,7 +143,8 @@
     if (!id) return;
     try { localStorage.setItem(projectKey, id); } catch { /* unavailable */ }
     updateProjectOverview();
-    window.location.assign('/projects/' + encodeURIComponent(id));
+    const section = /^\/projects\/[0-9a-f-]{36}\/(board|specifications|assistant)\/?$/i.exec(window.location.pathname)?.[1];
+    window.location.assign('/projects/' + encodeURIComponent(id) + (section ? '/' + section : ''));
   });
   void loadProjectSwitcher();
 
