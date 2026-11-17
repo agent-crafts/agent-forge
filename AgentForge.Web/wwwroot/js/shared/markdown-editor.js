@@ -52,11 +52,8 @@
     if (previewButton) {
       previewButton.addEventListener('click', () => {
         EasyMDE.togglePreview(editor);
-        const previewing = editor.codemirror.getWrapperElement().classList.contains('editor-preview-active');
-        previewButton.textContent = previewing ? 'Edit' : 'Preview';
-        previewButton.setAttribute('aria-pressed', String(previewing));
-        container.closest('form')?.classList.toggle('is-instructions-preview', previewing);
-        if (!previewing) editor.codemirror.refresh();
+        syncInstructionsMode();
+        if (!editor.codemirror.getWrapperElement().classList.contains('editor-preview-active')) editor.codemirror.refresh();
       });
     }
     const actions = container.closest("form")?.querySelector(".agent-instructions-actions");
