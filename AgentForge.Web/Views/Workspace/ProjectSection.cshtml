@@ -17,28 +17,33 @@
 }
 <link rel="stylesheet" href="~/css/lifecycle-workspace.css" asp-append-version="true" />
 <div class="lf-root" data-lifecycle-stage="@stageKey">
-    <header class="lf-heading">
-        <div><h1>@title</h1><p class="lf-muted">@(descriptions.TryGetValue(stageKey, out var description) ? description : "Shared project artifacts and activity.")</p></div>
-        <span class="lf-demo">● Interactive demo · sample data only</span>
+    <header class="lf-project-header">
+        <div class="lf-project-identity">
+            <span class="lf-project-icon" aria-hidden="true">▦</span>
+            <div class="lf-project-details">
+                <div class="lf-project-title"><strong>@projectName</strong><span class="lf-project-status">Demo workspace</span></div>
+                <p>Lifecycle progress · sample values</p>
+            </div>
+        </div>
+        <nav class="lf-progress-timeline" aria-label="Engineering lifecycle">
+            <ol class="lf-progress-track">
+                @for (var i = 0; i < stages.Length; i++)
+                {
+                    var stage = stages[i];
+                    var isCurrent = i == stageIndex;
+                    var isEarlier = stageIndex >= 0 && i < stageIndex;
+                    var samplePercent = new[] { 100, 60, 30, 0, 0 }[i];
+                    <li class="lf-progress-item @(isCurrent ? "is-current" : isEarlier ? "is-earlier" : "is-upcoming")">
+                        <a class="lf-progress-link" href="/projects/@projectId/@stage.Item1" aria-current="@(isCurrent ? "step" : null)" aria-label="Go to @stage.Item2">
+                            <span class="lf-progress-node" aria-hidden="true">@(i + 1)</span>
+                            <span class="lf-progress-name">@stage.Item2</span>
+                            <span class="lf-progress-percent">@samplePercent%</span>
+                        </a>
+                    </li>
+                }
+            </ol>
+        </nav>
     </header>
-    <nav class="lf-timeline" aria-label="Engineering lifecycle">
-        <div class="lf-timeline-heading"><strong>Project lifecycle</strong><span>@(stageIndex >= 0 ? $"Stage {stageIndex + 1} of {stages.Length}" : "Explore the stages") · Demo navigation</span></div>
-        <ol class="lf-timeline-track">
-            @for (var i = 0; i < stages.Length; i++)
-            {
-                var stage = stages[i];
-                var isCurrent = i == stageIndex;
-                var isEarlier = stageIndex >= 0 && i < stageIndex;
-                <li class="lf-timeline-item @(isCurrent ? "is-current" : isEarlier ? "is-earlier" : "is-upcoming")">
-                    <a href="/projects/@projectId/@stage.Item1" class="lf-timeline-link" aria-current="@(isCurrent ? "step" : null)" aria-label="@stage.Item2 stage">
-                        <span class="lf-timeline-dot">@(i + 1)</span>
-                        <span class="lf-timeline-label">@stage.Item2</span>
-                    </a>
-                </li>
-            }
-        </ol>
-        <p class="lf-timeline-note">Stages are navigable previews. Earlier stages are not necessarily completed or approved.</p>
-    </nav>
     @if (stageIndex >= 0)
     {
         <div class="lf-split">
