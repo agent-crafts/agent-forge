@@ -51,3 +51,12 @@
 .lf-progress-percent{color:var(--lf-muted);font-size:11px}
 .lf-progress-link:hover .lf-progress-node{transform:scale(1.08)}
 @media(max-width:650px){.lf-project-identity{padding:15px}.lf-progress-timeline{padding:18px 12px}.lf-progress-name{font-size:10px;overflow-wrap:anywhere}.lf-progress-link{gap:7px}.lf-project-title strong{font-size:14px}.lf-progress-item:not(:last-child)::after{top:13px}}
+
+
+/* Match the shared Project Profile ui-panel card treatment, preserving split-pane layouts. */
+.lf-root{--lf-border:var(--line,#dce3ef);--lf-surface:var(--surface,#fff);--lf-muted:var(--muted,#66758c)}
+.lf-root .ui-panel.lf-project-header,
+.lf-root .ui-panel.lf-card{padding:0;border:1px solid var(--line,#dce3ef);border-radius:15px;background:var(--surface,#fff);box-shadow:none}
+.lf-root .ui-panel.lf-project-header{overflow:hidden}
+.lf-root .ui-panel.lf-card{min-width:0;overflow:hidden}
+.lf-root .ui-panel.lf-collection{padding-bottom:20px}
