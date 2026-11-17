@@ -30,12 +30,12 @@
       const editButton = instructionsForm.querySelector('#editAgentInstructions');
       const saveButton = instructionsForm.querySelector('#saveAgentInstructions');
       const setInstructionsMode = preview => {
-        const currentlyPreview = editor.codemirror.getWrapperElement().classList.contains('editor-preview-active');
+        const currentlyPreview = editor.isPreviewActive();
         if (currentlyPreview !== preview) EasyMDE.togglePreview(editor);
         instructionsForm.classList.toggle('is-instructions-preview', preview);
         if (saveButton) saveButton.disabled = preview;
         if (!preview) {
-          // EasyMDE preview can leave CodeMirror read-only after toggling back.
+          // Restore the editable CodeMirror after EasyMDE exits preview.
           editor.codemirror.setOption('readOnly', false);
           editor.codemirror.refresh();
           editor.codemirror.focus();
