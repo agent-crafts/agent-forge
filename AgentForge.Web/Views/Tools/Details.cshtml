@@ -207,7 +207,7 @@
                 <div class="ui-stack"><section class="ui-panel min-w-0">
                     <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span><div class="ui-panel-title-copy"><h2>Try this MCP tool</h2>
                     <p class="ui-subtitle">Enter JSON arguments to execute this MCP tool.</p></div></div>
-                    <form id="mcpToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-4 grid gap-4">
+                    <form id="mcpToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="grid gap-4">
                         @Html.AntiForgeryToken()
                         <div class="ui-field">
                             <label class="ui-field-label" for="mcpToolArguments">Arguments (JSON)</label>
