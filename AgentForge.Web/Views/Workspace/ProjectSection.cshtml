@@ -7,6 +7,15 @@
     var projectId = ViewData["ProjectId"] as string ?? "";
     var stageIndex = Array.FindIndex(stages, stage => stage.Item1 == stageKey);
     var agent = stageIndex >= 0 ? stages[stageIndex].Item3 : "Project Assistant";
+    // Illustrative estimates only; telemetry and forecasting are not wired yet.
+    var demoProgress = new[] { 100, 60, 30, 0, 0 };
+    var demoTokensUsed = new[] { 185000, 132000, 94000, 0, 0 };
+    var demoTokensBudget = new[] { 185000, 220000, 320000, 160000, 80000 };
+    var demoCostUsed = new[] { 3.70m, 2.64m, 1.88m, 0m, 0m };
+    var demoCostBudget = new[] { 3.70m, 4.40m, 6.40m, 3.20m, 1.60m };
+    var demoHoursUsed = new[] { 12, 9, 7, 0, 0 };
+    var demoHoursBudget = new[] { 12, 15, 24, 12, 6 };
+
     var descriptions = new Dictionary<string, string> {
         ["discovery"] = "Turn a product idea into approved requirements, features and task specifications.",
         ["design"] = "Transform approved requirements into responsive, reviewable screens.",
@@ -17,6 +26,7 @@
 }
 <link rel="stylesheet" href="~/css/lifecycle-workspace.css" asp-append-version="true" />
 <div class="lf-root" data-lifecycle-stage="@stageKey">
+    <div class="lf-overview-grid">
     <header class="lf-project-header ui-panel">
         <div class="lf-project-identity">
             <span class="lf-project-icon" aria-hidden="true">▦</span>
@@ -32,7 +42,7 @@
                     var stage = stages[i];
                     var isCurrent = i == stageIndex;
                     var isEarlier = stageIndex >= 0 && i < stageIndex;
-                    var samplePercent = new[] { 100, 60, 30, 0, 0 }[i];
+                    var samplePercent = demoProgress[i];
                     <li class="lf-progress-item @(isCurrent ? "is-current" : isEarlier ? "is-earlier" : "is-upcoming")">
                         <a class="lf-progress-link" href="/projects/@projectId/@stage.Item1" aria-current="@(isCurrent ? "step" : null)" aria-label="Go to @stage.Item2">
                             <span class="lf-progress-node" aria-hidden="true">@(i + 1)</span>
@@ -44,6 +54,33 @@
             </ol>
         </nav>
     </header>
+    @if (stageIndex >= 0)
+    {
+        var usedTokens = demoTokensUsed[stageIndex];
+        var budgetTokens = demoTokensBudget[stageIndex];
+        var usedCost = demoCostUsed[stageIndex];
+        var budgetCost = demoCostBudget[stageIndex];
+        var usedHours = demoHoursUsed[stageIndex];
+        var budgetHours = demoHoursBudget[stageIndex];
+        var percentComplete = demoProgress[stageIndex];
+        <aside class="lf-stage-insights ui-panel" aria-label="Stage usage and forecast, demo estimates">
+            <div class="lf-insights-heading">
+                <div><strong>Stage insights</strong><span>@stages[stageIndex].Item2 · estimated usage</span></div>
+                <span class="lf-insights-demo">Demo</span>
+            </div>
+            <div class="lf-insights-progress">
+                <div class="lf-insights-progress-label"><span>Stage completion</span><strong>@percentComplete%</strong></div>
+                <div class="lf-insights-bar" role="progressbar" aria-label="Stage completion" aria-valuenow="@percentComplete" aria-valuemin="0" aria-valuemax="100"><span style="width:@(percentComplete)%"></span></div>
+            </div>
+            <div class="lf-insights-metrics">
+                <div class="lf-insights-metric"><span>Tokens used</span><strong>@(usedTokens.ToString("N0"))</strong><small>of @(budgetTokens.ToString("N0")) estimated</small></div>
+                <div class="lf-insights-metric"><span>AI spend</span><strong>$@(usedCost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture))</strong><small>$@((budgetCost - usedCost).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)) estimated left</small></div>
+                <div class="lf-insights-metric"><span>Time spent</span><strong>@usedHours h</strong><small>@(budgetHours - usedHours) h estimated left</small></div>
+            </div>
+            <p class="lf-insights-footnote">Illustrative values, not measured usage or a committed forecast.</p>
+        </aside>
+    }
+    </div>
     @if (stageIndex >= 0)
     {
         <div class="lf-split">
