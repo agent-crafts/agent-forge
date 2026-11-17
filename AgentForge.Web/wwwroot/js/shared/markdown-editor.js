@@ -54,17 +54,23 @@
     };
     if (previewButton) container.syncInstructionsMode = syncInstructionsMode;
     if (previewButton) {
-      const toggleInstructionsMode = () => {
-        EasyMDE.togglePreview(editor);
+      const setInstructionsMode = previewing => {
+        const isPreview = editor.codemirror.getWrapperElement().classList.contains('editor-preview-active');
+        if (isPreview !== previewing) EasyMDE.togglePreview(editor);
         syncInstructionsMode();
-        if (!editor.codemirror.getWrapperElement().classList.contains('editor-preview-active')) editor.codemirror.refresh();
+        if (!previewing) editor.codemirror.refresh();
       };
-      previewButton.addEventListener('click', toggleInstructionsMode);
-      editButton?.addEventListener('click', toggleInstructionsMode);
+      container.setInstructionsMode = setInstructionsMode;
+      previewButton.addEventListener('click', () => setInstructionsMode(true));
+      editButton?.addEventListener('click', () => setInstructionsMode(false));
     }
-    const actions = container.closest("form")?.querySelector(".agent-instructions-actions");
-    const statusbar = container.querySelector(".editor-statusbar");
-    if (actions && statusbar) statusbar.appendChild(actions);
+    // Keep form actions outside EasyMDE's generated statusbar/toolbar.
+    // Toolbar controls must never implicitly submit the instructions form.
+    if (previewButton) {
+      container.querySelectorAll('.editor-toolbar button').forEach(control => {
+        control.type = 'button';
+      });
+    }
     editor.codemirror.on('change', () => {
       textarea.value = editor.value();
       textarea.dispatchEvent(new Event('input', { bubbles: true }));
