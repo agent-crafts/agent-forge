@@ -33,13 +33,14 @@
       });
     }
     const previewButton = container.closest('form')?.querySelector('#previewAgentInstructions');
+    const editButton = container.closest('form')?.querySelector('#editAgentInstructions');
     const syncInstructionsMode = () => {
       if (!previewButton) return;
       const previewing = editor.codemirror.getWrapperElement().classList.contains('editor-preview-active');
       const form = container.closest('form');
       form?.classList.toggle('is-instructions-preview', previewing);
-      previewButton.textContent = previewing ? 'Edit' : 'Preview';
-      previewButton.setAttribute('aria-pressed', String(previewing));
+      previewButton.hidden = previewing;
+      if (editButton) editButton.hidden = !previewing;
       form?.querySelectorAll('.editor-toolbar button, .editor-toolbar a').forEach(control => {
         if (control.tagName === 'BUTTON') control.disabled = previewing;
         control.setAttribute('aria-disabled', String(previewing));
@@ -50,11 +51,13 @@
     };
     if (previewButton) container.syncInstructionsMode = syncInstructionsMode;
     if (previewButton) {
-      previewButton.addEventListener('click', () => {
+      const toggleInstructionsMode = () => {
         EasyMDE.togglePreview(editor);
         syncInstructionsMode();
         if (!editor.codemirror.getWrapperElement().classList.contains('editor-preview-active')) editor.codemirror.refresh();
-      });
+      };
+      previewButton.addEventListener('click', toggleInstructionsMode);
+      editButton?.addEventListener('click', toggleInstructionsMode);
     }
     const actions = container.closest("form")?.querySelector(".agent-instructions-actions");
     const statusbar = container.querySelector(".editor-statusbar");
