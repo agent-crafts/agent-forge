@@ -13,7 +13,7 @@
 
   function addRow(key = "", value = "") {
     const row = document.createElement("div");
-    row.className = "ui-field flex flex-wrap items-end gap-3";
+    row.className = "flex w-full min-w-0 items-end gap-3";
     row.dataset.originalKey = key;
     row.dataset.originalValue = value;
     const keyField = document.createElement("label");
@@ -42,7 +42,7 @@
     valueField.append(valueLabel, valueInput);
     const remove = document.createElement("button");
     remove.type = "button";
-    remove.className = "ui-button ui-button--secondary";
+    remove.className = "ui-button ui-button--secondary shrink-0";
     remove.textContent = "Remove";
     remove.addEventListener("click", () => { row.remove(); status.textContent = ""; });
     if (fixedKeys.has(key)) {
