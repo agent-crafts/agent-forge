@@ -49,7 +49,7 @@ public sealed class WorkspaceController(ISender sender) : Controller
     }
 
     // User workspace routes. Project membership and per-project data access are not yet implemented.
-    [HttpGet("projects/{id:guid}/{section:regex(^(board|specifications|assistant)$)}")]
+    [HttpGet("projects/{id:guid}/{section:regex(^(board|specifications|assistant|discovery|design|development|quality|deployment|workflows|runs)$)}")]
     public async Task<IActionResult> ProjectSection(Guid id, string section, CancellationToken cancellationToken)
     {
         var project = await sender.Send(new GetProjectByIdQuery(id), cancellationToken);
@@ -59,7 +59,14 @@ public sealed class WorkspaceController(ISender sender) : Controller
         {
             "board" => "Board",
             "specifications" => "Specifications",
-            _ => "Assistant"
+            "assistant" => "Assistant",
+            "discovery" => "Discovery",
+            "design" => "Design",
+            "development" => "Development",
+            "quality" => "Quality",
+            "deployment" => "Deployment",
+            "workflows" => "Workflows",
+            _ => "Runs"
         };
         ViewData["Section"] = "project-" + section.ToLowerInvariant();
         ViewData["ProjectName"] = project.Name;
