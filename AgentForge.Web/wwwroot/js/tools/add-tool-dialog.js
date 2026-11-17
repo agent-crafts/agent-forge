@@ -27,7 +27,7 @@
  };
  const addRow=(name="",definition=null,isRequired=true,locked=false)=>{
   const row=document.createElement("div");row.className="ui-modal-parameter";
-  row.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required maxlength="155" placeholder="Parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required">Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter">×</button>';
+  row.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required maxlength="155" placeholder="Parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required">Required</label><button type="button" class="param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';
   row.querySelector(".param-name").value=name;row.querySelector(".param-name").readOnly=locked;
   row.querySelector(".param-type").value=definition?.type||"string";
   row.querySelector(".param-required").checked=isRequired;row.querySelector(".param-required").disabled=locked;
