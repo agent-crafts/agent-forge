@@ -14,14 +14,14 @@
         </div>
     </section>
     <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Agent details sections">
-        <button type="button" id="agentOverviewTab" role="tab" aria-controls="agentOverviewPanel" aria-selected="true" tabindex="0" class="border-b-2 border-accent px-5 py-3 text-sm font-semibold text-heading">Overview</button>
-        <button type="button" id="agentInstructionsTab" role="tab" aria-controls="agentInstructionsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Instructions</button>
-        <button type="button" id="agentToolsTab" role="tab" aria-controls="agentToolsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Tools</button>
-        <button type="button" id="agentSkillsTab" role="tab" aria-controls="agentSkillsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Skills</button>
-        <button type="button" id="agentKnowledgeTab" role="tab" aria-controls="agentKnowledgePanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Knowledge</button>
-        <button type="button" id="agentPlaygroundTab" role="tab" aria-controls="agentPlaygroundPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Playground</button>
-        <button type="button" id="agentRunsTab" role="tab" aria-controls="agentRunsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Runs</button>
-        <button type="button" id="agentSettingsTab" role="tab" aria-controls="agentSettingsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Settings</button>
+        <button type="button" id="agentOverviewTab" role="tab" aria-controls="agentOverviewPanel" aria-selected="true" tabindex="0" class="ui-button ui-button--ghost border-b-2 border-accent px-5 py-3 text-heading">Overview</button>
+        <button type="button" id="agentInstructionsTab" role="tab" aria-controls="agentInstructionsPanel" aria-selected="false" tabindex="-1" class="ui-button ui-button--ghost border-b-2 border-transparent px-5 py-3 text-muted">Instructions</button>
+        <button type="button" id="agentToolsTab" role="tab" aria-controls="agentToolsPanel" aria-selected="false" tabindex="-1" class="ui-button ui-button--ghost border-b-2 border-transparent px-5 py-3 text-muted">Tools</button>
+        <button type="button" id="agentSkillsTab" role="tab" aria-controls="agentSkillsPanel" aria-selected="false" tabindex="-1" class="ui-button ui-button--ghost border-b-2 border-transparent px-5 py-3 text-muted">Skills</button>
+        <button type="button" id="agentKnowledgeTab" role="tab" aria-controls="agentKnowledgePanel" aria-selected="false" tabindex="-1" class="ui-button ui-button--ghost border-b-2 border-transparent px-5 py-3 text-muted">Knowledge</button>
+        <button type="button" id="agentPlaygroundTab" role="tab" aria-controls="agentPlaygroundPanel" aria-selected="false" tabindex="-1" class="ui-button ui-button--ghost border-b-2 border-transparent px-5 py-3 text-muted">Playground</button>
+        <button type="button" id="agentRunsTab" role="tab" aria-controls="agentRunsPanel" aria-selected="false" tabindex="-1" class="ui-button ui-button--ghost border-b-2 border-transparent px-5 py-3 text-muted">Runs</button>
+        <button type="button" id="agentSettingsTab" role="tab" aria-controls="agentSettingsPanel" aria-selected="false" tabindex="-1" class="ui-button ui-button--ghost border-b-2 border-transparent px-5 py-3 text-muted">Settings</button>
     </div>
     <div id="agentOverviewPanel" role="tabpanel" aria-labelledby="agentOverviewTab">
         <partial name="~/Views/Agents/_OverviewTab.cshtml" model="Model" />
