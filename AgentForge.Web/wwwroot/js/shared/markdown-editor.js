@@ -39,6 +39,7 @@
         const previewing = editor.codemirror.getWrapperElement().classList.contains('editor-preview-active');
         previewButton.textContent = previewing ? 'Edit' : 'Preview';
         previewButton.setAttribute('aria-pressed', String(previewing));
+        container.closest('form')?.classList.toggle('is-instructions-preview', previewing);
         if (!previewing) editor.codemirror.refresh();
       });
     }
