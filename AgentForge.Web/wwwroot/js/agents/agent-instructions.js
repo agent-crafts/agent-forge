@@ -48,12 +48,7 @@
       if (markdownEditor && !markdownEditor.codemirror.getWrapperElement().classList.contains('editor-preview-active')) {
         EasyMDE.togglePreview(markdownEditor);
       }
-      form.classList.add('is-instructions-preview');
-      const previewButton = document.getElementById('previewAgentInstructions');
-      if (previewButton) {
-        previewButton.textContent = 'Edit';
-        previewButton.setAttribute('aria-pressed', 'true');
-      }
+      form.querySelector('[data-markdown-editor]')?.syncInstructionsMode?.();
       window.AgentForgeToast?.show({ type: 'success', title: 'Instructions saved', message: 'Agent instructions updated successfully.' });
     } catch (error) {
       window.AgentForgeToast?.show({ type: 'error', title: 'Unable to save instructions', message: error.message || 'Unable to save instructions.' });
