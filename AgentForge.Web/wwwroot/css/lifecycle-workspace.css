@@ -60,3 +60,9 @@
 .lf-root .ui-panel.lf-project-header{overflow:hidden}
 .lf-root .ui-panel.lf-card{min-width:0;overflow:hidden}
 .lf-root .ui-panel.lf-collection{padding-bottom:20px}
+
+
+/* Use the page as the only vertical scroll container; keep chat and artifacts in document flow. */
+.lf-root .lf-messages{max-height:none;overflow:visible;flex:1 0 auto}
+.lf-root .lf-chat,.lf-root .lf-artifacts{height:auto;max-height:none}
+.lf-root .lf-tabs{overflow-x:auto;overflow-y:hidden}
