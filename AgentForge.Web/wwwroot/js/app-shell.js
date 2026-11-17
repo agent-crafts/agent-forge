@@ -62,7 +62,7 @@
   document.addEventListener('pointerdown', event => {
     if (!event.target.closest('.workspace-project-picker')) closeProjectOptions();
   });
-  const projectDetailsPattern = /^\/projects\/([0-9a-f-]{36})(?:\/(?:board|specifications|assistant))?\/?$/i;
+  const projectDetailsPattern = /^\/projects\/([0-9a-f-]{36})(?:\/(?:board|specifications|assistant|discovery|design|development|quality|deployment|workflows|runs))?\/?$/i;
   const onProjectGrid = window.location.pathname.replace(/\/$/, '') === '/projects';
 
   function selectedProjectId() {
@@ -143,7 +143,7 @@
     if (!id) return;
     try { localStorage.setItem(projectKey, id); } catch { /* unavailable */ }
     updateProjectOverview();
-    const section = /^\/projects\/[0-9a-f-]{36}\/(board|specifications|assistant)\/?$/i.exec(window.location.pathname)?.[1];
+    const section = /^\/projects\/[0-9a-f-]{36}\/(board|specifications|assistant|discovery|design|development|quality|deployment|workflows|runs)\/?$/i.exec(window.location.pathname)?.[1];
     window.location.assign('/projects/' + encodeURIComponent(id) + (section ? '/' + section : ''));
   });
   void loadProjectSwitcher();
