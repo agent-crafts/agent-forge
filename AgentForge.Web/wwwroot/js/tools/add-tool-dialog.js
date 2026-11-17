@@ -37,15 +37,26 @@
  };
  const syncRows=()=>{
   const key=executorSelect.value,add=get("addToolParameter");
-  add.hidden=key==="get_github_issue"||key==="http.get_json";
+  add.hidden=key==="get_github_issue";
   if(key==="get_github_issue"){
    rows.replaceChildren();
    const p=document.createElement("p");p.className="text-sm text-muted";
    p.textContent="issue_number · integer · required (minimum: 1). Defined by the GitHub issue executor.";rows.append(p);
   }else if(key==="http.get_json"){
-   const current=new Map([...rows.querySelectorAll(".ui-modal-parameter")].map(r=>[r.querySelector(".param-name").value.trim(),{type:r.querySelector(".param-type").value}]));
-   rows.replaceChildren();
-   for(const name of httpParameterNames())addRow(name,current.get(name)||originalSchema?.properties?.[name],true,true);
+   const placeholders=new Set(httpParameterNames());
+   const existing=[...rows.querySelectorAll(".ui-modal-parameter")];
+   for(const row of existing){
+    const name=row.querySelector(".param-name").value.trim();
+    const locked=placeholders.has(name);
+    row.querySelector(".param-name").readOnly=locked;
+    row.querySelector(".param-required").disabled=locked;
+    if(locked)row.querySelector(".param-required").checked=true;
+    row.querySelector(".param-remove").hidden=locked;
+   }
+   const names=new Set(existing.map(row=>row.querySelector(".param-name").value.trim()));
+   for(const name of placeholders){
+    if(!names.has(name))addRow(name,originalSchema?.properties?.[name],true,true);
+   }
   }else if(editMode&&originalSchema&&rows.querySelectorAll(".ui-modal-parameter").length===0){
    for(const [name,def] of Object.entries(originalSchema.properties||{}))addRow(name,def,(originalSchema.required||[]).includes(name));
   }
@@ -218,7 +229,7 @@
   if(window.AgentForgeJsonViewer)window.AgentForgeJsonViewer.render(get("newToolSchema"),value);
   else get("newToolSchema").textContent=JSON.stringify(value,null,2);
  };
- get("addToolParameter").addEventListener("click",()=>{if(executorSelect.value==="get_github_issue"||executorSelect.value==="http.get_json")return;addRow();schema();});
+ get("addToolParameter").addEventListener("click",()=>{if(executorSelect.value==="get_github_issue")return;addRow();schema();});
  const saveButton=get("previewToolConfiguration");
  let saving=false;
  const fieldError=(field,message)=>{
