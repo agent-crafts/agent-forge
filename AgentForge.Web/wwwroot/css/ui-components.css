@@ -675,3 +675,10 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
   overflow-y:auto;
   overscroll-behavior:contain;
 }
+
+/* Shared dropdown panel design: use .ui-dropdown-panel and .ui-dropdown-option on any menu/listbox. */
+.ui-dropdown-panel{z-index:40;max-height:260px;overflow-y:auto;padding:5px;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface);box-shadow:0 16px 40px #0003;color:var(--content)}
+.ui-dropdown-option{display:block;width:100%;padding:9px 10px;border:0;border-radius:7px;background:transparent;color:var(--content);font:inherit;font-size:13px;text-align:left;cursor:pointer;overflow-wrap:anywhere}
+.ui-dropdown-option:hover,.ui-dropdown-option:focus-visible{background:var(--hover)}
+.ui-dropdown-option[aria-selected="true"],.ui-dropdown-option[aria-checked="true"]{background:var(--active);font-weight:600}
+.ui-dropdown-option:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
