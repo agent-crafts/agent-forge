@@ -1,19 +1,68 @@
 (() => {
-  const form=document.getElementById("httpJsonTryForm");
-  if(!form)return;
-  const status=document.getElementById("httpJsonTryStatus");
-  const result=document.getElementById("httpJsonTryResult");
-  form.addEventListener("submit",async event=>{
+  const form = document.getElementById("httpJsonTryForm");
+  if (!form) return;
+
+  const args = document.getElementById("httpJsonArguments");
+  const error = document.getElementById("httpJsonArgumentsError");
+  const run = document.getElementById("httpJsonToolRun");
+  const status = document.getElementById("httpJsonTryStatus");
+  const result = document.getElementById("httpJsonTryResult");
+  const viewer = window.AgentForgeJsonViewer;
+
+  const clearError = () => {
+    args.removeAttribute("aria-invalid");
+    error.hidden = true;
+    error.textContent = "";
+  };
+  args.addEventListener("input", clearError);
+
+  form.addEventListener("submit", async event => {
     event.preventDefault();
-    const button=form.querySelector('button[type="submit"]');
-    button.disabled=true;status.textContent="Running...";result.textContent="";
-    try{
-      const token=form.querySelector('input[name="__RequestVerificationToken"]')?.value;
-      const response=await fetch(form.action,{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json",...(token?{"RequestVerificationToken":token}:{})},body:JSON.stringify(Object.fromEntries([...new FormData(form).entries()].filter(([key])=>key!=="__RequestVerificationToken").map(([key,value])=>{const field=form.elements.namedItem(key);const type=field?.dataset?.parameterType;return [key,type==="integer"?Number.parseInt(value,10):type==="number"?Number(value):type==="boolean"?value==="true":value];})))});
-      const payload=await response.json();
-      status.textContent=payload.success?"Success":"Failed (HTTP "+response.status+")";
-      result.textContent=JSON.stringify(payload,null,2);
-    }catch(error){status.textContent="Request failed";result.textContent=error.message||String(error);}
-    finally{button.disabled=false;}
+    if (run.disabled) return;
+    clearError();
+
+    let input;
+    try {
+      input = JSON.parse(args.value);
+      if (!input || typeof input !== "object" || Array.isArray(input)) {
+        throw new Error("Expected a JSON object.");
+      }
+    } catch {
+      args.setAttribute("aria-invalid", "true");
+      error.hidden = false;
+      error.textContent = "Enter a valid JSON object, such as {}.";
+      status.textContent = "Invalid arguments";
+      viewer.clear(result);
+      args.focus();
+      return;
+    }
+
+    run.disabled = true;
+    status.textContent = "Running…";
+    viewer.clear(result, "Waiting for the tool response…");
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "RequestVerificationToken": form.elements.__RequestVerificationToken.value
+        },
+        body: JSON.stringify(input)
+      });
+      const payload = await response.json().catch(() => null);
+      if (response.ok && payload?.success) {
+        status.textContent = "Success";
+        viewer.render(result, payload.data);
+      } else {
+        status.textContent = `Failed (HTTP ${response.status})`;
+        if (payload) viewer.render(result, payload);
+        else viewer.clear(result, "The server returned no JSON response.");
+      }
+    } catch {
+      status.textContent = "Request failed";
+      viewer.clear(result, "Could not reach AgentForge. Try again.");
+    } finally {
+      run.disabled = false;
+    }
   });
 })();
