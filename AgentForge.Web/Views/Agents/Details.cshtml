@@ -59,7 +59,17 @@
             if (index === 1) {
                 requestAnimationFrame(() => {
                     const markdownEditor = panels[1].querySelector('[data-markdown-editor]')?.markdownEditor;
-                    markdownEditor?.codemirror?.refresh();
+                    if (!markdownEditor) return;
+                    if (!panels[1].dataset.initialPreviewShown) {
+                        EasyMDE.togglePreview(markdownEditor);
+                        panels[1].dataset.initialPreviewShown = 'true';
+                        const previewButton = document.getElementById('previewAgentInstructions');
+                        if (previewButton) {
+                            previewButton.textContent = 'Edit';
+                            previewButton.setAttribute('aria-pressed', 'true');
+                        }
+                    }
+                    markdownEditor.codemirror.refresh();
                 });
             }
         });
