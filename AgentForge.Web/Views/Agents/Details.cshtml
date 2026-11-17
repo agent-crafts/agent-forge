@@ -20,7 +20,6 @@
         <partial name="_Button" model='new UiButtonModel { Text = "Skills", Variant = UiButtonVariant.Ghost, Id = "agentSkillsTab", Role = "tab", AriaControls = "agentSkillsPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
         <partial name="_Button" model='new UiButtonModel { Text = "Knowledge", Variant = UiButtonVariant.Ghost, Id = "agentKnowledgeTab", Role = "tab", AriaControls = "agentKnowledgePanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
         <partial name="_Button" model='new UiButtonModel { Text = "Playground", Variant = UiButtonVariant.Ghost, Id = "agentPlaygroundTab", Role = "tab", AriaControls = "agentPlaygroundPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
-        <partial name="_Button" model='new UiButtonModel { Text = "Runs", Variant = UiButtonVariant.Ghost, Id = "agentRunsTab", Role = "tab", AriaControls = "agentRunsPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
         <partial name="_Button" model='new UiButtonModel { Text = "Settings", Variant = UiButtonVariant.Ghost, Id = "agentSettingsTab", Role = "tab", AriaControls = "agentSettingsPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
     </div>
     <div id="agentOverviewPanel" role="tabpanel" aria-labelledby="agentOverviewTab">
@@ -33,7 +32,6 @@
     <div id="agentSkillsPanel" role="tabpanel" aria-labelledby="agentSkillsTab" hidden><partial name="~/Views/Agents/_SkillsTab.cshtml" model="Model" /></div>
     <div id="agentKnowledgePanel" role="tabpanel" aria-labelledby="agentKnowledgeTab" hidden><partial name="~/Views/Agents/_KnowledgeTab.cshtml" model="Model" /></div>
     <div id="agentPlaygroundPanel" role="tabpanel" aria-labelledby="agentPlaygroundTab" hidden><partial name="~/Views/Agents/_PlaygroundTab.cshtml" model="Model" /></div>
-    <div id="agentRunsPanel" role="tabpanel" aria-labelledby="agentRunsTab" hidden><partial name="~/Views/Agents/_RunsTab.cshtml" model="Model" /></div>
     <div id="agentSettingsPanel" role="tabpanel" aria-labelledby="agentSettingsTab" hidden><partial name="~/Views/Agents/_SettingsTab.cshtml" model="Model" /></div>
 </div>
 <partial name="~/Views/Agents/_CreateAgentDialog.cshtml" />
@@ -44,8 +42,8 @@
 <script src="~/js/agents/agent-playground.js" asp-append-version="true"></script>
 <script>
 (() => {
-    const tabs = [document.getElementById('agentOverviewTab'), document.getElementById('agentInstructionsTab'), document.getElementById('agentToolsTab'), document.getElementById('agentSkillsTab'), document.getElementById('agentKnowledgeTab'), document.getElementById('agentPlaygroundTab'), document.getElementById('agentRunsTab'), document.getElementById('agentSettingsTab')];
-    const panels = [document.getElementById('agentOverviewPanel'), document.getElementById('agentInstructionsPanel'), document.getElementById('agentToolsPanel'), document.getElementById('agentSkillsPanel'), document.getElementById('agentKnowledgePanel'), document.getElementById('agentPlaygroundPanel'), document.getElementById('agentRunsPanel'), document.getElementById('agentSettingsPanel')];
+    const tabs = [document.getElementById('agentOverviewTab'), document.getElementById('agentInstructionsTab'), document.getElementById('agentToolsTab'), document.getElementById('agentSkillsTab'), document.getElementById('agentKnowledgeTab'), document.getElementById('agentPlaygroundTab'), document.getElementById('agentSettingsTab')];
+    const panels = [document.getElementById('agentOverviewPanel'), document.getElementById('agentInstructionsPanel'), document.getElementById('agentToolsPanel'), document.getElementById('agentSkillsPanel'), document.getElementById('agentKnowledgePanel'), document.getElementById('agentPlaygroundPanel'), document.getElementById('agentSettingsPanel')];
     tabs.forEach((tab, index) => {
         tab.addEventListener('click', () => {
             tabs.forEach((item, i) => {
