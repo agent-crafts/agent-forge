@@ -17,7 +17,7 @@
 }
 <link rel="stylesheet" href="~/css/lifecycle-workspace.css" asp-append-version="true" />
 <div class="lf-root" data-lifecycle-stage="@stageKey">
-    <header class="lf-project-header">
+    <header class="lf-project-header ui-panel">
         <div class="lf-project-identity">
             <span class="lf-project-icon" aria-hidden="true">▦</span>
             <div class="lf-project-details">
@@ -47,7 +47,7 @@
     @if (stageIndex >= 0)
     {
         <div class="lf-split">
-            <section class="lf-chat lf-card" aria-label="@agent demo conversation">
+            <section class="lf-chat lf-card ui-panel" aria-label="@agent demo conversation">
                 <div class="lf-panel-head"><div><strong>@agent</strong><small>Guided workspace conversation</small></div><span class="lf-pill">Demo</span></div>
                 <div class="lf-messages" id="lfMessages" aria-live="polite">
                     @if (stageKey == "discovery")
@@ -84,7 +84,7 @@
                 <form class="lf-composer" id="lfDemoChat"><label class="lf-sr-only" for="lfPrompt">Demo message</label><input id="lfPrompt" autocomplete="off" placeholder="Ask @agent…" /><button type="submit">Send</button></form>
                 <p class="lf-disclaimer">Demo replies are scripted locally. No AI, API calls or persistence.</p>
             </section>
-            <section class="lf-artifacts lf-card" aria-label="Stage artifacts">
+            <section class="lf-artifacts lf-card ui-panel" aria-label="Stage artifacts">
                 <div class="lf-panel-head"><div><strong>@(stageKey == "discovery" ? "Discovery artifacts" : stageKey == "design" ? "Design studio" : stageKey == "development" ? "Code workspace" : stageKey == "quality" ? "Quality reports" : "Release center")</strong><small>Healthcare Booking · sample project</small></div><span class="lf-pill">v0.1 · Sample</span></div>
                 @if (stageKey == "discovery")
                 {
@@ -137,7 +137,7 @@ export async function book(
     }
     else if (stageKey == "board" || stageKey == "specifications")
     {
-        <section class="lf-card lf-collection"><div class="lf-panel-head"><div><strong>@title</strong><small>Shared sample artifacts · no persistence</small></div><span class="lf-pill">Demo</span></div>
+        <section class="lf-card lf-collection ui-panel"><div class="lf-panel-head"><div><strong>@title</strong><small>Shared sample artifacts · no persistence</small></div><span class="lf-pill">Demo</span></div>
             @if (stageKey == "board")
             {
                 <div class="lf-board"><div><h3>Backlog</h3><article><strong>FEAT-004</strong><p>Notifications & reminders</p><small>TASK-013 · TASK-014</small></article></div><div><h3>In progress</h3><article><strong>FEAT-002</strong><p>Doctor search & availability</p><small>TASK-009 · TASK-010</small></article></div><div><h3>Ready</h3><article><strong>FEAT-001</strong><p>Authentication & profiles</p><small>TASK-007 · TASK-008</small></article><article><strong>FEAT-003</strong><p>Appointment booking</p><small>TASK-011 · TASK-012</small></article></div></div>
@@ -150,7 +150,7 @@ export async function book(
     }
     else
     {
-        <section class="lf-card lf-collection"><div class="lf-panel-head"><div><strong>@title</strong><small>Lifecycle demo overview</small></div><span class="lf-pill">Sample</span></div><p class="lf-muted">This area will connect to project-specific @(stageKey == "workflows" ? "workflow definitions" : "agent run history") in a later implementation.</p><div class="lf-spec"><h3>Example flow</h3><p>Discovery → Design → Development → Quality → Deployment</p><p>Every stage references shared business requirements, features and task specifications.</p></div></section>
+        <section class="lf-card lf-collection ui-panel"><div class="lf-panel-head"><div><strong>@title</strong><small>Lifecycle demo overview</small></div><span class="lf-pill">Sample</span></div><p class="lf-muted">This area will connect to project-specific @(stageKey == "workflows" ? "workflow definitions" : "agent run history") in a later implementation.</p><div class="lf-spec"><h3>Example flow</h3><p>Discovery → Design → Development → Quality → Deployment</p><p>Every stage references shared business requirements, features and task specifications.</p></div></section>
     }
 </div>
 <script src="~/js/lifecycle-workspace.js" asp-append-version="true" defer></script>
