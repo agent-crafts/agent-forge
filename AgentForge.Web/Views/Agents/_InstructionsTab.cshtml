@@ -28,10 +28,8 @@
 .agent-instructions-actions { display: flex; align-items: center; gap: .75rem; margin-top: .75rem; }
 .agent-markdown-component .editor-statusbar .agent-instructions-actions { margin-top: 0; }
 .agent-markdown-component .editor-statusbar .ui-button { font-size: .875rem; }
-/* Keep the toolbar and status visible in preview; disable editing actions. */
-#agentInstructionsForm.is-instructions-preview .editor-toolbar { opacity: .55; }
-#agentInstructionsForm.is-instructions-preview .editor-toolbar button,
-#agentInstructionsForm.is-instructions-preview .editor-toolbar a { pointer-events: none; cursor: not-allowed; }
+/* Preview hides the top Markdown formatting controls; Edit restores them. */
+#agentInstructionsForm.is-instructions-preview .editor-toolbar { display: none; }
 #agentInstructionsForm.is-instructions-preview #saveAgentInstructions { opacity: .5; cursor: not-allowed; }
 #agentInstructionsForm.is-instructions-preview .EasyMDEContainer .CodeMirror,
 #agentInstructionsForm.is-instructions-preview .EasyMDEContainer .editor-preview { border: 0; border-radius: 0; box-shadow: none; }
