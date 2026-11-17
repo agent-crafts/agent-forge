@@ -202,11 +202,11 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
 
 <script src="~/js/shared/json-viewer.js" asp-append-version="true"></script>
 <script src="~/js/tools/tool-try.js" asp-append-version="true"></script>
-<script src="~/js/tools/tool-configuration.js" asp-append-version="true"></script>
 
 <div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@((int)Enum.Parse<AgentForge.Core.Enums.ToolCategory>(Model.Category, ignoreCase: true))" data-tool-kind="@Model.Kind" data-tool-image-url="@Model.ImageUrl" data-tool-schema="@Model.JsonSchema" data-tool-executor-key="@Model.ExecutorKey" data-tool-configuration="@Model.ConfigurationJson"></div>
 <partial name="~/Views/Tools/_AddToolDialog.cshtml" />
 <ui-delete id="deleteToolDialog" title="Delete tool?" description="The tool will be removed from the catalog" item-name="@Model.DisplayName" confirm-button-id="confirmDeleteTool" confirm-text="Delete tool" />
+<script src="~/js/tools/tool-configuration.js" asp-append-version="true"></script>
 <script src="~/js/tools/add-tool-dialog.js" asp-append-version="true"></script>
 
 <script src="~/js/tools/delete-tool.js" asp-append-version="true"></script>
