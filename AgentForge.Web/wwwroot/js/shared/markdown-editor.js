@@ -47,7 +47,10 @@
         if (control.tagName === 'A') control.tabIndex = previewing ? -1 : 0;
       });
       const save = form?.querySelector('#saveAgentInstructions');
-      if (save) save.disabled = previewing;
+      if (save) {
+        save.hidden = previewing;
+        save.disabled = previewing;
+      }
     };
     if (previewButton) container.syncInstructionsMode = syncInstructionsMode;
     if (previewButton) {
