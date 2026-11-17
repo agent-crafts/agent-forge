@@ -13,82 +13,53 @@
  const githubRepo=document.getElementById("newToolGitHubRepo");
  const githubSchema={type:"object",properties:{issue_number:{type:"integer",minimum:1,description:"Positive GitHub issue number."}},required:["issue_number"],additionalProperties:false};
  const httpParameterNames=()=>[...new Set([...apiUrl.value.matchAll(/\\{([^{}]+)\\}/g)].map(match=>match[1]))];
- const httpSchema=()=>{
-  const properties={};
-  const names=httpParameterNames();
-  for(const name of names){
-   const previous=editMode&&originalSchema?.properties?.[name];
-   properties[name]=previous?structuredClone(previous):{type:"string"};
-  }
-  return {type:"object",properties,required:names,additionalProperties:false};
+ const buildSchema=()=>{
+  const next=editMode&&originalSchema?structuredClone(originalSchema):{type:"object",properties:{},required:[],additionalProperties:false};
+  const properties={},required=[];
+  rows.querySelectorAll(".ui-modal-parameter").forEach(row=>{
+   const name=row.querySelector(".param-name").value.trim();
+   if(!name)return;
+   const old=originalSchema?.properties?.[row.dataset.originalName||name];
+   properties[name]={...(old?structuredClone(old):{}),type:row.querySelector(".param-type").value};
+   if(row.querySelector(".param-required").checked)required.push(name);
+  });
+  next.properties=properties;next.required=required;return next;
  };
- const renderHttpParameters=()=>{
-  if(executorSelect.value!=="http.get_json")return;
-  rows.replaceChildren();
-  for(const name of httpParameterNames()){
-   const row=document.createElement("div");
-   row.className="ui-modal-parameter";
-   const definition=editMode&&originalSchema?.properties?.[name];
-   const type=definition?.type||"string";
-   const nameField=document.createElement("input");
-   nameField.className="ui-input param-name";
-   nameField.value=name;
-   nameField.disabled=true;
-   const typeField=document.createElement("input");
-   typeField.className="ui-input param-type";
-   typeField.value=type;
-   typeField.disabled=true;
-   const requiredLabel=document.createElement("label");
-   const requiredField=document.createElement("input");
-   requiredField.type="checkbox";
-   requiredField.className="param-required";
-   requiredField.checked=true;
-   requiredField.disabled=true;
-   requiredLabel.append(requiredField,document.createTextNode("Required"));
-   row.append(nameField,typeField,requiredLabel);
-   rows.append(row);
+ const addRow=(name="",definition=null,isRequired=true,locked=false)=>{
+  const row=document.createElement("div");row.className="ui-modal-parameter";
+  row.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required maxlength="155" placeholder="Parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required">Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter">×</button>';
+  row.querySelector(".param-name").value=name;row.querySelector(".param-name").readOnly=locked;
+  row.querySelector(".param-type").value=definition?.type||"string";
+  row.querySelector(".param-required").checked=isRequired;row.querySelector(".param-required").disabled=locked;
+  row.querySelector(".param-remove").hidden=locked;row.dataset.originalName=name;
+  row.querySelector(".param-remove").addEventListener("click",()=>{row.remove();schema();});
+  row.addEventListener("input",schema);row.addEventListener("change",schema);rows.append(row);
+ };
+ const syncRows=()=>{
+  const key=executorSelect.value,add=get("addToolParameter");
+  add.hidden=key==="get_github_issue"||key==="http.get_json";
+  if(key==="get_github_issue"){
+   rows.replaceChildren();
+   const p=document.createElement("p");p.className="text-sm text-muted";
+   p.textContent="issue_number · integer · required (minimum: 1). Defined by the GitHub issue executor.";rows.append(p);
+  }else if(key==="http.get_json"){
+   const current=new Map([...rows.querySelectorAll(".ui-modal-parameter")].map(r=>[r.querySelector(".param-name").value.trim(),{type:r.querySelector(".param-type").value}]));
+   rows.replaceChildren();
+   for(const name of httpParameterNames())addRow(name,current.get(name)||originalSchema?.properties?.[name],true,true);
+  }else if(editMode&&originalSchema&&rows.querySelectorAll(".ui-modal-parameter").length===0){
+   for(const [name,def] of Object.entries(originalSchema.properties||{}))addRow(name,def,(originalSchema.required||[]).includes(name));
   }
   schema();
  };
- apiUrl.addEventListener("input",renderHttpParameters);
- const lockGithubParameters=()=>{
-  const locked=executorSelect.value==="get_github_issue";
-  const add=get("addToolParameter");
-  add.hidden=true;
-  if(executorSelect.value==="http.get_json"){renderHttpParameters();return;}
-  if(locked){
-   rows.replaceChildren();
-   const label=document.createElement("div");
-   label.className="text-sm text-muted";
-   label.textContent="issue_number · integer · required (minimum: 1). Defined by the GitHub issue executor.";
-   rows.append(label);
-  }else{
-   rows.replaceChildren();
-   if(editMode&&originalSchema){
-    for(const [name,definition] of Object.entries(originalSchema.properties||{})){
-     add.click();
-     const row=rows.lastElementChild;
-     row.querySelector(".param-name").value=name;
-     row.dataset.originalName=name;
-     row.querySelector(".param-type").value=definition.type||"string";
-     row.querySelector(".param-required").checked=(originalSchema.required||[]).includes(name);
-    }
-   }
-  }
-  rows.querySelectorAll(".ui-modal-parameter input, .ui-modal-parameter select").forEach(field=>field.disabled=true);
-  schema();
- };
+ apiUrl.addEventListener("input",()=>{if(!editMode)executorSelect.value=apiUrl.value.trim()?"http.get_json":"";syncRows();});
  // Execution routing is internal: a configured API URL implies the HTTP adapter.
  // Preserve existing executor keys while editing, including legacy GitHub tools.
  const updateExecutor=()=>{
   if(!editMode)executorSelect.value=apiUrl.value.trim()?"http.get_json":"";
   apiUrlField.hidden=executorSelect.value==="get_github_issue";
   githubFields.hidden=executorSelect.value!=="get_github_issue";
-  lockGithubParameters();
+  syncRows();
  };
- apiUrl.addEventListener("input",()=>{
-  if(!editMode)updateExecutor();
- });
  executorSelect.addEventListener("change",updateExecutor);
  let previewUrl=null;
  const iconInput=document.getElementById("newToolIconUpload");
@@ -243,26 +214,12 @@
  });
 
  const rows=get("toolParameterRows");
- const buildEditedSchema=()=>{
-  const next=structuredClone(originalSchema);
-  const properties={};
-  const required=[];
-  rows.querySelectorAll(".ui-modal-parameter").forEach(row=>{
-   const name=row.querySelector(".param-name").value.trim();
-   if(!name)return;
-   const old=row.dataset.originalName;
-   const source=old&&originalSchema.properties&&originalSchema.properties[old];
-   const definition=source?structuredClone(source):{};
-   definition.type=row.querySelector(".param-type").value;
-   properties[name]=definition;
-   if(row.querySelector(".param-required").checked)required.push(name);
-  });
-  next.properties=properties;
-  next.required=required;
-  return next;
+ const schema=()=>{
+  const value=executorSelect.value==="get_github_issue"?githubSchema:buildSchema();
+  if(window.AgentForgeJsonViewer)window.AgentForgeJsonViewer.render(get("newToolSchema"),value);
+  else get("newToolSchema").textContent=JSON.stringify(value,null,2);
  };
- const schema=()=>{if(executorSelect.value==="http.get_json"){const value=httpSchema();if(window.AgentForgeJsonViewer)window.AgentForgeJsonViewer.render(get("newToolSchema"),value);else get("newToolSchema").textContent=JSON.stringify(value,null,2);return;}if(executorSelect.value==="get_github_issue"){window.AgentForgeJsonViewer?.render(get("newToolSchema"),githubSchema);if(!window.AgentForgeJsonViewer)get("newToolSchema").textContent=JSON.stringify(githubSchema,null,2);return;}const properties={},required=[];rows.querySelectorAll(".ui-modal-parameter").forEach(r=>{const n=r.querySelector(".param-name").value.trim();if(!n)return;properties[n]={type:r.querySelector(".param-type").value};if(r.querySelector(".param-required").checked)required.push(n);});const value=editMode&&originalSchema?buildEditedSchema():{type:"object",properties,required,additionalProperties:false};if(window.AgentForgeJsonViewer){window.AgentForgeJsonViewer.render(get("newToolSchema"),value);}else{get("newToolSchema").textContent=JSON.stringify(value,null,2);}};
- get("addToolParameter").addEventListener("click",()=>{if(executorSelect.value==="get_github_issue")return;const r=document.createElement("div");r.className="ui-modal-parameter";r.innerHTML='<input class="ui-input param-name" aria-label="Parameter name (required)" required maxlength="155" placeholder="Parameter name" title="Required parameter name"><select class="ui-select param-type" aria-label="Parameter type"><option>string</option><option>integer</option><option>number</option><option>boolean</option><option>array</option><option>object</option></select><label><input type="checkbox" class="param-required" checked>Required</label><button type="button" class="ui-button param-remove" aria-label="Delete parameter" title="Delete parameter"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14M10 10v7M14 10v7"/></svg></button>';r.querySelector(".param-remove").hidden=true;r.querySelectorAll("input, select").forEach(field=>field.disabled=true);r.addEventListener("input",schema);r.addEventListener("change",schema);rows.append(r);schema();});
+ get("addToolParameter").addEventListener("click",()=>{if(executorSelect.value==="get_github_issue"||executorSelect.value==="http.get_json")return;addRow();schema();});
  const saveButton=get("previewToolConfiguration");
  let saving=false;
  const fieldError=(field,message)=>{
@@ -372,7 +329,7 @@
   });
   const executorKey=executorSelect.value||null;
   const configurationJson=JSON.stringify(executorKey==="http.get_json"?{url:apiUrl.value.trim()}:executorKey==="get_github_issue"?{owner:githubOwner.value.trim(),repo:githubRepo.value.trim()}:{});
-  const jsonSchema=executorKey==="get_github_issue"?JSON.stringify(githubSchema):executorKey==="http.get_json"?JSON.stringify(httpSchema()):editMode&&originalSchema?JSON.stringify(originalSchema):JSON.stringify({type:"object",properties,required,additionalProperties:false});
+  const jsonSchema=JSON.stringify(executorKey==="get_github_issue"?githubSchema:buildSchema());
   status.textContent="";
   saving=true;
   saveButton.disabled=true;
