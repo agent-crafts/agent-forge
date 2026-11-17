@@ -48,6 +48,29 @@ public sealed class WorkspaceController(ISender sender) : Controller
         return View("~/Views/Projects/Details.cshtml", ProjectsController.ProjectCard.From(project));
     }
 
+    // User workspace routes. Project membership and per-project data access are not yet implemented.
+    [HttpGet("projects/{id:guid}/{section:regex(^(board|specifications|assistant)$)}")]
+    public async Task<IActionResult> ProjectSection(Guid id, string section, CancellationToken cancellationToken)
+    {
+        var project = await sender.Send(new GetProjectByIdQuery(id), cancellationToken);
+        if (project is null || !project.IsActive) return NotFound();
+
+        ViewData["Title"] = section.ToLowerInvariant() switch
+        {
+            "board" => "Board",
+            "specifications" => "Specifications",
+            _ => "Assistant"
+        };
+        ViewData["Section"] = "project-" + section.ToLowerInvariant();
+        ViewData["ProjectName"] = project.Name;
+        ViewData["ProjectId"] = id.ToString();
+
+        if (section.Equals("assistant", StringComparison.OrdinalIgnoreCase))
+            return View("~/Views/Chat/Index.cshtml");
+
+        return View("~/Views/Workspace/ProjectSection.cshtml");
+    }
+
     [HttpGet("tools")]
     public async Task<IActionResult> Tools(CancellationToken cancellationToken)
     {
