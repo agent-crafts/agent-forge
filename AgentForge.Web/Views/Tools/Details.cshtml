@@ -110,7 +110,7 @@
     </div>
     </div>
     <section id="toolConfigurationPanel" role="tabpanel" aria-labelledby="toolConfigurationTab" hidden>
-        <div class="ui-columns"><div class="ui-stack"><section class="ui-panel">
+        <section class="ui-panel w-full">
             <div class="ui-panel-title-block"><div class="ui-panel-title-copy"><h2>Configuration</h2><p class="ui-subtitle">Manage optional key/value settings saved with this tool, like environment variables.</p></div></div>
             <form id="toolConfigurationForm" class="grid gap-4">
                 <div id="toolConfigurationRows" class="grid gap-3"></div>
@@ -121,7 +121,7 @@
                 <p id="toolConfigurationStatus" class="ui-field-hint" role="status"></p>
             </form>
             <p class="ui-field-hint">Values are stored in the tool configuration. Do not enter passwords or API tokens here; secret storage is not supported by this editor.</p>
-        </section></div></div>
+        </section>
     </section>
     <section id="toolTryPanel" role="tabpanel" aria-labelledby="toolTryTab" hidden>
         @if (Model.ExecutorKey == "get_github_issue" || Model.Name == "get_github_issue" || Model.ExecutorKey == "http.get_json" || (Model.Kind == "external" && Model.ExecutorKey == "mcp"))
