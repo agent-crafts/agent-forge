@@ -115,22 +115,22 @@
                 <div class="ui-stack"><section class="ui-panel min-w-0">
                     <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span><div class="ui-panel-title-copy"><h2>Try this tool</h2>
                     <p class="ui-subtitle">Enter JSON arguments to execute this tool.</p></div></div>
-                    <form id="mcpToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="grid gap-4">
+                    <form id="toolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="grid gap-4">
                         @Html.AntiForgeryToken()
                         <div class="ui-field">
-                            <label class="ui-field-label" for="mcpToolArguments">Arguments (JSON)</label>
-                            <p id="mcpToolArgumentsHint" class="ui-field-hint">Replace the example values with your inputs. Use {} for a tool without arguments.</p>
-                            <textarea id="mcpToolArguments" class="ui-textarea" rows="8" spellcheck="false" aria-describedby="mcpToolArgumentsHint mcpToolArgumentsError">@exampleJson</textarea>
-                            <p id="mcpToolArgumentsError" class="ui-field-error" role="alert" hidden></p>
+                            <label class="ui-field-label" for="toolArguments">Arguments (JSON)</label>
+                            <p id="toolArgumentsHint" class="ui-field-hint">Replace the example values with your inputs. Use {} for a tool without arguments.</p>
+                            <textarea id="toolArguments" class="ui-textarea" rows="8" spellcheck="false" aria-describedby="toolArgumentsHint toolArgumentsError">@exampleJson</textarea>
+                            <p id="toolArgumentsError" class="ui-field-error" role="alert" hidden></p>
                         </div>
-                        <button id="mcpToolRun" class="ui-button ui-button--primary" type="submit">Run Tool</button>
+                        <button id="toolRun" class="ui-button ui-button--primary" type="submit">Run Tool</button>
                     </form>
                 </section></div>
                 <div class="ui-stack"><section class="ui-panel min-w-0">
                     <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8v1c0 2-1 3-3 3 2 0 3 1 3 3v1c0 2 0 4 3 4M16 4c3 0 3 2 3 4v1c0 2 1 3 3 3-2 0-3 1-3 3v1c0 2 0 4-3 4"/></svg></span><div class="ui-panel-title-copy"><h2>Response</h2>
                     <p class="ui-subtitle">Inspect the response returned by the tool.</p></div></div>
-                    <p id="mcpToolStatus" class="ui-subtitle" role="status">Not run</p>
-                    <partial name="_JsonViewer" model='("mcpToolResult", (string?)null)' />
+                    <p id="toolStatus" class="ui-subtitle" role="status">Not run</p>
+                    <partial name="_JsonViewer" model='("toolResult", (string?)null)' />
                 </section></div>
             </div>
         }
@@ -186,7 +186,7 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
 </script>
 
 <script src="~/js/shared/json-viewer.js" asp-append-version="true"></script>
-<script src="~/js/tools/mcp-tool-try.js" asp-append-version="true"></script>
+<script src="~/js/tools/tool-try.js" asp-append-version="true"></script>
 
 <div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@((int)Enum.Parse<AgentForge.Core.Enums.ToolCategory>(Model.Category, ignoreCase: true))" data-tool-kind="@Model.Kind" data-tool-image-url="@Model.ImageUrl" data-tool-schema="@Model.JsonSchema" data-tool-executor-key="@Model.ExecutorKey" data-tool-configuration="@Model.ConfigurationJson"></div>
 <partial name="~/Views/Tools/_AddToolDialog.cshtml" />
