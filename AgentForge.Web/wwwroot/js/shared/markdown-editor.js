@@ -25,6 +25,21 @@
       minHeight: container.hasAttribute('data-markdown-description') ? '160px' : '350px'
     });
     container.markdownEditor = editor;
+    const instructionsForm = container.closest('#agentInstructionsForm');
+    if (instructionsForm) {
+      const editButton = instructionsForm.querySelector('#editAgentInstructions');
+      const saveButton = instructionsForm.querySelector('#saveAgentInstructions');
+      const setInstructionsMode = preview => {
+        const currentlyPreview = editor.codemirror.getWrapperElement().classList.contains('editor-preview-active');
+        if (currentlyPreview !== preview) EasyMDE.togglePreview(editor);
+        instructionsForm.classList.toggle('is-instructions-preview', preview);
+        if (saveButton) saveButton.disabled = preview;
+        if (!preview) editor.codemirror.refresh();
+      };
+      container.setInstructionsMode = setInstructionsMode;
+      editButton?.addEventListener('click', () => setInstructionsMode(false));
+      setInstructionsMode(true);
+    }
     if (container.hasAttribute('data-markdown-description')) {
       editor.codemirror.on('change', () => {
         const value = editor.value();
