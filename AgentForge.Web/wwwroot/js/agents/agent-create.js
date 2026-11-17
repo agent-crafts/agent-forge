@@ -10,6 +10,10 @@
   let previewUrl = null;
   const get = id => document.getElementById(id);
   const descriptionEditor = () => get('agentDescription')?.closest('[data-markdown-editor]')?.markdownEditor;
+  const refreshDescriptionEditor = () => {
+    // CodeMirror is initialized while the modal is hidden; measure it only after opening.
+    requestAnimationFrame(() => descriptionEditor()?.codemirror.refresh());
+  };
   const setDescription = value => {
     const input = get('agentDescription');
     input.value = value;
@@ -115,6 +119,7 @@
     setDialogMode(false);
     resetForm();
     dialog.showModal();
+    refreshDescriptionEditor();
   });
 
   editOpen?.addEventListener('click', async () => {
@@ -133,6 +138,7 @@
       const storedIcon = editingAgent.icon ?? editingAgent.Icon ?? '';
       showIcon(storedIconUrl(storedIcon));
       dialog.showModal();
+      refreshDescriptionEditor();
     } catch (error) {
       window.AgentForgeToast?.show({ type: 'error', title: 'Unable to edit agent', message: error.message });
     } finally {
