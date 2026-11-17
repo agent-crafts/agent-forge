@@ -21,12 +21,23 @@
         <div><p class="lf-eyebrow">@projectName / AI-native engineering</p><h1>@title</h1><p class="lf-muted">@(descriptions.TryGetValue(stageKey, out var description) ? description : "Shared project artifacts and activity.")</p></div>
         <span class="lf-demo">● Interactive demo · sample data only</span>
     </header>
-    <nav class="lf-journey" aria-label="Engineering lifecycle">
-        @for (var i = 0; i < stages.Length; i++)
-        {
-            var stage = stages[i];
-            <a href="/projects/@projectId/@stage.Item1" class="lf-step @(stage.Item1 == stageKey ? "is-current" : "")"><span class="lf-step-number">@(i + 1)</span><span>@stage.Item2</span></a>
-        }
+    <nav class="lf-timeline" aria-label="Engineering lifecycle">
+        <div class="lf-timeline-heading"><strong>Project lifecycle</strong><span>@(stageIndex >= 0 ? $"Stage {stageIndex + 1} of {stages.Length}" : "Explore the stages") · Demo navigation</span></div>
+        <ol class="lf-timeline-track">
+            @for (var i = 0; i < stages.Length; i++)
+            {
+                var stage = stages[i];
+                var isCurrent = i == stageIndex;
+                var isEarlier = stageIndex >= 0 && i < stageIndex;
+                <li class="lf-timeline-item @(isCurrent ? "is-current" : isEarlier ? "is-earlier" : "is-upcoming")">
+                    <a href="/projects/@projectId/@stage.Item1" class="lf-timeline-link" aria-current="@(isCurrent ? "step" : null)" aria-label="@stage.Item2 stage">
+                        <span class="lf-timeline-dot">@(i + 1)</span>
+                        <span class="lf-timeline-label">@stage.Item2</span>
+                    </a>
+                </li>
+            }
+        </ol>
+        <p class="lf-timeline-note">Stages are navigable previews. Earlier stages are not necessarily completed or approved.</p>
     </nav>
     @if (stageIndex >= 0)
     {
