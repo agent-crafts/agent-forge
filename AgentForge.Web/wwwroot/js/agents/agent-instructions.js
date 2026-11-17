@@ -44,7 +44,17 @@
         const error = await response.json().catch(() => null);
         throw new Error(error?.error || error?.title || 'Save failed (HTTP ' + response.status + ').');
       }
-        window.AgentForgeToast?.show({ type: 'success', title: 'Instructions saved', message: 'Agent instructions updated successfully.' });
+      const markdownEditor = form.querySelector('[data-markdown-editor]')?.markdownEditor;
+      if (markdownEditor && !markdownEditor.codemirror.getWrapperElement().classList.contains('editor-preview-active')) {
+        EasyMDE.togglePreview(markdownEditor);
+      }
+      form.classList.add('is-instructions-preview');
+      const previewButton = document.getElementById('previewAgentInstructions');
+      if (previewButton) {
+        previewButton.textContent = 'Edit';
+        previewButton.setAttribute('aria-pressed', 'true');
+      }
+      window.AgentForgeToast?.show({ type: 'success', title: 'Instructions saved', message: 'Agent instructions updated successfully.' });
     } catch (error) {
       window.AgentForgeToast?.show({ type: 'error', title: 'Unable to save instructions', message: error.message || 'Unable to save instructions.' });
     } finally {
