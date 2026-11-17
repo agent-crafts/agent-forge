@@ -1,0 +1,20 @@
+@{
+    Layout = "_AppLayout";
+    var projectName = ViewData["ProjectName"] as string ?? "Project";
+    var section = ViewData["Section"] as string ?? "";
+    var isBoard = section == "project-board";
+}
+<div class="ui-detail">
+    <section class="ui-panel">
+        <p class="ui-subtitle">@projectName</p>
+        <h1 class="text-2xl font-semibold text-heading">@(isBoard ? "Board" : "Specifications")</h1>
+        @if (isBoard)
+        {
+            <p class="ui-subtitle">Project work items will appear here when the project board data model and APIs are connected.</p>
+        }
+        else
+        {
+            <p class="ui-subtitle">Project specifications will appear here when the project document bindings and APIs are connected.</p>
+        }
+    </section>
+</div>
