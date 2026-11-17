@@ -62,6 +62,7 @@
                     if (!markdownEditor) return;
                     if (!panels[1].dataset.initialPreviewShown) {
                         EasyMDE.togglePreview(markdownEditor);
+                        document.getElementById('agentInstructionsForm')?.classList.add('is-instructions-preview');
                         panels[1].dataset.initialPreviewShown = 'true';
                         const previewButton = document.getElementById('previewAgentInstructions');
                         if (previewButton) {
