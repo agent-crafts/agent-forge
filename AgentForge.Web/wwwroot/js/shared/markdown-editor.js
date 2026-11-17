@@ -15,7 +15,7 @@
       toolbar: [
         'bold', 'italic', 'strikethrough', '|',
         'heading', 'heading-smaller', 'heading-bigger', '|',
-        'quote', 'unordered-list', 'ordered-list', 'checklist', '|',
+        'quote', 'unordered-list', 'ordered-list', '|',
         'link', 'image', 'table', 'horizontal-rule', 'code', '|',
         'side-by-side', 'fullscreen', '|',
         'guide'
