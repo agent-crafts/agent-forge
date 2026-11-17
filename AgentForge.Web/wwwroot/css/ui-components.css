@@ -48,6 +48,7 @@
 .ui-panel-title-copy{min-width:0;flex:1}
 
 .ui-panel .ui-panel-title-copy .ui-subtitle{margin:0;font-size:11px;line-height:1.55;color:var(--muted)}
+.ui-markdown-content p{margin:0px}
 .ui-note{margin-top:20px;padding:17px 18px;border:1px solid var(--line);border-radius:10px;background:var(--surface-raised)}
 .ui-note strong{display:block;margin-bottom:7px;color:var(--heading);font-size:13px}
 .ui-note p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
