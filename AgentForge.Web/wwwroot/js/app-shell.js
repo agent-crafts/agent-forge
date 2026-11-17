@@ -31,7 +31,7 @@
       if (!option.value) continue;
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'workspace-project-option';
+      button.className = 'workspace-project-option ui-dropdown-option';
       button.setAttribute('role', 'option');
       button.setAttribute('aria-selected', String(option.value === projectSelect.value));
       button.textContent = option.textContent;
