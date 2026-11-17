@@ -8,7 +8,7 @@
 
   form.addEventListener('submit', async event => {
     event.preventDefault();
-    if (button.disabled) return;
+    if (event.submitter !== button || button.disabled) return;
     const instructions = form.querySelector('[data-markdown-editor]')?.markdownEditor?.value() ?? editor.value;
     if (instructions.length > 12000) {
       window.AgentForgeToast?.show({ type: 'error', title: 'Invalid instructions', message: 'Instructions cannot exceed 12,000 characters.' });
@@ -44,11 +44,12 @@
         const error = await response.json().catch(() => null);
         throw new Error(error?.error || error?.title || 'Save failed (HTTP ' + response.status + ').');
       }
-        window.AgentForgeToast?.show({ type: 'success', title: 'Instructions saved', message: 'Agent instructions updated successfully.' });
+      form.querySelector('[data-markdown-editor]')?.setInstructionsMode?.(true);
+      window.AgentForgeToast?.show({ type: 'success', title: 'Instructions saved', message: 'Agent instructions updated successfully.' });
     } catch (error) {
       window.AgentForgeToast?.show({ type: 'error', title: 'Unable to save instructions', message: error.message || 'Unable to save instructions.' });
     } finally {
-      button.disabled = false;
+      button.disabled = form.classList.contains('is-instructions-preview');
     }
   });
 })();

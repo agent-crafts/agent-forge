@@ -9,6 +9,16 @@
   let saving = false;
   let previewUrl = null;
   const get = id => document.getElementById(id);
+  const descriptionEditor = () => get('agentDescription')?.closest('[data-markdown-editor]')?.markdownEditor;
+  const refreshDescriptionEditor = () => {
+    // CodeMirror is initialized while the modal is hidden; measure it only after opening.
+    requestAnimationFrame(() => descriptionEditor()?.codemirror.refresh());
+  };
+  const setDescription = value => {
+    const input = get('agentDescription');
+    input.value = value;
+    descriptionEditor()?.value(value);
+  };
   const dialogTitle = get('createAgentTitle');
   const dialogDescription = get('createAgentDescription');
   const saveButton = get('submitAgentForm');
@@ -62,6 +72,7 @@
 
   const resetForm = () => {
     form.reset();
+    setDescription('');
     fields().forEach(clearFieldError);
     iconInput.value = '';
     showIcon(null);
@@ -108,6 +119,7 @@
     setDialogMode(false);
     resetForm();
     dialog.showModal();
+    refreshDescriptionEditor();
   });
 
   editOpen?.addEventListener('click', async () => {
@@ -120,12 +132,13 @@
       setDialogMode(true);
       resetForm();
       get('agentName').value = editingAgent.name;
-      get('agentDescription').value = editingAgent.description;
+      setDescription(editingAgent.description || '');
       get('agentCategoryInput').value = categoryValue(editingAgent);
       get('agentTags').value = (editingAgent.tags || []).join(', ');
       const storedIcon = editingAgent.icon ?? editingAgent.Icon ?? '';
       showIcon(storedIconUrl(storedIcon));
       dialog.showModal();
+      refreshDescriptionEditor();
     } catch (error) {
       window.AgentForgeToast?.show({ type: 'error', title: 'Unable to edit agent', message: error.message });
     } finally {
@@ -151,10 +164,11 @@
     const descriptionField = get('agentDescription');
     const tagsField = get('agentTags');
     const name = nameField.value.trim();
-    const description = descriptionField.value.trim();
+    const description = (descriptionEditor()?.value() ?? descriptionField.value).trim();
     const tags = tagsField.value.split(',').map(tag => tag.trim()).filter(Boolean);
     const category = Number(displayCategory.value);
     const errors = [];
+    descriptionField.value = description;
     const requiredFields = [
       [nameField, 'Agent name is required.'],
       [displayCategory, 'Category is required.'],

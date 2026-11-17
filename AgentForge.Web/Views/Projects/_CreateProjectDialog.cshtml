@@ -1,0 +1,23 @@
+<ui-modal id="createProjectDialog" title="Create New Project" description="Create the project identity." title-id="createProjectTitle" description-id="createProjectDescription" css-class="tool-config-dialog" width="640" primary-text="Save" primary-button-id="submitProjectForm" cancel-text="Cancel" cancel-button-id="cancelProjectDialog" close-button-id="closeProjectDialog">
+    @Html.AntiForgeryToken()
+    <form id="projectCreateForm" novalidate>
+        <section class="grid gap-2.5 [&_.ui-input]:w-full [&_.ui-input]:min-w-0" aria-label="Project information">
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="projectName">Project Name <span class="ui-required-mark" aria-hidden="true">*</span></label>
+            <input class="ui-input" id="projectName" name="name" placeholder="e.g. AgentForge Workspace" maxlength="200" required aria-required="true" />
+            <label class="mt-2 block text-[13px] font-semibold text-heading" for="projectDescription">Description</label>
+            <textarea class="ui-input min-h-24" id="projectDescription" data-markdown-input name="description" placeholder="What is this project about?" maxlength="2000"></textarea>
+            <button type="button" class="ui-button ui-button--secondary" data-markdown-preview-button="projectDescription" aria-pressed="false">Preview Markdown</button>
+            <label class="ui-field-label" for="projectIconUpload">Project icon (optional)</label>
+            <div class="ui-file">
+                <label class="ui-file-avatar" for="projectIconUpload">
+                    <span id="projectIconFallback" class="ui-file-fallback" aria-hidden="true"><partial name="~/Views/Projects/_ProjectIcon.cshtml" /></span>
+                    <img id="projectIconPreview" class="ui-file-preview" alt="" width="96" height="96" hidden />
+                    <span class="ui-file-change" aria-hidden="true">✎</span>
+                    <input id="projectIconUpload" class="ui-file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+                </label>
+                <p class="ui-file-hint">PNG, JPG, WebP or GIF, up to 2 MB.</p>
+            </div>
+        </section>
+    </form>
+    <p id="projectFormFeedback" class="mt-4 min-h-5 text-[13px] ui-field-error" role="status" aria-live="polite"></p>
+</ui-modal>

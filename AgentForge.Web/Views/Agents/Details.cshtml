@@ -14,14 +14,12 @@
         </div>
     </section>
     <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Agent details sections">
-        <button type="button" id="agentOverviewTab" role="tab" aria-controls="agentOverviewPanel" aria-selected="true" tabindex="0" class="border-b-2 border-accent px-5 py-3 text-sm font-semibold text-heading">Overview</button>
-        <button type="button" id="agentInstructionsTab" role="tab" aria-controls="agentInstructionsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Instructions</button>
-        <button type="button" id="agentToolsTab" role="tab" aria-controls="agentToolsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Tools</button>
-        <button type="button" id="agentSkillsTab" role="tab" aria-controls="agentSkillsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Skills</button>
-        <button type="button" id="agentKnowledgeTab" role="tab" aria-controls="agentKnowledgePanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Knowledge</button>
-        <button type="button" id="agentPlaygroundTab" role="tab" aria-controls="agentPlaygroundPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Playground</button>
-        <button type="button" id="agentRunsTab" role="tab" aria-controls="agentRunsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Runs</button>
-        <button type="button" id="agentSettingsTab" role="tab" aria-controls="agentSettingsPanel" aria-selected="false" tabindex="-1" class="border-b-2 border-transparent px-5 py-3 text-sm font-semibold text-muted">Settings</button>
+        <partial name="_Button" model='new UiButtonModel { Text = "Overview", Variant = UiButtonVariant.Ghost, Id = "agentOverviewTab", Role = "tab", AriaControls = "agentOverviewPanel", AriaSelected = "true", CssClass = "border-b-2 border-accent px-5 py-3 text-heading" }' />
+        <partial name="_Button" model='new UiButtonModel { Text = "Instructions", Variant = UiButtonVariant.Ghost, Id = "agentInstructionsTab", Role = "tab", AriaControls = "agentInstructionsPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
+        <partial name="_Button" model='new UiButtonModel { Text = "Tools", Variant = UiButtonVariant.Ghost, Id = "agentToolsTab", Role = "tab", AriaControls = "agentToolsPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
+        <partial name="_Button" model='new UiButtonModel { Text = "Skills", Variant = UiButtonVariant.Ghost, Id = "agentSkillsTab", Role = "tab", AriaControls = "agentSkillsPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
+        <partial name="_Button" model='new UiButtonModel { Text = "Knowledge", Variant = UiButtonVariant.Ghost, Id = "agentKnowledgeTab", Role = "tab", AriaControls = "agentKnowledgePanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
+        <partial name="_Button" model='new UiButtonModel { Text = "Playground", Variant = UiButtonVariant.Ghost, Id = "agentPlaygroundTab", Role = "tab", AriaControls = "agentPlaygroundPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
     </div>
     <div id="agentOverviewPanel" role="tabpanel" aria-labelledby="agentOverviewTab">
         <partial name="~/Views/Agents/_OverviewTab.cshtml" model="Model" />
@@ -33,8 +31,6 @@
     <div id="agentSkillsPanel" role="tabpanel" aria-labelledby="agentSkillsTab" hidden><partial name="~/Views/Agents/_SkillsTab.cshtml" model="Model" /></div>
     <div id="agentKnowledgePanel" role="tabpanel" aria-labelledby="agentKnowledgeTab" hidden><partial name="~/Views/Agents/_KnowledgeTab.cshtml" model="Model" /></div>
     <div id="agentPlaygroundPanel" role="tabpanel" aria-labelledby="agentPlaygroundTab" hidden><partial name="~/Views/Agents/_PlaygroundTab.cshtml" model="Model" /></div>
-    <div id="agentRunsPanel" role="tabpanel" aria-labelledby="agentRunsTab" hidden><partial name="~/Views/Agents/_RunsTab.cshtml" model="Model" /></div>
-    <div id="agentSettingsPanel" role="tabpanel" aria-labelledby="agentSettingsTab" hidden><partial name="~/Views/Agents/_SettingsTab.cshtml" model="Model" /></div>
 </div>
 <partial name="~/Views/Agents/_CreateAgentDialog.cshtml" />
 <ui-delete id="deleteAgentDialog" title="Delete agent?" description="The agent will be removed from the active list" item-name="@Model.Name" confirm-button-id="confirmDeleteAgent" confirm-text="Delete agent" />
@@ -44,8 +40,8 @@
 <script src="~/js/agents/agent-playground.js" asp-append-version="true"></script>
 <script>
 (() => {
-    const tabs = [document.getElementById('agentOverviewTab'), document.getElementById('agentInstructionsTab'), document.getElementById('agentToolsTab'), document.getElementById('agentSkillsTab'), document.getElementById('agentKnowledgeTab'), document.getElementById('agentPlaygroundTab'), document.getElementById('agentRunsTab'), document.getElementById('agentSettingsTab')];
-    const panels = [document.getElementById('agentOverviewPanel'), document.getElementById('agentInstructionsPanel'), document.getElementById('agentToolsPanel'), document.getElementById('agentSkillsPanel'), document.getElementById('agentKnowledgePanel'), document.getElementById('agentPlaygroundPanel'), document.getElementById('agentRunsPanel'), document.getElementById('agentSettingsPanel')];
+    const tabs = [document.getElementById('agentOverviewTab'), document.getElementById('agentInstructionsTab'), document.getElementById('agentToolsTab'), document.getElementById('agentSkillsTab'), document.getElementById('agentKnowledgeTab'), document.getElementById('agentPlaygroundTab')];
+    const panels = [document.getElementById('agentOverviewPanel'), document.getElementById('agentInstructionsPanel'), document.getElementById('agentToolsPanel'), document.getElementById('agentSkillsPanel'), document.getElementById('agentKnowledgePanel'), document.getElementById('agentPlaygroundPanel')];
     tabs.forEach((tab, index) => {
         tab.addEventListener('click', () => {
             tabs.forEach((item, i) => {
@@ -61,7 +57,8 @@
             if (index === 1) {
                 requestAnimationFrame(() => {
                     const markdownEditor = panels[1].querySelector('[data-markdown-editor]')?.markdownEditor;
-                    markdownEditor?.codemirror?.refresh();
+                    if (!markdownEditor) return;
+                    markdownEditor.codemirror.refresh();
                 });
             }
         });

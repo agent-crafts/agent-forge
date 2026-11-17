@@ -18,8 +18,13 @@
             <p id="agentCategoryInputError" class="ui-field-error hidden" role="alert"></p>
             <p id="agentCategoryHelp" class="text-[13px] text-muted">Choose the primary category.</p>
 
-            <label class="mt-2 block text-[13px] font-semibold text-heading" for="agentDescription">Description <span class="ui-required-mark" aria-hidden="true">*</span></label>
-            <textarea class="ui-input min-h-24" id="agentDescription" name="description" placeholder="What does this agent do?" maxlength="300" required aria-required="true" aria-describedby="agentDescriptionError"></textarea>
+            <div class="mt-2 flex items-center justify-between gap-3">
+                <label class="block text-[13px] font-semibold text-heading" for="agentDescription">Description <span class="ui-required-mark" aria-hidden="true">*</span></label>
+                <button type="button" class="ui-markdown-toolbar-button text-xs" data-markdown-preview-button="agentDescription" aria-label="Preview description">Preview</button>
+            </div>
+            <div class="agent-markdown-component" data-markdown-editor data-markdown-description>
+                <textarea class="ui-input w-full" id="agentDescription" name="description" placeholder="What does this agent do?" maxlength="300" required aria-required="true" aria-describedby="agentDescriptionError"></textarea>
+            </div>
             <p id="agentDescriptionError" class="ui-field-error hidden" role="alert"></p>
             <p class="text-[13px] text-muted">Briefly describe what this agent does and when to use it.</p>
 

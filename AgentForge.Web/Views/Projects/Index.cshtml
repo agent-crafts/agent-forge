@@ -1,0 +1,52 @@
+@model IReadOnlyList<AgentForge.Web.Controllers.ProjectsController.ProjectCard>
+@{
+    Layout = "_AppLayout";
+    var pageNumber = (int)(ViewData["PageNumber"] ?? 1);
+    var totalPages = (int)(ViewData["TotalPages"] ?? 0);
+}
+<div class="ui-toolbar mb-6 flex flex-wrap items-center gap-3">
+    <label class="ui-visually-hidden" for="projectSearch">Search projects</label>
+    <div class="min-w-0 flex-1"><ui-input id="projectSearch" type="search" auto-complete="off" placeholder="Search projects..." /></div>
+    <ui-button id="openProjectDialog" variant="secondary" text="+ Add Project" aria-label="Add Project" aria-has-popup="dialog" aria-controls="createProjectDialog" />
+</div>
+<div class="ui-grid grid grid-cols-1 gap-3 lg:grid-cols-2" id="projectsGrid">
+    @foreach (var project in Model)
+    {
+        <a class="project-card ui-item-card group flex min-w-0 items-start cursor-default gap-3 rounded-xl border border-line bg-surface px-3 py-3 text-content no-underline transition-all duration-150 hover:-translate-y-0.5 hover:border-line-strong hover:bg-hover hover:shadow-sm"
+           href="/projects/@Uri.EscapeDataString(project.Id)" aria-label="View details for @project.Name"
+           data-search="@($"{project.Name} {project.Description}".ToLowerInvariant())">
+            <span class="ui-icon-tile self-start" aria-hidden="true">
+                @if (project.Icon.StartsWith("/api/files/", StringComparison.Ordinal))
+                {
+                    <img src="@project.Icon" alt="" width="40" height="40" class="h-10 w-10 rounded-lg object-cover" />
+                }
+                else
+                {
+                    <partial name="~/Views/Projects/_ProjectIcon.cshtml" />
+                }
+            </span>
+            <span class="ui-item-content flex min-w-0 flex-1 flex-col gap-0.5">
+                <span class="ui-item-title break-words text-sm font-semibold text-heading">@project.Name</span>
+                <span class="ui-item-description block min-w-0 max-w-full truncate text-xs leading-5 text-muted" title="@project.Description">@(project.Description ?? "No description")</span>
+                @* Temporary placeholder until Project-Agent assignments are implemented. *@
+                <span class="ui-tool-card-badges" aria-label="Project agents (placeholder)">
+                    <span class="ui-tool-card-badge"><span class="ui-tool-card-badge-label">Agents</span> 3</span>
+                </span>
+            </span>
+        </a>
+    }
+</div>
+@if (totalPages > 1)
+{
+    <nav class="mt-5 flex items-center justify-between gap-3" aria-label="Projects pages">
+        <span class="text-sm text-muted">Page @pageNumber of @totalPages</span>
+        <div class="flex gap-2">
+            @if (pageNumber > 1) { <a class="ui-button" href="/projects?pageNumber=@(pageNumber - 1)">Previous</a> }
+            @if (pageNumber < totalPages) { <a class="ui-button" href="/projects?pageNumber=@(pageNumber + 1)">Next</a> }
+        </div>
+    </nav>
+}
+<p id="projectEmpty" class="mt-5 rounded-xl border border-dashed border-line p-6 text-sm text-muted" hidden>@(Model.Count == 0 ? "No projects yet. Create your first project." : "No projects found on this page.")</p>
+<partial name="~/Views/Projects/_CreateProjectDialog.cshtml" />
+<script src="~/js/projects/project-create.js" asp-append-version="true"></script>
+<script src="~/js/projects/projects-gallery.js" asp-append-version="true"></script>

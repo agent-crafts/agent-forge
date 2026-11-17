@@ -40,10 +40,15 @@
 .ui-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
 .ui-stack{display:flex;flex-direction:column;gap:16px;min-width:0}
 .ui-panel{min-width:0;padding:20px;border:1px solid var(--line);border-radius:15px;background:var(--surface)}
-.ui-panel h2{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-size:17px;font-weight:700;color:var(--heading)}
+.ui-panel h2{display:flex;align-items:center;gap:10px;margin:0px;font-size:17px;font-weight:700;color:var(--heading)}
 .ui-panel>p,.ui-panel-heading p{margin:0 0 15px;font-size:13px;line-height:1.75;color:var(--muted)}
 .ui-panel .ui-subtitle{margin:-4px 0 14px;font-size:12px;line-height:1.55;color:var(--muted)}
 .ui-panel-icon{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:9px;background:var(--surface-raised);color:var(--accent);font-size:15px;font-weight:700}
+.ui-panel-title-block{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ui-panel-title-copy{min-width:0;flex:1}
+
+.ui-panel .ui-panel-title-copy .ui-subtitle{margin:0;font-size:11px;line-height:1.55;color:var(--muted)}
+.ui-markdown-content p{margin:0px}
 .ui-note{margin-top:20px;padding:17px 18px;border:1px solid var(--line);border-radius:10px;background:var(--surface-raised)}
 .ui-note strong{display:block;margin-bottom:7px;color:var(--heading);font-size:13px}
 .ui-note p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
@@ -54,9 +59,8 @@
 .ui-table td:first-child{color:var(--heading);font-weight:650}
 .ui-table code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}
 .ui-required{display:inline-block;padding:3px 7px;border-radius:6px;background:rgba(220,65,65,.11);color:#d74a4a;font-weight:650}
-.ui-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.ui-panel-heading h2{margin-bottom:3px}
-.ui-panel-heading p{margin-bottom:14px}
+.ui-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.ui-panel-heading .ui-panel-title-block{margin-bottom:0}
 .ui-copy{flex:none;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-raised);color:var(--content);font:inherit;font-size:12px;cursor:pointer}
 .ui-copy:hover{border-color:var(--accent)}
 .ui-code{margin:0;padding:18px;border:1px solid #263247;border-radius:10px;background:#151d2b;color:#d5e4fa;font:12px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;overflow:auto;white-space:pre;max-height:420px}
@@ -97,11 +101,13 @@
 .ui-detail [aria-label="Tool details sections"]{display:flex;gap:12px;margin-top:24px;border-bottom:1px solid var(--line)}
 .ui-detail [aria-label="Tool details sections"] button{padding:12px 20px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font-size:14px;font-weight:650;cursor:pointer}
 .ui-detail [aria-label="Tool details sections"] button[aria-selected=true]{border-bottom-color:var(--accent);color:var(--heading)}
-#toolTryPanel{margin-top:24px}
+
+#toolConfigurationPanel{margin-top:16px}
+
 #toolTryPanel>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:16px}
 #toolTryPanel>div>section{min-width:0;padding:24px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
 #toolTryPanel h2{margin:0;color:var(--heading);font-size:19px;font-weight:700}
-#toolTryPanel h2+p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
 #githubToolTryForm{display:grid;gap:20px;margin-top:24px}
 #githubToolTryForm>div{display:grid;gap:8px}
 #githubToolTryForm label{font-size:13px;font-weight:600;color:var(--heading)}
@@ -196,9 +202,10 @@
 #toolParameterRows .ui-modal-parameter{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 #toolParameterRows .param-name{flex:2 1 180px;min-width:0}
 #toolParameterRows .param-type{flex:1 1 130px;min-width:0}
-#toolParameterRows .param-remove{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:10px;background:transparent;box-shadow:none;color:#dc2626}
-#toolParameterRows .param-remove svg{display:block;width:22px;height:22px;flex:none}
-#toolParameterRows .param-remove:hover,#toolParameterRows .param-remove:focus-visible{background:rgba(220,38,38,.12);box-shadow:none;color:#b91c1c}
+#toolParameterRows .param-required:not(:disabled),#toolParameterRows .param-required:not(:disabled)+span,#toolParameterRows label:has(.param-required:not(:disabled)){cursor:pointer}
+#toolParameterRows .param-remove, #toolConfigurationRows .param-remove{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:10px;background:transparent;box-shadow:none;color:#dc2626;cursor:pointer}
+#toolParameterRows .param-remove svg,#toolConfigurationRows .param-remove svg{display:block;width:22px;height:22px;flex:none}
+#toolParameterRows .param-remove:hover,#toolParameterRows .param-remove:focus-visible,#toolConfigurationRows .param-remove:hover,#toolConfigurationRows .param-remove:focus-visible{background:rgba(220,38,38,.12);box-shadow:none;color:#b91c1c}
 
 .ui-file{display:flex;flex-direction:column;align-items:flex-start;gap:10px;width:fit-content;max-width:100%}
 .ui-file-avatar{position:relative;display:grid;width:96px;height:96px;margin:0;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--surface-raised);color:var(--heading);cursor:pointer}
@@ -221,16 +228,16 @@
 
 
 /* Tool Details: minimal underline tabs, independent of generated Tailwind. */
-.ui-detail [aria-label="Tool details sections"]{display:flex;align-items:stretch;gap:20px;margin-top:24px;padding:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;max-width:100%;flex-wrap:wrap}
-.ui-detail [aria-label="Tool details sections"] .ui-button[role="tab"]{min-height:44px;padding:12px 4px 11px;border:0;border-bottom:3px solid transparent;border-radius:0;background:transparent;color:var(--muted);font-size:14px;font-weight:600;line-height:1.3;box-shadow:none;transition:color .15s,border-color .15s}
-.ui-detail [aria-label="Tool details sections"] .ui-button[role="tab"]:hover:not([aria-selected="true"]){background:transparent;color:var(--heading)}
-.ui-detail [aria-label="Tool details sections"] .ui-button[role="tab"][aria-selected="true"]{border:0;border-bottom:3px solid var(--accent);background:transparent;color:var(--heading);box-shadow:none}
+.ui-detail [role="tablist"][aria-label$="details sections"]{display:flex;align-items:stretch;gap:20px;margin-top:14px;padding:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;max-width:100%;flex-wrap:wrap}
+.ui-detail [role="tablist"][aria-label$="details sections"] .ui-button[role="tab"]{min-height:44px;padding:12px 4px 11px;border:0;border-bottom:3px solid transparent;border-radius:0;background:transparent;color:var(--muted);font-size:14px;font-weight:600;line-height:1.3;box-shadow:none;transition:color .15s,border-color .15s}
+.ui-detail [role="tablist"][aria-label$="details sections"] .ui-button[role="tab"]:hover:not([aria-selected="true"]){background:transparent;color:var(--heading)}
+.ui-detail [role="tablist"][aria-label$="details sections"] .ui-button[role="tab"][aria-selected="true"]{border:0;border-bottom:3px solid var(--accent);background:transparent;color:var(--heading);box-shadow:none}
 #toolTryPanel [aria-label="Response format"]{display:flex;align-items:stretch;gap:18px;padding:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;flex-wrap:wrap}
 #toolTryPanel [aria-label="Response format"] .ui-button[role="tab"]{padding:9px 2px 10px;border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;color:var(--muted);font-size:13px;font-weight:600;box-shadow:none;transition:color .15s,border-color .15s}
 #toolTryPanel [aria-label="Response format"] .ui-button[role="tab"]:hover:not([aria-selected="true"]){background:transparent;color:var(--heading)}
 #toolTryPanel [aria-label="Response format"] .ui-button[role="tab"][aria-selected="true"]{border:0;border-bottom:2px solid var(--accent);background:transparent;color:var(--heading);box-shadow:none}
 .ui-detail [role="tab"]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-@media(max-width:480px){.ui-detail [aria-label="Tool details sections"]{gap:16px}.ui-detail [aria-label="Tool details sections"] .ui-button[role="tab"]{flex:initial;padding:12px 2px 11px}}
+@media(max-width:480px){.ui-detail [aria-label="Tool details sections"]{gap:16px}.ui-detail [role="tablist"][aria-label$="details sections"] .ui-button[role="tab"]{flex:initial;padding:12px 2px 11px}}
 
 /* Inline form validation */
 .ui-required-mark{color:#dc2626;font-weight:700}
@@ -319,10 +326,10 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .ui-detail .ui-tool-actions #deleteToolButton svg{stroke:currentColor}
 
 /* Agent detail tabs follow the Tool detail navigation pattern. */
-.ui-detail [aria-label="Agent details sections"]{display:flex;align-items:stretch;gap:20px;margin-top:24px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.ui-detail [aria-label="Agent details sections"] button[role="tab"]{min-height:44px;padding:12px 4px 11px;border:0;border-bottom:3px solid transparent;border-radius:0;background:transparent;color:var(--muted);font-size:14px;font-weight:600;cursor:pointer}
-.ui-detail [aria-label="Agent details sections"] button[role="tab"][aria-selected="true"]{border-bottom-color:var(--accent);color:var(--heading)}
-.ui-detail [aria-label="Agent details sections"] button[role="tab"]:hover{color:var(--heading)}
+
+
+
+
 
 .agent-overview-layout{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(260px,1fr);gap:16px;margin-top:16px;align-items:start}
 .agent-feature-list{padding-left:22px;margin:0;display:grid;gap:8px;font-size:13px;color:var(--content)}
@@ -360,11 +367,11 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 @media(max-width:540px){.agent-instructions-heading{flex-wrap:wrap}.agent-prompt-preview{padding:16px;font-size:12px}}
 
 /* Refined Instructions tab: clear hierarchy and comfortable prompt reading. */
-#agentInstructionsPanel .agent-instructions{padding:24px;border-radius:16px}
-#agentInstructionsPanel .agent-instructions-heading{align-items:center;padding-bottom:22px}
-#agentInstructionsPanel .agent-instructions-heading h2{display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:20px;line-height:1.35}
-#agentInstructionsPanel .agent-instructions-heading .ui-panel-icon{flex:none}
-#agentInstructionsPanel .agent-instructions-heading .ui-subtitle{margin:0;font-size:13px;line-height:1.6}
+
+
+
+
+
 #agentInstructionsPanel .agent-instructions-badge{gap:7px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;white-space:nowrap}
 #agentInstructionsPanel .agent-instructions-badge::before{content:"";width:8px;height:8px;border:2px solid currentColor;border-radius:50%;opacity:.75}
 #agentInstructionsPanel .agent-instructions-body{padding-top:0}
@@ -383,17 +390,17 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 @media(max-width:640px){#agentInstructionsPanel .agent-instructions{padding:16px}#agentInstructionsPanel .agent-instructions-heading{align-items:flex-start;gap:10px}#agentInstructionsPanel .agent-prompt-preview{padding:16px;font-size:12px;max-height:540px}}
 
 /* Match the Instructions card heading to the Overview card headings. */
-#agentInstructionsPanel .agent-instructions{padding:var(--panel-padding,20px)}
-#agentInstructionsPanel .agent-instructions>h2{margin:0 0 12px}
+
+
 
 /* Agent tools catalog (sample UI only). */
 .agent-tools{margin-top:16px}
-.agent-tools-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-.agent-tools-heading h2{margin:0}
+.agent-tools-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+
 .agent-tools-controls{display:flex;gap:10px;flex-wrap:wrap}
 .agent-tools-search input,.agent-tools-controls select{height:38px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--content);font-size:13px}
 .agent-tools-search input{min-width:200px}
-.agent-tools>.ui-subtitle{margin:12px 0 16px}
+
 .agent-tools-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
 .agent-tools-filters button{padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-raised);color:var(--muted);font-size:12px;cursor:pointer}
 .agent-tools-filters button.is-active{background:var(--active);color:var(--accent);border-color:var(--accent)}
@@ -418,9 +425,9 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 
 /* Agent-owned Skills workspace: preview UI, aligned with the Tools gallery. */
 .agent-skills{margin-top:16px}
-.agent-skills-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
-.agent-skills-heading h2{margin:0 0 12px}
-.agent-skills-heading .ui-subtitle{margin:0}
+.agent-skills-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+
+
 .agent-skills-primary{background:var(--accent);color:white;border:1px solid var(--accent);padding:9px 15px;border-radius:9px;cursor:pointer}
 .agent-skills-controls{display:flex;gap:12px;margin:20px 0 16px}
 .agent-skills-controls input,.agent-skills-controls select,.agent-skills-dialog input,.agent-skills-dialog textarea{padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--content);font:inherit}
@@ -461,7 +468,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 
 /* Planned agent detail tabs. */
 .agent-coming-soon{margin-top:16px}
-.agent-coming-soon>h2{margin:0 0 16px}
+
 .agent-coming-soon-content{padding:42px 18px;text-align:center;border:1px dashed var(--line);border-radius:12px}
 .agent-coming-soon-label{display:inline-block;padding:7px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;font-weight:600}
 .agent-coming-soon-content>p{margin:14px 0 0;color:var(--content);font-size:14px}
@@ -535,6 +542,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .ui-field{display:flex;flex-direction:column;gap:7px;min-width:0}
 .ui-field-label{font-size:13px;font-weight:650;color:var(--heading)}
 .ui-field-hint{font-size:11px;color:var(--muted)}
+.toolTryForm .ui-field #toolArgumentsHint,#toolTryForm .ui-field #toolArgumentsHint{margin-top:0px}
 .ui-field-error{font-size:12px;color:#dc2626}
 .ui-textarea{box-sizing:border-box;width:100%;min-height:90px;padding:12px 14px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--content);font:inherit;font-size:13px;resize:vertical}
 .ui-field :is(.ui-input,.ui-select,.ui-textarea)[aria-invalid="true"]{border-color:#dc2626}
@@ -630,3 +638,40 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 }
 
 .ui-delete-dialog .ui-dialog-header { align-items: center; min-height: 64px; }
+
+/* Agent profile: share the Tool panel header system across tabs. */
+.agent-tools-heading .ui-panel-title-block,.agent-skills-heading .ui-panel-title-block,.agent-playground>.flex:first-child .ui-panel-title-block{margin-bottom:0}
+.agent-tools-heading .ui-panel-title-copy,.agent-skills-heading .ui-panel-title-copy{min-width:0}
+.agent-playground [data-playground-layout]{height:min(75vh,800px);min-height:420px}
+@media(max-width:900px){.agent-playground [data-playground-layout]{height:auto;min-height:0}.agent-playground [data-playground-layout]>div,.agent-playground [data-playground-layout]>aside{min-height:360px}}
+
+/* Shared Markdown editor inside the agent create/edit modal. */
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar{background:var(--surface-raised);color:var(--heading);border-color:var(--line);opacity:1}
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar button,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar a{color:var(--heading)!important;opacity:1}
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar button:hover,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar button.active,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar a:hover,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-toolbar a.active{background:var(--hover);color:var(--heading)!important;border-color:var(--line-strong)}
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .CodeMirror,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-preview,
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-preview-side{background:var(--surface);color:var(--content)}
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .CodeMirror-cursor{border-left-color:var(--heading)}
+:is(#createAgentDialog, #addToolDialog) .agent-markdown-component .editor-statusbar{color:var(--muted)}
+
+/* Keep the Markdown preview heading visible while long descriptions scroll. */
+.ui-markdown-preview-dialog[open]{
+  display:flex;
+  flex-direction:column;
+  max-height:min(85dvh,800px);
+  overflow:hidden;
+}
+.ui-markdown-preview-dialog .ui-markdown-preview-header{
+  flex:0 0 auto;
+}
+.ui-markdown-preview-dialog .ui-markdown-preview-body{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}

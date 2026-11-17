@@ -10,10 +10,42 @@
     <link rel="stylesheet" href="~/css/toast.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/ui-components.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/app.css" asp-append-version="true">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.css">
+    <style>
+      .ui-markdown-content { overflow-wrap: anywhere; line-height: 1.65; }
+      .ui-markdown-content p + p, .ui-markdown-content ul + p, .ui-markdown-content ol + p { margin-top: .75rem; }
+      .ui-markdown-content h1, .ui-markdown-content h2, .ui-markdown-content h3 { font-weight: 700; margin: .9rem 0 .35rem; }
+      .ui-markdown-content h1 { font-size: 1.5rem; }
+      .ui-markdown-content h2 { font-size: 1.25rem; }
+      .ui-markdown-content h3 { font-size: 1.1rem; }
+      .ui-markdown-content strong { font-weight: 700; }
+      .ui-markdown-content em { font-style: italic; }
+      .ui-markdown-content ul { list-style: disc; padding-left: 1.5rem; }
+      .ui-markdown-content ol { list-style: decimal; padding-left: 1.5rem; }
+      .ui-markdown-content a { text-decoration: underline; color: var(--accent, currentColor); }
+      .ui-markdown-content pre { overflow-x: auto; padding: .75rem; border-radius: .5rem; background: var(--surface-raised, #f3f4f6); }
+      .ui-markdown-content code { font-family: monospace; }
+      .ui-markdown-content blockquote { border-left: 3px solid var(--line, #94a3b8); padding-left: .75rem; }
+      .ui-markdown-content img { max-width: 100%; height: auto; }
+      .ui-markdown-toolbar { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .35rem; }
+      .ui-markdown-toolbar-button { border: 1px solid var(--line, #cbd5e1); border-radius: .4rem; padding: .3rem .55rem; font-size: .8rem; background: var(--surface-raised, #f8fafc); color: var(--content, inherit); cursor: pointer; }
+      .ui-markdown-toolbar-button:hover { background: var(--hover, #e2e8f0); }
+      .ui-markdown-toolbar-button:focus-visible { outline: 2px solid var(--accent, currentColor); outline-offset: 2px; }
+      .ui-markdown-preview-dialog { width: min(760px, calc(100vw - 2rem)); max-height: min(80vh, 850px); overflow: auto; padding: 1rem 1.25rem; border: 1px solid var(--line, #cbd5e1); border-radius: .85rem; background: var(--surface, #fff); color: var(--content, #172033); box-shadow: 0 20px 65px #0005; }
+      .ui-markdown-preview-dialog::backdrop { background: #0008; }
+      .ui-markdown-preview-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: 0 0 .5rem; margin: 0; border-bottom: 1px solid var(--line, #cbd5e1); }
+      .ui-markdown-preview-header h2 { margin: 0; padding: 0; line-height: 1.4; font-size: 1.15rem; font-weight: 700; }
+      .ui-markdown-preview-body { padding-top: .75rem; min-height: 6rem; }
+    </style>
 </head>
 <body>
     @RenderBody()
     <partial name="_Toast" />
+    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/easymde@2.20.0/dist/easymde.min.js"></script>
+    <script src="~/js/shared/markdown-editor.js" asp-append-version="true"></script>
+    <script src="~/js/shared/markdown-descriptions.js" asp-append-version="true"></script>
     <script src="~/js/shared/toast.js" asp-append-version="true"></script>
     <script src="~/js/shared/conversation-messages.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

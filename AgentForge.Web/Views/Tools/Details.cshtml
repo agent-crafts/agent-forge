@@ -59,26 +59,25 @@
         </div>
         <div class="ui-profile-main flex flex-col items-start gap-4">
             <div class="ui-profile-title"><h1>@Model.DisplayName</h1></div>
-            <div class="ui-tags"><span>@Model.Category</span></div>
+            <div class="ui-tags"><span>@Model.Name</span><span>@Model.Category</span></div>
         </div>
 
     </section>
     <div class="mt-6 flex gap-2 border-b border-line" role="tablist" aria-label="Tool details sections">
         <partial name="_Button" model='new UiButtonModel { Text = "Overview", Variant = UiButtonVariant.Ghost, Id = "toolOverviewTab", Role = "tab", AriaControls = "toolOverviewPanel", AriaSelected = "true", CssClass = "border-b-2 border-accent px-5 py-3 text-heading" }' />
+        <partial name="_Button" model='new UiButtonModel { Text = "Configuration", Variant = UiButtonVariant.Ghost, Id = "toolConfigurationTab", Role = "tab", AriaControls = "toolConfigurationPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
         <partial name="_Button" model='new UiButtonModel { Text = "Try Now", Variant = UiButtonVariant.Ghost, Id = "toolTryTab", Role = "tab", AriaControls = "toolTryPanel", AriaSelected = "false", TabIndex = -1, CssClass = "border-b-2 border-transparent px-5 py-3 text-muted" }' />
     </div>
     <div id="toolOverviewPanel" role="tabpanel" aria-labelledby="toolOverviewTab">
     <div class="ui-columns">
         <div class="ui-stack">
             <section class="ui-panel" id="tool-overview">
-                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M8 3h7l6 6h-6V3"/><path d="M8 13h8M8 17h8"/></svg></span> Overview</h2>
-                <p class="ui-subtitle">What this tool does and when to use it.</p>
-                <p>@Model.Description</p>
+                <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"/><path d="M12 11v5M12 8h.01"/></svg></span><div class="ui-panel-title-copy"><h2>Overview</h2><p class="ui-subtitle">What this tool does and when to use it.</p></div></div>
+                <div class="ui-markdown-content" data-markdown-render>@Model.Description</div>
                 <div class="ui-note"><strong>When to use this tool</strong><p>Use this tool when its registered capability matches your task. Review the input contract before integrating it into an agent workflow.</p></div>
             </section>
             <section class="ui-panel" id="tool-parameters">
-                <h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="var(--surface-raised)"/><circle cx="15" cy="17" r="2" fill="var(--surface-raised)"/></svg></span> Parameters</h2>
-                <p class="ui-subtitle">Required inputs and types from the registered schema.</p>
+                <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="var(--surface-raised)"/><circle cx="15" cy="17" r="2" fill="var(--surface-raised)"/></svg></span><div class="ui-panel-title-copy"><h2>Parameters</h2><p class="ui-subtitle">Required inputs and types from the registered schema.</p></div></div>
                 @if (hasProperties)
                 {
                     <div class="ui-table-scroll"><table class="ui-table">
@@ -99,135 +98,60 @@
         </div>
         <div class="ui-stack">
             <section class="ui-panel" id="tool-schema">
-                <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8v1c0 2-1 3-3 3 2 0 3 1 3 3v1c0 2 0 4 3 4M16 4c3 0 3 2 3 4v1c0 2 1 3 3 3-2 0-3 1-3 3v1c0 2 0 4-3 4"/></svg></span> JSON Schema</h2><p>The registered input contract for this tool.</p></div><partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, CssClass = "ui-copy", CopyTarget = "tool-schema-code" }' /></div>
+                <div class="ui-panel-heading"><div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8v1c0 2-1 3-3 3 2 0 3 1 3 3v1c0 2 0 4 3 4M16 4c3 0 3 2 3 4v1c0 2 1 3 3 3-2 0-3 1-3 3v1c0 2 0 4-3 4"/></svg></span><div class="ui-panel-title-copy"><h2>JSON Schema</h2><p class="ui-subtitle">The registered input contract for this tool.</p></div></div><partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, CssClass = "ui-copy", CopyTarget = "tool-schema-code" }' /></div>
                 <partial name="_JsonViewer" model='("tool-schema-code", (string?)formattedSchema)' />
             </section>
             <section class="ui-panel" id="tool-example">
-                <div class="ui-panel-heading"><div><h2><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="m7 9 3 3-3 3M12 15h5"/></svg></span> Example Input</h2><p>Illustrative values based on the schema; not executed.</p></div><partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, CssClass = "ui-copy", CopyTarget = "tool-example-code" }' /></div>
+                <div class="ui-panel-heading"><div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="m7 9 3 3-3 3M12 15h5"/></svg></span><div class="ui-panel-title-copy"><h2>Example Input</h2><p class="ui-subtitle">Illustrative values based on the schema; not executed.</p></div></div><partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, CssClass = "ui-copy", CopyTarget = "tool-example-code" }' /></div>
                 <partial name="_JsonViewer" model='("tool-example-code", (string?)exampleJson)' />
             </section>
             <p class="ui-footnote">Open Try Now to see whether this tool can run from the catalog.</p>
         </div>
     </div>
     </div>
-    <section id="toolTryPanel" role="tabpanel" aria-labelledby="toolTryTab" hidden class="mt-6">
-        @if (Model.ExecutorKey == "get_github_issue" || Model.Name == "get_github_issue")
-        {
-            <div class="tool-try-layout grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.35fr)]">
-                <section class="min-w-0 rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
-                    <h2 class="text-lg font-bold text-heading">Try this tool</h2>
-                    <p class="mt-1 text-sm leading-6 text-muted">Provide the input parameters and run the tool to see the response.</p>
-                    <form id="githubToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-6 grid gap-5">
-                        @Html.AntiForgeryToken()
-                        <div class="grid gap-2">
-                            <label for="githubRepoOwner" class="text-sm font-semibold text-heading">Repository Owner</label>
-                            <input id="githubRepoOwner" type="text" value="@(githubOwner ?? "")" readonly aria-describedby="githubRepoOwnerHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
-                            <p id="githubRepoOwnerHelp" class="text-xs text-muted">The GitHub organization or user.</p>
-                        </div>
-                        <div class="grid gap-2">
-                            <label for="githubRepoName" class="text-sm font-semibold text-heading">Repository Name</label>
-                            <input id="githubRepoName" type="text" value="@(githubRepo ?? "")" readonly aria-describedby="githubRepoNameHelp" class="ui-input w-full rounded-xl border border-line bg-raised px-4 py-3 text-sm text-muted" />
-                            <p id="githubRepoNameHelp" class="text-xs text-muted">The repository name.</p>
-                        </div>
-                        <div class="grid gap-2">
-                            <label for="githubIssueNumber" class="text-sm font-semibold text-heading">Issue Number <span class="text-red-500">*</span> <span class="text-muted" title="Required positive integer">ⓘ</span></label>
-                            <input id="githubIssueNumber" name="issueNumber" type="number" min="1" step="1" required placeholder="e.g. 12" aria-describedby="githubIssueNumberHelp" class="ui-input w-full rounded-xl border border-line bg-surface px-4 py-3 text-sm text-content focus-visible:outline-2 focus-visible:outline-accent" />
-                            <p id="githubIssueNumberHelp" class="text-xs text-muted">The number of the issue to retrieve.</p>
-                        </div>
-                        <div class="flex flex-col gap-3 sm:flex-row">
-                            <partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Type = "submit", Id = "githubToolRun", Icon = "▷", LabelId = "githubToolRunLabel", CssClass = "flex-1" }' />
-                            <partial name="_Button" model='new UiButtonModel { Text = "Reset", Variant = UiButtonVariant.Secondary, Type = "reset", Id = "githubToolReset", Icon = "↻" }' />
-                        </div>
-                    </form>
-                </section>
-                <section class="flex min-w-0 flex-col rounded-2xl border border-line bg-surface p-5 shadow-sm sm:p-6">
-                    <div class="flex flex-wrap items-start justify-between gap-3">
-                        <div><h2 class="text-lg font-bold text-heading">Response</h2><p class="mt-1 text-sm text-muted">The tool response will appear here after execution.</p></div>
-                        <div class="flex flex-wrap items-center gap-2 text-xs text-muted">
-                            <span id="githubToolStatus" class="rounded-full bg-raised px-3 py-1.5 font-semibold">Not run</span>
-                            <span id="githubToolDuration" class="rounded-full bg-raised px-3 py-1.5" hidden></span>
-                            
-                        </div>
-                    </div>
-                    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
-                        <div class="flex items-center gap-2" role="tablist" aria-label="Response format">
-                            <partial name="_Button" model='new UiButtonModel { Text = "JSON", Variant = UiButtonVariant.Outlined, Id = "githubResponseJsonTab", Role = "tab", AriaSelected = "true", AriaControls = "githubResponseJsonPanel" }' />
-                            <partial name="_Button" model='new UiButtonModel { Text = "Formatted", Variant = UiButtonVariant.Outlined, Id = "githubResponseFormattedTab", Role = "tab", AriaSelected = "false", AriaControls = "githubResponseFormattedPanel" }' />
-                            <partial name="_Button" model='new UiButtonModel { Text = "Raw", Variant = UiButtonVariant.Outlined, Id = "githubResponseRawTab", Role = "tab", AriaSelected = "false", AriaControls = "githubResponseRawPanel" }' />
-                        </div>
-                        <partial name="_Button" model='new UiButtonModel { Text = "Copy", Variant = UiButtonVariant.Outlined, Id = "githubToolCopy", Disabled = true }' />
-                    </div>
-                    <div id="githubResponseJsonPanel" role="tabpanel" aria-labelledby="githubResponseJsonTab" class="mt-4 min-h-80">
-                        <partial name="_JsonViewer" model='("githubToolResultJson", (string?)null)' />
-                    </div>
-                    <div id="githubResponseFormattedPanel" role="tabpanel" aria-labelledby="githubResponseFormattedTab" hidden class="mt-4 min-h-80 rounded-xl border border-line bg-raised p-5">
-                        <div id="githubToolResultFormatted" class="grid gap-4 text-sm text-content">Run the tool to view formatted issue details.</div>
-                    </div>
-                    <div id="githubResponseRawPanel" role="tabpanel" aria-labelledby="githubResponseRawTab" hidden class="mt-4 min-h-80">
-                        <pre class="ui-code h-full min-h-80 max-h-[560px] overflow-auto rounded-xl border border-line bg-[#151d2b] p-4 text-xs leading-6"><code id="githubToolResultRaw">Run the tool to view the raw response.</code></pre>
-                    </div>
-
-                </section>
-            </div>
-        }
-        else if (Model.ExecutorKey == "http.get_json")
-        {
-            <div class="grid gap-4 xl:grid-cols-2">
-                <section class="rounded-2xl border border-line bg-surface p-6">
-                    <h2 class="text-lg font-bold text-heading">Try HTTP GET JSON</h2>
-                    <p class="mt-2 text-sm text-muted">Runs the saved API URL using the input parameters below.</p>
-                    <form id="httpJsonTryForm" action="/api/tools/@Model.Id/execute" class="mt-5 grid gap-3">
-                        @Html.AntiForgeryToken()
-                        @if (hasProperties)
-                        {
-                            @foreach (var property in properties.EnumerateObject())
-                            {
-                                var parameterType = property.Value.TryGetProperty("type", out var t) ? t.GetString() : "string";
-                                <label class="grid gap-1 text-sm font-semibold text-heading">
-                                    @property.Name
-                                    <input class="ui-input" name="@property.Name" data-parameter-type="@parameterType"
-                                           type="@(parameterType is "integer" or "number" ? "number" : "text")"
-                                           step="@(parameterType == "integer" ? "1" : "any")"
-                                           required="@required.Contains(property.Name)" />
-                                </label>
-                            }
-                        }
-                        <button type="submit" class="ui-button ui-button-primary">Run Tool</button>
-                    </form>
-                </section>
-                <section class="rounded-2xl border border-line bg-surface p-6">
-                    <h2 class="text-lg font-bold text-heading">Response</h2>
-                    <p id="httpJsonTryStatus" role="status" class="mt-2 text-sm text-muted">Not run</p>
-                    <pre class="mt-4 max-h-[560px] overflow-auto rounded-xl bg-[#151d2b] p-4 text-xs text-white"><code id="httpJsonTryResult">Run the tool to see its response.</code></pre>
-                </section>
-            </div>
-        }
-        else if (Model.Kind == "external" && Model.ExecutorKey == "mcp")
+    <section id="toolConfigurationPanel" role="tabpanel" aria-labelledby="toolConfigurationTab" hidden>
+        <section class="ui-panel w-full">
+            <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.64 5.64l2.12 2.12m8.48 8.48 2.12 2.12M18.36 5.64l-2.12 2.12M7.76 16.24l-2.12 2.12"/><circle cx="12" cy="12" r="4"/></svg></span><div class="ui-panel-title-copy"><h2>Configuration</h2><p class="ui-subtitle">Manage optional key/value settings saved with this tool, like environment variables.</p></div></div>
+            <form id="toolConfigurationForm" class="grid gap-4">
+                <div id="toolConfigurationRows" class="grid gap-3"></div>
+                <div class="flex flex-wrap justify-end gap-3">
+                    <button type="button" id="addToolConfiguration" class="ui-button ui-button--secondary">+ Add Configuration</button>
+                    <button type="submit" id="saveToolConfiguration" class="ui-button ui-button--primary">Save Changes</button>
+                </div>
+                <p id="toolConfigurationStatus" class="ui-field-hint" role="status"></p>
+            </form>
+            <p class="ui-field-hint">Values are stored in the tool configuration. Do not enter passwords or API tokens here; secret storage is not supported by this editor.</p>
+        </section>
+    </section>
+    <section id="toolTryPanel" role="tabpanel" aria-labelledby="toolTryTab" hidden>
+        @if (Model.ExecutorKey == "get_github_issue" || Model.Name == "get_github_issue" || Model.ExecutorKey == "http.get_json" || (Model.Kind == "external" && Model.ExecutorKey == "mcp"))
         {
             <div class="ui-columns">
-                <section class="ui-panel min-w-0">
-                    <h2>Try this MCP tool</h2>
-                    <form id="mcpToolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="mt-4 grid gap-4">
+                <div class="ui-stack"><section class="ui-panel min-w-0">
+                    <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span><div class="ui-panel-title-copy"><h2>Try this tool</h2>
+                    <p class="ui-subtitle">Enter JSON arguments to execute this tool.</p></div></div>
+                    <form id="toolTryForm" method="post" action="/api/tools/@Model.Id/execute" class="grid gap-4">
                         @Html.AntiForgeryToken()
                         <div class="ui-field">
-                            <label class="ui-field-label" for="mcpToolArguments">Arguments (JSON)</label>
-                            <p id="mcpToolArgumentsHint" class="ui-field-hint">Replace the example values with your inputs. Use {} for a tool without arguments.</p>
-                            <textarea id="mcpToolArguments" class="ui-textarea" rows="8" spellcheck="false" aria-describedby="mcpToolArgumentsHint mcpToolArgumentsError">@exampleJson</textarea>
-                            <p id="mcpToolArgumentsError" class="ui-field-error" role="alert" hidden></p>
+                            <label class="ui-field-label" for="toolArguments">Arguments (JSON)</label>
+                            <p id="toolArgumentsHint" class="ui-field-hint">Replace the example values with your inputs. Use {} for a tool without arguments.</p>
+                            <textarea id="toolArguments" class="ui-textarea" rows="8" spellcheck="false" aria-describedby="toolArgumentsHint toolArgumentsError">@exampleJson</textarea>
+                            <p id="toolArgumentsError" class="ui-field-error" role="alert" hidden></p>
                         </div>
-                        <ui-button id="mcpToolRun" variant="primary" type="submit">Run Tool</ui-button>
+                        <button id="toolRun" class="ui-button ui-button--primary" type="submit">Run Tool</button>
                     </form>
-                </section>
-                <section class="ui-panel min-w-0">
-                    <h2>Response</h2>
-                    <p id="mcpToolStatus" class="ui-subtitle" role="status">Not run</p>
-                    <partial name="_JsonViewer" model='("mcpToolResult", (string?)null)' />
-                </section>
+                </section></div>
+                <div class="ui-stack"><section class="ui-panel min-w-0">
+                    <div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4C5 4 5 6 5 8v1c0 2-1 3-3 3 2 0 3 1 3 3v1c0 2 0 4 3 4M16 4c3 0 3 2 3 4v1c0 2 1 3 3 3-2 0-3 1-3 3v1c0 2 0 4-3 4"/></svg></span><div class="ui-panel-title-copy"><h2>Response</h2>
+                    <p class="ui-subtitle">Inspect the response returned by the tool.</p></div></div>
+                    <p id="toolStatus" class="ui-subtitle" role="status">Not run</p>
+                    <partial name="_JsonViewer" model='("toolResult", (string?)null)' />
+                </section></div>
             </div>
         }
         else
         {
-            <div class="rounded-2xl border border-line bg-surface p-6"><h2 class="text-lg font-bold text-heading">Try Now</h2><p class="mt-2 text-sm text-muted">This tool does not have an approved UI execution adapter yet.</p><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></div>
+            <div class="ui-columns"><div class="ui-stack"><section class="ui-panel"><div class="ui-panel-title-block"><span class="ui-panel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5Z"/></svg></span><div class="ui-panel-title-copy"><h2>Try Now</h2><p class="ui-subtitle">This tool does not have an approved UI execution adapter yet.</p></div></div><partial name="_Button" model='new UiButtonModel { Text = "Run Tool", Variant = UiButtonVariant.Primary, Disabled = true, CssClass = "mt-5" }' /></section></div></div>
         }
     </section>
 </div>
@@ -250,8 +174,8 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
 
 <script>
 (() => {
-    const tabs = [document.getElementById('toolOverviewTab'), document.getElementById('toolTryTab')];
-    const panels = [document.getElementById('toolOverviewPanel'), document.getElementById('toolTryPanel')];
+    const tabs = [document.getElementById('toolOverviewTab'), document.getElementById('toolConfigurationTab'), document.getElementById('toolTryTab')];
+    const panels = [document.getElementById('toolOverviewPanel'), document.getElementById('toolConfigurationPanel'), document.getElementById('toolTryPanel')];
     tabs.forEach((tab, index) => {
         tab.addEventListener('click', () => {
             tabs.forEach((item, i) => {
@@ -277,13 +201,12 @@ document.querySelectorAll('.ui-detail [data-copy-target]').forEach(button => {
 </script>
 
 <script src="~/js/shared/json-viewer.js" asp-append-version="true"></script>
-<script src="~/js/tools/github-tool-try.js" asp-append-version="true"></script>
-<script src="~/js/tools/http-json-tool-try.js" asp-append-version="true"></script>
-<script src="~/js/tools/mcp-tool-try.js" asp-append-version="true"></script>
+<script src="~/js/tools/tool-try.js" asp-append-version="true"></script>
 
 <div id="toolEditContext" hidden data-tool-id="@Model.Id" data-tool-name="@Model.Name" data-tool-display-name="@Model.DisplayName" data-tool-description="@Model.Description" data-tool-category="@((int)Enum.Parse<AgentForge.Core.Enums.ToolCategory>(Model.Category, ignoreCase: true))" data-tool-kind="@Model.Kind" data-tool-image-url="@Model.ImageUrl" data-tool-schema="@Model.JsonSchema" data-tool-executor-key="@Model.ExecutorKey" data-tool-configuration="@Model.ConfigurationJson"></div>
 <partial name="~/Views/Tools/_AddToolDialog.cshtml" />
 <ui-delete id="deleteToolDialog" title="Delete tool?" description="The tool will be removed from the catalog" item-name="@Model.DisplayName" confirm-button-id="confirmDeleteTool" confirm-text="Delete tool" />
+<script src="~/js/tools/tool-configuration.js" asp-append-version="true"></script>
 <script src="~/js/tools/add-tool-dialog.js" asp-append-version="true"></script>
 
 <script src="~/js/tools/delete-tool.js" asp-append-version="true"></script>

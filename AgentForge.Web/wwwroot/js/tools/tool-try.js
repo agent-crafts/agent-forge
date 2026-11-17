@@ -1,12 +1,12 @@
 (() => {
-  const form = document.getElementById("mcpToolTryForm");
+  const form = document.getElementById("toolTryForm");
   if (!form) return;
 
-  const args = document.getElementById("mcpToolArguments");
-  const error = document.getElementById("mcpToolArgumentsError");
-  const run = document.getElementById("mcpToolRun");
-  const status = document.getElementById("mcpToolStatus");
-  const result = document.getElementById("mcpToolResult");
+  const args = document.getElementById("toolArguments");
+  const error = document.getElementById("toolArgumentsError");
+  const run = document.getElementById("toolRun");
+  const status = document.getElementById("toolStatus");
+  const result = document.getElementById("toolResult");
   const viewer = window.AgentForgeJsonViewer;
 
   const clearError = () => {

@@ -18,7 +18,7 @@ public sealed class FileService(IHostEnvironment environment) : IFileService
 
     public async Task<StoredFile> SaveImageAsync(string owner, Stream content, long length, string contentType, CancellationToken cancellationToken)
     {
-        if (owner is not ("agents" or "tools")) throw new ArgumentException("Invalid file owner.");
+        if (owner is not ("agents" or "tools" or "projects")) throw new ArgumentException("Invalid file owner.");
         if (length is <= 0 or > MaxBytes)
             throw new ArgumentException("Select an image smaller than 2 MB.");
         if (!Extensions.TryGetValue(contentType, out var extension))
@@ -51,7 +51,7 @@ public sealed class FileService(IHostEnvironment environment) : IFileService
     {
         var owner = filename.Split('/')[0];
         var name = filename.Split('/').Last();
-        if (owner is not ("agents" or "tools") || filename != owner + "/" + name) return null;
+        if (owner is not ("agents" or "tools" or "projects") || filename != owner + "/" + name) return null;
         var extension = Path.GetExtension(name);
         var stem = Path.GetFileNameWithoutExtension(name);
         if (stem.Length != 24 || !stem.All(Uri.IsHexDigit) || !MimeTypes.TryGetValue(extension, out var mime))

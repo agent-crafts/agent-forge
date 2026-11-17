@@ -1,4 +1,6 @@
 using AgentForge.Application.Agents.Queries;
+using AgentForge.Application.Projects.Commands;
+using AgentForge.Application.Projects.Queries;
 using AgentForge.Application.Tools.Queries;
 using AgentForge.Core.Domains;
 using AgentForge.Core.Enums;
@@ -23,6 +25,28 @@ public sealed class WorkspaceController(ISender sender) : Controller
         ["knowledge"] = ("Knowledge", "Connect documents and knowledge sources to your agents."),
         ["runs"] = ("Runs", "Inspect agent executions, steps, and tool calls.")
     };
+
+    [HttpGet("projects")]
+    public async Task<IActionResult> Projects([FromQuery] int pageNumber = 1, CancellationToken cancellationToken = default)
+    {
+        if (pageNumber < 1) return BadRequest("Invalid page number.");
+        var page = await sender.Send(new GetProjectsPageQuery(new PagedQuery<Project>(pageNumber, 20, p => p.IsActive, p => p.OrderBy(x => x.Name))), cancellationToken);
+        ViewData["Title"] = "Projects";
+        ViewData["Section"] = "projects";
+        ViewData["PageNumber"] = page.PageNumber;
+        ViewData["TotalPages"] = page.TotalPages;
+        return View("~/Views/Projects/Index.cshtml", page.Items.Select(ProjectsController.ProjectCard.From).ToArray());
+    }
+
+    [HttpGet("projects/{id:guid}")]
+    public async Task<IActionResult> ProjectDetails(Guid id, CancellationToken cancellationToken)
+    {
+        var project = await sender.Send(new GetProjectByIdQuery(id), cancellationToken);
+        if (project is null || !project.IsActive) return NotFound();
+        ViewData["Title"] = project.Name;
+        ViewData["Section"] = "projects";
+        return View("~/Views/Projects/Details.cshtml", ProjectsController.ProjectCard.From(project));
+    }
 
     [HttpGet("tools")]
     public async Task<IActionResult> Tools(CancellationToken cancellationToken)
@@ -84,11 +108,14 @@ public sealed class WorkspaceController(ISender sender) : Controller
         ViewData["AvailableAgentTools"] = tools.Items.ToArray();
         ViewData["AssignedAgentToolIds"] = (await sender.Send(new GetAgentToolIdsQuery(id), cancellationToken)).ToHashSet();
         ViewData["Title"] = agent.Name;
+        ViewData["ParentTitle"] = "Agents";
+        ViewData["ParentController"] = "Workspace";
+        ViewData["ParentAction"] = nameof(Agents);
         ViewData["Section"] = "agents";
         return View("~/Views/Agents/Details.cshtml", AgentsController.AgentCard.From(agent));
     }
 
-    [HttpGet("{section:regex(^(projects|specifications|workflows|tasks|reviews|pipelines|knowledge|runs)$)}")]
+    [HttpGet("{section:regex(^(specifications|workflows|tasks|reviews|pipelines|knowledge|runs)$)}")]
     public IActionResult Index(string section)
     {
         if (!Pages.TryGetValue(section, out var page)) return NotFound();
