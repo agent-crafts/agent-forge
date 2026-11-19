@@ -10,11 +10,8 @@
     // Illustrative estimates only; telemetry and forecasting are not wired yet.
     var demoProgress = new[] { 100, 60, 30, 0, 0 };
     var demoTokensUsed = new[] { 185000, 132000, 94000, 0, 0 };
-    var demoTokensBudget = new[] { 185000, 220000, 320000, 160000, 80000 };
     var demoCostUsed = new[] { 3.70m, 2.64m, 1.88m, 0m, 0m };
-    var demoCostBudget = new[] { 3.70m, 4.40m, 6.40m, 3.20m, 1.60m };
     var demoHoursUsed = new[] { 12, 9, 7, 0, 0 };
-    var demoHoursBudget = new[] { 12, 15, 24, 12, 6 };
 
     var descriptions = new Dictionary<string, string> {
         ["discovery"] = "Turn a product idea into approved requirements, features and task specifications.",
@@ -33,6 +30,14 @@
             <div class="lf-project-details">
                 <div class="lf-project-title"><strong>@(stageKey == "board" ? "Project Board" : stageKey == "specifications" ? "Project Specifications" : projectName)</strong><span class="lf-project-status">Demo workspace</span></div>
                 <p>@(stageKey == "board" ? $"{projectName} · Track work from new requests through delivery." : stageKey == "specifications" ? $"{projectName} · Browse uploaded and Agent project documents." : "Lifecycle progress · sample values")</p>
+                @if (stageIndex >= 0)
+                {
+                    <div class="lf-lifecycle-usage" aria-label="Illustrative stage usage">
+                        <span title="Time spent">⏱ @demoHoursUsed[stageIndex]h</span>
+                        <span title="Tokens used">◈ @((demoTokensUsed[stageIndex] / 1000.0).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture))K</span>
+                        <span title="AI cost">$ @demoCostUsed[stageIndex].ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)</span>
+                    </div>
+                }
             </div>
             @if (stageKey == "specifications")
             {
@@ -69,33 +74,6 @@
         }
 
     </header>
-    @if (stageIndex >= 0)
-    {
-        var usedTokens = demoTokensUsed[stageIndex];
-        var budgetTokens = demoTokensBudget[stageIndex];
-        var usedCost = demoCostUsed[stageIndex];
-        var budgetCost = demoCostBudget[stageIndex];
-        var usedHours = demoHoursUsed[stageIndex];
-        var budgetHours = demoHoursBudget[stageIndex];
-        var percentComplete = demoProgress[stageIndex];
-        <aside class="lf-stage-insights ui-panel" aria-label="Stage insights, demo estimates">
-            <div class="lf-insights-heading">
-                <div><strong>Stage insights</strong><span>@stages[stageIndex].Item2 · estimated usage</span></div>
-                <span class="lf-insights-demo">Demo</span>
-            </div>
-            <div class="lf-insights-ring-layout">
-                <div class="lf-insights-ring" role="progressbar" aria-label="Stage completion" aria-valuenow="@percentComplete" aria-valuemin="0" aria-valuemax="100" style="--lf-ring-progress:@(percentComplete)%">
-                    <div class="lf-insights-ring-center"><strong>@percentComplete%</strong><span>Complete</span></div>
-                </div>
-                <div class="lf-insights-ring-metrics">
-                    <div class="lf-insights-ring-metric"><span>Tokens used</span><strong>@(usedTokens.ToString("N0"))</strong></div>
-                    <div class="lf-insights-ring-metric"><span>AI spend</span><strong>$@(usedCost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture))</strong></div>
-                    <div class="lf-insights-ring-metric"><span>Time spent</span><strong>@usedHours h</strong></div>
-                </div>
-            </div>
-            <p class="lf-insights-footnote">Illustrative values, not measured usage.</p>
-        </aside>
-    }
     </div>
     @if (stageIndex >= 0)
     {
