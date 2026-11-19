@@ -285,3 +285,8 @@
 .lf-specs-feature-head h3.lf-specs-feature-heading{flex:1;min-width:0;margin:0;font-size:13px;line-height:1.5;font-weight:400;color:#111111;overflow-wrap:anywhere}
 .lf-specs-feature-heading .lf-specs-kicker{display:inline;font-size:10px;line-height:inherit;font-weight:700;letter-spacing:normal;color:#111111;white-space:nowrap}
 .lf-specs-feature-head .lf-board-count{flex:none}
+
+/* Feature task heading and status share a row, with the status aligned right. */
+.lf-specs-task-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-width:0}
+.lf-specs-task-head h4{flex:1;min-width:0;margin:0}
+.lf-specs-task-head .lf-specs-task-state{flex:none;white-space:nowrap;margin-top:1px}
