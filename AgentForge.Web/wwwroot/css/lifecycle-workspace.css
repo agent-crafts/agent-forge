@@ -568,4 +568,4 @@
 @media(max-width:650px){.lf-project-identity>.lf-lifecycle-usage{margin-left:0;justify-content:flex-start}}
 
 /* Match header usage typography to the project name. */
-.lf-project-identity>.lf-lifecycle-usage{font-size:14px;font-weight:700;color:var(--heading,inherit)}
+.lf-project-identity>.lf-lifecycle-usage{font-size:14px;font-weight:400;color:var(--heading,inherit)}
