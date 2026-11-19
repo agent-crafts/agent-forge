@@ -37,7 +37,7 @@
       button.addEventListener("click", () => {
         const row = button.closest("[data-lf-doc-row]");
         root.querySelector("[data-lf-doc-preview-title]").textContent = row.dataset.name;
-        root.querySelector("[data-lf-doc-preview-meta]").textContent = `${row.dataset.type} · ${row.dataset.updated} · ${row.dataset.source === "ai" ? "Agent" : "Uploaded"}`;
+        root.querySelector("[data-lf-doc-preview-meta]").textContent = `${row.dataset.type} · ${row.dataset.updated} · ${row.dataset.source === "ai" ? "Agent" : "User"}`;
         root.querySelector("[data-lf-doc-preview-content]").textContent = examples[row.dataset.preview];
         if (typeof dialog.showModal === "function") dialog.showModal();
       });
