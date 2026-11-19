@@ -324,4 +324,10 @@ export async function book(
         <section class="lf-card lf-collection ui-panel"><div class="lf-panel-head"><div><strong>@title</strong><small>Lifecycle demo overview</small></div><span class="lf-pill">Sample</span></div><p class="lf-muted">This area will connect to project-specific @(stageKey == "workflows" ? "workflow definitions" : "agent run history") in a later implementation.</p><div class="lf-spec"><h3>Example flow</h3><p>Discovery → Design → Development → Quality → Deployment</p><p>Every stage references shared business requirements, features and task specifications.</p></div></section>
     }
 </div>
+@if (stageKey == "specifications")
+{
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.9.1/mammoth.browser.min.js" defer></script>
+    <script defer>document.addEventListener("DOMContentLoaded", () => { if (window.pdfjsLib) window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js"; });</script>
+}
 <script src="~/js/lifecycle-workspace.js" asp-append-version="true" defer></script>
