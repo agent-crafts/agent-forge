@@ -78,21 +78,22 @@
         var usedHours = demoHoursUsed[stageIndex];
         var budgetHours = demoHoursBudget[stageIndex];
         var percentComplete = demoProgress[stageIndex];
-        <aside class="lf-stage-insights ui-panel" aria-label="Stage usage and forecast, demo estimates">
+        <aside class="lf-stage-insights ui-panel" aria-label="Stage insights, demo estimates">
             <div class="lf-insights-heading">
                 <div><strong>Stage insights</strong><span>@stages[stageIndex].Item2 · estimated usage</span></div>
                 <span class="lf-insights-demo">Demo</span>
             </div>
-            <div class="lf-insights-progress">
-                <div class="lf-insights-progress-label"><span>Stage completion</span><strong>@percentComplete%</strong></div>
-                <div class="lf-insights-bar" role="progressbar" aria-label="Stage completion" aria-valuenow="@percentComplete" aria-valuemin="0" aria-valuemax="100"><span style="width:@(percentComplete)%"></span></div>
+            <div class="lf-insights-ring-layout">
+                <div class="lf-insights-ring" role="progressbar" aria-label="Stage completion" aria-valuenow="@percentComplete" aria-valuemin="0" aria-valuemax="100" style="--lf-ring-progress:@(percentComplete)%">
+                    <div class="lf-insights-ring-center"><strong>@percentComplete%</strong><span>Complete</span></div>
+                </div>
+                <div class="lf-insights-ring-metrics">
+                    <div class="lf-insights-ring-metric"><span>Tokens used</span><strong>@(usedTokens.ToString("N0"))</strong></div>
+                    <div class="lf-insights-ring-metric"><span>AI spend</span><strong>$@(usedCost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture))</strong></div>
+                    <div class="lf-insights-ring-metric"><span>Time spent</span><strong>@usedHours h</strong></div>
+                </div>
             </div>
-            <div class="lf-insights-metrics">
-                <div class="lf-insights-metric"><span>Tokens used</span><strong>@(usedTokens.ToString("N0"))</strong><small>of @(budgetTokens.ToString("N0")) estimated</small></div>
-                <div class="lf-insights-metric"><span>AI spend</span><strong>$@(usedCost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture))</strong><small>$@((budgetCost - usedCost).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)) estimated left</small></div>
-                <div class="lf-insights-metric"><span>Time spent</span><strong>@usedHours h</strong><small>@(budgetHours - usedHours) h estimated left</small></div>
-            </div>
-            <p class="lf-insights-footnote">Illustrative values, not measured usage or a committed forecast.</p>
+            <p class="lf-insights-footnote">Illustrative values, not measured usage.</p>
         </aside>
     }
     </div>
