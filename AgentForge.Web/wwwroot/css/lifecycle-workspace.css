@@ -308,3 +308,44 @@
 .lf-specs-expand-actions button{border:1px solid var(--line);background:var(--surface);color:var(--content);border-radius:4px;padding:6px 9px;font-size:11px;white-space:nowrap;cursor:pointer}
 .lf-specs-expand-actions button:hover{background:var(--hover)}
 .lf-specs-expand-actions button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Project Specifications: static document library. */
+.lf-doc-library{display:grid;gap:14px;min-width:0}
+.lf-doc-library-toolbar,.lf-doc-library-controls{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.lf-doc-library-toolbar h2{font-size:17px;margin:0 0 5px;color:var(--heading)}
+.lf-doc-library-toolbar p{font-size:12px;color:var(--muted);margin:0}
+.lf-doc-upload{border:1px solid var(--accent);background:var(--accent);color:var(--button-text,#fff);padding:10px 15px;border-radius:4px;font-size:12px;font-weight:650;cursor:pointer}
+.lf-doc-library-controls{justify-content:flex-start}
+.lf-doc-search-label{flex:1;min-width:200px}
+.lf-doc-search-label input,.lf-doc-filter-label select{width:100%;padding:10px 12px;border:1px solid var(--line-strong);border-radius:4px;background:var(--surface);color:var(--content);font:inherit;font-size:12px}
+.lf-doc-filter-label{min-width:150px}
+.lf-doc-count{font-size:12px;color:var(--muted);margin-left:auto;white-space:nowrap}
+.lf-doc-table-wrap{min-width:0;overflow-x:auto}
+.lf-doc-table{border-collapse:collapse;width:100%;min-width:650px;text-align:left;font-size:12px;color:var(--content)}
+.lf-doc-table th{font-size:11px;font-weight:650;color:var(--muted);background:var(--surface-raised);padding:13px 16px;border-bottom:1px solid var(--line)}
+.lf-doc-table td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:middle}
+.lf-doc-table tbody tr:last-child td{border-bottom:0}
+.lf-doc-table tbody tr[hidden]{display:none}
+.lf-doc-name{display:flex;align-items:center;gap:12px;min-width:200px}
+.lf-doc-name strong{display:block;font-size:12px;color:var(--heading);font-weight:650;overflow-wrap:anywhere}
+.lf-doc-name small{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+.lf-doc-file-icon{width:36px;height:40px;display:grid;place-items:center;flex:none;border-radius:4px;border:1px solid var(--line);background:var(--hover);color:var(--accent);font-size:10px;font-weight:750}
+.lf-doc-source{display:inline-block;padding:5px 8px;border-radius:4px;background:var(--hover);font-size:11px;white-space:nowrap}
+.lf-doc-source.is-ai{color:var(--accent);background:var(--active)}
+.lf-doc-actions{white-space:nowrap}
+.lf-doc-actions button,.lf-doc-preview-footer button{border:1px solid var(--line-strong);background:var(--surface);color:var(--content);padding:7px 10px;border-radius:4px;font-size:11px;cursor:pointer;margin-right:5px}
+.lf-doc-actions button:hover,.lf-doc-preview-footer button:hover{background:var(--hover)}
+.lf-doc-empty{padding:22px;text-align:center;color:var(--muted);font-size:12px}
+.lf-doc-empty[hidden],.lf-doc-demo-message[hidden]{display:none}
+.lf-doc-demo-message{border:1px solid var(--line);background:var(--surface-raised);color:var(--content);padding:12px;border-radius:4px;font-size:12px}
+.lf-doc-preview-dialog{width:min(680px,calc(100vw - 32px));max-height:min(80dvh,800px);padding:0;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--content);box-shadow:0 20px 70px #0004}
+.lf-doc-preview-dialog::backdrop{background:#0f172a99}
+.lf-doc-preview-header,.lf-doc-preview-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.lf-doc-preview-header strong{display:block;font-size:15px;color:var(--heading)}
+.lf-doc-preview-header small{display:block;font-size:11px;color:var(--muted);margin-top:5px}
+.lf-doc-preview-header>button{border:0;background:transparent;color:var(--content);font-size:18px;cursor:pointer}
+.lf-doc-preview-body{padding:20px;overflow:auto;max-height:55dvh}
+.lf-doc-preview-notice{font-size:11px;color:var(--muted);margin:0 0 15px}
+.lf-doc-preview-body pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;margin:0;color:var(--content)}
+.lf-doc-preview-footer{justify-content:flex-end;border-bottom:0;border-top:1px solid var(--line)}
+@media(max-width:640px){.lf-doc-library-toolbar{align-items:flex-start}.lf-doc-upload{width:100%}.lf-doc-filter-label{flex:1}.lf-doc-count{margin-left:0}}
