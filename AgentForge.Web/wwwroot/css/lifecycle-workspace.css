@@ -510,3 +510,11 @@
   .lf-doc-rendered-preview.lf-doc-markdown-preview,
   .lf-doc-rendered-preview pre.lf-doc-code{padding:24px 20px;min-height:320px}
 }
+
+/* All document paper previews are borderless; retain the soft page shadow. */
+.lf-doc-rendered-preview.lf-doc-markdown-preview,
+.lf-doc-rendered-preview pre.lf-doc-code,
+.lf-doc-rendered-preview .lf-doc-pdf-canvas,
+.lf-doc-rendered-preview .lf-doc-preview-page{
+  border:0;
+}
