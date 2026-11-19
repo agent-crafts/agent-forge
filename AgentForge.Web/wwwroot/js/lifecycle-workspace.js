@@ -2,6 +2,39 @@
   "use strict";
   const root = document.querySelector(".lf-root");
   if (!root) return;
+  const discoveryDownload = root.querySelector("[data-lf-discovery-download]");
+  if (discoveryDownload) {
+    discoveryDownload.addEventListener("click", async () => {
+      const message = root.querySelector("[data-lf-discovery-message]");
+      try {
+        if (!window.JSZip) throw new Error("Word document generator is unavailable.");
+        const zip = new window.JSZip();
+        zip.file("[Content_Types].xml", '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>');
+        zip.folder("_rels").file(".rels", '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
+        const escapeXml = value => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const paper = root.querySelector(".lf-discovery-paper");
+        const lines = [...paper.querySelectorAll("h2,h3,p,li")].map(element => ({
+          text: element.textContent.trim(),
+          heading: element.tagName === "H2" || element.tagName === "H3",
+          bullet: element.tagName === "LI"
+        }));
+        const paragraphs = lines.map(line => '<w:p><w:pPr>' + (line.bullet ? '<w:ind w:left="720"/>' : '') + '</w:pPr><w:r><w:rPr>' + (line.heading ? '<w:b/><w:sz w:val="28"/>' : '') + '</w:rPr><w:t xml:space="preserve">' + escapeXml((line.bullet ? "• " : "") + line.text) + '</w:t></w:r></w:p>').join("");
+        zip.folder("word").file("document.xml", '<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' + paragraphs + '</w:body></w:document>');
+        const blob = await zip.generateAsync({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Business Requirements.docx";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        message.textContent = "Sample Word document generated for download.";
+      } catch (error) {
+        message.textContent = error.message || "Could not generate Word document.";
+      }
+    });
+  }
   // Static document-library demo: searchable metadata and illustrative read-only previews.
   const docRows = [...root.querySelectorAll("[data-lf-doc-row]")];
   if (docRows.length) {
