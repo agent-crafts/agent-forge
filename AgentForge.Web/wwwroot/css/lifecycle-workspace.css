@@ -274,3 +274,12 @@
 .lf-project-identity:has(.lf-board-view-toolbar){flex-wrap:wrap}
 .lf-project-identity .lf-board-view-toolbar{margin-left:auto;flex:none}
 @media(max-width:640px){.lf-project-identity .lf-board-view-toolbar{margin-left:0;width:100%;justify-self:stretch}.lf-project-identity .lf-board-view-toolbar button{flex:1}}
+
+/* Board workspace owns vertical scrolling; shell, header and view switcher stay fixed. */
+.shell:has(.lf-root[data-lifecycle-stage="board"]) > .main{overflow:hidden;min-height:0}
+.shell:has(.lf-root[data-lifecycle-stage="board"]) > .main > .page-content{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.lf-root[data-lifecycle-stage="board"]{width:100%;max-width:1600px;flex:1;min-height:0;grid-template-rows:auto minmax(0,1fr);padding-bottom:0;overflow:hidden}
+.lf-root[data-lifecycle-stage="board"] .lf-board-workspace{min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:0}
+.lf-root[data-lifecycle-stage="board"] .lf-board-view{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:2px 4px 12px 0}
+.lf-root[data-lifecycle-stage="board"] .lf-board-layout{overflow-x:auto;overflow-y:visible}
+.lf-root[data-lifecycle-stage="board"] .lf-board-features-view{overflow-x:hidden}
