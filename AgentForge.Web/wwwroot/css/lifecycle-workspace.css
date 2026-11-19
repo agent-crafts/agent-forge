@@ -576,3 +576,8 @@
 /* Consistent, low-contrast conversation bubbles across Development Operations. */
 .lf-chat .lf-message.lf-agent{background:var(--surface-raised,#f8fafc);color:var(--content,#334155);border:1px solid var(--line,#e2e8f0)}
 .lf-chat .lf-message.lf-user{background:var(--active,#eef4ff);color:var(--content,#334155);border:1px solid var(--line-strong,#dbe5f2)}
+
+/* Show all five Operations artifact results at 90% without shrinking the panel header. */
+.lf-artifacts .lf-artifact-results{zoom:.9;width:111.111111%;min-width:0}
+/* Keep the Discovery preview modal at normal reading size. */
+.lf-artifact-results .lf-discovery-dialog{zoom:1.111111}
