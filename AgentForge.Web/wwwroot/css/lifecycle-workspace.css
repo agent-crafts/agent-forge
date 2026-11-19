@@ -213,3 +213,6 @@
 
 /* Task ID size only; keep title, badge and metrics unchanged. */
 .lf-board-task-list .lf-board-task-heading .lf-board-task-id{font-size:10px}
+
+/* Use standard black for Kanban task footer metrics. */
+.lf-board-task-list .lf-board-task-stats{color:#111111}
