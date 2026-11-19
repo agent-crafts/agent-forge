@@ -68,7 +68,7 @@
 [hidden]{display:none!important}
 @media(max-width:1100px){.ui-profile{gap:16px}.ui-metadata{flex-basis:240px;gap:14px}.ui-columns{grid-template-columns:1fr}}
 @media(max-width:900px){.ui-grid{grid-template-columns:1fr}}
-@media(max-width:700px){.ui-profile{align-items:flex-start;flex-wrap:wrap;padding:18px}.ui-profile-icon{width:65px;height:65px}.ui-profile-icon svg{width:40px;height:40px}.ui-profile-main{flex:1 1 calc(100% - 90px)}.ui-profile-title h1{font-size:19px}.ui-metadata{flex:1 1 100%}.ui-panel{padding:16px}}
+@media(max-width:700px){.ui-profile{align-items:flex-start;flex-wrap:wrap;padding:18px}.ui-profile-icon{width:65px;height:65px}.ui-profile-icon svg{width:40px;height:40px}.ui-profile-main{flex:1 1 calc(100% - 90px)}.ui-profile-title h1{font-size:19px}.ui-metadata{flex:1 1 100%}.ui-panel{padding:12px}}
 @media(max-width:480px){.ui-toolbar{gap:7px}.ui-select-wrap{flex-basis:120px}.ui-select{padding-left:8px;padding-right:26px;font-size:12px}.ui-select-chevron{right:7px}.ui-button{padding:10px 8px;font-size:12px}.ui-button .ui-button-hint{display:none}.ui-item-card{gap:11px;padding:13px}.ui-icon-tile{width:42px;height:42px}.ui-icon-tile svg{width:26px;height:26px}}
 
 /* Generic section heading icon: identical tile and SVG dimensions across panels. */
@@ -547,7 +547,7 @@ button:focus-visible:not(:disabled){filter:brightness(.9)}
 .ui-textarea{box-sizing:border-box;width:100%;min-height:90px;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--content);font:inherit;font-size:13px;resize:vertical}
 .ui-field :is(.ui-input,.ui-select,.ui-textarea)[aria-invalid="true"]{border-color:#dc2626}
 
-.ui-card{padding:20px;border:1px solid var(--line);border-radius:9px;background:var(--surface)}
+.ui-card{padding:12px;border:1px solid var(--line);border-radius:9px;background:var(--surface)}
 .ui-card h3{margin:0 0 8px;color:var(--heading)}
 .ui-card p{margin:0;color:var(--muted)}
 .ui-dialog{border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--content);max-width:min(90vw,900px)}
