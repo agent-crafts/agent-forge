@@ -2,6 +2,9 @@
   "use strict";
   const root = document.querySelector(".lf-root");
   if (!root) return;
+  const discoveryDialog = root.querySelector("[data-lf-discovery-dialog]");
+  root.querySelector("[data-lf-discovery-preview]")?.addEventListener("click", () => discoveryDialog?.showModal());
+  root.querySelector("[data-lf-discovery-close]")?.addEventListener("click", () => discoveryDialog?.close());
   const discoveryDownload = root.querySelector("[data-lf-discovery-download]");
   if (discoveryDownload) {
     discoveryDownload.addEventListener("click", async () => {
