@@ -417,3 +417,17 @@
   font-size:11px;
   line-height:1.35;
 }
+
+/* Color-coded document actions, retaining the borderless icon-only treatment. */
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button[data-lf-doc-preview]{
+  color:var(--accent);
+}
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button[data-lf-doc-download]{
+  color:#15966c;
+}
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button[data-lf-doc-preview]:hover{
+  color:var(--heading);
+}
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button[data-lf-doc-download]:hover{
+  color:#0c7654;
+}
