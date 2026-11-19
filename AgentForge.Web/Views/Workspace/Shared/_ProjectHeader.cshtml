@@ -1,0 +1,52 @@
+@{ var stageKey = (string)ViewData["WorkspaceStage"]!; var projectName = (string)ViewData["ProjectName"]!; var projectId = (string)ViewData["ProjectId"]!; var stages = new[] { ("discovery", "Discovery"), ("design", "Design"), ("development", "Development"), ("quality", "Quality"), ("deployment", "Deployment") }; var stageIndex = Array.FindIndex(stages, x => x.Item1 == stageKey); var demoHoursUsed = new[] {12,9,7,0,0}; var demoTokensUsed = new[] {185000,132000,94000,0,0}; var demoCostUsed = new[] {3.70m,2.64m,1.88m,0m,0m}; var stageIconPaths = new Dictionary<string,string> { ["discovery"]="M11 3a8 8 0 1 0 0 16 8 8 0 0 0 0-16ZM17 17l4 4", ["design"]="M3 21l6-2 12-12-4-4L5 15l-2 6ZM14 6l4 4", ["development"]="M8 8l-4 4 4 4M16 8l4 4-4 4M14 4l-4 16", ["quality"]="M12 2l8 4v6c0 5-3 8-8 10-5-2-8-5-8-10V6l8-4ZM8 12l3 3 5-6", ["deployment"]="M12 3l5 5-5 5-5-5 5-5ZM12 13v8M5 18h14" }; }
+    <div class="lf-overview-grid @(stageKey == "board" || stageKey == "specifications" ? "lf-overview-grid--single" : "")">
+    <header class="lf-project-header ui-panel">
+        <div class="lf-project-identity">
+            <span class="lf-project-icon" aria-hidden="true">@if (stageKey == "board") { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18" /></svg> } else if (stageKey == "specifications") { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6zM15 3v5h4M9 12h7M9 16h7" /></svg> } else if (stageIconPaths.TryGetValue(stageKey, out var stageIconPath)) { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="@stageIconPath" /></svg> } else { <span>▦</span> }</span>
+            <div class="lf-project-details">
+                <div class="lf-project-title"><strong>@(stageKey == "board" ? "Project Board" : stageKey == "specifications" ? "Project Specifications" : projectName)</strong><span class="lf-project-status">Demo workspace</span></div>
+                <p>@(stageKey == "board" ? $"{projectName} · Track work from new requests through delivery." : stageKey == "specifications" ? $"{projectName} · Browse uploaded and Agent project documents." : "Lifecycle progress · sample values")</p>
+
+            </div>
+            @if (stageIndex >= 0)
+            {
+                <div class="lf-lifecycle-usage" aria-label="Illustrative stage usage">
+                    <span title="Time spent">⏱ @demoHoursUsed[stageIndex]h</span>
+                    <span title="Tokens used">◈ @((demoTokensUsed[stageIndex] / 1000.0).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture))K</span>
+                    <span title="AI cost">$ @demoCostUsed[stageIndex].ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)</span>
+                </div>
+            }
+            @if (stageKey == "specifications")
+            {
+                <button class="lf-doc-upload" type="button" data-lf-doc-demo-action="Upload">+ Upload document</button>
+            }
+            @if (stageKey == "board")
+            {
+            <div class="lf-board-view-toolbar" role="group" aria-label="Board display mode">
+                <button type="button" class="is-active" data-lf-board-view="kanban" aria-pressed="true">Board</button>
+                <button type="button" data-lf-board-view="features" aria-pressed="false">Features</button>
+            </div>
+            }
+        </div>
+        @if (stageKey != "board" && stageKey != "specifications")
+        {
+        <nav class="lf-progress-timeline" aria-label="Engineering lifecycle">
+            <ol class="lf-progress-track">
+                @for (var i = 0; i < stages.Length; i++)
+                {
+                    var stage = stages[i];
+                    var isCurrent = i == stageIndex;
+                    var isEarlier = stageIndex >= 0 && i < stageIndex;
+                    <li class="lf-progress-item @(isCurrent ? "is-current" : isEarlier ? "is-earlier" : "is-upcoming")">
+                        <a class="lf-progress-link" href="/projects/@projectId/@stage.Item1" aria-current="@(isCurrent ? "step" : null)" aria-label="Go to @stage.Item2">
+                            <span class="lf-progress-node" aria-hidden="true">@(i + 1)</span>
+                            <span class="lf-progress-name">@stage.Item2</span>
+                        </a>
+                    </li>
+                }
+            </ol>
+        </nav>
+        }
+
+    </header>
+    </div>

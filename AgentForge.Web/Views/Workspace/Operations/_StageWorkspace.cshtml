@@ -1,0 +1,6 @@
+@{ var stageKey=(string)ViewData["WorkspaceStage"]!; var projectId=(string)ViewData["ProjectId"]!; var stages=new[] {("discovery","Discovery"),("design","Design"),("development","Development"),("quality","Quality"),("deployment","Deployment")}; var stageIndex=Array.FindIndex(stages,x=>x.Item1==stageKey); }
+<div class="lf-split">
+    <partial name="~/Views/Workspace/Operations/_AgentChat.cshtml" />
+    <partial name="~/Views/Workspace/Operations/_StageArtifacts.cshtml" />
+</div>
+<div class="lf-bottom"><span>Shared artifacts: BRD-001 → FEAT-003 → TASK-011 → Design → Code → Tests → Release</span>@if (stageIndex < stages.Length - 1) { <a href="/projects/@projectId/@stages[stageIndex + 1].Item1">Explore @stages[stageIndex + 1].Item2 →</a> } else { <a href="/projects/@projectId/discovery">Return to Discovery ↺</a> }</div>

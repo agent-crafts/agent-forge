@@ -1,0 +1,583 @@
+/* Lifecycle demo: sample content only, scoped to project workspaces. */
+.lf-root{--lf-border:var(--line-strong,#dce3ef);--lf-surface:var(--surface,#fff);--lf-muted:var(--muted,#66758c);--lf-accent:var(--accent,#5367e9);color:var(--content,#23304a);display:grid;gap:17px;max-width:1600px;margin:0 auto;padding:4px 0 32px}
+.lf-root *{box-sizing:border-box}.lf-root button,.lf-root input{font:inherit}.lf-root button{cursor:pointer}.lf-heading{display:flex;align-items:center;justify-content:space-between;gap:20px}.lf-heading h1{font-size:27px;margin:3px 0 7px;color:var(--heading,inherit)}.lf-eyebrow{font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:var(--lf-accent);font-weight:750;margin:0}.lf-muted{color:var(--lf-muted);font-size:12px;line-height:1.6;margin:4px 0}.lf-demo,.lf-pill{display:inline-flex;align-items:center;border:1px solid var(--lf-border);background:var(--lf-surface);color:var(--lf-muted);border-radius:14px;padding:5px 10px;font-size:11px;white-space:nowrap}.lf-demo{color:#8a62c7;background:#f7f2ff;border-color:#e8dcff}.lf-journey{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.lf-step{display:flex;gap:9px;align-items:center;justify-content:center;text-decoration:none;border:1px solid var(--lf-border);background:var(--lf-surface);color:var(--content,inherit);border-radius:5px;padding:11px 7px;font-size:12px;font-weight:650}.lf-step:hover,.lf-step.is-current{border-color:var(--lf-accent);background:var(--active,#eff2ff);color:var(--lf-accent)}.lf-step-number{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--hover,#f1f4f9);font-size:11px}.lf-step.is-current .lf-step-number{background:var(--lf-accent);color:white}.lf-card{background:var(--lf-surface);border:1px solid var(--lf-border);border-radius:8px;min-width:0;overflow:hidden}.lf-split{display:grid;grid-template-columns:minmax(300px,41%) minmax(0,59%);gap:14px;align-items:stretch}.lf-chat{display:flex;flex-direction:column;min-height:615px}.lf-artifacts{min-height:615px}.lf-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px;border-bottom:1px solid var(--lf-border)}.lf-panel-head strong{display:block;font-size:14px;color:var(--heading,inherit)}.lf-panel-head small{display:block;font-size:11px;color:var(--lf-muted);margin-top:4px}.lf-messages{padding:20px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:16px;flex:1;overflow:auto;max-height:540px}.lf-message{max-width:89%;padding:13px 15px;border-radius:8px;background:var(--hover,#f2f5fb);font-size:12px;line-height:1.7}.lf-message.lf-user{align-self:flex-end;background:#e9efff;color:#263e80}.lf-composer{display:flex;gap:8px;margin:0 15px;padding:13px 0;border-top:1px solid var(--lf-border)}.lf-composer input{min-width:0;flex:1;border:1px solid var(--lf-border);border-radius:4px;padding:11px;background:var(--lf-surface);color:inherit;font-size:12px}.lf-composer button,.lf-preview-toolbar button.is-active{background:var(--lf-accent);color:#fff;border:0;border-radius:4px;padding:9px 14px}.lf-disclaimer{font-size:10px;color:var(--lf-muted);margin:0 15px 14px}.lf-tabs{display:flex;gap:6px;border-bottom:1px solid var(--lf-border);padding:9px 13px 0;overflow:auto}.lf-tabs button{background:none;border:0;border-bottom:2px solid transparent;color:var(--lf-muted);font-size:12px;padding:11px 12px;white-space:nowrap}.lf-tabs button.is-active{border-color:var(--lf-accent);color:var(--lf-accent);font-weight:700}.lf-tab-panel{padding:18px;min-width:0}.lf-tab-panel[hidden],.lf-root pre[hidden]{display:none!important}.lf-document,.lf-spec{border:1px solid var(--lf-border);border-radius:6px;padding:20px;margin-bottom:12px;font-size:12px;line-height:1.7}.lf-document h2,.lf-spec h2{font-size:20px;line-height:1.35;margin:10px 0}.lf-document h3,.lf-spec h3{font-size:13px;margin:18px 0 6px}.lf-document p,.lf-spec p{margin:7px 0}.lf-document ul,.lf-spec ul,.lf-spec ol{padding-left:20px}.lf-doc-title{display:flex;justify-content:space-between;gap:12px;font-size:11px;color:var(--lf-muted)}.lf-green{color:#0b875a;background:#e8faf2;border-color:#c5f0dc}.lf-red{color:#bd3948;background:#fff0f1;border-color:#ffd4da}.lf-stat-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:16px}.lf-stat-row>div{padding:14px;border:1px solid var(--lf-border);border-radius:4px;min-width:0}.lf-stat-row strong{display:block;font-size:21px;color:var(--heading,inherit)}.lf-stat-row small{display:block;font-size:11px;color:var(--lf-muted);margin-top:4px}.lf-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:8px 0}.lf-board>div{border-radius:5px;background:var(--hover,#f4f6fa);padding:12px;min-height:225px}.lf-board h3{font-size:12px;margin:0 0 12px}.lf-board article{background:var(--lf-surface);border:1px solid var(--lf-border);border-radius:4px;padding:12px;margin-bottom:10px;font-size:11px}.lf-board article strong{color:var(--lf-accent)}.lf-board article p{margin:7px 0;font-size:12px}.lf-board article small{color:var(--lf-muted)}.lf-preview-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;margin-bottom:13px}.lf-preview-toolbar button{background:var(--lf-surface);color:inherit;border:1px solid var(--lf-border);border-radius:4px;padding:7px 10px;font-size:11px}.lf-browser{border:1px solid var(--lf-border);border-radius:6px;overflow:hidden;background:#fff;color:#22334b;transition:max-width .2s;margin:0 auto;max-width:100%}.lf-browser.is-mobile{max-width:350px}.lf-browser-bar{background:#f2f5fb;color:#9aa6b9;padding:9px 13px;font-size:10px}.lf-browser-bar span{margin-left:14px;color:#6c7891}.lf-website{padding:19px}.lf-website header{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:11px}.lf-website header strong{color:#375ecb;font-size:14px}.lf-hero{display:grid;grid-template-columns:1.5fr .7fr;gap:12px;align-items:center;background:#eaf5ff;border-radius:7px;padding:23px;margin-top:18px}.lf-hero h2{font-size:24px;line-height:1.2;margin:12px 0;color:#163b6d}.lf-hero p{font-size:12px;line-height:1.6;color:#4c6b8d}.lf-hero-graphic{display:grid;place-items:center;font-size:72px;color:#6da6db}.lf-searchbox{display:flex;justify-content:space-between;gap:8px;align-items:center;background:white;border-radius:4px;padding:9px;font-size:10px;color:#8190a4}.lf-searchbox span{background:#4c74e8;color:white;padding:7px 10px;border-radius:5px}.lf-website h3{font-size:13px}.lf-specialties{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.lf-specialties span{border:1px solid #e2e9f5;border-radius:4px;padding:13px 5px;text-align:center;font-size:10px}.lf-browser.is-mobile .lf-hero{grid-template-columns:1fr}.lf-browser.is-mobile .lf-hero-graphic{display:none}.lf-browser.is-mobile .lf-website header span{display:none}.lf-browser.is-mobile .lf-specialties{grid-template-columns:repeat(2,1fr)}.lf-file-list>div{display:flex;justify-content:space-between;gap:8px;padding:15px;border-bottom:1px solid var(--lf-border);font-size:12px}.lf-file-list span{color:var(--lf-muted);font-size:11px}.lf-code-layout{display:grid;grid-template-columns:180px minmax(0,1fr);min-height:495px;background:#121d30;color:#d6e2fa}.lf-file-tree{background:#19273d;border-right:1px solid #334159;padding:17px 8px;font-size:11px}.lf-file-tree strong{display:block;font-size:10px;letter-spacing:1px;color:#93a8c5;margin:0 8px 16px}.lf-file-tree>div,.lf-file-tree button{display:block;padding:9px 8px;white-space:nowrap}.lf-file-tree button{width:100%;background:none;color:inherit;border:0;text-align:left;font-size:11px}.lf-file-tree button.is-active{background:#2a405d}.lf-editor{min-width:0}.lf-editor-head{padding:13px 17px;border-bottom:1px solid #34425a;font-size:11px}.lf-editor pre{font-size:12px;line-height:1.8;overflow:auto;padding:16px;margin:0;min-height:260px;white-space:pre}.lf-terminal{border-top:1px solid #34425a;background:#0d1727;color:#b8c8dd;padding:14px 17px;font-size:11px;line-height:1.6}.lf-terminal strong{font-size:10px;color:#a3b6d2}.lf-terminal p{margin:7px 0}.lf-terminal-ok,.lf-pass{color:#168b5d}.lf-fail{color:#d14b57}.lf-table{width:100%;border-collapse:collapse;font-size:12px}.lf-table th,.lf-table td{padding:14px 10px;text-align:left;border-bottom:1px solid var(--lf-border)}.lf-table th{font-size:11px;color:var(--lf-muted)}.lf-env{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:19px;border:1px solid var(--lf-border);border-radius:4px;margin-bottom:12px}.lf-env strong{font-size:13px}.lf-env p{font-size:11px;color:var(--lf-muted);margin:7px 0 0}.lf-disabled-action{border:0;background:#aab2c5;color:white;border-radius:4px;padding:10px 14px;cursor:not-allowed!important}.lf-standalone{border-radius:4px}.lf-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:11px;color:var(--lf-muted);padding:14px;border:1px solid var(--lf-border);border-radius:5px}.lf-bottom a{color:var(--lf-accent);font-weight:700;text-decoration:none;white-space:nowrap}.lf-collection{padding-bottom:20px;min-height:350px}.lf-collection>.lf-board,.lf-collection>.lf-spec,.lf-collection>.lf-muted{margin:20px}.lf-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+@media(max-width:1050px){.lf-split{grid-template-columns:1fr}.lf-chat{min-height:420px}.lf-messages{max-height:330px}.lf-artifacts{min-height:400px}}
+@media(max-width:650px){.lf-heading{align-items:flex-start;flex-direction:column}.lf-journey{display:flex;overflow-x:auto}.lf-step{min-width:120px}.lf-board{grid-template-columns:1fr}.lf-code-layout{grid-template-columns:120px minmax(0,1fr)}.lf-file-tree{overflow:hidden}.lf-stat-row{grid-template-columns:repeat(2,1fr)}.lf-bottom{align-items:flex-start;flex-direction:column}.lf-hero{grid-template-columns:1fr}.lf-hero-graphic{display:none}.lf-specialties{grid-template-columns:repeat(2,1fr)}}
+
+
+/* Connected lifecycle timeline. Position indicates navigation, not approval status. */
+.lf-timeline{border:1px solid var(--lf-border);background:var(--lf-surface);border-radius:8px;padding:17px 22px 12px;min-width:0}
+.lf-timeline-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;font-size:13px}
+.lf-timeline-heading strong{color:var(--heading,inherit)}
+.lf-timeline-heading span{color:var(--lf-muted);font-size:11px}
+.lf-timeline-track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));list-style:none;margin:0;padding:0;position:relative}
+
+.lf-timeline-item{min-width:0;position:relative;text-align:center}
+.lf-timeline-item:not(:first-child)::before{content:"";position:absolute;top:17px;left:-50%;width:100%;height:3px;background:var(--lf-border);z-index:0}
+.lf-timeline-item.is-earlier:not(:first-child)::before,.lf-timeline-item.is-current:not(:first-child)::before{background:#16a34a}
+.lf-timeline-link{display:flex;flex-direction:column;align-items:center;gap:9px;text-decoration:none;color:var(--lf-muted);font-size:12px;font-weight:600;padding:0 2px 7px;outline-offset:4px}
+.lf-timeline-dot{display:grid;place-items:center;width:37px;height:37px;border-radius:50%;background:var(--lf-surface);border:2px solid var(--lf-border);color:var(--lf-muted);font-size:12px;z-index:1;transition:transform .15s,border-color .15s}
+.lf-timeline-item.is-earlier .lf-timeline-dot{border-color:#16a34a;color:#fff;background:#16a34a}
+.lf-timeline-item.is-earlier .lf-timeline-label{color:#16a34a}
+.lf-timeline-item.is-current .lf-timeline-dot{background:var(--lf-accent);border-color:var(--lf-accent);color:#fff;box-shadow:0 0 0 4px var(--active,#eff2ff)}
+.lf-timeline-item.is-current .lf-timeline-label{color:var(--lf-accent);font-weight:750}
+.lf-timeline-link:hover .lf-timeline-dot{transform:scale(1.08);border-color:var(--lf-accent)}
+.lf-timeline-note{color:var(--lf-muted);font-size:10px;margin:8px 0 0;text-align:center}
+@media(max-width:650px){.lf-timeline{padding:14px 12px}.lf-timeline-heading{align-items:flex-start;flex-direction:column;margin-bottom:15px}.lf-timeline-label{font-size:10px;overflow-wrap:anywhere}.lf-timeline-dot{width:30px;height:30px}.lf-timeline-track::before{top:14px}.lf-timeline-link{gap:7px}}
+
+@media(max-width:650px){.lf-timeline-item:not(:first-child)::before{top:14px}}
+
+
+/* Project summary and progress timeline matching the supplied header reference. */
+.lf-project-header{background:var(--lf-surface);border:1px solid var(--lf-border);border-radius:7px;box-shadow:0 2px 12px rgba(32,55,91,.05);overflow:hidden}
+.lf-project-identity{display:flex;align-items:center;gap:14px;padding:21px 24px;border-bottom:1px solid var(--lf-border)}
+.lf-project-icon{width:43px;height:43px;display:grid;place-items:center;background:#eaf2ff;color:#277bdc;border-radius:6px;font-size:25px;font-weight:700;flex-shrink:0}
+.lf-project-details{min-width:0}.lf-project-title{display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.lf-project-title strong{font-size:17px;color:var(--heading,inherit)}
+.lf-project-status{background:#e7f8f0;color:#0c9b65;border-radius:14px;font-size:11px;font-weight:700;padding:4px 11px}
+.lf-project-details p{margin:5px 0 0;font-size:12px;color:var(--lf-muted)}
+.lf-progress-timeline{padding:22px 24px 20px}
+.lf-progress-track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:0;margin:0;list-style:none}
+.lf-progress-item{position:relative;min-width:0}
+.lf-progress-item:not(:last-child)::after{content:"";position:absolute;left:50%;width:100%;height:3px;top:13px;background:#e2e8f0;z-index:0}
+.lf-progress-item.is-earlier:not(:last-child)::after{background:#16a34a}
+.lf-progress-link{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;color:var(--lf-muted);text-decoration:none;font-size:12px;font-weight:650;outline-offset:4px}
+.lf-progress-node{width:29px;height:29px;display:grid;place-items:center;border-radius:50%;border:3px solid #d6dfea;background:var(--lf-surface);color:#6d7f98;font-size:11px;z-index:1;box-shadow:0 0 0 4px var(--lf-surface)}
+.lf-progress-item.is-earlier .lf-progress-node{background:#16a34a;border-color:#16a34a;color:#fff}
+.lf-progress-item.is-current .lf-progress-node{border-color:#20a3fa;color:#1686e3;background:#e9f6ff}
+.lf-progress-item.is-earlier .lf-progress-percent{color:#16a34a}
+.lf-progress-item.is-current .lf-progress-name{color:#1686e3}
+.lf-progress-name{color:var(--heading,inherit);font-size:12px}
+.lf-progress-percent{color:var(--lf-muted);font-size:11px}
+.lf-progress-link:hover .lf-progress-node{transform:scale(1.08)}
+@media(max-width:650px){.lf-project-identity{padding:15px}.lf-progress-timeline{padding:18px 12px}.lf-progress-name{font-size:10px;overflow-wrap:anywhere}.lf-progress-link{gap:3px}.lf-project-title strong{font-size:14px}.lf-progress-item:not(:last-child)::after{top:13px}}
+
+
+/* Match the shared Project Profile ui-panel card treatment, preserving split-pane layouts. */
+.lf-root{--lf-border:var(--line,#dce3ef);--lf-surface:var(--surface,#fff);--lf-muted:var(--muted,#66758c)}
+.lf-root .ui-panel.lf-project-header,
+.lf-root .ui-panel.lf-card{padding:0;border:1px solid var(--line,#dce3ef);border-radius:10px;background:var(--surface,#fff);box-shadow:none}
+.lf-root .ui-panel.lf-project-header{overflow:hidden}
+.lf-root .ui-panel.lf-card{min-width:0;overflow:hidden}
+.lf-root .ui-panel.lf-collection{padding-bottom:20px}
+
+
+/* Use the page as the only vertical scroll container; keep chat and artifacts in document flow. */
+.lf-root .lf-messages{max-height:none;overflow:visible;flex:1 0 auto}
+.lf-root .lf-chat,.lf-root .lf-artifacts{height:auto;max-height:none}
+.lf-root .lf-tabs{overflow-x:auto;overflow-y:hidden}
+
+
+/* Lifecycle pages use the outer document scrollbar, not an inner content scrollbar. */
+.shell:has(.lf-root){height:auto;min-height:100dvh;overflow:visible}
+.shell:has(.lf-root)>.main{height:auto;min-height:0;max-height:none;overflow:visible}
+.shell:has(.lf-root)>.main>.page-content{flex:1 0 auto;min-height:0;min-width:0;overflow:visible}
+
+
+/* Keep the project sidebar pinned while the document scrolls; scroll its menu independently. */
+@media(min-width:641px){
+  .shell:has(.lf-root)>.sidebar{position:sticky;top:0;align-self:flex-start;height:100dvh;max-height:100dvh;overflow-y:auto;overscroll-behavior-y:contain}
+}
+
+
+/* Project header and stage intelligence share the Project Profile card styling. */
+.lf-overview-grid{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:14px;align-items:stretch}
+.lf-overview-grid>.ui-panel{min-width:0;border:1px solid var(--line);border-radius:10px;background:var(--surface);box-shadow:none}
+.lf-root .lf-stage-insights.ui-panel{padding:18px 19px;display:flex;flex-direction:column;gap:15px}
+.lf-insights-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.lf-insights-heading strong{display:block;font-size:14px;color:var(--heading)}
+.lf-insights-heading span:not(.lf-insights-demo){display:block;font-size:11px;color:var(--muted);margin-top:5px}
+.lf-insights-demo{font-size:10px;font-weight:700;color:var(--accent);background:var(--active);border-radius:999px;padding:4px 8px}
+.lf-insights-progress-label{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted);margin-bottom:8px}
+.lf-insights-progress-label strong{color:var(--heading);font-size:12px}
+.lf-insights-bar{height:7px;background:var(--surface-raised);border-radius:999px;overflow:hidden}
+.lf-insights-bar>span{display:block;height:100%;background:var(--accent);border-radius:inherit}
+.lf-insights-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.lf-insights-metric{min-width:0;padding:10px 8px;border:1px solid var(--line);border-radius:5px;background:var(--surface-raised)}
+.lf-insights-metric>span{display:block;font-size:10px;color:var(--muted)}
+.lf-insights-metric>strong{display:block;font-size:16px;color:var(--heading);margin:5px 0;overflow-wrap:anywhere}
+.lf-insights-metric>small{display:block;font-size:10px;line-height:1.35;color:var(--muted)}
+.lf-insights-footnote{font-size:10px;line-height:1.5;color:var(--muted);margin:auto 0 0}
+@media(max-width:1150px){.lf-overview-grid{grid-template-columns:1fr}.lf-insights-metrics{gap:12px}}
+@media(max-width:480px){.lf-root .lf-stage-insights.ui-panel{padding:15px}.lf-insights-metrics{grid-template-columns:1fr 1fr}.lf-insights-metric:last-child{grid-column:1/-1}}
+
+/* Shared Board has no lifecycle stepper; let its project header span the row. */
+.lf-overview-grid--single{grid-template-columns:minmax(0,1fr)}
+.lf-overview-grid--single .lf-project-identity{border-bottom:0}
+
+
+/* Five-column Kanban board, separate from lifecycle navigation. */
+.lf-board-layout{min-width:0}
+.lf-board-columns{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:stretch}
+.lf-root .lf-board-column.ui-panel{min-width:0;padding:14px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);box-shadow:none}
+.lf-board-column-head{display:flex;align-items:center;justify-content:space-between;gap:6px;padding-bottom:13px;border-bottom:1px solid var(--line);margin-bottom:13px}
+.lf-board-column-head h2{display:flex;align-items:center;gap:7px;margin:0;font-size:12px;font-weight:700;color:var(--heading);white-space:nowrap}
+.lf-board-status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none;background:#94a3b8}
+.lf-board-status-dot.is-progress{background:#3b82f6}.lf-board-status-dot.is-review{background:#a855f7}.lf-board-status-dot.is-quality{background:#f59e0b}.lf-board-status-dot.is-done{background:#16a34a}
+.lf-board-count{font-size:11px;min-width:22px;text-align:center;padding:3px 6px;border-radius:4px;background:var(--surface-raised);color:var(--muted)}
+.lf-board-task{padding:13px 11px;border:1px solid var(--line);border-radius:5px;background:var(--surface-raised);overflow-wrap:anywhere}
+.lf-board-task-id{font-size:10px;font-weight:700;color:var(--accent)}
+.lf-board-task h3{font-size:12px;line-height:1.5;margin:7px 0;color:var(--heading)}
+.lf-board-task p{font-size:11px;line-height:1.55;color:var(--content);margin:0 0 12px}
+.lf-board-task small{font-size:10px;color:var(--muted)}
+.lf-board-note{font-size:11px;color:var(--muted);margin:12px 0 0}
+@media(max-width:1250px){.lf-board-columns{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:820px){.lf-board-columns{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:500px){.lf-board-columns{grid-template-columns:minmax(0,1fr)}}
+
+
+/* Compact only the Kanban cards: five readable lanes without browser/page zoom. */
+.lf-board-layout{overflow-x:auto;overflow-y:visible}
+.lf-board-columns{grid-template-columns:repeat(5,minmax(150px,1fr));gap:8px;align-items:start}
+.lf-root .lf-board-column.ui-panel{padding:10px 9px;border-radius:7px}
+.lf-board-column-head{padding-bottom:9px;margin-bottom:9px;gap:4px}
+.lf-board-column-head h2{font-size:11px;gap:5px}
+.lf-board-status-dot{width:7px;height:7px}
+.lf-board-count{font-size:10px;min-width:19px;padding:2px 5px}
+.lf-board-task{padding:10px 9px;border-radius:4px}
+.lf-board-task-id{font-size:10px}
+.lf-board-task h3{font-size:11px;line-height:1.4;margin:5px 0}
+.lf-board-task p{font-size:10px;line-height:1.45;margin-bottom:8px}
+.lf-board-task small{font-size:9px;line-height:1.4}
+@media(max-width:1250px){.lf-board-columns{grid-template-columns:repeat(5,minmax(150px,1fr))}}
+@media(max-width:820px){.lf-board-columns{grid-template-columns:repeat(5,minmax(150px,1fr))}}
+@media(max-width:500px){.lf-board-columns{grid-template-columns:repeat(5,minmax(150px,1fr))}}
+
+
+/* Kanban lane treatment: white header, soft gray body, white task surfaces. */
+.lf-root .lf-board-column.ui-panel{background:#f3f4f6;padding:0 9px 10px;overflow:hidden}
+.lf-board-column-head{background:#ffffff;margin:0 -9px 10px;padding:11px 9px;border-bottom:1px solid #e5e7eb}
+.lf-board-task{background:#ffffff;border-color:#e5e7eb}
+
+
+/* Task-first board cards with compact feature badge and future telemetry slots. */
+.lf-board-task h3{margin:0 0 9px;font-size:12px;line-height:1.45;font-weight:700}
+.lf-board-task-meta{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:11px}
+.lf-board-task-id{font-size:9px;font-weight:650;color:var(--muted)}
+.lf-board-feature{display:inline-flex;align-items:center;max-width:100%;border-radius:999px;padding:3px 7px;background:#eaf2ff;color:#2563eb;font-size:9px;font-weight:650;line-height:1.3;overflow-wrap:anywhere}
+.lf-board-task-stats{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;border-top:1px solid #e5e7eb;padding-top:9px;color:var(--muted);font-size:10px;font-variant-numeric:tabular-nums}
+.lf-board-task-stats span{white-space:nowrap}
+
+
+/* Native accessible disclosure groups: Status > Feature > Tasks. */
+.lf-board-feature-group{min-width:0;margin:0 0 9px}
+.lf-board-feature-summary{display:flex;align-items:center;gap:5px;cursor:pointer;list-style:none;padding:7px 2px;color:var(--heading)}
+.lf-board-feature-summary::-webkit-details-marker{display:none}
+.lf-board-feature-summary:focus-visible{outline:2px solid #3b82f6;outline-offset:2px;border-radius:4px}
+.lf-board-feature-title{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px;font-size:10px;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
+.lf-board-feature-id{color:#2563eb;font-size:9px;letter-spacing:.02em}
+.lf-board-feature-total{flex:none;color:var(--muted);font-size:9px;white-space:nowrap}
+.lf-board-chevron{width:6px;height:6px;flex:none;border-right:1.5px solid #64748b;border-bottom:1.5px solid #64748b;transform:rotate(45deg);transition:transform .15s;margin:0 3px 3px}
+.lf-board-feature-group:not([open]) .lf-board-chevron{transform:rotate(-45deg)}
+.lf-board-feature-tasks{display:grid;gap:7px;padding-top:5px}
+.lf-board-feature-tasks .lf-board-task{margin:0}
+
+
+/* Inline task ID followed by its title, keeping the metrics footer unchanged. */
+.lf-board-task-heading{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:6px;row-gap:3px;margin-bottom:9px}
+.lf-board-task-heading .lf-board-task-id{flex:none;font-size:10px;font-weight:700;color:#2563eb}
+.lf-board-task-heading h3{flex:1 1 90px;min-width:0;margin:0;font-size:11px;line-height:1.45}
+
+
+/* Clean Kanban: flat tasks, feature badge, concise usage footer. */
+.lf-board-task-list{display:grid;gap:8px}
+.lf-board-task-feature{display:flex;align-items:center;margin:0 0 9px}
+.lf-board-task-feature .lf-board-feature{font-size:9px}
+.lf-board-task-list .lf-board-task{margin:0}
+.lf-board-task-list .lf-board-task-heading{margin-bottom:7px}
+.lf-board-task-list .lf-board-task-stats{gap:5px;padding-top:8px}
+
+
+/* Task ID and title share one text flow; wrapped lines start at the card's left edge. */
+.lf-board-task-list h3.lf-board-task-heading{display:block;margin:0 0 7px;font-size:11px;line-height:1.5;font-weight:700;overflow-wrap:anywhere}
+.lf-board-task-list .lf-board-task-heading .lf-board-task-id{display:inline;float:none;margin-right:4px;font-size:10px;font-weight:700;color:#2563eb;white-space:nowrap}
+
+
+/* Task heading typography: black ID (bold), black title (normal). */
+.lf-board-task-list h3.lf-board-task-heading{color:#111111;font-weight:400}
+.lf-board-task-list .lf-board-task-heading .lf-board-task-id{color:#111111;font-weight:700}
+
+/* Improve readability of time, tokens and cost on compact task cards. */
+.lf-board-task-list .lf-board-task-stats{font-size:12px;line-height:1.45;gap:7px;padding-top:9px}
+
+/* Match task ID and title to the 12px metrics footer. */
+.lf-board-task-list h3.lf-board-task-heading{font-size:12px}
+.lf-board-task-list .lf-board-task-heading .lf-board-task-id{font-size:12px}
+
+/* Inline task typography: 11px ID without margin, 13px title. */
+.lf-board-task-list h3.lf-board-task-heading{font-size:13px}
+.lf-board-task-list .lf-board-task-heading .lf-board-task-id{font-size:11px;margin:0}
+
+/* Feature badge label uses regular weight, distinct from bold task IDs. */
+.lf-board-task-feature .lf-board-feature{font-weight:400}
+
+/* Task ID size only; keep title, badge and metrics unchanged. */
+.lf-board-task-list .lf-board-task-heading .lf-board-task-id{font-size:10px}
+
+/* Use standard black for Kanban task footer metrics. */
+.lf-board-task-list .lf-board-task-stats{color:#111111}
+
+/* Compact Kanban task card corners. */
+.lf-board-task-list .lf-board-task{border-radius:4px}
+
+/* Subtle left accent for each Kanban task card. */
+.lf-board-task-list .lf-board-task{border-left:3px solid var(--accent)}
+
+/* Specifications library: Board-aligned visual language, grouped by feature. */
+.lf-specs-layout{display:grid;gap:14px;min-width:0}
+.lf-specs-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.lf-root .lf-specs-summary-item.ui-panel{padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.lf-specs-summary-item>span{font-size:11px;color:var(--muted)}
+.lf-specs-summary-item>strong{font-size:24px;line-height:1.2;color:var(--heading)}
+.lf-specs-summary-item>small{font-size:10px;color:var(--muted)}
+.lf-root .lf-specs-requirements.ui-panel{padding:18px}
+.lf-specs-section-head,.lf-specs-section-title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.lf-specs-section-head h2,.lf-specs-section-title h2{font-size:16px;line-height:1.35;margin:4px 0 6px;color:var(--heading)}
+.lf-specs-section-head p,.lf-specs-section-title p{font-size:12px;line-height:1.55;color:var(--muted);margin:0}
+.lf-specs-kicker{font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--accent)}
+.lf-specs-label{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface-raised);color:var(--muted);padding:4px 8px;border-radius:4px;font-size:10px;white-space:nowrap}
+.lf-specs-requirement-points{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.lf-specs-requirement-points span{padding:7px 9px;border:1px solid var(--line);border-radius:4px;background:var(--surface);font-size:11px;color:var(--content)}
+.lf-specs-section-title{align-items:center;margin-top:4px}
+.lf-specs-features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.lf-root .lf-specs-feature.ui-panel{padding:0 10px 10px;overflow:hidden;min-width:0;background:#f3f4f6}
+.lf-specs-feature-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 -10px 10px;padding:12px 10px;background:var(--surface);border-bottom:1px solid var(--line)}
+.lf-specs-feature-head h3{margin:3px 0 0;font-size:13px;font-weight:600;line-height:1.4;color:var(--heading)}
+.lf-specs-task-list{display:grid;gap:8px}
+.lf-specs-task{position:relative;min-width:0;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:4px;padding:11px 10px}
+.lf-specs-task h4{font-size:13px;line-height:1.5;font-weight:400;color:#111;margin:0 0 8px;overflow-wrap:anywhere}
+.lf-specs-task-id{font-size:10px;font-weight:700;white-space:nowrap}
+.lf-specs-task>p{font-size:11px;line-height:1.55;color:var(--content);margin:9px 0 0}
+.lf-specs-task-state{display:inline-flex;font-size:10px;line-height:1.3;padding:3px 7px;border-radius:4px;background:#e9eef6;color:#334155}
+.lf-specs-task-state.is-progress{background:#dbeafe;color:#1d4ed8}
+.lf-specs-task-state.is-review{background:#f3e8ff;color:#7e22ce}
+.lf-specs-task-state.is-quality{background:#fef3c7;color:#92400e}
+.lf-specs-task-state.is-done{background:#dcfce7;color:#166534}
+.lf-specs-details{margin-top:10px;border-top:1px solid var(--line);padding-top:9px;font-size:11px;color:var(--content);line-height:1.6}
+.lf-specs-details summary{cursor:pointer;font-weight:600;color:var(--accent)}
+.lf-specs-details summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.lf-specs-details ul{margin:8px 0;padding-left:18px}
+.lf-specs-details p{margin:8px 0 0}
+@media(max-width:850px){.lf-specs-features{grid-template-columns:1fr}}
+@media(max-width:540px){.lf-specs-summary{grid-template-columns:1fr 1fr}.lf-specs-summary-item:last-child{grid-column:1/-1}.lf-specs-section-head,.lf-specs-section-title{flex-wrap:wrap}}
+
+/* Board display switcher: Kanban workflow or feature-grouped specifications. */
+.lf-board-workspace{display:grid;gap:12px;min-width:0}
+.lf-board-view-toolbar{display:inline-flex;justify-self:start;gap:3px;padding:3px;border:1px solid var(--line);border-radius:6px;background:var(--surface-raised)}
+.lf-board-view-toolbar button{appearance:none;border:0;background:transparent;color:var(--content);padding:8px 14px;border-radius:4px;font:inherit;font-size:12px;font-weight:500;cursor:pointer}
+.lf-board-view-toolbar button.is-active{background:var(--surface);color:var(--accent);box-shadow:0 1px 3px rgba(15,23,42,.1);font-weight:700}
+.lf-board-view-toolbar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.lf-board-view[hidden]{display:none!important}
+.lf-board-features-view .lf-specs-section-title{margin:0 0 12px}
+
+/* Keep the view switcher in the Board header, with room for narrow screens. */
+.lf-project-identity:has(.lf-board-view-toolbar){flex-wrap:wrap}
+.lf-project-identity .lf-board-view-toolbar{margin-left:auto;flex:none}
+@media(max-width:640px){.lf-project-identity .lf-board-view-toolbar{margin-left:0;width:100%;justify-self:stretch}.lf-project-identity .lf-board-view-toolbar button{flex:1}}
+
+/* Features view: task usage and feature totals reuse the Board's compact metric language. */
+.lf-specs-usage,.lf-specs-feature-usage{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;font-size:12px;line-height:1.45;font-variant-numeric:tabular-nums}
+.lf-specs-usage{margin-top:10px;padding-top:9px;border-top:1px solid var(--line);color:var(--content)}
+.lf-specs-feature-usage{margin-top:10px;padding:10px 2px 1px;border-top:1px solid var(--line);font-weight:600;color:var(--heading)}
+.lf-specs-usage span,.lf-specs-feature-usage span{white-space:nowrap}
+
+/* Feature heading follows the same inline ID + title hierarchy as task headings. */
+.lf-specs-feature-head h3.lf-specs-feature-heading{flex:1;min-width:0;margin:0;font-size:13px;line-height:1.5;font-weight:400;color:#111111;overflow-wrap:anywhere}
+.lf-specs-feature-heading .lf-specs-kicker{display:inline;font-size:10px;line-height:inherit;font-weight:700;letter-spacing:normal;color:#111111;white-space:nowrap}
+.lf-specs-feature-head .lf-board-count{flex:none}
+
+/* Feature task heading and status share a row, with the status aligned right. */
+.lf-specs-task-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-width:0}
+.lf-specs-task-head h4{flex:1;min-width:0;margin:0}
+.lf-specs-task-head .lf-specs-task-state{flex:none;white-space:nowrap;margin-top:1px}
+
+/* Native accessible collapse/expand for each feature; open by default. */
+.lf-specs-feature-details{min-width:0}
+.lf-specs-feature-details>.lf-specs-feature-head{cursor:pointer;list-style:none;user-select:none}
+.lf-specs-feature-details>.lf-specs-feature-head::-webkit-details-marker{display:none}
+.lf-specs-feature-details>.lf-specs-feature-head:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+.lf-specs-feature-details>.lf-specs-feature-head .lf-specs-chevron{width:8px;height:8px;flex:none;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .15s ease;color:var(--muted);margin:0 5px 4px 2px}
+.lf-specs-feature-details[open]>.lf-specs-feature-head .lf-specs-chevron{transform:rotate(225deg);margin-bottom:0}
+.lf-specs-feature-details:not([open])>.lf-specs-feature-head{margin-bottom:-10px;border-bottom:0}
+.lf-specs-feature-body{min-width:0}
+@media(prefers-reduced-motion:reduce){.lf-specs-feature-details .lf-specs-chevron{transition:none}}
+
+/* Feature count and bulk expand/collapse controls share the section heading. */
+.lf-specs-header-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:10px}
+.lf-specs-expand-actions{display:inline-flex;align-items:center;gap:6px}
+.lf-specs-expand-actions button{border:1px solid var(--line);background:var(--surface);color:var(--content);border-radius:4px;padding:6px 9px;font-size:11px;white-space:nowrap;cursor:pointer}
+.lf-specs-expand-actions button:hover{background:var(--hover)}
+.lf-specs-expand-actions button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Project Specifications: static document library. */
+.lf-doc-library{display:grid;gap:14px;min-width:0}
+.lf-doc-library-toolbar,.lf-doc-library-controls{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.lf-doc-library-toolbar h2{font-size:17px;margin:0 0 5px;color:var(--heading)}
+.lf-doc-library-toolbar p{font-size:12px;color:var(--muted);margin:0}
+.lf-doc-upload{border:1px solid var(--accent);background:var(--accent);color:var(--button-text,#fff);padding:10px 15px;border-radius:4px;font-size:12px;font-weight:650;cursor:pointer}
+.lf-doc-library-controls{justify-content:flex-start}
+.lf-doc-search-label{flex:1;min-width:200px}
+.lf-doc-search-label input,.lf-doc-filter-label select{width:100%;padding:10px 12px;border:1px solid var(--line-strong);border-radius:4px;background:var(--surface);color:var(--content);font:inherit;font-size:12px}
+.lf-doc-filter-label{min-width:150px}
+.lf-doc-count{font-size:12px;color:var(--muted);margin-left:auto;white-space:nowrap}
+.lf-doc-table-wrap{min-width:0;overflow-x:auto}
+.lf-doc-table{border-collapse:collapse;width:100%;min-width:650px;text-align:left;font-size:12px;color:var(--content)}
+.lf-doc-table th{font-size:11px;font-weight:650;color:var(--muted);background:var(--surface-raised);padding:13px 16px;border-bottom:1px solid var(--line)}
+.lf-doc-table td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:middle}
+.lf-doc-table tbody tr:last-child td{border-bottom:0}
+.lf-doc-table tbody tr[hidden]{display:none}
+.lf-doc-name{display:flex;align-items:center;gap:12px;min-width:200px}
+.lf-doc-name strong{display:block;font-size:12px;color:var(--heading);font-weight:650;overflow-wrap:anywhere}
+.lf-doc-name small{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+.lf-doc-file-icon{width:36px;height:40px;display:grid;place-items:center;flex:none;border-radius:4px;border:1px solid var(--line);background:var(--hover);color:var(--accent);font-size:10px;font-weight:750}
+.lf-doc-source{display:inline-block;padding:5px 8px;border-radius:4px;background:var(--hover);font-size:11px;white-space:nowrap}
+.lf-doc-source.is-ai{color:var(--accent);background:var(--active)}
+.lf-doc-actions{white-space:nowrap}
+.lf-doc-actions button,.lf-doc-preview-footer button{border:1px solid var(--line-strong);background:var(--surface);color:var(--content);padding:7px 10px;border-radius:4px;font-size:11px;cursor:pointer;margin-right:5px}
+.lf-doc-actions button:hover,.lf-doc-preview-footer button:hover{background:var(--hover)}
+.lf-doc-empty{padding:22px;text-align:center;color:var(--muted);font-size:12px}
+.lf-doc-empty[hidden],.lf-doc-demo-message[hidden]{display:none}
+.lf-doc-demo-message{border:1px solid var(--line);background:var(--surface-raised);color:var(--content);padding:12px;border-radius:4px;font-size:12px}
+.lf-doc-preview-dialog{width:min(680px,calc(100vw - 32px));max-height:min(80dvh,800px);padding:0;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--content);box-shadow:0 20px 70px #0004}
+.lf-doc-preview-dialog::backdrop{background:#0f172a99}
+.lf-doc-preview-header,.lf-doc-preview-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.lf-doc-preview-header strong{display:block;font-size:15px;color:var(--heading)}
+.lf-doc-preview-header small{display:block;font-size:11px;color:var(--muted);margin-top:5px}
+.lf-doc-preview-header>button{border:0;background:transparent;color:var(--content);font-size:18px;cursor:pointer}
+.lf-doc-preview-body{padding:20px;overflow:auto;max-height:55dvh}
+.lf-doc-preview-notice{font-size:11px;color:var(--muted);margin:0 0 15px}
+.lf-doc-preview-body pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;margin:0;color:var(--content)}
+.lf-doc-preview-footer{justify-content:flex-end;border-bottom:0;border-top:1px solid var(--line)}
+@media(max-width:640px){.lf-doc-library-toolbar{align-items:flex-start}.lf-doc-upload{width:100%}.lf-doc-filter-label{flex:1}.lf-doc-count{margin-left:0}}
+
+/* Show documents as a responsive grid of standalone items, not a table inside a card. */
+.lf-doc-table-wrap{overflow:visible}
+.lf-doc-table{display:block;width:100%;min-width:0;border:0}
+.lf-doc-table thead{display:none}
+.lf-doc-table tbody{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.lf-doc-table tbody tr{display:flex;flex-direction:column;gap:12px;min-width:0;padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:4px}
+.lf-doc-table tbody tr:hover{border-color:var(--line-strong)}
+.lf-doc-table td{display:block;padding:0;border:0;min-width:0}
+.lf-doc-table tbody tr:last-child td{border:0}
+.lf-doc-table td:nth-child(2){margin-top:auto}
+.lf-doc-table td:nth-child(3){font-size:11px;color:var(--muted)}
+.lf-doc-table .lf-doc-name{min-width:0;align-items:flex-start}
+.lf-doc-table .lf-doc-name>div{min-width:0}
+.lf-doc-table .lf-doc-actions{display:flex;gap:8px;white-space:normal;padding-top:12px;border-top:1px solid var(--line)}
+.lf-doc-table .lf-doc-actions button{flex:1;margin:0}
+@media(max-width:1050px){.lf-doc-table tbody{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.lf-doc-table tbody{grid-template-columns:1fr}}
+
+/* Document card footer: source badge left, icon actions right. */
+.lf-doc-table td.lf-doc-date{margin-top:auto;font-size:11px;color:var(--muted)}
+.lf-doc-table td.lf-doc-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.lf-doc-action-buttons{display:inline-flex;align-items:center;gap:8px;margin-left:auto}
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button{display:inline-grid;place-items:center;flex:none;width:32px;height:32px;padding:0;margin:0}
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button:hover{color:var(--accent);border-color:var(--accent)}
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Document type beside title; date and source together in the footer. */
+.lf-doc-title-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+.lf-doc-title-line strong{min-width:0}
+.lf-doc-type{display:inline-flex;align-items:center;padding:3px 6px;border:1px solid var(--line);border-radius:4px;background:var(--hover);font-size:10px;font-weight:650;color:var(--muted);white-space:nowrap}
+.lf-doc-table td.lf-doc-actions{margin-top:auto}
+.lf-doc-footer-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
+.lf-doc-source-date{font-size:11px;color:var(--muted);white-space:nowrap}
+
+/* Document source is in the header, opposite the file title; footer keeps date and actions. */
+.lf-doc-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-width:0}
+.lf-doc-card-header .lf-doc-name{flex:1;min-width:0}
+.lf-doc-card-header>.lf-doc-source{flex:none}
+.lf-doc-table td.lf-doc-actions{justify-content:space-between}
+
+/* Footer actions: bare icons without button containers. */
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button{
+  width:auto;
+  height:auto;
+  min-width:0;
+  min-height:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button:hover{
+  border:0;
+  background:transparent;
+  color:var(--accent);
+}
+
+/* Keep Upload document at the far end of the project header with a compact footprint. */
+.lf-project-identity>.lf-doc-upload{
+  margin-left:auto;
+  flex:none;
+  width:auto;
+  padding:7px 11px;
+  font-size:11px;
+  line-height:1.35;
+}
+
+/* Color-coded document actions, retaining the borderless icon-only treatment. */
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button[data-lf-doc-preview]{
+  color:var(--accent);
+}
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button[data-lf-doc-download]{
+  color:#15966c;
+}
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button[data-lf-doc-preview]:hover{
+  color:var(--heading);
+}
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button[data-lf-doc-download]:hover{
+  color:#0c7654;
+}
+
+/* Source badges: shared black text, distinct subtle backgrounds. */
+.lf-doc-card-header .lf-doc-source.is-ai{
+  color:#111;
+  background:#dbeafe;
+}
+.lf-doc-card-header .lf-doc-source.is-user{
+  color:#111;
+  background:#e5e7eb;
+}
+
+/* Format-aware static document previews. */
+.lf-doc-rendered-preview{min-width:0}
+.lf-doc-preview-page{padding:24px 28px;background:var(--surface);border:1px solid var(--line);border-radius:4px;line-height:1.65}
+.lf-doc-preview-page h2{margin:0 0 16px;font-size:21px;color:var(--heading);line-height:1.3}
+.lf-doc-preview-page h3{margin:20px 0 8px;font-size:15px;color:var(--heading)}
+.lf-doc-preview-page p{margin:10px 0}
+.lf-doc-preview-page ul{padding-left:22px;margin:8px 0 16px}
+.lf-doc-preview-page li{margin:5px 0}
+.lf-doc-preview-page.is-pdf{background:#fff;color:#222;box-shadow:0 4px 18px #00000012;min-height:340px}
+.lf-doc-preview-page.is-pdf h2{color:#222}
+.lf-doc-page-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--muted);margin-bottom:12px}
+.lf-doc-preview-page.is-pdf .lf-doc-page-eyebrow{color:#666}
+.lf-doc-page-footnote{font-size:11px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.lf-doc-architecture-flow{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:32px 0;padding:16px 0}
+.lf-doc-flow-node{padding:10px;border:1px solid #cbd5e1;border-radius:4px;background:#eff6ff;font-size:11px;color:#1e293b}
+.lf-doc-flow-arrow{color:#64748b}
+.lf-doc-rendered-preview pre.lf-doc-code{margin:0;padding:20px;overflow-x:auto;white-space:pre;overflow-wrap:normal;border:1px solid var(--line);border-radius:4px;background:var(--hover);color:var(--content);font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}
+@media(max-width:650px){.lf-doc-preview-page{padding:18px}.lf-doc-architecture-flow{gap:5px}}
+
+/* Shared preview host for Markdown, YAML, PDF.js canvases and Mammoth HTML. */
+.lf-doc-rendered-preview.lf-doc-markdown-preview{line-height:1.7;overflow-wrap:anywhere}
+.lf-doc-rendered-preview.lf-doc-markdown-preview h1,.lf-doc-rendered-preview.lf-doc-markdown-preview h2,.lf-doc-rendered-preview.lf-doc-markdown-preview h3{margin:0 0 12px;color:var(--heading);line-height:1.35}
+.lf-doc-rendered-preview.lf-doc-markdown-preview h1{font-size:22px}
+.lf-doc-rendered-preview.lf-doc-markdown-preview h2{font-size:18px}
+.lf-doc-rendered-preview.lf-doc-markdown-preview h3{font-size:15px}
+.lf-doc-rendered-preview.lf-doc-markdown-preview p{margin:0 0 12px}
+.lf-doc-rendered-preview.lf-doc-markdown-preview ul,.lf-doc-rendered-preview.lf-doc-markdown-preview ol{padding-left:24px;margin:0 0 16px}
+.lf-doc-rendered-preview .lf-doc-pdf-canvas{display:block;max-width:100%;height:auto;margin:0 auto 16px;background:#fff;box-shadow:0 3px 14px #0002}
+.lf-doc-rendered-preview .lf-doc-preview-error{padding:14px;border:1px solid var(--line);border-radius:4px;color:var(--content);background:var(--hover)}
+
+/* Unified PDF-style document viewer: paper surface, centered pages and soft shadows. */
+.lf-doc-preview-dialog{width:min(960px,calc(100vw - 32px));max-height:min(92dvh,1100px)}
+.lf-doc-preview-body{background:var(--surface);max-height:calc(92dvh - 160px);padding:28px 20px}
+.lf-doc-preview-notice{max-width:760px;margin:0 auto 16px;text-align:center}
+.lf-doc-rendered-preview{max-width:760px;margin:0 auto}
+.lf-doc-rendered-preview.lf-doc-markdown-preview,
+.lf-doc-rendered-preview .lf-doc-code{
+  box-sizing:border-box;
+  width:100%;
+  min-height:460px;
+  padding:42px 48px;
+  background:#fff;
+  color:#1f2937;
+  border:1px solid #e2e8f0;
+  border-radius:2px;
+  box-shadow:0 10px 28px #00000018,0 2px 6px #0000000b;
+}
+.lf-doc-rendered-preview.lf-doc-markdown-preview h1,
+.lf-doc-rendered-preview.lf-doc-markdown-preview h2,
+.lf-doc-rendered-preview.lf-doc-markdown-preview h3{color:#111827}
+.lf-doc-rendered-preview pre.lf-doc-code{
+  margin:0;
+  padding:42px 48px;
+  white-space:pre;
+  overflow:auto;
+  overflow-wrap:normal;
+  background:#fff;
+  color:#1f2937;
+  border:1px solid #e2e8f0;
+  border-radius:2px;
+  box-shadow:0 10px 28px #00000018,0 2px 6px #0000000b;
+}
+.lf-doc-rendered-preview .lf-doc-pdf-canvas{box-shadow:0 10px 28px #00000018,0 2px 6px #0000000b}
+@media(max-width:650px){
+  .lf-doc-preview-body{padding:16px 10px}
+  .lf-doc-rendered-preview.lf-doc-markdown-preview,
+  .lf-doc-rendered-preview pre.lf-doc-code{padding:24px 20px;min-height:320px}
+}
+
+/* All document paper previews are borderless; retain the soft page shadow. */
+.lf-doc-rendered-preview.lf-doc-markdown-preview,
+.lf-doc-rendered-preview pre.lf-doc-code,
+.lf-doc-rendered-preview .lf-doc-pdf-canvas,
+.lf-doc-rendered-preview .lf-doc-preview-page{
+  border:0;
+}
+
+/* Discovery produces a single Word artifact rather than tabbed artifact views. */
+.lf-discovery-document-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.lf-discovery-document-toolbar strong{display:block;font-size:13px;color:var(--heading)}
+.lf-discovery-document-toolbar small{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+.lf-discovery-document-toolbar button{border:1px solid var(--line-strong);border-radius:4px;background:var(--surface);color:var(--content);padding:8px 12px;cursor:pointer;font-size:12px}
+.lf-discovery-document-toolbar button:hover{background:var(--hover)}
+.lf-discovery-paper{box-sizing:border-box;max-width:760px;margin:0;padding:20px;background:#fff;color:#1f2937;box-shadow:none;line-height:1.65}
+.lf-discovery-paper h2{margin:0 0 8px;font-size:22px;color:#111827}
+.lf-discovery-paper h3{margin:22px 0 8px;font-size:15px;color:#111827}
+.lf-discovery-paper p{margin:0 0 10px}
+.lf-discovery-paper ul{padding-left:24px}
+.lf-discovery-paper .lf-muted{color:#64748b}
+@media(max-width:650px){.lf-discovery-paper{padding:20px}.lf-discovery-document-toolbar{flex-wrap:wrap}}
+
+.lf-panel-head .lf-discovery-preview-button{flex:0 0 auto;width:auto;min-width:0;max-width:max-content;white-space:nowrap;padding:7px 13px;border:1px solid var(--line-strong);border-radius:4px;background:var(--surface);color:var(--heading);font-size:12px;cursor:pointer}
+.lf-discovery-preview-button:hover{background:var(--hover)}
+.lf-discovery-dialog{box-sizing:border-box;width:min(900px,calc(100vw - 32px));max-height:90dvh;overflow:auto;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--content)}
+.lf-discovery-dialog::backdrop{background:#0008}
+.lf-discovery-dialog-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line)}
+.lf-discovery-dialog-head button{border:0;background:transparent;color:var(--content);cursor:pointer;font-size:16px}
+.lf-discovery-dialog .lf-discovery-document{padding:24px 16px}
+@media(max-width:650px){.lf-discovery-dialog .lf-discovery-document{padding:12px}}
+
+/* Stage insights: completion ring and budget-free usage metrics. */
+.lf-insights-ring-layout{display:flex;align-items:center;gap:20px;min-width:0}
+.lf-insights-ring{--lf-ring-progress:0%;width:118px;height:118px;flex:none;border-radius:50%;background:conic-gradient(var(--accent) var(--lf-ring-progress),var(--surface-raised) var(--lf-ring-progress));display:grid;place-items:center}
+.lf-insights-ring-center{width:96px;height:96px;border-radius:50%;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.lf-insights-ring-center strong{font-size:24px;line-height:1.15;color:var(--heading);font-variant-numeric:tabular-nums}
+.lf-insights-ring-center span{font-size:10px;color:var(--muted)}
+.lf-insights-ring-metrics{flex:1;min-width:0;display:flex;flex-direction:column}
+.lf-insights-ring-metric{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.lf-insights-ring-metric:last-child{border-bottom:0}
+.lf-insights-ring-metric span{font-size:11px;color:var(--muted)}
+.lf-insights-ring-metric strong{font-size:13px;font-weight:650;color:var(--heading);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media(max-width:420px){.lf-insights-ring-layout{gap:12px}.lf-insights-ring{width:96px;height:96px}.lf-insights-ring-center{width:78px;height:78px}.lf-insights-ring-center strong{font-size:20px}}
+
+/* Task-style lifecycle usage, shown beneath the project subtitle. */
+.lf-lifecycle-usage{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px;margin-top:9px;font-size:12px;line-height:1.45;color:var(--content);font-variant-numeric:tabular-nums}
+.lf-lifecycle-usage span{white-space:nowrap}
+
+/* Lifecycle header spans the available workspace width. */
+.lf-overview-grid{grid-template-columns:minmax(0,1fr);width:100%}
+.lf-overview-grid>.lf-project-header{width:100%;min-width:0}
+
+/* Align stage usage on the same header row as the project name. */
+.lf-project-identity>.lf-lifecycle-usage{margin:0 0 0 auto;flex:none;justify-content:flex-end}
+@media(max-width:650px){.lf-project-identity>.lf-lifecycle-usage{margin-left:0;justify-content:flex-start}}
+
+/* Match header usage typography to the project name. */
+.lf-project-identity>.lf-lifecycle-usage{font-size:14px;font-weight:400;color:var(--heading,inherit)}
+
+/* Compact project header card spacing across lifecycle pages. */
+.lf-project-identity{padding:12px}
+
+/* Consistent, low-contrast conversation bubbles across Development Operations. */
+.lf-chat .lf-message.lf-agent{background:var(--surface-raised,#f8fafc);color:var(--content,#334155);border:1px solid var(--line,#e2e8f0)}
+.lf-chat .lf-message.lf-user{background:var(--active,#eef4ff);color:var(--content,#334155);border:1px solid var(--line-strong,#dbe5f2)}
+
+/* Show all five Operations artifact results at 90% without shrinking the panel header. */
+.lf-artifacts .lf-artifact-results{zoom:.9;width:111.111111%;min-width:0}
+/* Keep the Discovery preview modal at normal reading size. */
+.lf-artifact-results .lf-discovery-dialog{zoom:1.111111}
