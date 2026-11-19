@@ -191,3 +191,8 @@
 /* Task ID and title share one text flow; wrapped lines start at the card's left edge. */
 .lf-board-task-list h3.lf-board-task-heading{display:block;margin:0 0 7px;font-size:11px;line-height:1.5;font-weight:700;overflow-wrap:anywhere}
 .lf-board-task-list .lf-board-task-heading .lf-board-task-id{display:inline;float:none;margin-right:4px;font-size:10px;font-weight:700;color:#2563eb;white-space:nowrap}
+
+
+/* Task heading typography: black ID (bold), black title (normal). */
+.lf-board-task-list h3.lf-board-task-heading{color:#111111;font-weight:400}
+.lf-board-task-list .lf-board-task-heading .lf-board-task-id{color:#111111;font-weight:700}
