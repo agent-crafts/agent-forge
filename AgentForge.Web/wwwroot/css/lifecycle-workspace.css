@@ -260,3 +260,12 @@
 .lf-specs-details p{margin:8px 0 0}
 @media(max-width:850px){.lf-specs-features{grid-template-columns:1fr}}
 @media(max-width:540px){.lf-specs-summary{grid-template-columns:1fr 1fr}.lf-specs-summary-item:last-child{grid-column:1/-1}.lf-specs-section-head,.lf-specs-section-title{flex-wrap:wrap}}
+
+/* Board display switcher: Kanban workflow or feature-grouped specifications. */
+.lf-board-workspace{display:grid;gap:12px;min-width:0}
+.lf-board-view-toolbar{display:inline-flex;justify-self:start;gap:3px;padding:3px;border:1px solid var(--line);border-radius:6px;background:var(--surface-raised)}
+.lf-board-view-toolbar button{appearance:none;border:0;background:transparent;color:var(--content);padding:8px 14px;border-radius:4px;font:inherit;font-size:12px;font-weight:500;cursor:pointer}
+.lf-board-view-toolbar button.is-active{background:var(--surface);color:var(--accent);box-shadow:0 1px 3px rgba(15,23,42,.1);font-weight:700}
+.lf-board-view-toolbar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.lf-board-view[hidden]{display:none!important}
+.lf-board-features-view .lf-specs-section-title{margin:0 0 12px}
