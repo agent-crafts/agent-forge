@@ -431,3 +431,13 @@
 .lf-doc-table .lf-doc-actions .lf-doc-action-buttons button[data-lf-doc-download]:hover{
   color:#0c7654;
 }
+
+/* Source badges: shared black text, distinct subtle backgrounds. */
+.lf-doc-card-header .lf-doc-source.is-ai{
+  color:#111;
+  background:#dbeafe;
+}
+.lf-doc-card-header .lf-doc-source.is-user{
+  color:#111;
+  background:#e5e7eb;
+}
