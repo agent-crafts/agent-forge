@@ -441,3 +441,22 @@
   color:#111;
   background:#e5e7eb;
 }
+
+/* Format-aware static document previews. */
+.lf-doc-rendered-preview{min-width:0}
+.lf-doc-preview-page{padding:24px 28px;background:var(--surface);border:1px solid var(--line);border-radius:4px;line-height:1.65}
+.lf-doc-preview-page h2{margin:0 0 16px;font-size:21px;color:var(--heading);line-height:1.3}
+.lf-doc-preview-page h3{margin:20px 0 8px;font-size:15px;color:var(--heading)}
+.lf-doc-preview-page p{margin:10px 0}
+.lf-doc-preview-page ul{padding-left:22px;margin:8px 0 16px}
+.lf-doc-preview-page li{margin:5px 0}
+.lf-doc-preview-page.is-pdf{background:#fff;color:#222;box-shadow:0 4px 18px #00000012;min-height:340px}
+.lf-doc-preview-page.is-pdf h2{color:#222}
+.lf-doc-page-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--muted);margin-bottom:12px}
+.lf-doc-preview-page.is-pdf .lf-doc-page-eyebrow{color:#666}
+.lf-doc-page-footnote{font-size:11px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.lf-doc-architecture-flow{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:32px 0;padding:16px 0}
+.lf-doc-flow-node{padding:10px;border:1px solid #cbd5e1;border-radius:4px;background:#eff6ff;font-size:11px;color:#1e293b}
+.lf-doc-flow-arrow{color:#64748b}
+.lf-doc-rendered-preview pre.lf-doc-code{margin:0;padding:20px;overflow-x:auto;white-space:pre;overflow-wrap:normal;border:1px solid var(--line);border-radius:4px;background:var(--hover);color:var(--content);font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}
+@media(max-width:650px){.lf-doc-preview-page{padding:18px}.lf-doc-architecture-flow{gap:5px}}
