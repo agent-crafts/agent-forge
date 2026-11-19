@@ -157,3 +157,17 @@
 .lf-board-feature{display:inline-flex;align-items:center;max-width:100%;border-radius:999px;padding:3px 7px;background:#eaf2ff;color:#2563eb;font-size:9px;font-weight:650;line-height:1.3;overflow-wrap:anywhere}
 .lf-board-task-stats{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;border-top:1px solid #e5e7eb;padding-top:9px;color:var(--muted);font-size:10px;font-variant-numeric:tabular-nums}
 .lf-board-task-stats span{white-space:nowrap}
+
+
+/* Native accessible disclosure groups: Status > Feature > Tasks. */
+.lf-board-feature-group{min-width:0;margin:0 0 9px}
+.lf-board-feature-summary{display:flex;align-items:center;gap:5px;cursor:pointer;list-style:none;padding:7px 2px;color:var(--heading)}
+.lf-board-feature-summary::-webkit-details-marker{display:none}
+.lf-board-feature-summary:focus-visible{outline:2px solid #3b82f6;outline-offset:2px;border-radius:4px}
+.lf-board-feature-title{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px;font-size:10px;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
+.lf-board-feature-id{color:#2563eb;font-size:9px;letter-spacing:.02em}
+.lf-board-feature-total{flex:none;color:var(--muted);font-size:9px;white-space:nowrap}
+.lf-board-chevron{width:6px;height:6px;flex:none;border-right:1.5px solid #64748b;border-bottom:1.5px solid #64748b;transform:rotate(45deg);transition:transform .15s;margin:0 3px 3px}
+.lf-board-feature-group:not([open]) .lf-board-chevron{transform:rotate(-45deg)}
+.lf-board-feature-tasks{display:grid;gap:7px;padding-top:5px}
+.lf-board-feature-tasks .lf-board-task{margin:0}
