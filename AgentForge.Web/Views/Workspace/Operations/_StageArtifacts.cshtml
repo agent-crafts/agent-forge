@@ -1,0 +1,5 @@
+@{ var stageKey=(string)ViewData["WorkspaceStage"]!; var artifactPath=stageKey switch { "discovery"=>"~/Views/Workspace/Operations/Discovery/_Artifacts.cshtml", "design"=>"~/Views/Workspace/Operations/Design/_Artifacts.cshtml", "development"=>"~/Views/Workspace/Operations/Development/_Artifacts.cshtml", "quality"=>"~/Views/Workspace/Operations/Quality/_Artifacts.cshtml", _=>"~/Views/Workspace/Operations/Deployment/_Artifacts.cshtml" }; }
+            <section class="lf-artifacts lf-card ui-panel" aria-label="Stage artifacts">
+                <div class="lf-panel-head"><div><strong>@(stageKey == "discovery" ? "Discovery artifacts" : stageKey == "design" ? "Design studio" : stageKey == "development" ? "Code workspace" : stageKey == "quality" ? "Quality reports" : "Release center")</strong><small>Healthcare Booking · sample project</small></div>@if (stageKey == "discovery") { <button type="button" class="lf-discovery-preview-button" data-lf-discovery-preview>Preview</button> } else { <span class="lf-pill">v0.1 · Sample</span> }</div>
+                <partial name="@artifactPath" />
+            </section>
