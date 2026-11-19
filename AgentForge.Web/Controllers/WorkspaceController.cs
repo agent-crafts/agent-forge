@@ -38,16 +38,6 @@ public sealed class WorkspaceController(ISender sender) : Controller
         return View("~/Views/Projects/Index.cshtml", page.Items.Select(ProjectsController.ProjectCard.From).ToArray());
     }
 
-    [HttpGet("projects/{id:guid}")]
-    public async Task<IActionResult> ProjectDetails(Guid id, CancellationToken cancellationToken)
-    {
-        var project = await sender.Send(new GetProjectByIdQuery(id), cancellationToken);
-        if (project is null || !project.IsActive) return NotFound();
-        ViewData["Title"] = project.Name;
-        ViewData["Section"] = "projects";
-        return View("~/Views/Projects/Details.cshtml", ProjectsController.ProjectCard.From(project));
-    }
-
     // Assistant remains a chat route; other workspace sections own dedicated controllers.
     [HttpGet("projects/{id:guid}/assistant")]
     public async Task<IActionResult> ProjectAssistant(Guid id, CancellationToken cancellationToken)
