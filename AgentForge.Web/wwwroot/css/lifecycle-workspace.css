@@ -204,6 +204,6 @@
 .lf-board-task-list h3.lf-board-task-heading{font-size:12px}
 .lf-board-task-list .lf-board-task-heading .lf-board-task-id{font-size:12px}
 
-/* Fine-tune inline task typography: 11px ID without extra margin, 12px title. */
-.lf-board-task-list h3.lf-board-task-heading{font-size:12px}
+/* Inline task typography: 11px ID without margin, 13px title. */
+.lf-board-task-list h3.lf-board-task-heading{font-size:13px}
 .lf-board-task-list .lf-board-task-heading .lf-board-task-id{font-size:11px;margin:0}
