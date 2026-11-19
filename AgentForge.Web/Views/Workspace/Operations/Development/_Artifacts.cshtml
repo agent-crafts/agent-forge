@@ -1,0 +1,21 @@
+<div class="lf-code-layout"><aside class="lf-file-tree"><strong>EXPLORER</strong><div>▾ healthcare-app</div><div>　▾ src</div><button type="button" class="is-active" data-lf-file="booking">　　booking.ts</button><button type="button" data-lf-file="service">　　availability.ts</button><div>　　components/</div><div>　▸ tests/</div><div>　package.json</div></aside><div class="lf-editor"><div class="lf-editor-head" id="lfFilename">booking.ts · TASK-011</div><pre data-lf-code="booking"><code>export type BookingRequest = {
+  patientId: string;
+  providerId: string;
+  slotId: string;
+};
+
+export async function book(
+  request: BookingRequest
+) {
+  if (!request.slotId) {
+    throw new Error("Slot required");
+  }
+  return bookingApi.create(request);
+}</code></pre><pre data-lf-code="service" hidden><code>export async function getAvailableSlots(
+  providerId: string
+) {
+  return availabilityApi.list({
+    providerId,
+    futureOnly: true
+  });
+}</code></pre><div class="lf-terminal"><strong>TERMINAL · SAMPLE OUTPUT</strong><p>$ npm run build</p><p class="lf-terminal-ok">✓ Build completed · illustrative</p><p>$ npm test</p><p class="lf-terminal-ok">✓ 22 passed · illustrative</p></div></div></div><p class="lf-muted">Source excerpts and terminal output are mock data; no repository was generated or built.</p>
