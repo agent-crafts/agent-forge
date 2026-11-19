@@ -34,6 +34,13 @@
                 <div class="lf-project-title"><strong>@(stageKey == "board" ? "Project Board" : stageKey == "specifications" ? "Project Specifications" : projectName)</strong><span class="lf-project-status">Demo workspace</span></div>
                 <p>@(stageKey == "board" ? $"{projectName} · Track work from new requests through delivery." : stageKey == "specifications" ? $"{projectName} · Review requirements, features and task specifications." : "Lifecycle progress · sample values")</p>
             </div>
+            @if (stageKey == "board")
+            {
+            <div class="lf-board-view-toolbar" role="group" aria-label="Board display mode">
+                <button type="button" class="is-active" data-lf-board-view="kanban" aria-pressed="true">Kanban Board</button>
+                <button type="button" data-lf-board-view="features" aria-pressed="false">Features</button>
+            </div>
+            }
         </div>
         @if (stageKey != "board" && stageKey != "specifications")
         {
@@ -178,10 +185,6 @@ export async function book(
     else if (stageKey == "board")
     {
         <section class="lf-board-workspace" aria-label="Project work views">
-            <div class="lf-board-view-toolbar" role="group" aria-label="Board display mode">
-                <button type="button" class="is-active" data-lf-board-view="kanban" aria-pressed="true">Kanban Board</button>
-                <button type="button" data-lf-board-view="features" aria-pressed="false">Features</button>
-            </div>
             <div class="lf-board-view" data-lf-board-panel="kanban">
             <section class="lf-board-layout" aria-label="Project Kanban board">
             <div class="lf-board-columns">
@@ -272,7 +275,7 @@ export async function book(
                 <div class="lf-specs-section-head"><div><span class="lf-specs-kicker">BUSINESS REQUIREMENTS</span><h2 id="lfSpecsRequirements">BRD-001 · Healthcare Appointment Platform</h2><p>Patients discover providers, view available slots and manage bookings without calling a clinic.</p></div><span class="lf-specs-label">Sample · v0.1</span></div>
                 <div class="lf-specs-requirement-points"><span>Find doctors and available appointments</span><span>Prevent double bookings</span><span>Allow cancellation at least 24 hours before a visit</span></div>
             </section>
-            <p class="lf-board-note">Illustrative specifications and statuses only · no saved artifacts, approval workflow or live Board synchronization.</p>
+            <p class="lf-board-note">Illustrative requirements only · feature-grouped task specifications are available in the Board's Features view.</p>
         </section>
     }
     else
