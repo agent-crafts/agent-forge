@@ -290,3 +290,14 @@
 .lf-specs-task-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-width:0}
 .lf-specs-task-head h4{flex:1;min-width:0;margin:0}
 .lf-specs-task-head .lf-specs-task-state{flex:none;white-space:nowrap;margin-top:1px}
+
+/* Native accessible collapse/expand for each feature; open by default. */
+.lf-specs-feature-details{min-width:0}
+.lf-specs-feature-details>.lf-specs-feature-head{cursor:pointer;list-style:none;user-select:none}
+.lf-specs-feature-details>.lf-specs-feature-head::-webkit-details-marker{display:none}
+.lf-specs-feature-details>.lf-specs-feature-head:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+.lf-specs-feature-details>.lf-specs-feature-head .lf-specs-chevron{width:8px;height:8px;flex:none;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .15s ease;color:var(--muted);margin:0 5px 4px 2px}
+.lf-specs-feature-details[open]>.lf-specs-feature-head .lf-specs-chevron{transform:rotate(225deg);margin-bottom:0}
+.lf-specs-feature-details:not([open])>.lf-specs-feature-head{margin-bottom:-10px;border-bottom:0}
+.lf-specs-feature-body{min-width:0}
+@media(prefers-reduced-motion:reduce){.lf-specs-feature-details .lf-specs-chevron{transition:none}}
