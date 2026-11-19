@@ -566,3 +566,6 @@
 /* Align stage usage on the same header row as the project name. */
 .lf-project-identity>.lf-lifecycle-usage{margin:0 0 0 auto;flex:none;justify-content:flex-end}
 @media(max-width:650px){.lf-project-identity>.lf-lifecycle-usage{margin-left:0;justify-content:flex-start}}
+
+/* Match header usage typography to the project name. */
+.lf-project-identity>.lf-lifecycle-usage{font-size:14px;font-weight:700;color:var(--heading,inherit)}
