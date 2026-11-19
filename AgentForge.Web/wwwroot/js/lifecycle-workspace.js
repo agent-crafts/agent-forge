@@ -17,12 +17,21 @@
     });
   });
   const featureDetails = root.querySelectorAll('[data-lf-board-panel="features"] .lf-specs-feature-details');
-  root.querySelectorAll("[data-lf-features-expand]").forEach(button => {
-    button.addEventListener("click", () => {
-      const expand = button.dataset.lfFeaturesExpand === "true";
+  const featureToggle = root.querySelector("[data-lf-features-toggle]");
+  if (featureToggle && featureDetails.length) {
+    const syncFeatureToggle = () => {
+      const allExpanded = [...featureDetails].every(details => details.open);
+      featureToggle.textContent = allExpanded ? "Collapse all" : "Expand all";
+      featureToggle.setAttribute("aria-expanded", String(allExpanded));
+    };
+    featureToggle.addEventListener("click", () => {
+      const expand = ![...featureDetails].every(details => details.open);
       featureDetails.forEach(details => { details.open = expand; });
+      syncFeatureToggle();
     });
-  });
+    featureDetails.forEach(details => details.addEventListener("toggle", syncFeatureToggle));
+    syncFeatureToggle();
+  }
   root.querySelectorAll("[data-lf-tab]").forEach(button => {
     button.addEventListener("click", () => {
       const tab = button.dataset.lfTab;
