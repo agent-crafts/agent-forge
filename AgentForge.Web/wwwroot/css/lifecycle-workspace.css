@@ -219,3 +219,6 @@
 
 /* Compact Kanban task card corners. */
 .lf-board-task-list .lf-board-task{border-radius:4px}
+
+/* Subtle left accent for each Kanban task card. */
+.lf-board-task-list .lf-board-task{border-left:3px solid #94a3b8}
