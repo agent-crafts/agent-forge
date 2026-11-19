@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AgentForge.Web.Controllers;
 
 [Route("projects/{id:guid}/workflows")]
-public sealed class WorkflowsController(ISender sender) : DashboardController(sender)
+public sealed class WorkflowsController(ISender sender) : WorkspacePageController(sender)
 {
     [HttpGet]
     public Task<IActionResult> Index(Guid id, CancellationToken cancellationToken)
