@@ -177,7 +177,13 @@ export async function book(
     }
     else if (stageKey == "board")
     {
-        <section class="lf-board-layout" aria-label="Project Kanban board">
+        <section class="lf-board-workspace" aria-label="Project work views">
+            <div class="lf-board-view-toolbar" role="group" aria-label="Board display mode">
+                <button type="button" class="is-active" data-lf-board-view="kanban" aria-pressed="true">Kanban Board</button>
+                <button type="button" data-lf-board-view="features" aria-pressed="false">Features</button>
+            </div>
+            <div class="lf-board-view" data-lf-board-panel="kanban">
+            <section class="lf-board-layout" aria-label="Project Kanban board">
             <div class="lf-board-columns">
                 <section class="lf-board-column ui-panel" aria-label="New, 2 tasks">
                     <div class="lf-board-column-head"><h2><span class="lf-board-status-dot is-new"></span>New</h2><span class="lf-board-count">2</span></div>
@@ -216,19 +222,8 @@ export async function book(
             </div>
             <p class="lf-board-note">Sample tasks and usage estimates only · no measured telemetry, persistence or drag-and-drop.</p>
         </section>
-    }
-    else if (stageKey == "specifications")
-    {
-        <section class="lf-specs-layout" aria-label="Project specifications library">
-            <div class="lf-specs-summary" aria-label="Sample specification overview">
-                <div class="lf-specs-summary-item ui-panel"><span>Business requirements</span><strong>1</strong><small>BRD-001</small></div>
-                <div class="lf-specs-summary-item ui-panel"><span>Features</span><strong>4</strong><small>FEAT-001 – FEAT-004</small></div>
-                <div class="lf-specs-summary-item ui-panel"><span>Task specifications</span><strong>9</strong><small>8 tasks + 1 QA scenario</small></div>
             </div>
-            <section class="lf-specs-requirements ui-panel" aria-labelledby="lfSpecsRequirements">
-                <div class="lf-specs-section-head"><div><span class="lf-specs-kicker">BUSINESS REQUIREMENTS</span><h2 id="lfSpecsRequirements">BRD-001 · Healthcare Appointment Platform</h2><p>Patients discover providers, view available slots and manage bookings without calling a clinic.</p></div><span class="lf-specs-label">Sample · v0.1</span></div>
-                <div class="lf-specs-requirement-points"><span>Find doctors and available appointments</span><span>Prevent double bookings</span><span>Allow cancellation at least 24 hours before a visit</span></div>
-            </section>
+            <section class="lf-board-view lf-board-features-view" data-lf-board-panel="features" aria-label="Features grouped by specification" hidden>
             <div class="lf-specs-section-title"><div><h2>Feature specifications</h2><p>Task-level artifacts grouped by feature, using the same IDs as the Project Board.</p></div><span class="lf-specs-label">4 features · 9 items</span></div>
             <div class="lf-specs-features">
                 <section class="lf-specs-feature ui-panel" aria-labelledby="lfSpecFeature001">
@@ -261,6 +256,22 @@ export async function book(
                     </div>
                 </section>
             </div>
+                <p class="lf-board-note">Sample feature and task specifications · no live synchronization or persistence.</p>
+            </section>
+        </section>
+    }
+    else if (stageKey == "specifications")
+    {
+        <section class="lf-specs-layout" aria-label="Project specifications library">
+            <div class="lf-specs-summary" aria-label="Sample specification overview">
+                <div class="lf-specs-summary-item ui-panel"><span>Business requirements</span><strong>1</strong><small>BRD-001</small></div>
+                <div class="lf-specs-summary-item ui-panel"><span>Features</span><strong>4</strong><small>FEAT-001 – FEAT-004</small></div>
+                <div class="lf-specs-summary-item ui-panel"><span>Task specifications</span><strong>9</strong><small>8 tasks + 1 QA scenario</small></div>
+            </div>
+            <section class="lf-specs-requirements ui-panel" aria-labelledby="lfSpecsRequirements">
+                <div class="lf-specs-section-head"><div><span class="lf-specs-kicker">BUSINESS REQUIREMENTS</span><h2 id="lfSpecsRequirements">BRD-001 · Healthcare Appointment Platform</h2><p>Patients discover providers, view available slots and manage bookings without calling a clinic.</p></div><span class="lf-specs-label">Sample · v0.1</span></div>
+                <div class="lf-specs-requirement-points"><span>Find doctors and available appointments</span><span>Prevent double bookings</span><span>Allow cancellation at least 24 hours before a visit</span></div>
+            </section>
             <p class="lf-board-note">Illustrative specifications and statuses only · no saved artifacts, approval workflow or live Board synchronization.</p>
         </section>
     }
