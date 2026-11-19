@@ -216,3 +216,6 @@
 
 /* Use standard black for Kanban task footer metrics. */
 .lf-board-task-list .lf-board-task-stats{color:#111111}
+
+/* Compact Kanban task card corners. */
+.lf-board-task-list .lf-board-task{border-radius:4px}
