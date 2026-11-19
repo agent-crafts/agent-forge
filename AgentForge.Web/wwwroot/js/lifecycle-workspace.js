@@ -16,6 +16,13 @@
       });
     });
   });
+  const featureDetails = root.querySelectorAll('[data-lf-board-panel="features"] .lf-specs-feature-details');
+  root.querySelectorAll("[data-lf-features-expand]").forEach(button => {
+    button.addEventListener("click", () => {
+      const expand = button.dataset.lfFeaturesExpand === "true";
+      featureDetails.forEach(details => { details.open = expand; });
+    });
+  });
   root.querySelectorAll("[data-lf-tab]").forEach(button => {
     button.addEventListener("click", () => {
       const tab = button.dataset.lfTab;
