@@ -63,7 +63,7 @@
       }
       // Markdown: render headings and lists as readable document elements.
       let list = null;
-      content.split(/\\n/).forEach(line => {
+      content.split(/\n/).forEach(line => {
         const value = line.trim();
         if (!value) { list = null; return; }
         if (value.startsWith("# ")) { add(page, "h2", value.slice(2)); list = null; }
