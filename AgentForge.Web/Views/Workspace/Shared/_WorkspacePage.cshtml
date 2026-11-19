@@ -1,0 +1,22 @@
+@{ Layout = "_AppLayout"; var stageKey = (string)ViewData["WorkspaceStage"]!; }
+<link rel="stylesheet" href="~/css/lifecycle-workspace.css" asp-append-version="true" />
+<div class="lf-root" data-lifecycle-stage="@stageKey">
+    <partial name="~/Views/Workspace/Shared/_ProjectHeader.cshtml" />
+    @if (stageKey is "discovery" or "design" or "development" or "quality" or "deployment") { <partial name="~/Views/Workspace/Operations/_StageWorkspace.cshtml" /> }
+    else if (stageKey == "board") { <partial name="~/Views/Workspace/Board/_BoardWorkspace.cshtml" /> }
+    else if (stageKey == "specifications") { <partial name="~/Views/Workspace/Specifications/_DocumentLibrary.cshtml" /> }
+    else { <partial name="~/Views/Workspace/AgentStudio/_StudioWorkspace.cshtml" /> }
+</div>
+@if (stageKey == "specifications")
+{
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.9.1/mammoth.browser.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
+    <script defer>document.addEventListener("DOMContentLoaded", () => { if (window.pdfjsLib) window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js"; });</script>
+}
+@if (stageKey == "discovery")
+{
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
+}
+<script src="~/js/lifecycle-workspace.js" asp-append-version="true" defer></script>
