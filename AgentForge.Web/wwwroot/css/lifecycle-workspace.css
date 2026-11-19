@@ -199,3 +199,7 @@
 
 /* Improve readability of time, tokens and cost on compact task cards. */
 .lf-board-task-list .lf-board-task-stats{font-size:12px;line-height:1.45;gap:7px;padding-top:9px}
+
+/* Match task ID and title to the 12px metrics footer. */
+.lf-board-task-list h3.lf-board-task-heading{font-size:12px}
+.lf-board-task-list .lf-board-task-heading .lf-board-task-id{font-size:12px}
