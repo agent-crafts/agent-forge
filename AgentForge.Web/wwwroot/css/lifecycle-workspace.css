@@ -533,7 +533,7 @@
 .lf-discovery-paper .lf-muted{color:#64748b}
 @media(max-width:650px){.lf-discovery-paper{padding:20px}.lf-discovery-document-toolbar{flex-wrap:wrap}}
 
-.lf-discovery-preview-button{padding:7px 13px;border:1px solid var(--line-strong);border-radius:4px;background:var(--surface);color:var(--heading);font-size:12px;cursor:pointer}
+.lf-panel-head .lf-discovery-preview-button{flex:0 0 auto;width:auto;min-width:0;max-width:max-content;white-space:nowrap;padding:7px 13px;border:1px solid var(--line-strong);border-radius:4px;background:var(--surface);color:var(--heading);font-size:12px;cursor:pointer}
 .lf-discovery-preview-button:hover{background:var(--hover)}
 .lf-discovery-dialog{box-sizing:border-box;width:min(900px,calc(100vw - 32px));max-height:90dvh;overflow:auto;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--content)}
 .lf-discovery-dialog::backdrop{background:#0008}
