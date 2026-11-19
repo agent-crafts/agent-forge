@@ -269,3 +269,8 @@
 .lf-board-view-toolbar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .lf-board-view[hidden]{display:none!important}
 .lf-board-features-view .lf-specs-section-title{margin:0 0 12px}
+
+/* Keep the view switcher in the Board header, with room for narrow screens. */
+.lf-project-identity:has(.lf-board-view-toolbar){flex-wrap:wrap}
+.lf-project-identity .lf-board-view-toolbar{margin-left:auto;flex:none}
+@media(max-width:640px){.lf-project-identity .lf-board-view-toolbar{margin-left:0;width:100%;justify-self:stretch}.lf-project-identity .lf-board-view-toolbar button{flex:1}}
