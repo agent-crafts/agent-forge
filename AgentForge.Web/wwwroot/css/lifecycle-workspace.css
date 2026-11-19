@@ -541,3 +541,16 @@
 .lf-discovery-dialog-head button{border:0;background:transparent;color:var(--content);cursor:pointer;font-size:16px}
 .lf-discovery-dialog .lf-discovery-document{padding:24px 16px}
 @media(max-width:650px){.lf-discovery-dialog .lf-discovery-document{padding:12px}}
+
+/* Stage insights: completion ring and budget-free usage metrics. */
+.lf-insights-ring-layout{display:flex;align-items:center;gap:20px;min-width:0}
+.lf-insights-ring{--lf-ring-progress:0%;width:118px;height:118px;flex:none;border-radius:50%;background:conic-gradient(var(--accent) var(--lf-ring-progress),var(--surface-raised) var(--lf-ring-progress));display:grid;place-items:center}
+.lf-insights-ring-center{width:96px;height:96px;border-radius:50%;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.lf-insights-ring-center strong{font-size:24px;line-height:1.15;color:var(--heading);font-variant-numeric:tabular-nums}
+.lf-insights-ring-center span{font-size:10px;color:var(--muted)}
+.lf-insights-ring-metrics{flex:1;min-width:0;display:flex;flex-direction:column}
+.lf-insights-ring-metric{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.lf-insights-ring-metric:last-child{border-bottom:0}
+.lf-insights-ring-metric span{font-size:11px;color:var(--muted)}
+.lf-insights-ring-metric strong{font-size:13px;font-weight:650;color:var(--heading);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media(max-width:420px){.lf-insights-ring-layout{gap:12px}.lf-insights-ring{width:96px;height:96px}.lf-insights-ring-center{width:78px;height:78px}.lf-insights-ring-center strong{font-size:20px}}
