@@ -207,3 +207,6 @@
 /* Inline task typography: 11px ID without margin, 13px title. */
 .lf-board-task-list h3.lf-board-task-heading{font-size:13px}
 .lf-board-task-list .lf-board-task-heading .lf-board-task-id{font-size:11px;margin:0}
+
+/* Feature badge label uses regular weight, distinct from bold task IDs. */
+.lf-board-task-feature .lf-board-feature{font-weight:400}
