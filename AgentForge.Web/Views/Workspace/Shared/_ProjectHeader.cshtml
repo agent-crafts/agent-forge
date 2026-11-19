@@ -1,4 +1,4 @@
-@{ var stageKey = (string)ViewData["WorkspaceStage"]!; var projectName = (string)ViewData["ProjectName"]!; var projectId = (string)ViewData["ProjectId"]!; var stages = new[] { ("discovery", "Discovery"), ("design", "Design"), ("development", "Development"), ("quality", "Quality"), ("deployment", "Deployment") }; var stageIndex = Array.FindIndex(stages, x => x.Item1 == stageKey); var demoProgress = new[] {100,60,30,0,0}; var demoHoursUsed = new[] {12,9,7,0,0}; var demoTokensUsed = new[] {185000,132000,94000,0,0}; var demoCostUsed = new[] {3.70m,2.64m,1.88m,0m,0m}; var stageIconPaths = new Dictionary<string,string> { ["discovery"]="M11 3a8 8 0 1 0 0 16 8 8 0 0 0 0-16ZM17 17l4 4", ["design"]="M3 21l6-2 12-12-4-4L5 15l-2 6ZM14 6l4 4", ["development"]="M8 8l-4 4 4 4M16 8l4 4-4 4M14 4l-4 16", ["quality"]="M12 2l8 4v6c0 5-3 8-8 10-5-2-8-5-8-10V6l8-4ZM8 12l3 3 5-6", ["deployment"]="M12 3l5 5-5 5-5-5 5-5ZM12 13v8M5 18h14" }; }
+@{ var stageKey = (string)ViewData["WorkspaceStage"]!; var projectName = (string)ViewData["ProjectName"]!; var projectId = (string)ViewData["ProjectId"]!; var stages = new[] { ("discovery", "Discovery"), ("design", "Design"), ("development", "Development"), ("quality", "Quality"), ("deployment", "Deployment") }; var stageIndex = Array.FindIndex(stages, x => x.Item1 == stageKey); var demoHoursUsed = new[] {12,9,7,0,0}; var demoTokensUsed = new[] {185000,132000,94000,0,0}; var demoCostUsed = new[] {3.70m,2.64m,1.88m,0m,0m}; var stageIconPaths = new Dictionary<string,string> { ["discovery"]="M11 3a8 8 0 1 0 0 16 8 8 0 0 0 0-16ZM17 17l4 4", ["design"]="M3 21l6-2 12-12-4-4L5 15l-2 6ZM14 6l4 4", ["development"]="M8 8l-4 4 4 4M16 8l4 4-4 4M14 4l-4 16", ["quality"]="M12 2l8 4v6c0 5-3 8-8 10-5-2-8-5-8-10V6l8-4ZM8 12l3 3 5-6", ["deployment"]="M12 3l5 5-5 5-5-5 5-5ZM12 13v8M5 18h14" }; }
     <div class="lf-overview-grid @(stageKey == "board" || stageKey == "specifications" ? "lf-overview-grid--single" : "")">
     <header class="lf-project-header ui-panel">
         <div class="lf-project-identity">
@@ -37,12 +37,10 @@
                     var stage = stages[i];
                     var isCurrent = i == stageIndex;
                     var isEarlier = stageIndex >= 0 && i < stageIndex;
-                    var samplePercent = demoProgress[i];
                     <li class="lf-progress-item @(isCurrent ? "is-current" : isEarlier ? "is-earlier" : "is-upcoming")">
                         <a class="lf-progress-link" href="/projects/@projectId/@stage.Item1" aria-current="@(isCurrent ? "step" : null)" aria-label="Go to @stage.Item2">
                             <span class="lf-progress-node" aria-hidden="true">@(i + 1)</span>
                             <span class="lf-progress-name">@stage.Item2</span>
-                            <span class="lf-progress-percent">@samplePercent%</span>
                         </a>
                     </li>
                 }
