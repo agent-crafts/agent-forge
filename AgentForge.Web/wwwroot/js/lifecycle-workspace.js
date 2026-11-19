@@ -2,6 +2,55 @@
   "use strict";
   const root = document.querySelector(".lf-root");
   if (!root) return;
+  // Static document-library demo: searchable metadata and illustrative read-only previews.
+  const docRows = [...root.querySelectorAll("[data-lf-doc-row]")];
+  if (docRows.length) {
+    const search = root.querySelector("[data-lf-doc-search]");
+    const source = root.querySelector("[data-lf-doc-source]");
+    const count = root.querySelector("[data-lf-doc-count]");
+    const empty = root.querySelector("[data-lf-doc-empty]");
+    const dialog = root.querySelector("[data-lf-doc-dialog]");
+    const message = root.querySelector("[data-lf-doc-message]");
+    const examples = {
+      business: "# Healthcare Appointment Platform\\n\\n## Problem\\nPatients need a simple way to discover providers and book appointments.\\n\\n## Goals\\n- Find doctors and available appointments\\n- Prevent double bookings\\n- Allow cancellation at least 24 hours before a visit",
+      architecture: "System Architecture — sample PDF outline\\n\\nWeb application → API → Appointment service → Data store\\n\\nThis is an illustrative preview only; no PDF file is stored.",
+      api: "openapi: 3.0.3\\ninfo:\\n  title: Healthcare Appointment API\\n  version: 0.1.0\\npaths:\\n  /doctors:\\n    get:\\n      summary: Search doctors\\n  /appointments:\\n    post:\\n      summary: Book an available slot",
+      acceptance: "# Booking acceptance criteria\\n\\n- Only future, available slots can be booked.\\n- Two patients cannot reserve the same slot.\\n- Successful booking returns a confirmation.\\n- Invalid patients or providers receive validation errors.",
+      notes: "Stakeholder Notes — sample Word document outline\\n\\n- Prioritize appointment discovery and booking.\\n- Include responsive layouts and accessible error states.\\n- Confirm cancellation policy before release.\\n\\nThis is an illustrative preview only; no Word file is stored."
+    };
+    const refresh = () => {
+      const term = search.value.trim().toLowerCase();
+      const selected = source.value;
+      let visible = 0;
+      docRows.forEach(row => {
+        const matches = (selected === "all" || row.dataset.source === selected)
+          && (row.dataset.name.toLowerCase().includes(term) || row.dataset.type.toLowerCase().includes(term));
+        row.hidden = !matches;
+        if (matches) visible++;
+      });
+      count.textContent = `${visible} document${visible === 1 ? "" : "s"}`;
+      empty.hidden = visible !== 0;
+    };
+    search.addEventListener("input", refresh);
+    source.addEventListener("change", refresh);
+    root.querySelectorAll("[data-lf-doc-preview]").forEach(button => {
+      button.addEventListener("click", () => {
+        const row = button.closest("[data-lf-doc-row]");
+        root.querySelector("[data-lf-doc-preview-title]").textContent = row.dataset.name;
+        root.querySelector("[data-lf-doc-preview-meta]").textContent = `${row.dataset.type} · ${row.dataset.updated} · ${row.dataset.source === "ai" ? "AI generated" : "Uploaded"}`;
+        root.querySelector("[data-lf-doc-preview-content]").textContent = examples[row.dataset.preview];
+        if (typeof dialog.showModal === "function") dialog.showModal();
+      });
+    });
+    root.querySelectorAll("[data-lf-doc-close]").forEach(button => button.addEventListener("click", () => dialog.close()));
+    const demoNotice = action => {
+      message.textContent = `${action} is not available in this static demo. No files are stored or downloaded.`;
+      message.hidden = false;
+    };
+    root.querySelectorAll("[data-lf-doc-download]").forEach(button => button.addEventListener("click", () => demoNotice("Download")));
+    root.querySelectorAll("[data-lf-doc-demo-action]").forEach(button => button.addEventListener("click", () => demoNotice(button.dataset.lfDocDemoAction)));
+    refresh();
+  }
   const boardButtons = root.querySelectorAll("[data-lf-board-view]");
   boardButtons.forEach(button => {
     button.addEventListener("click", () => {
