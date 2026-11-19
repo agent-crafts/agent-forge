@@ -48,34 +48,17 @@ public sealed class WorkspaceController(ISender sender) : Controller
         return View("~/Views/Projects/Details.cshtml", ProjectsController.ProjectCard.From(project));
     }
 
-    // User workspace routes. Project membership and per-project data access are not yet implemented.
-    [HttpGet("projects/{id:guid}/{section:regex(^(board|specifications|assistant|discovery|design|development|quality|deployment|workflows|runs)$)}")]
-    public async Task<IActionResult> ProjectSection(Guid id, string section, CancellationToken cancellationToken)
+    // Assistant remains a chat route; other workspace sections own dedicated controllers.
+    [HttpGet("projects/{id:guid}/assistant")]
+    public async Task<IActionResult> ProjectAssistant(Guid id, CancellationToken cancellationToken)
     {
         var project = await sender.Send(new GetProjectByIdQuery(id), cancellationToken);
         if (project is null || !project.IsActive) return NotFound();
-
-        ViewData["Title"] = section.ToLowerInvariant() switch
-        {
-            "board" => "Board",
-            "specifications" => "Specifications",
-            "assistant" => "Assistant",
-            "discovery" => "Discovery",
-            "design" => "Design",
-            "development" => "Development",
-            "quality" => "Quality",
-            "deployment" => "Deployment",
-            "workflows" => "Workflows",
-            _ => "Runs"
-        };
-        ViewData["Section"] = "project-" + section.ToLowerInvariant();
+        ViewData["Title"] = "Assistant";
+        ViewData["Section"] = "project-assistant";
         ViewData["ProjectName"] = project.Name;
         ViewData["ProjectId"] = id.ToString();
-
-        if (section.Equals("assistant", StringComparison.OrdinalIgnoreCase))
-            return View("~/Views/Chat/Index.cshtml");
-
-        return View("~/Views/Workspace/ProjectSection.cshtml");
+        return View("~/Views/Chat/Index.cshtml");
     }
 
     [HttpGet("tools")]
