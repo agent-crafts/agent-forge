@@ -562,3 +562,7 @@
 /* Lifecycle header spans the available workspace width. */
 .lf-overview-grid{grid-template-columns:minmax(0,1fr);width:100%}
 .lf-overview-grid>.lf-project-header{width:100%;min-width:0}
+
+/* Align stage usage on the same header row as the project name. */
+.lf-project-identity>.lf-lifecycle-usage{margin:0 0 0 auto;flex:none;justify-content:flex-end}
+@media(max-width:650px){.lf-project-identity>.lf-lifecycle-usage{margin-left:0;justify-content:flex-start}}
