@@ -177,3 +177,12 @@
 .lf-board-task-heading{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:6px;row-gap:3px;margin-bottom:9px}
 .lf-board-task-heading .lf-board-task-id{flex:none;font-size:10px;font-weight:700;color:#2563eb}
 .lf-board-task-heading h3{flex:1 1 90px;min-width:0;margin:0;font-size:11px;line-height:1.45}
+
+
+/* Clean Kanban: flat tasks, feature badge, concise usage footer. */
+.lf-board-task-list{display:grid;gap:8px}
+.lf-board-task-feature{display:flex;align-items:center;margin:0 0 9px}
+.lf-board-task-feature .lf-board-feature{font-size:9px}
+.lf-board-task-list .lf-board-task{margin:0}
+.lf-board-task-list .lf-board-task-heading{margin-bottom:7px}
+.lf-board-task-list .lf-board-task-stats{gap:5px;padding-top:8px}
