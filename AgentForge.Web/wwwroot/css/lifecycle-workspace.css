@@ -124,3 +124,21 @@
 @media(max-width:1250px){.lf-board-columns{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:820px){.lf-board-columns{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:500px){.lf-board-columns{grid-template-columns:minmax(0,1fr)}}
+
+
+/* Compact only the Kanban cards: five readable lanes without browser/page zoom. */
+.lf-board-layout{overflow-x:auto;overflow-y:visible}
+.lf-board-columns{grid-template-columns:repeat(5,minmax(150px,1fr));gap:8px;align-items:start}
+.lf-root .lf-board-column.ui-panel{padding:10px 9px;border-radius:12px}
+.lf-board-column-head{padding-bottom:9px;margin-bottom:9px;gap:4px}
+.lf-board-column-head h2{font-size:11px;gap:5px}
+.lf-board-status-dot{width:7px;height:7px}
+.lf-board-count{font-size:10px;min-width:19px;padding:2px 5px}
+.lf-board-task{padding:10px 9px;border-radius:8px}
+.lf-board-task-id{font-size:10px}
+.lf-board-task h3{font-size:11px;line-height:1.4;margin:5px 0}
+.lf-board-task p{font-size:10px;line-height:1.45;margin-bottom:8px}
+.lf-board-task small{font-size:9px;line-height:1.4}
+@media(max-width:1250px){.lf-board-columns{grid-template-columns:repeat(5,minmax(150px,1fr))}}
+@media(max-width:820px){.lf-board-columns{grid-template-columns:repeat(5,minmax(150px,1fr))}}
+@media(max-width:500px){.lf-board-columns{grid-template-columns:repeat(5,minmax(150px,1fr))}}
