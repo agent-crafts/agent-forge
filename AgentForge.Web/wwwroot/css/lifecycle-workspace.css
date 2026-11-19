@@ -186,3 +186,8 @@
 .lf-board-task-list .lf-board-task{margin:0}
 .lf-board-task-list .lf-board-task-heading{margin-bottom:7px}
 .lf-board-task-list .lf-board-task-stats{gap:5px;padding-top:8px}
+
+
+/* Task ID and title share one text flow; wrapped lines start at the card's left edge. */
+.lf-board-task-list h3.lf-board-task-heading{display:block;margin:0 0 7px;font-size:11px;line-height:1.5;font-weight:700;overflow-wrap:anywhere}
+.lf-board-task-list .lf-board-task-heading .lf-board-task-id{display:inline;float:none;margin-right:4px;font-size:10px;font-weight:700;color:#2563eb;white-space:nowrap}
