@@ -572,3 +572,7 @@
 
 /* Compact project header card spacing across lifecycle pages. */
 .lf-project-identity{padding:12px}
+
+/* Consistent, low-contrast conversation bubbles across Development Operations. */
+.lf-chat .lf-message.lf-agent{background:var(--surface-raised,#f8fafc);color:var(--content,#334155);border:1px solid var(--line,#e2e8f0)}
+.lf-chat .lf-message.lf-user{background:var(--active,#eef4ff);color:var(--content,#334155);border:1px solid var(--line-strong,#dbe5f2)}
