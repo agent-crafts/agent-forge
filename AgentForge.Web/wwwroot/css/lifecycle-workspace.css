@@ -355,7 +355,7 @@
 .lf-doc-table{display:block;width:100%;min-width:0;border:0}
 .lf-doc-table thead{display:none}
 .lf-doc-table tbody{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.lf-doc-table tbody tr{display:flex;flex-direction:column;gap:12px;min-width:0;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:4px}
+.lf-doc-table tbody tr{display:flex;flex-direction:column;gap:12px;min-width:0;padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:4px}
 .lf-doc-table tbody tr:hover{border-color:var(--line-strong)}
 .lf-doc-table td{display:block;padding:0;border:0;min-width:0}
 .lf-doc-table tbody tr:last-child td{border:0}
