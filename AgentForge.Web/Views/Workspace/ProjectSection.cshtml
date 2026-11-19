@@ -29,10 +29,10 @@
     <div class="lf-overview-grid @(stageKey == "board" ? "lf-overview-grid--single" : "")">
     <header class="lf-project-header ui-panel">
         <div class="lf-project-identity">
-            <span class="lf-project-icon" aria-hidden="true">▦</span>
+            <span class="lf-project-icon" aria-hidden="true">@(stageKey == "board" ? "☷" : "▦")</span>
             <div class="lf-project-details">
-                <div class="lf-project-title"><strong>@projectName</strong><span class="lf-project-status">Demo workspace</span></div>
-                <p>Lifecycle progress · sample values</p>
+                <div class="lf-project-title"><strong>@(stageKey == "board" ? "Project Board" : projectName)</strong><span class="lf-project-status">Demo workspace</span></div>
+                <p>@(stageKey == "board" ? $"{projectName} · Track work from new requests through delivery." : "Lifecycle progress · sample values")</p>
             </div>
         </div>
         @if (stageKey != "board")
@@ -175,17 +175,39 @@ export async function book(
         </div>
         <div class="lf-bottom"><span>Shared artifacts: BRD-001 → FEAT-003 → TASK-011 → Design → Code → Tests → Release</span>@if (stageIndex < stages.Length - 1) { <a href="/projects/@projectId/@stages[stageIndex + 1].Item1">Explore @stages[stageIndex + 1].Item2 →</a> } else { <a href="/projects/@projectId/discovery">Return to Discovery ↺</a> }</div>
     }
-    else if (stageKey == "board" || stageKey == "specifications")
+    else if (stageKey == "board")
     {
-        <section class="lf-card lf-collection ui-panel"><div class="lf-panel-head"><div><strong>@title</strong><small>Shared sample artifacts · no persistence</small></div><span class="lf-pill">Demo</span></div>
-            @if (stageKey == "board")
-            {
-                <div class="lf-board"><div><h3>Backlog</h3><article><strong>FEAT-004</strong><p>Notifications & reminders</p><small>TASK-013 · TASK-014</small></article></div><div><h3>In progress</h3><article><strong>FEAT-002</strong><p>Doctor search & availability</p><small>TASK-009 · TASK-010</small></article></div><div><h3>Ready</h3><article><strong>FEAT-001</strong><p>Authentication & profiles</p><small>TASK-007 · TASK-008</small></article><article><strong>FEAT-003</strong><p>Appointment booking</p><small>TASK-011 · TASK-012</small></article></div></div>
-            }
-            else
-            {
-                <div class="lf-spec"><span class="lf-pill">BRD-001 · FEAT-003</span><h2>Appointment booking</h2><p><strong>TASK-011:</strong> Implement booking API. Prevent double booking, validate patient and provider, and confirm successful reservations.</p><p><strong>TASK-012:</strong> Build responsive booking UI with doctor search, available slots and confirmation states.</p><p><strong>Acceptance criteria:</strong> Book only available future slots; prevent concurrent reservations; allow cancellation until 24 hours before start.</p></div>
-            }
+        <section class="lf-board-layout" aria-label="Project Kanban board">
+            <div class="lf-board-columns">
+                <section class="lf-board-column ui-panel" aria-label="New, 1 item">
+                    <div class="lf-board-column-head"><h2><span class="lf-board-status-dot is-new"></span>New</h2><span class="lf-board-count">1</span></div>
+                    <article class="lf-board-task"><span class="lf-board-task-id">FEAT-004</span><h3>Notifications &amp; reminders</h3><p>Notify patients and doctors about upcoming appointments.</p><small>TASK-013 · TASK-014</small></article>
+                </section>
+                <section class="lf-board-column ui-panel" aria-label="In Progress, 1 item">
+                    <div class="lf-board-column-head"><h2><span class="lf-board-status-dot is-progress"></span>In Progress</h2><span class="lf-board-count">1</span></div>
+                    <article class="lf-board-task"><span class="lf-board-task-id">FEAT-002</span><h3>Doctor search &amp; availability</h3><p>Search providers and display available booking slots.</p><small>TASK-009 · TASK-010</small></article>
+                </section>
+                <section class="lf-board-column ui-panel" aria-label="Review, 1 item">
+                    <div class="lf-board-column-head"><h2><span class="lf-board-status-dot is-review"></span>Review</h2><span class="lf-board-count">1</span></div>
+                    <article class="lf-board-task"><span class="lf-board-task-id">FEAT-003</span><h3>Appointment booking</h3><p>Review booking API and responsive booking experience.</p><small>TASK-011 · TASK-012</small></article>
+                </section>
+                <section class="lf-board-column ui-panel" aria-label="Quality, 1 item">
+                    <div class="lf-board-column-head"><h2><span class="lf-board-status-dot is-quality"></span>Quality</h2><span class="lf-board-count">1</span></div>
+                    <article class="lf-board-task"><span class="lf-board-task-id">QA-001</span><h3>Booking validation</h3><p>Verify cancellation cutoff and concurrent booking scenarios.</p><small>2 demo defects · testing</small></article>
+                </section>
+                <section class="lf-board-column ui-panel" aria-label="Done, 1 item">
+                    <div class="lf-board-column-head"><h2><span class="lf-board-status-dot is-done"></span>Done</h2><span class="lf-board-count">1</span></div>
+                    <article class="lf-board-task"><span class="lf-board-task-id">FEAT-001</span><h3>Authentication &amp; profiles</h3><p>Patient and doctor access and profile management.</p><small>TASK-007 · TASK-008</small></article>
+                </section>
+            </div>
+            <p class="lf-board-note">Sample board items and statuses only · no persistence or drag-and-drop.</p>
+        </section>
+    }
+    else if (stageKey == "specifications")
+    {
+        <section class="lf-card lf-collection ui-panel">
+            <div class="lf-panel-head"><div><strong>@title</strong><small>Shared sample artifacts · no persistence</small></div><span class="lf-pill">Demo</span></div>
+            <div class="lf-spec"><span class="lf-pill">BRD-001 · FEAT-003</span><h2>Appointment booking</h2><p><strong>TASK-011:</strong> Implement booking API. Prevent double booking, validate patient and provider, and confirm successful reservations.</p><p><strong>TASK-012:</strong> Build responsive booking UI with doctor search, available slots and confirmation states.</p><p><strong>Acceptance criteria:</strong> Book only available future slots; prevent concurrent reservations; allow cancellation until 24 hours before start.</p></div>
         </section>
     }
     else
