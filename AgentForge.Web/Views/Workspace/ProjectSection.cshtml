@@ -139,10 +139,25 @@
                 <div class="lf-panel-head"><div><strong>@(stageKey == "discovery" ? "Discovery artifacts" : stageKey == "design" ? "Design studio" : stageKey == "development" ? "Code workspace" : stageKey == "quality" ? "Quality reports" : "Release center")</strong><small>Healthcare Booking · sample project</small></div><span class="lf-pill">v0.1 · Sample</span></div>
                 @if (stageKey == "discovery")
                 {
-                    <div class="lf-tabs" role="tablist" aria-label="Discovery outputs"><button type="button" class="is-active" data-lf-tab="business">Business document</button><button type="button" data-lf-tab="features">Feature board</button><button type="button" data-lf-tab="specs">Task specs</button></div>
-                    <div class="lf-tab-panel" data-lf-panel="business"><div class="lf-document"><div class="lf-doc-title"><span>BRD-001</span><span class="lf-pill lf-green">Ready for review</span></div><h2>Healthcare Appointment Platform</h2><p class="lf-muted">Business requirements · version 0.1</p><h3>Problem statement</h3><p>Patients need a simple way to discover healthcare providers, see available slots and manage bookings without calling a clinic.</p><h3>Target users</h3><p>Patients, healthcare providers and clinic administrators.</p><h3>Business goals</h3><ul><li>Reduce friction when scheduling appointments.</li><li>Prevent double bookings.</li><li>Allow cancellation at least 24 hours before an appointment.</li></ul><h3>Success criteria</h3><p>A patient can discover a doctor, select a free slot and receive confirmation.</p></div></div>
-                    <div class="lf-tab-panel" data-lf-panel="features" hidden><div class="lf-stat-row"><div><strong>4</strong><small>Features</small></div><div><strong>8</strong><small>Tasks</small></div><div><strong>3</strong><small>Ready</small></div></div><div class="lf-board"><div><h3>Backlog</h3><article><strong>FEAT-004</strong><p>Notifications & reminders</p><small>2 tasks</small></article></div><div><h3>In progress</h3><article><strong>FEAT-002</strong><p>Doctor search & availability</p><small>2 tasks</small></article></div><div><h3>Ready</h3><article><strong>FEAT-001</strong><p>Authentication & profiles</p><small>2 tasks</small></article><article><strong>FEAT-003</strong><p>Appointment booking</p><small>2 tasks</small></article></div></div></div>
-                    <div class="lf-tab-panel" data-lf-panel="specs" hidden><div class="lf-spec"><span class="lf-pill">TASK-011 · FEAT-003</span><h2>Implement appointment booking API</h2><p><strong>User story:</strong> As a patient, I want to book an available slot so I can schedule a visit.</p><h3>Acceptance criteria</h3><ul><li>Only future, available slots can be booked.</li><li>Two patients cannot reserve the same slot.</li><li>A successful booking returns an identifier and confirmation.</li><li>Invalid patient or provider returns a validation error.</li></ul><h3>Dependencies</h3><p>Provider availability API, patient authentication and booking persistence.</p></div><div class="lf-spec"><span class="lf-pill">TASK-012 · FEAT-003</span><h3>Build appointment booking UI</h3><p>Search for a doctor, choose an available slot and show booking confirmation with accessible error states.</p></div></div>
+                    <div class="lf-discovery-document" aria-label="Discovery Word document">
+                        <div class="lf-discovery-document-toolbar">
+                            <div><strong>Business Requirements.docx</strong><small>Word document · BRD-001 · Sample</small></div>
+                            <button type="button" data-lf-discovery-download>Download Word</button>
+                        </div>
+                        <article class="lf-discovery-paper" aria-label="Business requirements document preview">
+                            <h2>Healthcare Appointment Platform</h2>
+                            <p class="lf-muted">Business requirements · version 0.1</p>
+                            <h3>Problem statement</h3>
+                            <p>Patients need a simple way to discover healthcare providers, see available slots and manage bookings without calling a clinic.</p>
+                            <h3>Target users</h3>
+                            <p>Patients, healthcare providers and clinic administrators.</p>
+                            <h3>Business goals</h3>
+                            <ul><li>Reduce friction when scheduling appointments.</li><li>Prevent double bookings.</li><li>Allow cancellation at least 24 hours before an appointment.</li></ul>
+                            <h3>Success criteria</h3>
+                            <p>A patient can discover a doctor, select a free slot and receive confirmation.</p>
+                        </article>
+                        <p class="lf-muted" data-lf-discovery-message role="status">Sample document. Download generates a Word file locally; no project files are stored.</p>
+                    </div>
                 }
                 else if (stageKey == "design")
                 {
@@ -331,5 +346,9 @@ export async function book(
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
     <script defer>document.addEventListener("DOMContentLoaded", () => { if (window.pdfjsLib) window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js"; });</script>
+}
+@if (stageKey == "discovery")
+{
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
 }
 <script src="~/js/lifecycle-workspace.js" asp-append-version="true" defer></script>
