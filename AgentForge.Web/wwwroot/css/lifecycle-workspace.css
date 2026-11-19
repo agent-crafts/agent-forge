@@ -460,3 +460,14 @@
 .lf-doc-flow-arrow{color:#64748b}
 .lf-doc-rendered-preview pre.lf-doc-code{margin:0;padding:20px;overflow-x:auto;white-space:pre;overflow-wrap:normal;border:1px solid var(--line);border-radius:4px;background:var(--hover);color:var(--content);font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}
 @media(max-width:650px){.lf-doc-preview-page{padding:18px}.lf-doc-architecture-flow{gap:5px}}
+
+/* Shared preview host for Markdown, YAML, PDF.js canvases and Mammoth HTML. */
+.lf-doc-rendered-preview.lf-doc-markdown-preview{line-height:1.7;overflow-wrap:anywhere}
+.lf-doc-rendered-preview.lf-doc-markdown-preview h1,.lf-doc-rendered-preview.lf-doc-markdown-preview h2,.lf-doc-rendered-preview.lf-doc-markdown-preview h3{margin:0 0 12px;color:var(--heading);line-height:1.35}
+.lf-doc-rendered-preview.lf-doc-markdown-preview h1{font-size:22px}
+.lf-doc-rendered-preview.lf-doc-markdown-preview h2{font-size:18px}
+.lf-doc-rendered-preview.lf-doc-markdown-preview h3{font-size:15px}
+.lf-doc-rendered-preview.lf-doc-markdown-preview p{margin:0 0 12px}
+.lf-doc-rendered-preview.lf-doc-markdown-preview ul,.lf-doc-rendered-preview.lf-doc-markdown-preview ol{padding-left:24px;margin:0 0 16px}
+.lf-doc-rendered-preview .lf-doc-pdf-canvas{display:block;max-width:100%;height:auto;margin:0 auto 16px;background:#fff;box-shadow:0 3px 14px #0002}
+.lf-doc-rendered-preview .lf-doc-preview-error{padding:14px;border:1px solid var(--line);border-radius:4px;color:var(--content);background:var(--hover)}
