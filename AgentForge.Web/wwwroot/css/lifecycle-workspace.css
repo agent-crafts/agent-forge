@@ -171,3 +171,9 @@
 .lf-board-feature-group:not([open]) .lf-board-chevron{transform:rotate(-45deg)}
 .lf-board-feature-tasks{display:grid;gap:7px;padding-top:5px}
 .lf-board-feature-tasks .lf-board-task{margin:0}
+
+
+/* Inline task ID followed by its title, keeping the metrics footer unchanged. */
+.lf-board-task-heading{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:6px;row-gap:3px;margin-bottom:9px}
+.lf-board-task-heading .lf-board-task-id{flex:none;font-size:10px;font-weight:700;color:#2563eb}
+.lf-board-task-heading h3{flex:1 1 90px;min-width:0;margin:0;font-size:11px;line-height:1.45}
