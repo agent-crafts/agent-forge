@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AgentForge.Web.Controllers;
 
 [Route("projects/{id:guid}/board")]
-public sealed class BoardController(ISender sender) : DashboardController(sender)
+public sealed class BoardController(ISender sender) : WorkspacePageController(sender)
 {
     [HttpGet]
     public Task<IActionResult> Index(Guid id, CancellationToken cancellationToken)
