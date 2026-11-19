@@ -274,3 +274,9 @@
 .lf-project-identity:has(.lf-board-view-toolbar){flex-wrap:wrap}
 .lf-project-identity .lf-board-view-toolbar{margin-left:auto;flex:none}
 @media(max-width:640px){.lf-project-identity .lf-board-view-toolbar{margin-left:0;width:100%;justify-self:stretch}.lf-project-identity .lf-board-view-toolbar button{flex:1}}
+
+/* Features view: task usage and feature totals reuse the Board's compact metric language. */
+.lf-specs-usage,.lf-specs-feature-usage{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px;line-height:1.45;font-variant-numeric:tabular-nums}
+.lf-specs-usage{margin-top:10px;padding-top:9px;border-top:1px solid var(--line);color:var(--content)}
+.lf-specs-feature-usage{margin-top:10px;padding:10px 2px 1px;border-top:1px solid var(--line);font-weight:600;color:var(--heading)}
+.lf-specs-usage span,.lf-specs-feature-usage span{white-space:nowrap}
