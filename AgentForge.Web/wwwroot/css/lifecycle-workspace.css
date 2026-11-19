@@ -558,3 +558,7 @@
 /* Task-style lifecycle usage, shown beneath the project subtitle. */
 .lf-lifecycle-usage{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px;margin-top:9px;font-size:12px;line-height:1.45;color:var(--content);font-variant-numeric:tabular-nums}
 .lf-lifecycle-usage span{white-space:nowrap}
+
+/* Lifecycle header spans the available workspace width. */
+.lf-overview-grid{grid-template-columns:minmax(0,1fr);width:100%}
+.lf-overview-grid>.lf-project-header{width:100%;min-width:0}
