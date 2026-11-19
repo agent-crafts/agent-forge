@@ -27,6 +27,27 @@
       notice.textContent = text;
       previewContainer.appendChild(notice);
     };
+    const createSamplePdf = () => {
+      if (!window.jspdf?.jsPDF) throw new Error("Sample PDF generator is unavailable.");
+      const pdf = new window.jspdf.jsPDF();
+      pdf.setFontSize(18);
+      pdf.text("System Architecture", 20, 28);
+      pdf.setFontSize(11);
+      pdf.text("Healthcare Appointment Platform", 20, 42);
+      pdf.text("Web application -> API -> Appointment service -> Data store", 20, 65);
+      pdf.text("Illustrative document generated locally for the preview demo.", 20, 85);
+      return pdf.output("arraybuffer");
+    };
+    const createSampleDocx = async () => {
+      if (!window.JSZip) throw new Error("Sample DOCX generator is unavailable.");
+      const zip = new window.JSZip();
+      zip.file("[Content_Types].xml", '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>');
+      zip.folder("_rels").file(".rels", '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
+      const paragraphs = ["Stakeholder Notes", "Healthcare Appointment Platform", "Prioritize appointment discovery and booking.", "Include responsive layouts and accessible error states.", "Confirm cancellation policy before release.", "Illustrative document generated locally for the preview demo."];
+      const xml = paragraphs.map((line, index) => '<w:p><w:r><w:rPr>' + (index === 0 ? '<w:b/><w:sz w:val="32"/>' : '') + '</w:rPr><w:t>' + line + '</w:t></w:r></w:p>').join("");
+      zip.folder("word").file("document.xml", '<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' + xml + '</w:body></w:document>');
+      return zip.generateAsync({ type: "arraybuffer" });
+    };
     const renderPreview = async row => {
       const token = ++activePreview;
       previewContainer.replaceChildren();
@@ -57,10 +78,18 @@
           previewContainer.appendChild(pre);
           return;
         }
-        if (!url) throw new Error("A real " + row.dataset.type + " file is required for preview. This demo only has metadata for this document.");
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Unable to load document (HTTP " + response.status + ").");
-        const bytes = await response.arrayBuffer();
+        let bytes;
+        if (url) {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error("Unable to load document (HTTP " + response.status + ").");
+          bytes = await response.arrayBuffer();
+        } else if (type === "pdf") {
+          bytes = createSamplePdf();
+        } else if (type === "word" || type === "docx") {
+          bytes = await createSampleDocx();
+        } else {
+          throw new Error("No document content is available.");
+        }
         if (token !== activePreview) return;
         if (type === "pdf") {
           if (!window.pdfjsLib) throw new Error("PDF.js renderer is unavailable.");
