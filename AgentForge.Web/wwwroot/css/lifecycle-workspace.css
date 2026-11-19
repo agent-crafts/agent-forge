@@ -383,3 +383,9 @@
 .lf-doc-table td.lf-doc-actions{margin-top:auto}
 .lf-doc-footer-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
 .lf-doc-source-date{font-size:11px;color:var(--muted);white-space:nowrap}
+
+/* Document source is in the header, opposite the file title; footer keeps date and actions. */
+.lf-doc-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-width:0}
+.lf-doc-card-header .lf-doc-name{flex:1;min-width:0}
+.lf-doc-card-header>.lf-doc-source{flex:none}
+.lf-doc-table td.lf-doc-actions{justify-content:space-between}
