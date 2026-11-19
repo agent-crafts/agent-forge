@@ -30,15 +30,16 @@
             <div class="lf-project-details">
                 <div class="lf-project-title"><strong>@(stageKey == "board" ? "Project Board" : stageKey == "specifications" ? "Project Specifications" : projectName)</strong><span class="lf-project-status">Demo workspace</span></div>
                 <p>@(stageKey == "board" ? $"{projectName} · Track work from new requests through delivery." : stageKey == "specifications" ? $"{projectName} · Browse uploaded and Agent project documents." : "Lifecycle progress · sample values")</p>
-                @if (stageIndex >= 0)
-                {
-                    <div class="lf-lifecycle-usage" aria-label="Illustrative stage usage">
-                        <span title="Time spent">⏱ @demoHoursUsed[stageIndex]h</span>
-                        <span title="Tokens used">◈ @((demoTokensUsed[stageIndex] / 1000.0).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture))K</span>
-                        <span title="AI cost">$ @demoCostUsed[stageIndex].ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)</span>
-                    </div>
-                }
+
             </div>
+            @if (stageIndex >= 0)
+            {
+                <div class="lf-lifecycle-usage" aria-label="Illustrative stage usage">
+                    <span title="Time spent">⏱ @demoHoursUsed[stageIndex]h</span>
+                    <span title="Tokens used">◈ @((demoTokensUsed[stageIndex] / 1000.0).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture))K</span>
+                    <span title="AI cost">$ @demoCostUsed[stageIndex].ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)</span>
+                </div>
+            }
             @if (stageKey == "specifications")
             {
                 <button class="lf-doc-upload" type="button" data-lf-doc-demo-action="Upload">+ Upload document</button>
