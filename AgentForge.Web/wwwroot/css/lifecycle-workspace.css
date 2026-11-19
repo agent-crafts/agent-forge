@@ -554,3 +554,7 @@
 .lf-insights-ring-metric span{font-size:11px;color:var(--muted)}
 .lf-insights-ring-metric strong{font-size:13px;font-weight:650;color:var(--heading);font-variant-numeric:tabular-nums;white-space:nowrap}
 @media(max-width:420px){.lf-insights-ring-layout{gap:12px}.lf-insights-ring{width:96px;height:96px}.lf-insights-ring-center{width:78px;height:78px}.lf-insights-ring-center strong{font-size:20px}}
+
+/* Task-style lifecycle usage, shown beneath the project subtitle. */
+.lf-lifecycle-usage{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px;margin-top:9px;font-size:12px;line-height:1.45;color:var(--content);font-variant-numeric:tabular-nums}
+.lf-lifecycle-usage span{white-space:nowrap}
