@@ -12,67 +12,90 @@
     const dialog = root.querySelector("[data-lf-doc-dialog]");
     const message = root.querySelector("[data-lf-doc-message]");
     const examples = {
-      business: "# Healthcare Appointment Platform\\n\\n## Problem\\nPatients need a simple way to discover providers and book appointments.\\n\\n## Goals\\n- Find doctors and available appointments\\n- Prevent double bookings\\n- Allow cancellation at least 24 hours before a visit",
-      architecture: "System Architecture — sample PDF outline\\n\\nWeb application → API → Appointment service → Data store\\n\\nThis is an illustrative preview only; no PDF file is stored.",
-      api: "openapi: 3.0.3\\ninfo:\\n  title: Healthcare Appointment API\\n  version: 0.1.0\\npaths:\\n  /doctors:\\n    get:\\n      summary: Search doctors\\n  /appointments:\\n    post:\\n      summary: Book an available slot",
-      acceptance: "# Booking acceptance criteria\\n\\n- Only future, available slots can be booked.\\n- Two patients cannot reserve the same slot.\\n- Successful booking returns a confirmation.\\n- Invalid patients or providers receive validation errors.",
-      notes: "Stakeholder Notes — sample Word document outline\\n\\n- Prioritize appointment discovery and booking.\\n- Include responsive layouts and accessible error states.\\n- Confirm cancellation policy before release.\\n\\nThis is an illustrative preview only; no Word file is stored."
+      business: "# Healthcare Appointment Platform\n\n## Problem\nPatients need a simple way to discover providers and book appointments.\n\n## Goals\n- Find doctors and available appointments\n- Prevent double bookings\n- Allow cancellation at least 24 hours before a visit",
+      api: "openapi: 3.0.3\ninfo:\n  title: Healthcare Appointment API\n  version: 0.1.0\npaths:\n  /doctors:\n    get:\n      summary: Search doctors\n  /appointments:\n    post:\n      summary: Book an available slot",
+      acceptance: "# Booking acceptance criteria\n\n- Only future, available slots can be booked.\n- Two patients cannot reserve the same slot.\n- Successful booking returns a confirmation.\n- Invalid patients or providers receive validation errors."
     };
-    // Format-aware, text-only demo rendering. Never interpret document content as HTML.
-    const renderPreview = row => {
-      const container = root.querySelector("[data-lf-doc-preview-content]");
-      container.replaceChildren();
-      const format = row.dataset.type.toLowerCase();
-      const content = examples[row.dataset.preview] || "";
-      const add = (parent, tag, value, className) => {
-        const element = document.createElement(tag);
-        if (className) element.className = className;
-        element.textContent = value;
-        parent.appendChild(element);
-        return element;
-      };
-      if (format === "yaml" || format === "yml") {
-        const code = add(container, "pre", "", "lf-doc-code");
-        add(code, "code", content);
-        return;
+    // Real file URLs can be supplied by data-file-url on each document row when storage is connected.
+    // PDF and DOCX require real file bytes; never invent a rendered document from metadata.
+    const previewContainer = root.querySelector("[data-lf-doc-preview-content]");
+    let activePreview = 0;
+    const previewError = text => {
+      previewContainer.replaceChildren();
+      const notice = document.createElement("p");
+      notice.className = "lf-doc-preview-error";
+      notice.textContent = text;
+      previewContainer.appendChild(notice);
+    };
+    const renderPreview = async row => {
+      const token = ++activePreview;
+      previewContainer.replaceChildren();
+      const type = row.dataset.type.toLowerCase();
+      const url = row.dataset.fileUrl;
+      const sample = examples[row.dataset.preview];
+      try {
+        if (type === "markdown") {
+          const content = url ? await (await fetch(url)).text() : sample;
+          if (!content) throw new Error("No Markdown content is available.");
+          if (!window.marked || !window.DOMPurify) throw new Error("Markdown renderer is unavailable.");
+          const html = window.DOMPurify.sanitize(window.marked.parse(content));
+          if (token !== activePreview) return;
+          previewContainer.innerHTML = html;
+          previewContainer.classList.add("lf-doc-markdown-preview");
+          return;
+        }
+        previewContainer.classList.remove("lf-doc-markdown-preview");
+        if (type === "yaml" || type === "yml" || type === "json" || type === "text") {
+          const content = url ? await (await fetch(url)).text() : sample;
+          if (!content) throw new Error("No text content is available.");
+          if (token !== activePreview) return;
+          const pre = document.createElement("pre");
+          pre.className = "lf-doc-code";
+          const code = document.createElement("code");
+          code.textContent = content;
+          pre.appendChild(code);
+          previewContainer.appendChild(pre);
+          return;
+        }
+        if (!url) throw new Error("A real " + row.dataset.type + " file is required for preview. This demo only has metadata for this document.");
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Unable to load document (HTTP " + response.status + ").");
+        const bytes = await response.arrayBuffer();
+        if (token !== activePreview) return;
+        if (type === "pdf") {
+          if (!window.pdfjsLib) throw new Error("PDF.js renderer is unavailable.");
+          const pdf = await window.pdfjsLib.getDocument({ data: new Uint8Array(bytes) }).promise;
+          try {
+            for (let index = 1; index <= pdf.numPages; index++) {
+              if (token !== activePreview) return;
+              const page = await pdf.getPage(index);
+              const base = page.getViewport({ scale: 1 });
+              const scale = Math.min(1.6, Math.max(0.5, (previewContainer.clientWidth - 16) / base.width));
+              const viewport = page.getViewport({ scale });
+              const canvas = document.createElement("canvas");
+              canvas.className = "lf-doc-pdf-canvas";
+              canvas.width = Math.ceil(viewport.width);
+              canvas.height = Math.ceil(viewport.height);
+              await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+              if (token !== activePreview) return;
+              previewContainer.appendChild(canvas);
+            }
+          } finally { await pdf.destroy(); }
+          return;
+        }
+        if (type === "word" || type === "docx") {
+          if (!window.mammoth) throw new Error("Word renderer is unavailable.");
+          const result = await window.mammoth.convertToHtml({ arrayBuffer: bytes });
+          if (token !== activePreview) return;
+          if (!window.DOMPurify) throw new Error("HTML sanitizer is unavailable.");
+          previewContainer.innerHTML = window.DOMPurify.sanitize(result.value);
+          previewContainer.classList.add("lf-doc-markdown-preview");
+          return;
+        }
+        throw new Error("Unsupported preview format: " + row.dataset.type);
+      } catch (error) {
+        if (token === activePreview) previewError(error.message || "Preview failed.");
       }
-      const page = document.createElement("div");
-      page.className = format === "pdf" ? "lf-doc-preview-page is-pdf" : "lf-doc-preview-page";
-      container.appendChild(page);
-      if (format === "pdf") {
-        add(page, "div", "ARCHITECTURE OVERVIEW", "lf-doc-page-eyebrow");
-        add(page, "h2", "System Architecture");
-        add(page, "p", "Healthcare Appointment Platform · Illustrative PDF layout");
-        const flow = add(page, "div", "", "lf-doc-architecture-flow");
-        ["Web application", "API", "Appointment service", "Data store"].forEach((name, index) => {
-          if (index) add(flow, "span", "→", "lf-doc-flow-arrow");
-          add(flow, "span", name, "lf-doc-flow-node");
-        });
-        add(page, "p", "This is a sample page layout, not a rendered PDF file.");
-        return;
-      }
-      if (format === "word") {
-        add(page, "div", "STAKEHOLDER NOTES", "lf-doc-page-eyebrow");
-        add(page, "h2", "Stakeholder Notes");
-        add(page, "p", "Healthcare Appointment Platform");
-        const list = document.createElement("ul");
-        page.appendChild(list);
-        ["Prioritize appointment discovery and booking.", "Include responsive layouts and accessible error states.", "Confirm cancellation policy before release."].forEach(item => add(list, "li", item));
-        add(page, "p", "Illustrative Word-style preview; no .docx file is stored.", "lf-doc-page-footnote");
-        return;
-      }
-      // Markdown: render headings and lists as readable document elements.
-      let list = null;
-      content.split(/\n/).forEach(line => {
-        const value = line.trim();
-        if (!value) { list = null; return; }
-        if (value.startsWith("# ")) { add(page, "h2", value.slice(2)); list = null; }
-        else if (value.startsWith("## ")) { add(page, "h3", value.slice(3)); list = null; }
-        else if (value.startsWith("- ")) {
-          if (!list) { list = document.createElement("ul"); page.appendChild(list); }
-          add(list, "li", value.slice(2));
-        } else { add(page, "p", value); list = null; }
-      });
     };
     const refresh = () => {
       const term = search.value.trim().toLowerCase();
@@ -99,6 +122,7 @@
       });
     });
     root.querySelectorAll("[data-lf-doc-close]").forEach(button => button.addEventListener("click", () => dialog.close()));
+    dialog.addEventListener("close", () => { activePreview++; previewContainer.replaceChildren(); });
     const demoNotice = action => {
       message.textContent = `${action} is not available in this static demo. No files are stored or downloaded.`;
       message.hidden = false;
