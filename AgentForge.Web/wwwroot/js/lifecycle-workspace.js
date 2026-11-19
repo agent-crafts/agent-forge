@@ -18,6 +18,62 @@
       acceptance: "# Booking acceptance criteria\\n\\n- Only future, available slots can be booked.\\n- Two patients cannot reserve the same slot.\\n- Successful booking returns a confirmation.\\n- Invalid patients or providers receive validation errors.",
       notes: "Stakeholder Notes — sample Word document outline\\n\\n- Prioritize appointment discovery and booking.\\n- Include responsive layouts and accessible error states.\\n- Confirm cancellation policy before release.\\n\\nThis is an illustrative preview only; no Word file is stored."
     };
+    // Format-aware, text-only demo rendering. Never interpret document content as HTML.
+    const renderPreview = row => {
+      const container = root.querySelector("[data-lf-doc-preview-content]");
+      container.replaceChildren();
+      const format = row.dataset.type.toLowerCase();
+      const content = examples[row.dataset.preview] || "";
+      const add = (parent, tag, value, className) => {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        element.textContent = value;
+        parent.appendChild(element);
+        return element;
+      };
+      if (format === "yaml" || format === "yml") {
+        const code = add(container, "pre", "", "lf-doc-code");
+        add(code, "code", content);
+        return;
+      }
+      const page = document.createElement("div");
+      page.className = format === "pdf" ? "lf-doc-preview-page is-pdf" : "lf-doc-preview-page";
+      container.appendChild(page);
+      if (format === "pdf") {
+        add(page, "div", "ARCHITECTURE OVERVIEW", "lf-doc-page-eyebrow");
+        add(page, "h2", "System Architecture");
+        add(page, "p", "Healthcare Appointment Platform · Illustrative PDF layout");
+        const flow = add(page, "div", "", "lf-doc-architecture-flow");
+        ["Web application", "API", "Appointment service", "Data store"].forEach((name, index) => {
+          if (index) add(flow, "span", "→", "lf-doc-flow-arrow");
+          add(flow, "span", name, "lf-doc-flow-node");
+        });
+        add(page, "p", "This is a sample page layout, not a rendered PDF file.");
+        return;
+      }
+      if (format === "word") {
+        add(page, "div", "STAKEHOLDER NOTES", "lf-doc-page-eyebrow");
+        add(page, "h2", "Stakeholder Notes");
+        add(page, "p", "Healthcare Appointment Platform");
+        const list = document.createElement("ul");
+        page.appendChild(list);
+        ["Prioritize appointment discovery and booking.", "Include responsive layouts and accessible error states.", "Confirm cancellation policy before release."].forEach(item => add(list, "li", item));
+        add(page, "p", "Illustrative Word-style preview; no .docx file is stored.", "lf-doc-page-footnote");
+        return;
+      }
+      // Markdown: render headings and lists as readable document elements.
+      let list = null;
+      content.split(/\\n/).forEach(line => {
+        const value = line.trim();
+        if (!value) { list = null; return; }
+        if (value.startsWith("# ")) { add(page, "h2", value.slice(2)); list = null; }
+        else if (value.startsWith("## ")) { add(page, "h3", value.slice(3)); list = null; }
+        else if (value.startsWith("- ")) {
+          if (!list) { list = document.createElement("ul"); page.appendChild(list); }
+          add(list, "li", value.slice(2));
+        } else { add(page, "p", value); list = null; }
+      });
+    };
     const refresh = () => {
       const term = search.value.trim().toLowerCase();
       const selected = source.value;
@@ -38,7 +94,7 @@
         const row = button.closest("[data-lf-doc-row]");
         root.querySelector("[data-lf-doc-preview-title]").textContent = row.dataset.name;
         root.querySelector("[data-lf-doc-preview-meta]").textContent = `${row.dataset.type} · ${row.dataset.updated} · ${row.dataset.source === "ai" ? "Agent" : "User"}`;
-        root.querySelector("[data-lf-doc-preview-content]").textContent = examples[row.dataset.preview];
+        renderPreview(row);
         if (typeof dialog.showModal === "function") dialog.showModal();
       });
     });
