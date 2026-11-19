@@ -210,3 +210,6 @@
 
 /* Feature badge label uses regular weight, distinct from bold task IDs. */
 .lf-board-task-feature .lf-board-feature{font-weight:400}
+
+/* Task ID size only; keep title, badge and metrics unchanged. */
+.lf-board-task-list .lf-board-task-heading .lf-board-task-id{font-size:10px}
