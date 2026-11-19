@@ -29,7 +29,7 @@
     <div class="lf-overview-grid @(stageKey == "board" ? "lf-overview-grid--single" : "")">
     <header class="lf-project-header ui-panel">
         <div class="lf-project-identity">
-            <span class="lf-project-icon" aria-hidden="true">@(stageKey == "board" ? "☷" : "▦")</span>
+            <span class="lf-project-icon" aria-hidden="true">@if (stageKey == "board") { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18" /></svg> } else { <span>▦</span> }</span>
             <div class="lf-project-details">
                 <div class="lf-project-title"><strong>@(stageKey == "board" ? "Project Board" : projectName)</strong><span class="lf-project-status">Demo workspace</span></div>
                 <p>@(stageKey == "board" ? $"{projectName} · Track work from new requests through delivery." : "Lifecycle progress · sample values")</p>
