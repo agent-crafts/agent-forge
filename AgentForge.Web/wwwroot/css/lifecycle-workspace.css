@@ -100,3 +100,7 @@
 .lf-insights-footnote{font-size:10px;line-height:1.5;color:var(--muted);margin:auto 0 0}
 @media(max-width:1150px){.lf-overview-grid{grid-template-columns:1fr}.lf-insights-metrics{gap:12px}}
 @media(max-width:480px){.lf-root .lf-stage-insights.ui-panel{padding:15px}.lf-insights-metrics{grid-template-columns:1fr 1fr}.lf-insights-metric:last-child{grid-column:1/-1}}
+
+/* Shared Board has no lifecycle stepper; let its project header span the row. */
+.lf-overview-grid--single{grid-template-columns:minmax(0,1fr)}
+.lf-overview-grid--single .lf-project-identity{border-bottom:0}
