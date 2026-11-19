@@ -7,6 +7,14 @@
     var projectId = ViewData["ProjectId"] as string ?? "";
     var stageIndex = Array.FindIndex(stages, stage => stage.Item1 == stageKey);
     var agent = stageIndex >= 0 ? stages[stageIndex].Item3 : "Project Assistant";
+    // Keep Development Operations header icons aligned with the sidebar navigation.
+    var stageIconPaths = new Dictionary<string, string> {
+        ["discovery"] = "M11 3a8 8 0 1 0 0 16 8 8 0 0 0 0-16ZM17 17l4 4",
+        ["design"] = "M3 21l6-2 12-12-4-4L5 15l-2 6ZM14 6l4 4",
+        ["development"] = "M8 8l-4 4 4 4M16 8l4 4-4 4M14 4l-4 16",
+        ["quality"] = "M12 2l8 4v6c0 5-3 8-8 10-5-2-8-5-8-10V6l8-4ZM8 12l3 3 5-6",
+        ["deployment"] = "M12 3l5 5-5 5-5-5 5-5ZM12 13v8M5 18h14"
+    };
     // Illustrative estimates only; telemetry and forecasting are not wired yet.
     var demoProgress = new[] { 100, 60, 30, 0, 0 };
     var demoTokensUsed = new[] { 185000, 132000, 94000, 0, 0 };
@@ -26,7 +34,7 @@
     <div class="lf-overview-grid @(stageKey == "board" || stageKey == "specifications" ? "lf-overview-grid--single" : "")">
     <header class="lf-project-header ui-panel">
         <div class="lf-project-identity">
-            <span class="lf-project-icon" aria-hidden="true">@if (stageKey == "board") { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18" /></svg> } else if (stageKey == "specifications") { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6zM15 3v5h4M9 12h7M9 16h7" /></svg> } else { <span>▦</span> }</span>
+            <span class="lf-project-icon" aria-hidden="true">@if (stageKey == "board") { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18" /></svg> } else if (stageKey == "specifications") { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6zM15 3v5h4M9 12h7M9 16h7" /></svg> } else if (stageIconPaths.TryGetValue(stageKey, out var stageIconPath)) { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="@stageIconPath" /></svg> } else { <span>▦</span> }</span>
             <div class="lf-project-details">
                 <div class="lf-project-title"><strong>@(stageKey == "board" ? "Project Board" : stageKey == "specifications" ? "Project Specifications" : projectName)</strong><span class="lf-project-status">Demo workspace</span></div>
                 <p>@(stageKey == "board" ? $"{projectName} · Track work from new requests through delivery." : stageKey == "specifications" ? $"{projectName} · Browse uploaded and Agent project documents." : "Lifecycle progress · sample values")</p>
