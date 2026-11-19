@@ -144,6 +144,18 @@
     root.querySelectorAll("[data-lf-doc-preview]").forEach(button => {
       button.addEventListener("click", () => {
         const row = button.closest("[data-lf-doc-row]");
+        const descriptions = {
+          markdown: "Markdown document — formatted headings, paragraphs and lists.",
+          pdf: "PDF document — page-by-page preview.",
+          yaml: "YAML specification — structured text with preserved indentation.",
+          yml: "YAML specification — structured text with preserved indentation.",
+          json: "JSON document — structured text preview.",
+          text: "Plain text document — original text layout.",
+          word: "Word document — formatted content preview.",
+          docx: "Word document — formatted content preview."
+        };
+        root.querySelector("[data-lf-doc-preview-description]").textContent =
+          descriptions[row.dataset.type.toLowerCase()] || "Document preview.";
         root.querySelector("[data-lf-doc-preview-title]").textContent = row.dataset.name;
         root.querySelector("[data-lf-doc-preview-meta]").textContent = `${row.dataset.type} · ${row.dataset.updated} · ${row.dataset.source === "ai" ? "Agent" : "User"}`;
         renderPreview(row);
