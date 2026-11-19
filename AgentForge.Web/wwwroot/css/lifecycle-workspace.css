@@ -532,3 +532,12 @@
 .lf-discovery-paper ul{padding-left:24px}
 .lf-discovery-paper .lf-muted{color:#64748b}
 @media(max-width:650px){.lf-discovery-paper{padding:22px}.lf-discovery-document-toolbar{flex-wrap:wrap}}
+
+.lf-discovery-preview-button{padding:7px 13px;border:1px solid var(--line-strong);border-radius:4px;background:var(--surface);color:var(--heading);font-size:12px;cursor:pointer}
+.lf-discovery-preview-button:hover{background:var(--hover)}
+.lf-discovery-dialog{box-sizing:border-box;width:min(900px,calc(100vw - 32px));max-height:90dvh;overflow:auto;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--content)}
+.lf-discovery-dialog::backdrop{background:#0008}
+.lf-discovery-dialog-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line)}
+.lf-discovery-dialog-head button{border:0;background:transparent;color:var(--content);cursor:pointer;font-size:16px}
+.lf-discovery-dialog .lf-discovery-document{padding:24px 16px}
+@media(max-width:650px){.lf-discovery-dialog .lf-discovery-document{padding:12px}}
