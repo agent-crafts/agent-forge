@@ -2,6 +2,20 @@
   "use strict";
   const root = document.querySelector(".lf-root");
   if (!root) return;
+  const boardButtons = root.querySelectorAll("[data-lf-board-view]");
+  boardButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const view = button.dataset.lfBoardView;
+      boardButtons.forEach(item => {
+        const active = item === button;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      root.querySelectorAll("[data-lf-board-panel]").forEach(panel => {
+        panel.hidden = panel.dataset.lfBoardPanel !== view;
+      });
+    });
+  });
   root.querySelectorAll("[data-lf-tab]").forEach(button => {
     button.addEventListener("click", () => {
       const tab = button.dataset.lfTab;
