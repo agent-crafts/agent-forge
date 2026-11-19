@@ -139,7 +139,7 @@
                 <div class="lf-panel-head"><div><strong>@(stageKey == "discovery" ? "Discovery artifacts" : stageKey == "design" ? "Design studio" : stageKey == "development" ? "Code workspace" : stageKey == "quality" ? "Quality reports" : "Release center")</strong><small>Healthcare Booking · sample project</small></div>@if (stageKey == "discovery") { <button type="button" class="lf-discovery-preview-button" data-lf-discovery-preview>Preview</button> } else { <span class="lf-pill">v0.1 · Sample</span> }</div>
                 @if (stageKey == "discovery")
                 {
-                    <dialog class="lf-discovery-dialog" data-lf-discovery-dialog aria-label="Discovery document preview"><div class="lf-discovery-dialog-head"><strong>Document preview</strong><button type="button" data-lf-discovery-close aria-label="Close preview">✕</button></div><div class="lf-discovery-document" aria-label="Discovery Word document">
+                    <div class="lf-discovery-document" aria-label="Discovery Word document">
                         <article class="lf-discovery-paper" aria-label="Business requirements document preview">
                             <h2>Healthcare Appointment Platform</h2>
                             <p class="lf-muted">Business requirements · version 0.1</p>
@@ -152,7 +152,22 @@
                             <h3>Success criteria</h3>
                             <p>A patient can discover a doctor, select a free slot and receive confirmation.</p>
                         </article>
-                    </div></dialog>
+                    </div>
+                    <dialog class="lf-discovery-dialog" data-lf-discovery-dialog aria-label="Discovery document preview">
+                        <div class="lf-discovery-dialog-head"><strong>Document preview</strong><button type="button" data-lf-discovery-close aria-label="Close preview">✕</button></div>
+                        <div class="lf-discovery-document"><article class="lf-discovery-paper" aria-label="Business requirements document preview">
+                            <h2>Healthcare Appointment Platform</h2>
+                            <p class="lf-muted">Business requirements · version 0.1</p>
+                            <h3>Problem statement</h3>
+                            <p>Patients need a simple way to discover healthcare providers, see available slots and manage bookings without calling a clinic.</p>
+                            <h3>Target users</h3>
+                            <p>Patients, healthcare providers and clinic administrators.</p>
+                            <h3>Business goals</h3>
+                            <ul><li>Reduce friction when scheduling appointments.</li><li>Prevent double bookings.</li><li>Allow cancellation at least 24 hours before an appointment.</li></ul>
+                            <h3>Success criteria</h3>
+                            <p>A patient can discover a doctor, select a free slot and receive confirmation.</p>
+                        </article></div>
+                    </dialog>
                 }
                 else if (stageKey == "design")
                 {
