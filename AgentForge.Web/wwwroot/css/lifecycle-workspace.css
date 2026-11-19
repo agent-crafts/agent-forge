@@ -474,7 +474,7 @@
 
 /* Unified PDF-style document viewer: paper surface, centered pages and soft shadows. */
 .lf-doc-preview-dialog{width:min(960px,calc(100vw - 32px));max-height:min(92dvh,1100px)}
-.lf-doc-preview-body{background:var(--hover);max-height:calc(92dvh - 160px);padding:28px 20px}
+.lf-doc-preview-body{background:var(--surface);max-height:calc(92dvh - 160px);padding:28px 20px}
 .lf-doc-preview-notice{max-width:760px;margin:0 auto 16px;text-align:center}
 .lf-doc-rendered-preview{max-width:760px;margin:0 auto}
 .lf-doc-rendered-preview.lf-doc-markdown-preview,
