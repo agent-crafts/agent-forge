@@ -26,16 +26,16 @@
 }
 <link rel="stylesheet" href="~/css/lifecycle-workspace.css" asp-append-version="true" />
 <div class="lf-root" data-lifecycle-stage="@stageKey">
-    <div class="lf-overview-grid @(stageKey == "board" ? "lf-overview-grid--single" : "")">
+    <div class="lf-overview-grid @(stageKey == "board" || stageKey == "specifications" ? "lf-overview-grid--single" : "")">
     <header class="lf-project-header ui-panel">
         <div class="lf-project-identity">
-            <span class="lf-project-icon" aria-hidden="true">@if (stageKey == "board") { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18" /></svg> } else { <span>▦</span> }</span>
+            <span class="lf-project-icon" aria-hidden="true">@if (stageKey == "board") { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18" /></svg> } else if (stageKey == "specifications") { <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6zM15 3v5h4M9 12h7M9 16h7" /></svg> } else { <span>▦</span> }</span>
             <div class="lf-project-details">
-                <div class="lf-project-title"><strong>@(stageKey == "board" ? "Project Board" : projectName)</strong><span class="lf-project-status">Demo workspace</span></div>
-                <p>@(stageKey == "board" ? $"{projectName} · Track work from new requests through delivery." : "Lifecycle progress · sample values")</p>
+                <div class="lf-project-title"><strong>@(stageKey == "board" ? "Project Board" : stageKey == "specifications" ? "Project Specifications" : projectName)</strong><span class="lf-project-status">Demo workspace</span></div>
+                <p>@(stageKey == "board" ? $"{projectName} · Track work from new requests through delivery." : stageKey == "specifications" ? $"{projectName} · Review requirements, features and task specifications." : "Lifecycle progress · sample values")</p>
             </div>
         </div>
-        @if (stageKey != "board")
+        @if (stageKey != "board" && stageKey != "specifications")
         {
         <nav class="lf-progress-timeline" aria-label="Engineering lifecycle">
             <ol class="lf-progress-track">
@@ -219,9 +219,49 @@ export async function book(
     }
     else if (stageKey == "specifications")
     {
-        <section class="lf-card lf-collection ui-panel">
-            <div class="lf-panel-head"><div><strong>@title</strong><small>Shared sample artifacts · no persistence</small></div><span class="lf-pill">Demo</span></div>
-            <div class="lf-spec"><span class="lf-pill">BRD-001 · FEAT-003</span><h2>Appointment booking</h2><p><strong>TASK-011:</strong> Implement booking API. Prevent double booking, validate patient and provider, and confirm successful reservations.</p><p><strong>TASK-012:</strong> Build responsive booking UI with doctor search, available slots and confirmation states.</p><p><strong>Acceptance criteria:</strong> Book only available future slots; prevent concurrent reservations; allow cancellation until 24 hours before start.</p></div>
+        <section class="lf-specs-layout" aria-label="Project specifications library">
+            <div class="lf-specs-summary" aria-label="Sample specification overview">
+                <div class="lf-specs-summary-item ui-panel"><span>Business requirements</span><strong>1</strong><small>BRD-001</small></div>
+                <div class="lf-specs-summary-item ui-panel"><span>Features</span><strong>4</strong><small>FEAT-001 – FEAT-004</small></div>
+                <div class="lf-specs-summary-item ui-panel"><span>Task specifications</span><strong>9</strong><small>8 tasks + 1 QA scenario</small></div>
+            </div>
+            <section class="lf-specs-requirements ui-panel" aria-labelledby="lfSpecsRequirements">
+                <div class="lf-specs-section-head"><div><span class="lf-specs-kicker">BUSINESS REQUIREMENTS</span><h2 id="lfSpecsRequirements">BRD-001 · Healthcare Appointment Platform</h2><p>Patients discover providers, view available slots and manage bookings without calling a clinic.</p></div><span class="lf-specs-label">Sample · v0.1</span></div>
+                <div class="lf-specs-requirement-points"><span>Find doctors and available appointments</span><span>Prevent double bookings</span><span>Allow cancellation at least 24 hours before a visit</span></div>
+            </section>
+            <div class="lf-specs-section-title"><div><h2>Feature specifications</h2><p>Task-level artifacts grouped by feature, using the same IDs as the Project Board.</p></div><span class="lf-specs-label">4 features · 9 items</span></div>
+            <div class="lf-specs-features">
+                <section class="lf-specs-feature ui-panel" aria-labelledby="lfSpecFeature001">
+                    <div class="lf-specs-feature-head"><div><span class="lf-specs-kicker">FEAT-001</span><h3 id="lfSpecFeature001">Authentication &amp; profiles</h3></div><span class="lf-board-count">2 tasks</span></div>
+                    <div class="lf-specs-task-list">
+                        <article class="lf-specs-task"><h4><span class="lf-specs-task-id">TASK-007</span> Implement authentication flow</h4><span class="lf-specs-task-state is-done">Done</span></article>
+                        <article class="lf-specs-task"><h4><span class="lf-specs-task-id">TASK-008</span> Build profile management</h4><span class="lf-specs-task-state is-done">Done</span></article>
+                    </div>
+                </section>
+                <section class="lf-specs-feature ui-panel" aria-labelledby="lfSpecFeature002">
+                    <div class="lf-specs-feature-head"><div><span class="lf-specs-kicker">FEAT-002</span><h3 id="lfSpecFeature002">Doctor search &amp; availability</h3></div><span class="lf-board-count">2 tasks</span></div>
+                    <div class="lf-specs-task-list">
+                        <article class="lf-specs-task"><h4><span class="lf-specs-task-id">TASK-009</span> Build doctor search API</h4><span class="lf-specs-task-state is-progress">In Progress</span></article>
+                        <article class="lf-specs-task"><h4><span class="lf-specs-task-id">TASK-010</span> Implement availability UI</h4><span class="lf-specs-task-state is-progress">In Progress</span></article>
+                    </div>
+                </section>
+                <section class="lf-specs-feature ui-panel" aria-labelledby="lfSpecFeature003">
+                    <div class="lf-specs-feature-head"><div><span class="lf-specs-kicker">FEAT-003</span><h3 id="lfSpecFeature003">Appointment booking</h3></div><span class="lf-board-count">3 items</span></div>
+                    <div class="lf-specs-task-list">
+                        <article class="lf-specs-task"><h4><span class="lf-specs-task-id">TASK-011</span> Implement booking API</h4><span class="lf-specs-task-state is-review">Review</span><p>As a patient, I want to book an available slot so I can schedule a visit.</p><details class="lf-specs-details"><summary>Acceptance criteria &amp; dependencies</summary><ul><li>Only future, available slots can be booked.</li><li>Two patients cannot reserve the same slot.</li><li>Successful booking returns an identifier and confirmation.</li><li>Invalid patient or provider returns a validation error.</li></ul><p><strong>Dependencies:</strong> Provider availability API, patient authentication and booking persistence.</p></details></article>
+                        <article class="lf-specs-task"><h4><span class="lf-specs-task-id">TASK-012</span> Build responsive booking UI</h4><span class="lf-specs-task-state is-review">Review</span><p>Search for a doctor, select an available slot and show confirmation with accessible error states.</p></article>
+                        <article class="lf-specs-task"><h4><span class="lf-specs-task-id">QA-001</span> Validate booking scenarios</h4><span class="lf-specs-task-state is-quality">Quality</span><p>Cover successful booking, unavailable slots, invalid patients and cancellation windows.</p></article>
+                    </div>
+                </section>
+                <section class="lf-specs-feature ui-panel" aria-labelledby="lfSpecFeature004">
+                    <div class="lf-specs-feature-head"><div><span class="lf-specs-kicker">FEAT-004</span><h3 id="lfSpecFeature004">Notifications &amp; reminders</h3></div><span class="lf-board-count">2 tasks</span></div>
+                    <div class="lf-specs-task-list">
+                        <article class="lf-specs-task"><h4><span class="lf-specs-task-id">TASK-013</span> Implement appointment reminders</h4><span class="lf-specs-task-state is-new">New</span></article>
+                        <article class="lf-specs-task"><h4><span class="lf-specs-task-id">TASK-014</span> Create reminder scheduling</h4><span class="lf-specs-task-state is-new">New</span></article>
+                    </div>
+                </section>
+            </div>
+            <p class="lf-board-note">Illustrative specifications and statuses only · no saved artifacts, approval workflow or live Board synchronization.</p>
         </section>
     }
     else
