@@ -196,3 +196,6 @@
 /* Task heading typography: black ID (bold), black title (normal). */
 .lf-board-task-list h3.lf-board-task-heading{color:#111111;font-weight:400}
 .lf-board-task-list .lf-board-task-heading .lf-board-task-id{color:#111111;font-weight:700}
+
+/* Improve readability of time, tokens and cost on compact task cards. */
+.lf-board-task-list .lf-board-task-stats{font-size:12px;line-height:1.45;gap:7px;padding-top:9px}
