@@ -222,3 +222,41 @@
 
 /* Subtle left accent for each Kanban task card. */
 .lf-board-task-list .lf-board-task{border-left:3px solid var(--accent)}
+
+/* Specifications library: Board-aligned visual language, grouped by feature. */
+.lf-specs-layout{display:grid;gap:14px;min-width:0}
+.lf-specs-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.lf-root .lf-specs-summary-item.ui-panel{padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.lf-specs-summary-item>span{font-size:11px;color:var(--muted)}
+.lf-specs-summary-item>strong{font-size:24px;line-height:1.2;color:var(--heading)}
+.lf-specs-summary-item>small{font-size:10px;color:var(--muted)}
+.lf-root .lf-specs-requirements.ui-panel{padding:18px}
+.lf-specs-section-head,.lf-specs-section-title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.lf-specs-section-head h2,.lf-specs-section-title h2{font-size:16px;line-height:1.35;margin:4px 0 6px;color:var(--heading)}
+.lf-specs-section-head p,.lf-specs-section-title p{font-size:12px;line-height:1.55;color:var(--muted);margin:0}
+.lf-specs-kicker{font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--accent)}
+.lf-specs-label{flex:none;display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface-raised);color:var(--muted);padding:4px 8px;border-radius:4px;font-size:10px;white-space:nowrap}
+.lf-specs-requirement-points{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.lf-specs-requirement-points span{padding:7px 9px;border:1px solid var(--line);border-radius:4px;background:var(--surface);font-size:11px;color:var(--content)}
+.lf-specs-section-title{align-items:center;margin-top:4px}
+.lf-specs-features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.lf-root .lf-specs-feature.ui-panel{padding:0 10px 10px;overflow:hidden;min-width:0;background:#f3f4f6}
+.lf-specs-feature-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 -10px 10px;padding:12px 10px;background:var(--surface);border-bottom:1px solid var(--line)}
+.lf-specs-feature-head h3{margin:3px 0 0;font-size:13px;font-weight:600;line-height:1.4;color:var(--heading)}
+.lf-specs-task-list{display:grid;gap:8px}
+.lf-specs-task{position:relative;min-width:0;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:4px;padding:11px 10px}
+.lf-specs-task h4{font-size:13px;line-height:1.5;font-weight:400;color:#111;margin:0 0 8px;overflow-wrap:anywhere}
+.lf-specs-task-id{font-size:10px;font-weight:700;white-space:nowrap}
+.lf-specs-task>p{font-size:11px;line-height:1.55;color:var(--content);margin:9px 0 0}
+.lf-specs-task-state{display:inline-flex;font-size:10px;line-height:1.3;padding:3px 7px;border-radius:4px;background:#e9eef6;color:#334155}
+.lf-specs-task-state.is-progress{background:#dbeafe;color:#1d4ed8}
+.lf-specs-task-state.is-review{background:#f3e8ff;color:#7e22ce}
+.lf-specs-task-state.is-quality{background:#fef3c7;color:#92400e}
+.lf-specs-task-state.is-done{background:#dcfce7;color:#166534}
+.lf-specs-details{margin-top:10px;border-top:1px solid var(--line);padding-top:9px;font-size:11px;color:var(--content);line-height:1.6}
+.lf-specs-details summary{cursor:pointer;font-weight:600;color:var(--accent)}
+.lf-specs-details summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.lf-specs-details ul{margin:8px 0;padding-left:18px}
+.lf-specs-details p{margin:8px 0 0}
+@media(max-width:850px){.lf-specs-features{grid-template-columns:1fr}}
+@media(max-width:540px){.lf-specs-summary{grid-template-columns:1fr 1fr}.lf-specs-summary-item:last-child{grid-column:1/-1}.lf-specs-section-head,.lf-specs-section-title{flex-wrap:wrap}}
