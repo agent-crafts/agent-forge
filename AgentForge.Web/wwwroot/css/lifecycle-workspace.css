@@ -569,3 +569,6 @@
 
 /* Match header usage typography to the project name. */
 .lf-project-identity>.lf-lifecycle-usage{font-size:14px;font-weight:400;color:var(--heading,inherit)}
+
+/* Compact project header card spacing across lifecycle pages. */
+.lf-project-identity{padding:12px}
