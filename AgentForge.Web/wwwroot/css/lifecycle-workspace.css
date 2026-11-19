@@ -389,3 +389,21 @@
 .lf-doc-card-header .lf-doc-name{flex:1;min-width:0}
 .lf-doc-card-header>.lf-doc-source{flex:none}
 .lf-doc-table td.lf-doc-actions{justify-content:space-between}
+
+/* Footer actions: bare icons without button containers. */
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button{
+  width:auto;
+  height:auto;
+  min-width:0;
+  min-height:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.lf-doc-table .lf-doc-actions .lf-doc-action-buttons button:hover{
+  border:0;
+  background:transparent;
+  color:var(--accent);
+}
